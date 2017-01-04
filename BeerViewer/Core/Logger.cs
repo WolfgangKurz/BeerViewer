@@ -210,7 +210,7 @@ namespace BeerViewer.Core
 				{
 					if (!File.Exists(MainFolder + "\\ShipBuildLog.csv"))
 					{
-						var csvPath = Path.Combine(MainFolder, "ShipBuildLog2.csv");
+						var csvPath = Path.Combine(MainFolder, "ShipBuildLog.csv");
 						using (var fileStream = new FileStream(csvPath, FileMode.CreateNew, FileAccess.Write, FileShare.None))
 						using (var writer = new BinaryWriter(fileStream))
 						{
@@ -229,9 +229,9 @@ namespace BeerViewer.Core
 				}
 				else if (Type == LogType.ShipDrop)
 				{
-					if (!File.Exists(MainFolder + "\\DropLog2.csv"))
+					if (!File.Exists(MainFolder + "\\DropLog.csv"))
 					{
-						var csvPath = Path.Combine(MainFolder, "DropLog2.csv");
+						var csvPath = Path.Combine(MainFolder, "DropLog.csv");
 						using (var fileStream = new FileStream(csvPath, FileMode.CreateNew, FileAccess.Write, FileShare.None))
 						using (var writer = new BinaryWriter(fileStream))
 						{
@@ -243,7 +243,7 @@ namespace BeerViewer.Core
 						}
 					}
 
-					using (StreamWriter w = File.AppendText(MainFolder + "\\DropLog2.csv"))
+					using (StreamWriter w = File.AppendText(MainFolder + "\\DropLog.csv"))
 					{
 						w.WriteLine(format, args);
 					}
