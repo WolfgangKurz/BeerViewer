@@ -99,6 +99,7 @@ namespace BeerViewer.Core
 						if (BrowserFirstLoaded) return;
 						BrowserFirstLoaded = true;
 
+						#region Setup Page
 						Assembly assembly = Assembly.GetExecutingAssembly();
 						Version Version = assembly.GetName().Version;
 
@@ -140,7 +141,18 @@ namespace BeerViewer.Core
 							$"rev.{Version.Revision}"
 						);
 						browser.Document.Body.AppendChild(root);
+						#endregion
 
+						#region Apply Cookies
+						browser?.Navigate(
+							string.Format(
+								"javascript:void(eval(\"{0};\"));",
+								Const.PatchCookie
+							)
+						);
+						#endregion
+
+						#region Update Check
 						var updateLayer = browser.Document.GetElementById("update");
 						if (updateLayer != null)
 						{
@@ -160,6 +172,7 @@ namespace BeerViewer.Core
 							});
 							Checker.RequestCheck();
 						}
+						#endregion
 						return;
 					}
 					#endregion
