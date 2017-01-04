@@ -5,9 +5,12 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.IO;
 using System.Windows.Forms;
 using ImageFormat = System.Drawing.Imaging.ImageFormat;
 using IServiceProvider = BeerViewer.Win32.IServiceProvider;
+using VolumeMixer = BeerViewer.Models.VolumeMixer;
+using Process = System.Diagnostics.Process;
 using SHDocVw;
 
 using BeerViewer.Core;
@@ -144,6 +147,11 @@ namespace BeerViewer
 			};
 			this.FormClosed += (s, e) => Application.Exit();
 
+			VolumeMixer.SetApplicationMute(
+				Process.GetCurrentProcess().Id,
+				Settings.Application_Muted.Value
+			);
+
 			Proxy.Instance.Register(e =>
 			{
 				if (!e.Request.PathAndQuery.StartsWith("/kcsapi/")) return;
@@ -182,12 +190,41 @@ namespace BeerViewer
 			else
 			{
 				var filename = $"BeerViewer-{DateTimeOffset.Now.LocalDateTime.ToString("yyyyMMdd-HHmmss-ff")}.png";
-				Captured.Save(filename, ImageFormat.Png);
-
-				MessageProvider.Instance.Submit("스크린샷을 저장했습니다: " + filename, "BeerViewer");
+				var path = Path.Combine(
+					Environment.GetFolderPath(Environment.SpecialFolder.MyPictures),
+					filename
+				);
+				try
+				{
+					Captured.Save(filename, ImageFormat.Png);
+					MessageProvider.Instance.Submit("스크린샷을 저장했습니다: " + filename, "BeerViewer");
+				}
+				catch
+				{
+					MessageProvider.Instance.Submit("스크린샷 저장에 실패했습니다", "BeerViewer");
+				}
 			}
 
 			Helper.SetCritical(true);
+		}
+		private void btnRefresh_Click(object sender, EventArgs e)
+		{
+			Helper.PrepareBrowser(frmMain.Instance?.Browser, true);
+		}
+		private void btnMute_Click(object sender, EventArgs e)
+		{
+			var pid = Process.GetCurrentProcess().Id;
+
+			bool muted = !(VolumeMixer.GetApplicationMute(pid) ?? false);
+			VolumeMixer.SetApplicationMute(pid, muted);
+
+			muted = VolumeMixer.GetApplicationMute(pid) ?? false;
+			if (muted)
+				this.btnMute.BackgroundImage = Properties.Resources.Muted;
+			else
+				this.btnMute.BackgroundImage = Properties.Resources.Volume;
+
+			Settings.Application_Muted.Value = muted;
 		}
 
 		public void SetBackColor(Color color)
@@ -216,9 +253,10 @@ namespace BeerViewer
 				object pvaIn = (int)(zoomFactor * 100);
 				webBrowser.ExecWB(OLECMDID.OLECMDID_OPTICAL_ZOOM, OLECMDEXECOPT.OLECMDEXECOPT_DONTPROMPTUSER, ref pvaIn);
 
-				browserMain.Size = new Size(
-					(int)(800 * zoomFactor),
-					(int)(480 * zoomFactor)
+				var dpiFactor = Helper.GetDPIFactor();
+				browserMain.Size = this.MinimumSize = new Size(
+					(int)(800 * zoomFactor / dpiFactor),
+					(int)(480 * zoomFactor / dpiFactor)
 				);
 			}
 			catch (Exception ex)

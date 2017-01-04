@@ -124,6 +124,9 @@
   <data name="slotitem_OffshoreResupply" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\slotitem_OffshoreResupply.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="slotitem_JetbombFighter_A" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\slotitem_JetbombFighter_A.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="slotitem_MaintenancePersonnel" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\slotitem_MaintenancePersonnel.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -133,11 +136,11 @@
   <data name="slotitem_proficiency_4" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\slotitem_proficiency_4.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="slotitem_AntiTorpedoBulge" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\slotitem_AntiTorpedoBulge.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="slotitem_EngineImprovement" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\slotitem_EngineImprovement.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="slotitem_MainCanonHeavy" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\slotitem_MainCanonHeavy.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="slotitem_TorpedoBomber" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\slotitem_TorpedoBomber.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -160,9 +163,6 @@
   <data name="slotitem_MainCanonLight" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\slotitem_MainCanonLight.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="slotitem_Autogyro" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\slotitem_Autogyro.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="slotitem_APShell" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\slotitem_APShell.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -178,26 +178,29 @@
   <data name="slotitem_FleetCommandFacility" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\slotitem_FleetCommandFacility.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="slotitem_proficiency_6" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\slotitem_proficiency_6.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="slotitem_SecondaryCanon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\slotitem_SecondaryCanon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="slotitem_Facility" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\slotitem_Facility.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="slotitem_Fighter" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\slotitem_Fighter.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="slotitem_AmphibiousLandingCraft" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\slotitem_AmphibiousLandingCraft.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="slotitem_proficiency_1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\slotitem_proficiency_1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="slotitem_Flare" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\slotitem_Flare.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="slotitem_AmphibiousLandingCraft" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\slotitem_AmphibiousLandingCraft.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="slotitem_proficiency_6" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\slotitem_proficiency_6.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="slotitem_CombatRations" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\slotitem_CombatRations.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="slotitem_ASW" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\slotitem_ASW.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="slotitem_JetBombFighter_B" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\slotitem_JetBombFighter_B.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -205,20 +208,17 @@
   <data name="slotitem_proficiency_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\slotitem_proficiency_2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="slotitem_ASW" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\slotitem_ASW.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="slotitem_ReconSeaplane" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\slotitem_ReconSeaplane.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="slotitem_LandingCraft" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\slotitem_LandingCraft.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="slotitem_Torpedo" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\slotitem_Torpedo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="slotitem_Flare" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\slotitem_Flare.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="slotitem_LandBasedAttacker" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\slotitem_LandBasedAttacker.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="slotitem_AntiTorpedoBulge" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\slotitem_AntiTorpedoBulge.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="slotitem_Torpedo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\slotitem_Torpedo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="slotitem_DamageControl" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\slotitem_DamageControl.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -226,11 +226,8 @@
   <data name="slotitem_Unknown" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\slotitem_Unknown.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="slotitem_Rader" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\slotitem_Rader.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="slotitem_Facility" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\slotitem_Facility.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="slotitem_Autogyro" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\slotitem_Autogyro.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="slotitem_AAShell" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\slotitem_AAShell.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -238,8 +235,8 @@
   <data name="slotitem_SurfaceShipPersonnel" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\slotitem_SurfaceShipPersonnel.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="beerviewer_bg" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\beerviewer_bg.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="slotitem_Rader" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\slotitem_Rader.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="slotitem_proficiency_7" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\slotitem_proficiency_7.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -250,11 +247,14 @@
   <data name="slotitem_HighAngleGun" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\slotitem_HighAngleGun.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="slotitem_MainCanonHeavy" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\slotitem_MainCanonHeavy.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="beerviewer_bg" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\beerviewer_bg.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="slotitem_JetbombFighter_A" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\slotitem_JetbombFighter_A.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="slotitem_ReconSeaplane" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\slotitem_ReconSeaplane.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="slotitem_LandingCraft" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\slotitem_LandingCraft.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="slotitem_RocketLauncher" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\slotitem_RocketLauncher.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -264,5 +264,17 @@
   </data>
   <data name="slotitem_AntiAircraftFireDirector" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\slotitem_AntiAircraftFireDirector.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Muted" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Muted.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Refresh" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Refresh.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Screenshot" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Screenshot.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Volume" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Volume.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

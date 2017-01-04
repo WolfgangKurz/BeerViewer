@@ -26,6 +26,14 @@ namespace BeerViewer.Core
 		[DllImport("user32.dll")]
 		private static extern long LockWindowUpdate(IntPtr Handle);
 
+		[DllImport("gdi32.dll")]
+		static extern int GetDeviceCaps(IntPtr hdc, int nIndex);
+		public enum DeviceCap
+		{
+			VERTRES = 10,
+			DESKTOPVERTRES = 117
+		}
+
 		private static int UseGPUAcceleration => 1;
 		private static int FeatureBrowserEmulation => 11000;
 
@@ -77,7 +85,7 @@ namespace BeerViewer.Core
 		/// <summary>
 		/// 시작 전 브라우저 준비
 		/// </summary>
-		public static void PrepareBrowser(WebBrowser browser, bool withoutEventAttaching =false)
+		public static void PrepareBrowser(WebBrowser browser, bool withoutEventAttaching = false)
 		{
 			if (!BrowserFirstLoaded)
 			{
@@ -112,9 +120,6 @@ namespace BeerViewer.Core
 							"window.game_start = function(elem){{\n"
 							+ "try{ " + Const.PatchCookie + Const.GameURL + " }catch(e){ alert(e) }\n"
 							+ " elem.style.visibility=\"hidden\";\n"
-							+ "}};"
-							+ "window.patch_cookie = function(){{\n"
-							+ "try{ " + Const.PatchCookie + ";alert(\"Patch Complete\"); }catch(e){ alert(e) }"
 							+ "}};";
 						browser.Document.Body.AppendChild(script);
 
@@ -127,7 +132,6 @@ namespace BeerViewer.Core
 								+ "</div>"
 								+ "<h1>BeerViewer</h1>"
 								+ "<h3><span>{0}</span><span>{1}</span></h3>"
-								+ "<a href=\"#\" onclick=\"window.patch_cookie();\">Patch Cookie</a>"
 								+ "<a href=\"#\" onclick=\"window.game_start(this);\">GAME START</a>"
 								+ "<div id=\"update\"></div>"
 							+ " </div>",
@@ -151,7 +155,7 @@ namespace BeerViewer.Core
 									);
 								}
 								else if ((int)Checker.State < 0) // Error
-								updateLayer.InnerHtml = "<span style=\"padding:7px 0\">Update information pending failed</span>";
+									updateLayer.InnerHtml = "<span style=\"padding:7px 0\">Update information pending failed</span>";
 							});
 							Checker.RequestCheck();
 						}
@@ -307,6 +311,17 @@ namespace BeerViewer.Core
 			action?.Invoke();
 			control.ResumeLayout(false);
 			LockWindowUpdate(IntPtr.Zero);
+		}
+
+		public static double GetDPIFactor()
+		{
+			Graphics g = Graphics.FromHwnd(IntPtr.Zero);
+			IntPtr desktop = g.GetHdc();
+			int LogicalScreenHeight = GetDeviceCaps(desktop, (int)DeviceCap.VERTRES);
+			int PhysicalScreenHeight = GetDeviceCaps(desktop, (int)DeviceCap.DESKTOPVERTRES);
+
+			double ScreenScalingFactor = (double)PhysicalScreenHeight / LogicalScreenHeight;
+			return ScreenScalingFactor; // 1.25 = 125%
 		}
 	}
 }

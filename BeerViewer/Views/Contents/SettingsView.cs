@@ -126,6 +126,8 @@ namespace BeerViewer.Views.Contents
 			chkCriticalColor.Checked = Settings.BattleInfo_EnableColorChange.Value;
 			chkCriticalColor.CheckedChanged += (s, e) => Settings.BattleInfo_EnableColorChange.Value = chkCriticalColor.Checked;
 
+			chkGeneralAutoSelect.Checked = Settings.BackHome_AutoSelectTab.Value;
+			chkGeneralAutoSelect.CheckedChanged += (s, e) => Settings.BackHome_AutoSelectTab.Value = chkGeneralAutoSelect.Checked;
 			chkCriticalNotify.Checked = Settings.BattleInfo_CriticalEnabled.Value;
 			chkCriticalNotify.CheckedChanged += (s, e) => Settings.BattleInfo_CriticalEnabled.Value = chkCriticalNotify.Checked;
 			chkBattleEndNotify.Checked = Settings.BattleInfo_IsEnabledBattleEndNotify.Value;
@@ -151,6 +153,16 @@ namespace BeerViewer.Views.Contents
 		private void btnLogout_Click(object sender, EventArgs e)
 		{
 			frmMain.Instance?.Browser?.Navigate(Const.LogoutURL);
+		}
+
+		private void btnCookie_Click(object sender, EventArgs e)
+		{
+			frmMain.Instance?.Browser?.Navigate(
+				string.Format(
+					"javascript:void(eval(\"{0};alert('설정완료');\"));",
+					Const.PatchCookie
+				)
+			);
 		}
 	}
 }

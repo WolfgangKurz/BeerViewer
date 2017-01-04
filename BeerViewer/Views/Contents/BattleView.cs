@@ -149,15 +149,15 @@ namespace BeerViewer.Views.Contents
 				},
 				{
 					nameof(this.BattleData.SecondFleet),
-					(_, __) => this.SecondFleet.FleetData =this.BattleData.SecondFleet
+					(_, __) => this.SecondFleet.FleetData = this.BattleData.SecondFleet
 				},
 				{
 					nameof(this.BattleData.SecondEnemies),
-					(_, __) => this.SecondEnemies.FleetData =this.BattleData.SecondEnemies
+					(_, __) => this.SecondEnemies.FleetData = this.BattleData.SecondEnemies
 				},
 				{
 					nameof(this.BattleData.Enemies),
-					(_, __) => this.Enemies.FleetData =this.BattleData.Enemies
+					(_, __) => this.Enemies.FleetData = this.BattleData.Enemies
 				},
 				{
 					nameof(this.BattleData.AirCombatResults),
