@@ -72,6 +72,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\HQRecurd.cs" />
+    <Compile Include="Core\Logger.cs" />
     <Compile Include="Core\MessageProvider.cs" />
     <Compile Include="Core\NotifyHost.cs" />
     <Compile Include="Core\NotifyManager.cs" />
@@ -124,7 +126,9 @@
     <Compile Include="Models\BattleInfo\MapCellData.cs" />
     <Compile Include="Models\DynamicJson.cs" />
     <Compile Include="Models\QuestNameTable.cs" />
+    <Compile Include="Models\Raw\kcsapi_battleresult.cs" />
     <Compile Include="Models\Raw\kcsapi_mst_mapcell.cs" />
+    <Compile Include="Models\Raw\kcsapi_startnext.cs" />
     <Compile Include="Models\SallyArea.cs" />
     <Compile Include="Views\Catalogs\catalogCalc.cs">
       <SubType>Form</SubType>

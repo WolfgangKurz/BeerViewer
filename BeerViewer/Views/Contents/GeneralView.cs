@@ -34,6 +34,8 @@ namespace BeerViewer.Views.Contents
 		private NotifyHost notifyHost { get; set; }
 		private Homeport homeport { get; set; }
 
+		private HQRecord HQRecorder { get; }
+
 		public GeneralView()
 		{
 			InitializeComponent();
@@ -53,6 +55,9 @@ namespace BeerViewer.Views.Contents
 				else
 					Enabler(Enabled);
 			}, true);
+
+			this.HQRecorder = new HQRecord();
+			this.HQRecorder.Load();
 
 			this.comboResources1.SelectedIndexChanged += (s, e) => Settings.ResourceSelected1.Value = this.comboResources1.SelectedIndex;
 			this.comboResources2.SelectedIndexChanged += (s, e) => Settings.ResourceSelected2.Value = this.comboResources2.SelectedIndex;
@@ -132,6 +137,9 @@ namespace BeerViewer.Views.Contents
 				if (homeport.Quests.All.Count == 0) return;
 				UpdateQuests(homeport.Quests.Current);
 			}, true);
+
+			// Admiral
+			homeport.PropertyEvent(nameof(homeport.Admiral), () => this.UpdateHQRecord(this.homeport.Admiral), true);
 
 			catalogCalculator?.SetHomeport(this.homeport);
 			catalogShips?.SetHomeport(this.homeport);
@@ -340,6 +348,35 @@ namespace BeerViewer.Views.Contents
 		{
 			this.listQuests.Quests = quests.Where(x => x != null).ToArray();
 			this.listQuests.RequestUpdate();
+		}
+		private void UpdateHQRecord(Admiral admiral)
+		{
+			if (tableHQRecord.InvokeRequired)
+			{
+				this.tableHQRecord.Invoke(() => UpdateHQRecord(admiral));
+				return;
+			}
+
+			this.HQRecorder.Updated();
+
+			HQRecord.HQRecordElement res;
+			int diff;
+
+			res = this.HQRecorder.GetRecordMonth();
+			diff = admiral.Experience - res.HQExp;
+			tableHQRecord.TableCells[0].Value = string.Format("{0} exp. / {1:n2}", diff, diff * 7 / 10000.0);
+
+			res = this.HQRecorder.GetRecordDay();
+			diff = admiral.Experience - res.HQExp;
+			tableHQRecord.TableCells[1].Value = string.Format("{0} exp. / {1:n2}", diff, diff * 7 / 10000.0);
+
+			res = this.HQRecorder.GetRecordPrevious();
+			diff = admiral.Experience - res.HQExp;
+			tableHQRecord.TableCells[2].Value = string.Format("{0} exp. / {1:n2}", diff, diff * 7 / 10000.0);
+
+			tableHQRecord.TableCells[0].Visible = true;
+			tableHQRecord.TableCells[1].Visible = true;
+			tableHQRecord.TableCells[2].Visible = true;
 		}
 
 		private catalogCalc catalogCalculator { get; set; }

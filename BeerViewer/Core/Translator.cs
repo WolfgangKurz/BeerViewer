@@ -19,6 +19,7 @@ namespace BeerViewer.Core
 			SlotItemTypes,
 			SlotItems,
 			Quests,
+			Operations,
 		}
 		public class QuestNameDetail
 		{
@@ -35,6 +36,8 @@ namespace BeerViewer.Core
 		public static ConcurrentDictionary<string, string> QuestDetailTable { get; }
 		public static ConcurrentDictionary<string, QuestNameDetail> QuestIdTable { get; }
 
+		public static ConcurrentDictionary<string, string> OperationTable { get; }
+
 		static Translator()
 		{
 			Translator.ShipTypeTable = new ConcurrentDictionary<int, string>();
@@ -45,6 +48,8 @@ namespace BeerViewer.Core
 			Translator.QuestNameTable = new ConcurrentDictionary<string, string>();
 			Translator.QuestDetailTable = new ConcurrentDictionary<string, string>();
 			Translator.QuestIdTable = new ConcurrentDictionary<string, QuestNameDetail>();
+
+			Translator.OperationTable = new ConcurrentDictionary<string, string>();
 		}
 
 		internal static void Initialize()
@@ -56,6 +61,7 @@ namespace BeerViewer.Core
 				Translator.LoadTranslate(TranslateType.SlotItemTypes);
 				Translator.LoadTranslate(TranslateType.SlotItems);
 				Translator.LoadTranslate(TranslateType.Quests);
+				Translator.LoadTranslate(TranslateType.Operations);
 			}).Start();
 		}
 
@@ -144,6 +150,16 @@ namespace BeerViewer.Core
 								(a, b) => b
 							);
 						} catch { }
+					}
+					break;
+
+				case TranslateType.Operations:
+					Translator.OperationTable.Clear();
+					nodes = xml.SelectNodes("/Operations/Map");
+					foreach (XmlNode node in nodes)
+					{
+						try { Translator.OperationTable.AddOrUpdate(node["Source"].InnerText, node["Value"].InnerText, (a, b) => b); }
+						catch { }
 					}
 					break;
 			}

@@ -174,6 +174,11 @@ namespace BeerViewer.Core
 		public static string api_req_map_start => "/kcsapi/api_req_map/start";
 
 		/// <summary>
+		/// "/kcsapi/api_req_map/next" 엔드포인트 상수 문자열
+		/// </summary>
+		public static string api_req_map_next => "/kcsapi/api_req_map/next";
+
+		/// <summary>
 		/// "/kcsapi/api_req_member/updatedeckname" 엔드포인트 상수 문자열
 		/// </summary>
 		public static string api_req_member_updatedeckname => "/kcsapi/api_req_member/updatedeckname";
