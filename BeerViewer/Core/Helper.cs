@@ -115,12 +115,33 @@ namespace BeerViewer.Core
 							+ "<h1>BeerViewer</h1>"
 							+ "<h3><span>{0}</span><span>{1}</span></h3>"
 							+ "<a href=\"{2}\" onclick=\"javascript:this.style.visibility='hidden';\">GAME START</a>"
+							+ "<div id=\"update\" style=\"padding:14px 0 0\"></div>"
 						+ " </div>",
 						$"ver {Version.ToString(3)}",
 						$"rev.{Version.Revision}",
 						Const.GameURL
 					);
 					browser.Document.Body.AppendChild(root);
+
+					var updateLayer = browser.Document.GetElementById("update");
+					if (updateLayer != null)
+					{
+						var Checker = new VersionChecker();
+						Checker.PropertyEvent(nameof(Checker.State), () =>
+						{
+							if (Checker.State == CheckState.Updatable)
+							{
+								updateLayer.InnerHtml = string.Format(
+									"<a href=\"{1}\">New version! - {0}</a>",
+									Checker.Version,
+									Checker.UpdateURL
+								);
+							}
+							else if ((int)Checker.State < 0) // Error
+								updateLayer.InnerHtml = "<span>Update information pending failed</a>";
+						});
+						Checker.RequestCheck();
+					}
 
 					return;
 				}
@@ -134,9 +155,7 @@ namespace BeerViewer.Core
 					if (gameFrame == null)
 					{
 						if (document.Url.PathAndQuery.Contains(".swf?"))
-						{
 							gameFrame = document.Body;
-						}
 					}
 
 					var target = gameFrame?.Document;

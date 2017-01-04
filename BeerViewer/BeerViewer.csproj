@@ -76,6 +76,7 @@
     <Compile Include="Core\NotifyHost.cs" />
     <Compile Include="Core\NotifyManager.cs" />
     <Compile Include="Core\Translator.cs" />
+    <Compile Include="Core\VersionChecker.cs" />
     <Compile Include="Models\BattleInfo\AirCombatResult.cs" />
     <Compile Include="Models\BattleInfo\AirFireFlag.cs" />
     <Compile Include="Models\BattleInfo\AirSupremacy.cs" />

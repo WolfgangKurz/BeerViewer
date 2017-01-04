@@ -29,5 +29,10 @@ namespace BeerViewer.Core
 		/// <see cref="NotificationTime"/>초 남았을 때 알림
 		/// </summary>
 		public static int NotificationTime { get; } = 60;
+
+		/// <summary>
+		/// 업데이트 정보가 존재하는 URL
+		/// </summary>
+		public static string UpdateURL { get; } = "https://raw.githubusercontent.com/WolfgangKurz/BeerViewer/master/version.txt";
 	}
 }
