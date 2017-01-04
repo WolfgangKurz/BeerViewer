@@ -98,7 +98,7 @@ namespace BeerViewer.Core
 						style.InnerHtml = "body{ background:#2c3a48; font-family:sans-serif } div#root{ display:flex; background:rgba(0,0,0,0.38); height:100%; align-items:center; overflow:hidden }"
 							+ " div#content{ margin:auto; text-align:center; text-shadow:0 1px 15px rgba(255, 255, 255, 0.21); color:#fff }"
 							+ " h1,h3{ margin:0; font-weight:300 } h1{ font-size:56px } h3{ font-size:34px } h3 span { padding:0 12px }"
-							+ " a{ position:relative; display:inline-block; margin-top:20px; height:38px; line-height:42px; padding:0 22px; background:#505963;"
+							+ " a{ position:relative; display:inline-block; margin:20px 28px 0; height:38px; line-height:42px; padding:0 22px; background:#505963;"
 							+ "text-decoration:none;font-size:20px;color:#fff} a::before,a::after{ content:\"\"; position:absolute; display:inline-block;"
 							+ "left:-14px; top:6px; width:27px; height:27px; background:#505963; transform:rotate(45deg); z-index:0; cursor:pointer }"
 							+ " a::after{ left:auto; right:-14px } a:hover,a:hover::before,a:hover::after { background:#5C636B }"
@@ -110,9 +110,12 @@ namespace BeerViewer.Core
 						script.SetAttribute("type", "text/javascript");
 						script.InnerHtml =
 							"window.game_start = function(elem){{\n"
+							+ "try{ " + Const.PatchCookie + Const.GameURL + " }catch(e){ alert(e) }\n"
 							+ " elem.style.visibility=\"hidden\";\n"
-							+ Const.GameURL
-							+ "}}";
+							+ "}};"
+							+ "window.patch_cookie = function(){{\n"
+							+ "try{ " + Const.PatchCookie + ";alert(\"Patch Complete\"); }catch(e){ alert(e) }"
+							+ "}};";
 						browser.Document.Body.AppendChild(script);
 
 						var root = browser.Document.CreateElement("div");
@@ -124,6 +127,7 @@ namespace BeerViewer.Core
 								+ "</div>"
 								+ "<h1>BeerViewer</h1>"
 								+ "<h3><span>{0}</span><span>{1}</span></h3>"
+								+ "<a href=\"#\" onclick=\"window.patch_cookie();\">Patch Cookie</a>"
 								+ "<a href=\"#\" onclick=\"window.game_start(this);\">GAME START</a>"
 								+ "<div id=\"update\"></div>"
 							+ " </div>",
