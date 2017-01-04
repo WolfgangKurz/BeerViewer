@@ -33,6 +33,6 @@ namespace BeerViewer.Core
 		/// <summary>
 		/// 업데이트 정보가 존재하는 URL
 		/// </summary>
-		public static string UpdateURL { get; } = "https://raw.githubusercontent.com/WolfgangKurz/BeerViewer/master/version.txt";
+		public static string UpdateURL { get; } = "https://raw.githubusercontent.com/WolfgangKurz/BeerViewer/nightly/version.txt";
 	}
 }
