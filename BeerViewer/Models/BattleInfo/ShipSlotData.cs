@@ -14,7 +14,7 @@ namespace BeerViewer.Models.BattleInfo
 		public SlotItemInfo Source { get; private set; }
 
 		public int Maximum { get; private set; }
-		public bool Equipped => this.Source != null;
+		public bool Equipped => this.Source != null && this.Source.Id != 0;
 
 		#region Current 프로퍼티
 		private int _Current;

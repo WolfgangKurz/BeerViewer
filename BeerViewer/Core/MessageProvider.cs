@@ -34,7 +34,11 @@ namespace BeerViewer.Core
 			int id = randomObj.Next();
 			this.LastMessage = id;
 
-			Target.Text = (OriginalText.Length > 0 ? OriginalText + " :: " : "") + Message;
+			if (Target.InvokeRequired)
+				Target.Invoke(() => Target.Text = (OriginalText.Length > 0 ? OriginalText + " :: " : "") + Message);
+			else
+				Target.Text = (OriginalText.Length > 0 ? OriginalText + " :: " : "") + Message;
+
 			if (SetForever) return;
 
 			await Task.Delay(5000);

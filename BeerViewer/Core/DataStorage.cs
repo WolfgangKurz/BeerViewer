@@ -24,6 +24,22 @@ namespace BeerViewer.Core
 		public Homeport Homeport { get; private set; }
 
 
+		#region Ready 프로퍼티
+		private bool _Ready { get; set; }
+		public bool Ready
+		{
+			get { return this._Ready; }
+			set
+			{
+				if (this._Ready != value)
+				{
+					this._Ready = value;
+					this.RaisePropertyChanged();
+				}
+			}
+		}
+		#endregion
+
 		#region Initialized 프로퍼티
 		private bool _Initialized { get; set; }
 		public bool Initialized

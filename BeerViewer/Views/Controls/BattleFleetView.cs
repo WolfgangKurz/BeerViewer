@@ -49,11 +49,17 @@ namespace BeerViewer.Views.Controls
 		}
 		#endregion
 
+		protected Dictionary<Rectangle, ShipData> ShipDataMap { get; private set; } = new Dictionary<Rectangle, ShipData>();
 		private Size LatestSize { get; set; } = new Size(160, 320);
+
+		private BattleShipTooltip toolTip { get; }
 
 		public BattleFleetView()
 		{
 			InitializeComponent();
+
+			if (this.components == null) this.components = new Container();
+			this.toolTip = new BattleShipTooltip(this, this.components);
 
 			this.Paint += (s, e) =>
 			{
@@ -269,6 +275,8 @@ namespace BeerViewer.Views.Controls
 					}
 					nw += 4;
 
+					ShipDataMap.Clear();
+
 					ny = y;
 					foreach (var ship in FleetData?.Ships)
 					{
@@ -320,6 +328,8 @@ namespace BeerViewer.Views.Controls
 						ny += 5;
 						#endregion
 
+						ShipDataMap.Add(new Rectangle(0, y, this.Width, ny - y), ship);
+
 						renderSize.Width = Math.Max(renderSize.Width, x + 4);
 						y = ny;
 					}
@@ -338,6 +348,29 @@ namespace BeerViewer.Views.Controls
 					this.PerformAutoScale();
 					this.PerformLayout();
 				}
+			};
+
+			this.MouseMove += (s, e) =>
+			{
+				if (!this.ShipDataMap.Any(x => x.Key.Contains(e.X, e.Y)))
+				{
+					toolTip.SetShip(null);
+					return;
+				}
+
+				var item = this.ShipDataMap.FirstOrDefault(x => x.Key.Contains(e.X, e.Y)).Value;
+				toolTip.SetShip(item);
+			};
+			this.MouseDown += (s, e) =>
+			{
+				if (!this.ShipDataMap.Any(x => x.Key.Contains(e.X, e.Y)))
+				{
+					toolTip.SetShip(null);
+					return;
+				}
+
+				var item = this.ShipDataMap.FirstOrDefault(x => x.Key.Contains(e.X, e.Y)).Value;
+				toolTip.SetShip(item, true);
 			};
 		}
 

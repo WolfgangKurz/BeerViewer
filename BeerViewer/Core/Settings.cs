@@ -15,6 +15,7 @@ namespace BeerViewer.Core
 {
 	internal class Settings
 	{
+		public static SettingValue<double> BrowserZoom { get; set; } = new SettingValue<double>(GetKey(), 1.0);
 		public static SettingValue<bool> VerticalMode { get; set; } = new SettingValue<bool>(GetKey(), false);
 
 		public static SettingValue<int> ResourceSelected1 { get; set; } = new SettingValue<int>(GetKey(), 0);

@@ -76,6 +76,7 @@
     <Compile Include="Core\NotifyHost.cs" />
     <Compile Include="Core\NotifyManager.cs" />
     <Compile Include="Core\Translator.cs" />
+    <Compile Include="Core\VersionChecker.cs" />
     <Compile Include="Models\BattleInfo\AirCombatResult.cs" />
     <Compile Include="Models\BattleInfo\AirFireFlag.cs" />
     <Compile Include="Models\BattleInfo\AirSupremacy.cs" />
@@ -378,9 +379,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Views\Catalogs\catalogSlotitems.resx">
       <DependentUpon>catalogSlotitems.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Views\Contents\SettingsView.resx">
-      <DependentUpon>SettingsView.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="packages.config" />
