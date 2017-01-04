@@ -21,6 +21,7 @@ namespace BeerViewer.Core
 		public static SettingValue<int> Application_Y { get; set; } = new SettingValue<int>(GetKey(), int.MinValue);
 		public static SettingValue<int> Application_Width { get; set; } = new SettingValue<int>(GetKey(), int.MinValue);
 		public static SettingValue<int> Application_Height { get; set; } = new SettingValue<int>(GetKey(), int.MinValue);
+		public static SettingValue<int> Application_State { get; set; } = new SettingValue<int>(GetKey(), int.MinValue);
 
 		public static SettingValue<double> BrowserZoom { get; set; } = new SettingValue<double>(GetKey(), 1.0);
 		public static SettingValue<bool> VerticalMode { get; set; } = new SettingValue<bool>(GetKey(), false);

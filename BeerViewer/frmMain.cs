@@ -124,13 +124,16 @@ namespace BeerViewer
 			{
 				int x = this.Left, y = this.Top;
 				int w = this.Width, h = this.Height;
+				int state = (int)this.WindowState;
 
 				if (Settings.Application_X.Value != int.MinValue) x = Settings.Application_X.Value;
 				if (Settings.Application_Y.Value != int.MinValue) y = Settings.Application_Y.Value;
 				if (Settings.Application_Width.Value != int.MinValue) w = Settings.Application_Width.Value;
 				if (Settings.Application_Height.Value != int.MinValue) h = Settings.Application_Height.Value;
+				if (Settings.Application_State.Value != int.MinValue) state = Settings.Application_State.Value;
 
 				this.StartPosition = FormStartPosition.Manual;
+				this.WindowState = (FormWindowState)state;
 				this.Location = new Point(x, y);
 				this.Size = new Size(w, h);
 			}
@@ -139,13 +142,23 @@ namespace BeerViewer
 			{
 				Settings.Application_X.Value = this.Left;
 				Settings.Application_Y.Value = this.Top;
+				Settings.Application_State.Value = (int)this.WindowState;
 			};
 			this.Resize += (s, e) =>
 			{
 				Settings.Application_Width.Value = this.Width;
 				Settings.Application_Height.Value = this.Height;
+				Settings.Application_State.Value = (int)this.WindowState;
 			};
-			this.FormClosed += (s, e) => Application.Exit();
+
+			this.FormClosing += (s, e) =>
+			{
+				if (DataStorage.Instance?.IsInSortie ?? false) {
+					if (MessageBox.Show("정말로 종료하시겠습니까?" ,"BeerViewer",MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation)== DialogResult.No)
+						e.Cancel = true;
+				}
+			};
+			this.FormClosed += (s, e) =>Application.Exit();
 
 			VolumeMixer.SetApplicationMute(
 				Process.GetCurrentProcess().Id,
@@ -253,8 +266,8 @@ namespace BeerViewer
 
 				var dpiFactor = Helper.GetDPIFactor();
 				browserMain.Size = this.MinimumSize = new Size(
-					(int)(800 * zoomFactor / dpiFactor),
-					(int)(480 * zoomFactor / dpiFactor)
+					(int)(800 * zoomFactor),// / dpiFactor),
+					(int)(480 * zoomFactor)// / dpiFactor)
 				);
 			}
 			catch (Exception ex)
