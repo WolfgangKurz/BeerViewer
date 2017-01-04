@@ -204,8 +204,6 @@ namespace BeerViewer
 					MessageProvider.Instance.Submit("스크린샷 저장에 실패했습니다", "BeerViewer");
 				}
 			}
-
-			Helper.SetCritical(true);
 		}
 		private void btnRefresh_Click(object sender, EventArgs e)
 		{

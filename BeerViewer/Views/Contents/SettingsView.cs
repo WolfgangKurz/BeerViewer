@@ -132,6 +132,13 @@ namespace BeerViewer.Views.Contents
 			chkCriticalNotify.CheckedChanged += (s, e) => Settings.BattleInfo_CriticalEnabled.Value = chkCriticalNotify.Checked;
 			chkBattleEndNotify.Checked = Settings.BattleInfo_IsEnabledBattleEndNotify.Value;
 			chkBattleEndNotify.CheckedChanged += (s, e) => Settings.BattleInfo_IsEnabledBattleEndNotify.Value = chkBattleEndNotify.Checked;
+
+			this.comboFlashQuality.Items.Add("High");
+			this.comboFlashQuality.Items.Add("Medium");
+			this.comboFlashQuality.Items.Add("Low");
+			this.comboFlashQuality.SelectedIndex = Settings.FlashQuality.Value;
+			this.comboFlashQuality.SelectedIndexChanged += (s, e) =>
+				Settings.FlashQuality.Value = this.comboFlashQuality.SelectedIndex;
 		}
 
 		public void SetBackColor(Color color)

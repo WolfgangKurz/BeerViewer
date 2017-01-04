@@ -82,7 +82,7 @@ namespace BeerViewer.Models.BattleInfo
 		private void BackHome()
 		{
 			Helper.SetCritical(false);
-			if (Settings.BackHome_AutoSelectTab.Value)
+			if (Settings.BackHome_AutoSelectTab.Value && (DataStorage.Instance?.IsInSortie ?? false))
 				frmMain.Instance?.UpdateTab("General");
 		}
 

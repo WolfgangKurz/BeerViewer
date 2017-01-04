@@ -29,7 +29,7 @@
 		private void InitializeComponent()
 		{
 			this.layoutMain = new System.Windows.Forms.FlowLayoutPanel();
-			this.layoutButtons = new System.Windows.Forms.FlowLayoutPanel();
+			this.optButtons = new System.Windows.Forms.FlowLayoutPanel();
 			this.btnGameStart = new BeerViewer.Views.Controls.FlatButton();
 			this.btnLogout = new BeerViewer.Views.Controls.FlatButton();
 			this.btnCookie = new BeerViewer.Views.Controls.FlatButton();
@@ -57,12 +57,17 @@
 			this.chkGeneralAutoSelect = new BeerViewer.Views.Controls.FlatCheckBox();
 			this.chkCriticalNotify = new BeerViewer.Views.Controls.FlatCheckBox();
 			this.chkBattleEndNotify = new BeerViewer.Views.Controls.FlatCheckBox();
+			this.optFlashQuality = new System.Windows.Forms.FlowLayoutPanel();
+			this.labelFlashQuality = new System.Windows.Forms.Label();
+			this.comboFlashQuality = new BeerViewer.Views.Controls.FlatComboBox();
+			this.labelFlashQualityDesc = new System.Windows.Forms.Label();
 			this.layoutMain.SuspendLayout();
-			this.layoutButtons.SuspendLayout();
+			this.optButtons.SuspendLayout();
 			this.optZoom.SuspendLayout();
 			this.optMainLayout.SuspendLayout();
 			this.optViewRangeType.SuspendLayout();
 			this.optViewRangeFleet.SuspendLayout();
+			this.optFlashQuality.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// layoutMain
@@ -70,7 +75,7 @@
 			this.layoutMain.AutoSize = true;
 			this.layoutMain.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.layoutMain.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(58)))), ((int)(((byte)(72)))));
-			this.layoutMain.Controls.Add(this.layoutButtons);
+			this.layoutMain.Controls.Add(this.optButtons);
 			this.layoutMain.Controls.Add(this.optZoom);
 			this.layoutMain.Controls.Add(this.optMainLayout);
 			this.layoutMain.Controls.Add(this.optViewRangeType);
@@ -86,26 +91,28 @@
 			this.layoutMain.Controls.Add(this.chkGeneralAutoSelect);
 			this.layoutMain.Controls.Add(this.chkCriticalNotify);
 			this.layoutMain.Controls.Add(this.chkBattleEndNotify);
+			this.layoutMain.Controls.Add(this.optFlashQuality);
+			this.layoutMain.Controls.Add(this.labelFlashQualityDesc);
 			this.layoutMain.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
 			this.layoutMain.Location = new System.Drawing.Point(0, 0);
 			this.layoutMain.Margin = new System.Windows.Forms.Padding(0);
 			this.layoutMain.Name = "layoutMain";
 			this.layoutMain.Padding = new System.Windows.Forms.Padding(4);
-			this.layoutMain.Size = new System.Drawing.Size(269, 455);
+			this.layoutMain.Size = new System.Drawing.Size(269, 514);
 			this.layoutMain.TabIndex = 1;
 			this.layoutMain.WrapContents = false;
 			// 
-			// layoutButtons
+			// optButtons
 			// 
-			this.layoutButtons.AutoSize = true;
-			this.layoutButtons.Controls.Add(this.btnGameStart);
-			this.layoutButtons.Controls.Add(this.btnLogout);
-			this.layoutButtons.Controls.Add(this.btnCookie);
-			this.layoutButtons.Location = new System.Drawing.Point(4, 4);
-			this.layoutButtons.Margin = new System.Windows.Forms.Padding(0);
-			this.layoutButtons.Name = "layoutButtons";
-			this.layoutButtons.Size = new System.Drawing.Size(250, 32);
-			this.layoutButtons.TabIndex = 2;
+			this.optButtons.AutoSize = true;
+			this.optButtons.Controls.Add(this.btnGameStart);
+			this.optButtons.Controls.Add(this.btnLogout);
+			this.optButtons.Controls.Add(this.btnCookie);
+			this.optButtons.Location = new System.Drawing.Point(4, 4);
+			this.optButtons.Margin = new System.Windows.Forms.Padding(0);
+			this.optButtons.Name = "optButtons";
+			this.optButtons.Size = new System.Drawing.Size(250, 32);
+			this.optButtons.TabIndex = 2;
 			// 
 			// btnGameStart
 			// 
@@ -447,6 +454,53 @@
 			this.chkBattleEndNotify.Text = "전투가 종료되면 알림";
 			this.chkBattleEndNotify.UseVisualStyleBackColor = false;
 			// 
+			// optFlashQuality
+			// 
+			this.optFlashQuality.AutoSize = true;
+			this.optFlashQuality.Controls.Add(this.labelFlashQuality);
+			this.optFlashQuality.Controls.Add(this.comboFlashQuality);
+			this.optFlashQuality.Location = new System.Drawing.Point(4, 461);
+			this.optFlashQuality.Margin = new System.Windows.Forms.Padding(0, 10, 0, 0);
+			this.optFlashQuality.Name = "optFlashQuality";
+			this.optFlashQuality.Size = new System.Drawing.Size(191, 30);
+			this.optFlashQuality.TabIndex = 16;
+			// 
+			// labelFlashQuality
+			// 
+			this.labelFlashQuality.Anchor = System.Windows.Forms.AnchorStyles.None;
+			this.labelFlashQuality.AutoSize = true;
+			this.labelFlashQuality.Location = new System.Drawing.Point(3, 2);
+			this.labelFlashQuality.Name = "labelFlashQuality";
+			this.labelFlashQuality.Padding = new System.Windows.Forms.Padding(0, 4, 0, 0);
+			this.labelFlashQuality.Size = new System.Drawing.Size(90, 25);
+			this.labelFlashQuality.TabIndex = 0;
+			this.labelFlashQuality.Text = "플래시 퀄리티 :";
+			this.labelFlashQuality.UseCompatibleTextRendering = true;
+			// 
+			// comboFlashQuality
+			// 
+			this.comboFlashQuality.Anchor = System.Windows.Forms.AnchorStyles.None;
+			this.comboFlashQuality.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(39)))), ((int)(((byte)(47)))));
+			this.comboFlashQuality.DropDownHeight = 2;
+			this.comboFlashQuality.IntegralHeight = false;
+			this.comboFlashQuality.Location = new System.Drawing.Point(99, 3);
+			this.comboFlashQuality.Name = "comboFlashQuality";
+			this.comboFlashQuality.Size = new System.Drawing.Size(89, 24);
+			this.comboFlashQuality.TabIndex = 1;
+			// 
+			// labelFlashQualityDesc
+			// 
+			this.labelFlashQualityDesc.AutoSize = true;
+			this.labelFlashQualityDesc.Font = new System.Drawing.Font("맑은 고딕", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+			this.labelFlashQualityDesc.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(194)))), ((int)(((byte)(194)))), ((int)(((byte)(194)))));
+			this.labelFlashQualityDesc.Location = new System.Drawing.Point(17, 491);
+			this.labelFlashQualityDesc.Margin = new System.Windows.Forms.Padding(13, 0, 3, 0);
+			this.labelFlashQualityDesc.Name = "labelFlashQualityDesc";
+			this.labelFlashQualityDesc.Size = new System.Drawing.Size(181, 19);
+			this.labelFlashQualityDesc.TabIndex = 17;
+			this.labelFlashQualityDesc.Text = "※ 게임을 새로고침해야 적용됩니다.";
+			this.labelFlashQualityDesc.UseCompatibleTextRendering = true;
+			// 
 			// SettingsView
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
@@ -456,10 +510,10 @@
 			this.ForeColor = System.Drawing.Color.White;
 			this.Margin = new System.Windows.Forms.Padding(0);
 			this.Name = "SettingsView";
-			this.Size = new System.Drawing.Size(675, 486);
+			this.Size = new System.Drawing.Size(457, 563);
 			this.layoutMain.ResumeLayout(false);
 			this.layoutMain.PerformLayout();
-			this.layoutButtons.ResumeLayout(false);
+			this.optButtons.ResumeLayout(false);
 			this.optZoom.ResumeLayout(false);
 			this.optZoom.PerformLayout();
 			this.optMainLayout.ResumeLayout(false);
@@ -468,6 +522,8 @@
 			this.optViewRangeType.PerformLayout();
 			this.optViewRangeFleet.ResumeLayout(false);
 			this.optViewRangeFleet.PerformLayout();
+			this.optFlashQuality.ResumeLayout(false);
+			this.optFlashQuality.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -499,10 +555,14 @@
 		private System.Windows.Forms.FlowLayoutPanel optZoom;
 		private System.Windows.Forms.Label labelZoom;
 		private Controls.FlatComboBox comboZoom;
-		private System.Windows.Forms.FlowLayoutPanel layoutButtons;
+		private System.Windows.Forms.FlowLayoutPanel optButtons;
 		private Controls.FlatButton btnGameStart;
 		private Controls.FlatButton btnLogout;
 		private Controls.FlatButton btnCookie;
 		private Controls.FlatCheckBox chkGeneralAutoSelect;
+		private System.Windows.Forms.FlowLayoutPanel optFlashQuality;
+		private System.Windows.Forms.Label labelFlashQuality;
+		private Controls.FlatComboBox comboFlashQuality;
+		private System.Windows.Forms.Label labelFlashQualityDesc;
 	}
 }

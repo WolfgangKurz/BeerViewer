@@ -30,22 +30,22 @@
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
 			this.contentContainer = new System.Windows.Forms.TableLayoutPanel();
-			this.contentBattle = new BeerViewer.Views.Contents.BattleView();
-			this.contentFleets = new BeerViewer.Views.Contents.FleetsView();
-			this.contentGeneral = new BeerViewer.Views.Contents.GeneralView();
-			this.contentSettings = new BeerViewer.Views.Contents.SettingsView();
 			this.panelBrowser = new System.Windows.Forms.Panel();
-			this.browserMain = new System.Windows.Forms.WebBrowser();
 			this.layoutTab = new System.Windows.Forms.TableLayoutPanel();
 			this.layoutTabHost = new System.Windows.Forms.Panel();
 			this.layoutTabRight = new System.Windows.Forms.FlowLayoutPanel();
-			this.btnRefresh = new BeerViewer.Views.Controls.FlatButton();
-			this.btnMute = new BeerViewer.Views.Controls.FlatButton();
-			this.btnScreenshot = new BeerViewer.Views.Controls.FlatButton();
 			this.tabSettings = new System.Windows.Forms.Label();
 			this.tabBattle = new System.Windows.Forms.Label();
 			this.tabFleets = new System.Windows.Forms.Label();
 			this.tabGeneral = new System.Windows.Forms.Label();
+			this.contentBattle = new BeerViewer.Views.Contents.BattleView();
+			this.contentFleets = new BeerViewer.Views.Contents.FleetsView();
+			this.contentGeneral = new BeerViewer.Views.Contents.GeneralView();
+			this.contentSettings = new BeerViewer.Views.Contents.SettingsView();
+			this.btnRefresh = new BeerViewer.Views.Controls.FlatButton();
+			this.btnMute = new BeerViewer.Views.Controls.FlatButton();
+			this.btnScreenshot = new BeerViewer.Views.Controls.FlatButton();
+			this.browserMain = new System.Windows.Forms.WebBrowser();
 			this.contentContainer.SuspendLayout();
 			this.panelBrowser.SuspendLayout();
 			this.layoutTab.SuspendLayout();
@@ -78,6 +78,122 @@
 			this.contentContainer.Size = new System.Drawing.Size(640, 383);
 			this.contentContainer.TabIndex = 3;
 			this.contentContainer.Visible = false;
+			// 
+			// panelBrowser
+			// 
+			this.panelBrowser.AutoSize = true;
+			this.panelBrowser.Controls.Add(this.browserMain);
+			this.panelBrowser.Dock = System.Windows.Forms.DockStyle.Left;
+			this.panelBrowser.Location = new System.Drawing.Point(0, 0);
+			this.panelBrowser.Name = "panelBrowser";
+			this.panelBrowser.Size = new System.Drawing.Size(800, 681);
+			this.panelBrowser.TabIndex = 14;
+			// 
+			// layoutTab
+			// 
+			this.layoutTab.AutoScroll = true;
+			this.layoutTab.BackColor = System.Drawing.Color.Transparent;
+			this.layoutTab.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+			this.layoutTab.ColumnCount = 1;
+			this.layoutTab.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.layoutTab.Controls.Add(this.layoutTabHost, 0, 0);
+			this.layoutTab.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.layoutTab.Location = new System.Drawing.Point(800, 0);
+			this.layoutTab.Margin = new System.Windows.Forms.Padding(0);
+			this.layoutTab.Name = "layoutTab";
+			this.layoutTab.RowCount = 2;
+			this.layoutTab.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+			this.layoutTab.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.layoutTab.Size = new System.Drawing.Size(464, 681);
+			this.layoutTab.TabIndex = 15;
+			// 
+			// layoutTabHost
+			// 
+			this.layoutTabHost.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(24)))), ((int)(((byte)(24)))), ((int)(((byte)(24)))));
+			this.layoutTabHost.Controls.Add(this.layoutTabRight);
+			this.layoutTabHost.Controls.Add(this.tabSettings);
+			this.layoutTabHost.Controls.Add(this.tabBattle);
+			this.layoutTabHost.Controls.Add(this.tabFleets);
+			this.layoutTabHost.Controls.Add(this.tabGeneral);
+			this.layoutTabHost.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.layoutTabHost.Location = new System.Drawing.Point(0, 0);
+			this.layoutTabHost.Margin = new System.Windows.Forms.Padding(0, 0, 0, 4);
+			this.layoutTabHost.Name = "layoutTabHost";
+			this.layoutTabHost.Size = new System.Drawing.Size(464, 36);
+			this.layoutTabHost.TabIndex = 3;
+			// 
+			// layoutTabRight
+			// 
+			this.layoutTabRight.AutoSize = true;
+			this.layoutTabRight.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.layoutTabRight.BackColor = System.Drawing.Color.Transparent;
+			this.layoutTabRight.Controls.Add(this.btnRefresh);
+			this.layoutTabRight.Controls.Add(this.btnMute);
+			this.layoutTabRight.Controls.Add(this.btnScreenshot);
+			this.layoutTabRight.Dock = System.Windows.Forms.DockStyle.Right;
+			this.layoutTabRight.Location = new System.Drawing.Point(344, 0);
+			this.layoutTabRight.Margin = new System.Windows.Forms.Padding(0);
+			this.layoutTabRight.Name = "layoutTabRight";
+			this.layoutTabRight.Padding = new System.Windows.Forms.Padding(2);
+			this.layoutTabRight.Size = new System.Drawing.Size(120, 36);
+			this.layoutTabRight.TabIndex = 11;
+			this.layoutTabRight.WrapContents = false;
+			// 
+			// tabSettings
+			// 
+			this.tabSettings.BackColor = System.Drawing.Color.Transparent;
+			this.tabSettings.Dock = System.Windows.Forms.DockStyle.Left;
+			this.tabSettings.Font = new System.Drawing.Font("맑은 고딕", 10F);
+			this.tabSettings.ForeColor = System.Drawing.Color.White;
+			this.tabSettings.Location = new System.Drawing.Point(240, 0);
+			this.tabSettings.Margin = new System.Windows.Forms.Padding(0);
+			this.tabSettings.Name = "tabSettings";
+			this.tabSettings.Size = new System.Drawing.Size(64, 36);
+			this.tabSettings.TabIndex = 10;
+			this.tabSettings.Text = "설정";
+			this.tabSettings.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			// 
+			// tabBattle
+			// 
+			this.tabBattle.BackColor = System.Drawing.Color.Transparent;
+			this.tabBattle.Dock = System.Windows.Forms.DockStyle.Left;
+			this.tabBattle.Font = new System.Drawing.Font("맑은 고딕", 10F);
+			this.tabBattle.ForeColor = System.Drawing.Color.White;
+			this.tabBattle.Location = new System.Drawing.Point(152, 0);
+			this.tabBattle.Margin = new System.Windows.Forms.Padding(0);
+			this.tabBattle.Name = "tabBattle";
+			this.tabBattle.Size = new System.Drawing.Size(88, 36);
+			this.tabBattle.TabIndex = 9;
+			this.tabBattle.Text = "전투 정보";
+			this.tabBattle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			// 
+			// tabFleets
+			// 
+			this.tabFleets.BackColor = System.Drawing.Color.Transparent;
+			this.tabFleets.Dock = System.Windows.Forms.DockStyle.Left;
+			this.tabFleets.Font = new System.Drawing.Font("맑은 고딕", 10F);
+			this.tabFleets.ForeColor = System.Drawing.Color.White;
+			this.tabFleets.Location = new System.Drawing.Point(64, 0);
+			this.tabFleets.Margin = new System.Windows.Forms.Padding(0);
+			this.tabFleets.Name = "tabFleets";
+			this.tabFleets.Size = new System.Drawing.Size(88, 36);
+			this.tabFleets.TabIndex = 8;
+			this.tabFleets.Text = "함대 정보";
+			this.tabFleets.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			// 
+			// tabGeneral
+			// 
+			this.tabGeneral.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(81)))), ((int)(((byte)(117)))), ((int)(((byte)(142)))));
+			this.tabGeneral.Dock = System.Windows.Forms.DockStyle.Left;
+			this.tabGeneral.Font = new System.Drawing.Font("맑은 고딕", 10F);
+			this.tabGeneral.ForeColor = System.Drawing.Color.White;
+			this.tabGeneral.Location = new System.Drawing.Point(0, 0);
+			this.tabGeneral.Margin = new System.Windows.Forms.Padding(0);
+			this.tabGeneral.Name = "tabGeneral";
+			this.tabGeneral.Size = new System.Drawing.Size(64, 36);
+			this.tabGeneral.TabIndex = 3;
+			this.tabGeneral.Text = "종합";
+			this.tabGeneral.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// contentBattle
 			// 
@@ -136,79 +252,6 @@
 			this.contentSettings.Size = new System.Drawing.Size(320, 192);
 			this.contentSettings.TabIndex = 20;
 			// 
-			// panelBrowser
-			// 
-			this.panelBrowser.AutoSize = true;
-			this.panelBrowser.Controls.Add(this.browserMain);
-			this.panelBrowser.Dock = System.Windows.Forms.DockStyle.Left;
-			this.panelBrowser.Location = new System.Drawing.Point(0, 0);
-			this.panelBrowser.Name = "panelBrowser";
-			this.panelBrowser.Size = new System.Drawing.Size(800, 681);
-			this.panelBrowser.TabIndex = 14;
-			// 
-			// browserMain
-			// 
-			this.browserMain.AllowWebBrowserDrop = false;
-			this.browserMain.IsWebBrowserContextMenuEnabled = false;
-			this.browserMain.Location = new System.Drawing.Point(0, 0);
-			this.browserMain.Margin = new System.Windows.Forms.Padding(0);
-			this.browserMain.MinimumSize = new System.Drawing.Size(20, 20);
-			this.browserMain.Name = "browserMain";
-			this.browserMain.ScriptErrorsSuppressed = true;
-			this.browserMain.Size = new System.Drawing.Size(800, 480);
-			this.browserMain.TabIndex = 15;
-			this.browserMain.WebBrowserShortcutsEnabled = false;
-			// 
-			// layoutTab
-			// 
-			this.layoutTab.AutoScroll = true;
-			this.layoutTab.BackColor = System.Drawing.Color.Transparent;
-			this.layoutTab.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-			this.layoutTab.ColumnCount = 1;
-			this.layoutTab.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.layoutTab.Controls.Add(this.layoutTabHost, 0, 0);
-			this.layoutTab.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.layoutTab.Location = new System.Drawing.Point(800, 0);
-			this.layoutTab.Margin = new System.Windows.Forms.Padding(0);
-			this.layoutTab.Name = "layoutTab";
-			this.layoutTab.RowCount = 2;
-			this.layoutTab.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-			this.layoutTab.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.layoutTab.Size = new System.Drawing.Size(464, 681);
-			this.layoutTab.TabIndex = 15;
-			// 
-			// layoutTabHost
-			// 
-			this.layoutTabHost.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(24)))), ((int)(((byte)(24)))), ((int)(((byte)(24)))));
-			this.layoutTabHost.Controls.Add(this.layoutTabRight);
-			this.layoutTabHost.Controls.Add(this.tabSettings);
-			this.layoutTabHost.Controls.Add(this.tabBattle);
-			this.layoutTabHost.Controls.Add(this.tabFleets);
-			this.layoutTabHost.Controls.Add(this.tabGeneral);
-			this.layoutTabHost.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.layoutTabHost.Location = new System.Drawing.Point(0, 0);
-			this.layoutTabHost.Margin = new System.Windows.Forms.Padding(0, 0, 0, 4);
-			this.layoutTabHost.Name = "layoutTabHost";
-			this.layoutTabHost.Size = new System.Drawing.Size(464, 36);
-			this.layoutTabHost.TabIndex = 3;
-			// 
-			// layoutTabRight
-			// 
-			this.layoutTabRight.AutoSize = true;
-			this.layoutTabRight.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.layoutTabRight.BackColor = System.Drawing.Color.Transparent;
-			this.layoutTabRight.Controls.Add(this.btnRefresh);
-			this.layoutTabRight.Controls.Add(this.btnMute);
-			this.layoutTabRight.Controls.Add(this.btnScreenshot);
-			this.layoutTabRight.Dock = System.Windows.Forms.DockStyle.Right;
-			this.layoutTabRight.Location = new System.Drawing.Point(344, 0);
-			this.layoutTabRight.Margin = new System.Windows.Forms.Padding(0);
-			this.layoutTabRight.Name = "layoutTabRight";
-			this.layoutTabRight.Padding = new System.Windows.Forms.Padding(2);
-			this.layoutTabRight.Size = new System.Drawing.Size(120, 36);
-			this.layoutTabRight.TabIndex = 11;
-			this.layoutTabRight.WrapContents = false;
-			// 
 			// btnRefresh
 			// 
 			this.btnRefresh.Anchor = System.Windows.Forms.AnchorStyles.None;
@@ -266,61 +309,18 @@
 			this.btnScreenshot.TabIndex = 14;
 			this.btnScreenshot.Click += new System.EventHandler(this.btnScreenshot_Click);
 			// 
-			// tabSettings
+			// browserMain
 			// 
-			this.tabSettings.BackColor = System.Drawing.Color.Transparent;
-			this.tabSettings.Dock = System.Windows.Forms.DockStyle.Left;
-			this.tabSettings.Font = new System.Drawing.Font("맑은 고딕", 10F);
-			this.tabSettings.ForeColor = System.Drawing.Color.White;
-			this.tabSettings.Location = new System.Drawing.Point(240, 0);
-			this.tabSettings.Margin = new System.Windows.Forms.Padding(0);
-			this.tabSettings.Name = "tabSettings";
-			this.tabSettings.Size = new System.Drawing.Size(64, 36);
-			this.tabSettings.TabIndex = 10;
-			this.tabSettings.Text = "설정";
-			this.tabSettings.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			// 
-			// tabBattle
-			// 
-			this.tabBattle.BackColor = System.Drawing.Color.Transparent;
-			this.tabBattle.Dock = System.Windows.Forms.DockStyle.Left;
-			this.tabBattle.Font = new System.Drawing.Font("맑은 고딕", 10F);
-			this.tabBattle.ForeColor = System.Drawing.Color.White;
-			this.tabBattle.Location = new System.Drawing.Point(152, 0);
-			this.tabBattle.Margin = new System.Windows.Forms.Padding(0);
-			this.tabBattle.Name = "tabBattle";
-			this.tabBattle.Size = new System.Drawing.Size(88, 36);
-			this.tabBattle.TabIndex = 9;
-			this.tabBattle.Text = "전투 정보";
-			this.tabBattle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			// 
-			// tabFleets
-			// 
-			this.tabFleets.BackColor = System.Drawing.Color.Transparent;
-			this.tabFleets.Dock = System.Windows.Forms.DockStyle.Left;
-			this.tabFleets.Font = new System.Drawing.Font("맑은 고딕", 10F);
-			this.tabFleets.ForeColor = System.Drawing.Color.White;
-			this.tabFleets.Location = new System.Drawing.Point(64, 0);
-			this.tabFleets.Margin = new System.Windows.Forms.Padding(0);
-			this.tabFleets.Name = "tabFleets";
-			this.tabFleets.Size = new System.Drawing.Size(88, 36);
-			this.tabFleets.TabIndex = 8;
-			this.tabFleets.Text = "함대 정보";
-			this.tabFleets.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			// 
-			// tabGeneral
-			// 
-			this.tabGeneral.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(81)))), ((int)(((byte)(117)))), ((int)(((byte)(142)))));
-			this.tabGeneral.Dock = System.Windows.Forms.DockStyle.Left;
-			this.tabGeneral.Font = new System.Drawing.Font("맑은 고딕", 10F);
-			this.tabGeneral.ForeColor = System.Drawing.Color.White;
-			this.tabGeneral.Location = new System.Drawing.Point(0, 0);
-			this.tabGeneral.Margin = new System.Windows.Forms.Padding(0);
-			this.tabGeneral.Name = "tabGeneral";
-			this.tabGeneral.Size = new System.Drawing.Size(64, 36);
-			this.tabGeneral.TabIndex = 3;
-			this.tabGeneral.Text = "종합";
-			this.tabGeneral.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.browserMain.AllowWebBrowserDrop = false;
+			this.browserMain.IsWebBrowserContextMenuEnabled = false;
+			this.browserMain.Location = new System.Drawing.Point(0, 0);
+			this.browserMain.Margin = new System.Windows.Forms.Padding(0);
+			this.browserMain.MinimumSize = new System.Drawing.Size(20, 20);
+			this.browserMain.Name = "browserMain";
+			this.browserMain.ScriptErrorsSuppressed = true;
+			this.browserMain.Size = new System.Drawing.Size(800, 480);
+			this.browserMain.TabIndex = 15;
+			this.browserMain.WebBrowserShortcutsEnabled = false;
 			// 
 			// frmMain
 			// 

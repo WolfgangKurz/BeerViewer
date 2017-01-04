@@ -64,6 +64,7 @@ namespace BeerViewer.Views.Controls
 			this.Paint += (s, e) =>
 			{
 				if (e == null) return;
+				if (this.FleetData == null) return;
 
 				var g = e.Graphics;
 				var Width = this.Width - this.Padding.Left - this.Padding.Right;

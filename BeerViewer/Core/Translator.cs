@@ -133,23 +133,33 @@ namespace BeerViewer.Core
 					nodes = xml.SelectNodes("/Quests/Quest");
 					foreach (XmlNode node in nodes)
 					{
-						try { Translator.QuestNameTable.AddOrUpdate(node["NameSource"].InnerText, node["NameValue"].InnerText, (a, b) => b); }
-						catch { }
+						if (node["NameSource"] != null && node["NameValue"] != null) {
+							try { Translator.QuestNameTable.AddOrUpdate(node["NameSource"].InnerText, node["NameValue"].InnerText, (a, b) => b); }
+							catch { }
+						}
 
-						try { Translator.QuestDetailTable.AddOrUpdate(node["DetailSource"].InnerText, node["DetailValue"].InnerText, (a, b) => b); }
-						catch { }
+						if (node["DetailSource"] != null && node["DetailValue"] != null)
+						{
+							try { Translator.QuestDetailTable.AddOrUpdate(node["DetailSource"].InnerText, node["DetailValue"].InnerText, (a, b) => b); }
+							catch { }
+						}
 
-						try {
-							Translator.QuestIdTable.AddOrUpdate(
-								node["ID"].InnerText,
-								new QuestNameDetail
-								{
-									Name = node["NameValue"].InnerText,
-									Detail = node["DetailValue"].InnerText
-								},
-								(a, b) => b
-							);
-						} catch { }
+						if (node["ID"] != null && node["NameValue"] != null && node["DetailValue"] != null)
+						{
+							try
+							{
+								Translator.QuestIdTable.AddOrUpdate(
+									node["ID"].InnerText,
+									new QuestNameDetail
+									{
+										Name = node["NameValue"].InnerText,
+										Detail = node["DetailValue"].InnerText
+									},
+									(a, b) => b
+								);
+							}
+							catch { }
+						}
 					}
 					break;
 

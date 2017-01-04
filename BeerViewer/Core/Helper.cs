@@ -15,7 +15,7 @@ using System.IO;
 using System.Drawing.Imaging;
 using WebBrowser = System.Windows.Forms.WebBrowser;
 using Control = System.Windows.Forms.Control;
-using MethodInvoker = System.Windows.Forms.MethodInvoker;
+using IServiceProvider = BeerViewer.Win32.IServiceProvider;
 
 using BeerViewer.Win32;
 
@@ -93,6 +93,7 @@ namespace BeerViewer.Core
 				{
 					DataStorage.Instance.Ready = true;
 
+					#region Enterance Page
 					if (e.Url.OriginalString == "about:blank")
 					{
 						if (BrowserFirstLoaded) return;
@@ -161,6 +162,7 @@ namespace BeerViewer.Core
 						}
 						return;
 					}
+					#endregion
 
 					try
 					{
@@ -174,14 +176,51 @@ namespace BeerViewer.Core
 								gameFrame = document.Body;
 						}
 
+						#region Apply Stylesheet
 						var target = gameFrame?.Document;
 						if (target != null)
 						{
-							var elem = target.CreateElement("style");
-							elem.SetAttribute("type", "text/css");
-							elem.InnerHtml = Helper.UserStyleSheet;
-							document.Body.AppendChild(elem);
+							var style = target.CreateElement("style");
+							style.SetAttribute("type", "text/css");
+							style.InnerHtml = Helper.UserStyleSheet;
+							document.Body.AppendChild(style);
 						}
+						#endregion
+
+						#region Apply FlashQuality
+						var frames = (document.DomDocument as HTMLDocument).frames;
+						for (var i = 0; i < frames.length; i++)
+						{
+							var item = frames.item(i);
+							var provider = item as IServiceProvider;
+							if (provider == null) continue;
+
+							object ppvObject;
+							provider.QueryService(typeof(IWebBrowserApp).GUID, typeof(IWebBrowser2).GUID, out ppvObject);
+							var webBrowser = ppvObject as IWebBrowser2;
+
+							var iframeDocument = webBrowser?.Document as HTMLDocument;
+							if (iframeDocument == null) continue;
+
+							if (!iframeDocument.location.href.Contains("/ifr?")) continue;
+
+							string qualityString = "high";
+							switch (Settings.FlashQuality.Value)
+							{
+								case 0: qualityString = "high"; break;
+								case 1: qualityString = "medium"; break;
+								case 2: qualityString = "low"; break;
+							}
+
+							string scriptContent =
+								"window.kcsFlash_StartFlash = function(a){var b={id:'externalswf',width:'800',height:'480',wmode:'opaque',quality:'" + qualityString + "',bgcolor:'#000000',allowScriptAccess:'always'};document.getElementById('flashWrap').innerHTML=ConstMessageInfo.InstallFlashMessage,gadgets.flash.embedFlash(a+ConstURLInfo.MainFlashURL+'?api_token='+flashInfo.apiToken+'&api_starttime='+flashInfo.apiStartTime,document.getElementById('flashWrap'),6,b),document.getElementById('adFlashWrap').style.height='0px',document.getElementById('wsFlashWrap').style.height='0px',document.getElementById('flashWrap').style.height='480px',gadgets.window.adjustHeight(ConstGadgetInfo.height)};"
+							;
+							var elem = iframeDocument.createElement("SCRIPT");
+							elem.setAttribute("type", "text/javascript");
+							elem.innerHTML = scriptContent;
+							iframeDocument.appendChild(elem as IHTMLDOMNode);
+						}
+						#endregion
 					}
 					catch (Exception ex)
 					{
