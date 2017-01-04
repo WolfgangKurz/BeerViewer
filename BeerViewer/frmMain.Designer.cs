@@ -33,8 +33,8 @@
 			this.panelBrowser = new System.Windows.Forms.Panel();
 			this.layoutTab = new System.Windows.Forms.TableLayoutPanel();
 			this.layoutTabHost = new System.Windows.Forms.Panel();
+			this.layoutTabRight = new System.Windows.Forms.FlowLayoutPanel();
 			this.tabSettings = new System.Windows.Forms.Label();
-			this.layoutTabRight = new System.Windows.Forms.Panel();
 			this.tabBattle = new System.Windows.Forms.Label();
 			this.tabFleets = new System.Windows.Forms.Label();
 			this.tabGeneral = new System.Windows.Forms.Label();
@@ -42,6 +42,8 @@
 			this.contentFleets = new BeerViewer.Views.Contents.FleetsView();
 			this.contentGeneral = new BeerViewer.Views.Contents.GeneralView();
 			this.contentSettings = new BeerViewer.Views.Contents.SettingsView();
+			this.btnRefresh = new BeerViewer.Views.Controls.FlatButton();
+			this.btnMute = new BeerViewer.Views.Controls.FlatButton();
 			this.btnScreenshot = new BeerViewer.Views.Controls.FlatButton();
 			this.browserMain = new System.Windows.Forms.WebBrowser();
 			this.contentContainer.SuspendLayout();
@@ -107,9 +109,9 @@
 			// 
 			// layoutTabHost
 			// 
-			this.layoutTabHost.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))));
-			this.layoutTabHost.Controls.Add(this.tabSettings);
+			this.layoutTabHost.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(24)))), ((int)(((byte)(24)))), ((int)(((byte)(24)))));
 			this.layoutTabHost.Controls.Add(this.layoutTabRight);
+			this.layoutTabHost.Controls.Add(this.tabSettings);
 			this.layoutTabHost.Controls.Add(this.tabBattle);
 			this.layoutTabHost.Controls.Add(this.tabFleets);
 			this.layoutTabHost.Controls.Add(this.tabGeneral);
@@ -119,6 +121,23 @@
 			this.layoutTabHost.Name = "layoutTabHost";
 			this.layoutTabHost.Size = new System.Drawing.Size(464, 36);
 			this.layoutTabHost.TabIndex = 3;
+			// 
+			// layoutTabRight
+			// 
+			this.layoutTabRight.AutoSize = true;
+			this.layoutTabRight.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.layoutTabRight.BackColor = System.Drawing.Color.Transparent;
+			this.layoutTabRight.Controls.Add(this.btnRefresh);
+			this.layoutTabRight.Controls.Add(this.btnMute);
+			this.layoutTabRight.Controls.Add(this.btnScreenshot);
+			this.layoutTabRight.Dock = System.Windows.Forms.DockStyle.Right;
+			this.layoutTabRight.Location = new System.Drawing.Point(344, 0);
+			this.layoutTabRight.Margin = new System.Windows.Forms.Padding(0);
+			this.layoutTabRight.Name = "layoutTabRight";
+			this.layoutTabRight.Padding = new System.Windows.Forms.Padding(2);
+			this.layoutTabRight.Size = new System.Drawing.Size(120, 36);
+			this.layoutTabRight.TabIndex = 11;
+			this.layoutTabRight.WrapContents = false;
 			// 
 			// tabSettings
 			// 
@@ -133,19 +152,6 @@
 			this.tabSettings.TabIndex = 10;
 			this.tabSettings.Text = "설정";
 			this.tabSettings.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			// 
-			// layoutTabRight
-			// 
-			this.layoutTabRight.AutoSize = true;
-			this.layoutTabRight.BackColor = System.Drawing.Color.Transparent;
-			this.layoutTabRight.Controls.Add(this.btnScreenshot);
-			this.layoutTabRight.Dock = System.Windows.Forms.DockStyle.Right;
-			this.layoutTabRight.Location = new System.Drawing.Point(385, 0);
-			this.layoutTabRight.Margin = new System.Windows.Forms.Padding(0);
-			this.layoutTabRight.Name = "layoutTabRight";
-			this.layoutTabRight.Padding = new System.Windows.Forms.Padding(2);
-			this.layoutTabRight.Size = new System.Drawing.Size(79, 36);
-			this.layoutTabRight.TabIndex = 7;
 			// 
 			// tabBattle
 			// 
@@ -246,22 +252,62 @@
 			this.contentSettings.Size = new System.Drawing.Size(320, 192);
 			this.contentSettings.TabIndex = 20;
 			// 
+			// btnRefresh
+			// 
+			this.btnRefresh.Anchor = System.Windows.Forms.AnchorStyles.None;
+			this.btnRefresh.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(39)))), ((int)(((byte)(47)))));
+			this.btnRefresh.BackgroundImage = global::BeerViewer.Properties.Resources.Refresh;
+			this.btnRefresh.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(83)))), ((int)(((byte)(83)))), ((int)(((byte)(83)))));
+			this.btnRefresh.DownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(81)))), ((int)(((byte)(117)))), ((int)(((byte)(142)))));
+			this.btnRefresh.DownBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(71)))), ((int)(((byte)(83)))));
+			this.btnRefresh.Font = new System.Drawing.Font("맑은 고딕", 10F);
+			this.btnRefresh.ForeColor = System.Drawing.Color.White;
+			this.btnRefresh.Location = new System.Drawing.Point(6, 2);
+			this.btnRefresh.Margin = new System.Windows.Forms.Padding(4, 0, 0, 0);
+			this.btnRefresh.Name = "btnRefresh";
+			this.btnRefresh.OverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(89)))), ((int)(((byte)(89)))), ((int)(((byte)(89)))));
+			this.btnRefresh.OverBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(71)))), ((int)(((byte)(83)))));
+			this.btnRefresh.Size = new System.Drawing.Size(32, 32);
+			this.btnRefresh.TabIndex = 16;
+			this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
+			// 
+			// btnMute
+			// 
+			this.btnMute.Anchor = System.Windows.Forms.AnchorStyles.None;
+			this.btnMute.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(39)))), ((int)(((byte)(47)))));
+			this.btnMute.BackgroundImage = global::BeerViewer.Properties.Resources.Volume;
+			this.btnMute.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(83)))), ((int)(((byte)(83)))), ((int)(((byte)(83)))));
+			this.btnMute.DownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(81)))), ((int)(((byte)(117)))), ((int)(((byte)(142)))));
+			this.btnMute.DownBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(71)))), ((int)(((byte)(83)))));
+			this.btnMute.Font = new System.Drawing.Font("맑은 고딕", 10F);
+			this.btnMute.ForeColor = System.Drawing.Color.White;
+			this.btnMute.Location = new System.Drawing.Point(42, 2);
+			this.btnMute.Margin = new System.Windows.Forms.Padding(4, 0, 0, 0);
+			this.btnMute.Name = "btnMute";
+			this.btnMute.OverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(89)))), ((int)(((byte)(89)))), ((int)(((byte)(89)))));
+			this.btnMute.OverBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(71)))), ((int)(((byte)(83)))));
+			this.btnMute.Size = new System.Drawing.Size(36, 32);
+			this.btnMute.TabIndex = 15;
+			this.btnMute.Click += new System.EventHandler(this.btnMute_Click);
+			// 
 			// btnScreenshot
 			// 
+			this.btnScreenshot.Anchor = System.Windows.Forms.AnchorStyles.None;
 			this.btnScreenshot.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(39)))), ((int)(((byte)(47)))));
+			this.btnScreenshot.BackgroundImage = global::BeerViewer.Properties.Resources.Screenshot;
 			this.btnScreenshot.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(83)))), ((int)(((byte)(83)))), ((int)(((byte)(83)))));
-			this.btnScreenshot.Dock = System.Windows.Forms.DockStyle.Right;
 			this.btnScreenshot.DownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(81)))), ((int)(((byte)(117)))), ((int)(((byte)(142)))));
 			this.btnScreenshot.DownBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(71)))), ((int)(((byte)(83)))));
 			this.btnScreenshot.Font = new System.Drawing.Font("맑은 고딕", 10F);
 			this.btnScreenshot.ForeColor = System.Drawing.Color.White;
-			this.btnScreenshot.Location = new System.Drawing.Point(2, 2);
+			this.btnScreenshot.Location = new System.Drawing.Point(82, 2);
+			this.btnScreenshot.Margin = new System.Windows.Forms.Padding(4, 0, 0, 0);
 			this.btnScreenshot.Name = "btnScreenshot";
 			this.btnScreenshot.OverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(89)))), ((int)(((byte)(89)))), ((int)(((byte)(89)))));
 			this.btnScreenshot.OverBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(71)))), ((int)(((byte)(83)))));
-			this.btnScreenshot.Size = new System.Drawing.Size(75, 32);
-			this.btnScreenshot.TabIndex = 11;
-			this.btnScreenshot.Text = "스크린샷";
+			this.btnScreenshot.Size = new System.Drawing.Size(36, 32);
+			this.btnScreenshot.TabIndex = 14;
+			this.btnScreenshot.Click += new System.EventHandler(this.btnScreenshot_Click);
 			// 
 			// browserMain
 			// 
@@ -315,11 +361,13 @@
 		private System.Windows.Forms.TableLayoutPanel layoutTab;
 		private System.Windows.Forms.Panel layoutTabHost;
 		private System.Windows.Forms.Label tabSettings;
-		private System.Windows.Forms.Panel layoutTabRight;
-		private Views.Controls.FlatButton btnScreenshot;
 		private System.Windows.Forms.Label tabBattle;
 		private System.Windows.Forms.Label tabFleets;
 		private System.Windows.Forms.Label tabGeneral;
+		private System.Windows.Forms.FlowLayoutPanel layoutTabRight;
+		private Views.Controls.FlatButton btnRefresh;
+		private Views.Controls.FlatButton btnMute;
+		private Views.Controls.FlatButton btnScreenshot;
 	}
 }
 

@@ -15,6 +15,8 @@ namespace BeerViewer.Core
 {
 	internal class Settings
 	{
+		public static SettingValue<bool> Application_Muted { get; set; } = new SettingValue<bool>(GetKey(), false);
+
 		public static SettingValue<int> Application_X { get; set; } = new SettingValue<int>(GetKey(), int.MinValue);
 		public static SettingValue<int> Application_Y { get; set; } = new SettingValue<int>(GetKey(), int.MinValue);
 		public static SettingValue<int> Application_Width { get; set; } = new SettingValue<int>(GetKey(), int.MinValue);
@@ -43,8 +45,11 @@ namespace BeerViewer.Core
 		public static SettingValue<bool> BattleInfo_SecondIsCritical { get; set; } = new SettingValue<bool>(GetKey(), false);
 		public static SettingValue<bool> BattleInfo_EnableColorChange { get; set; } = new SettingValue<bool>(GetKey(), true);
 
+		public static SettingValue<bool> BackHome_AutoSelectTab { get; set; } = new SettingValue<bool>(GetKey(), true);
 		public static SettingValue<bool> BattleInfo_CriticalEnabled { get; set; } = new SettingValue<bool>(GetKey(), true);
 		public static SettingValue<bool> BattleInfo_IsEnabledBattleEndNotify { get; set; } = new SettingValue<bool>(GetKey(), true);
+
+		public static SettingValue<int> FlashQuality { get; set; } = new SettingValue<int>(GetKey(), 0);
 
 
 		internal class SettingValue<T> : Notifier

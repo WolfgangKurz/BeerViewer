@@ -93,13 +93,12 @@ namespace BeerViewer.Views.Contents
 
 				foreach (var fleet in fleets)
 				{
-					UpdateExpedition(fleet);
 					UpdateFleetState(fleet);
 
 					if (fleet != null)
 					{
-						fleet.Expedition.PropertyEvent(nameof(fleet.Expedition.Id), () => UpdateExpedition(fleet));
-						fleet.Expedition.PropertyEvent(nameof(fleet.Expedition.Remaining), () => UpdateExpedition(fleet));
+						fleet.Expedition.PropertyEvent(nameof(fleet.Expedition.Id), () => UpdateFleetState(fleet));
+						fleet.Expedition.PropertyEvent(nameof(fleet.Expedition.Remaining), () => UpdateFleetState(fleet));
 
 						fleet.State.Condition.PropertyEvent(nameof(fleet.State.Condition.Remaining), () => UpdateFleetState(fleet));
 						fleet.State.Updated += (s, e) => UpdateFleetState(fleet);
@@ -209,10 +208,16 @@ namespace BeerViewer.Views.Contents
 			else
 			{
 				if (fleet.Expedition.Id > 0)
-					UpdateDisplay(fleet.Id, $"{fleet.Id}번 함대", "원정중 ", Color.FromArgb(0x20, 0x40, 0x80));
+				{
+					var time = fleet.Expedition.Remaining;
+					var remaining = time.HasValue
+						? $"{(int)time.Value.TotalHours:D2}:{time.Value.ToString(@"mm\:ss")}"
+						: "--:--:--";
+					UpdateDisplay(fleet.Id, $"{fleet.Expedition.Id}번 원정", remaining, Color.FromArgb(0x20, 0x40, 0x80));
+				}
 
 				else if (fleet.IsInSortie)
-					UpdateDisplay(fleet.Id, $"{fleet.Id}번 함대", "출격중 ", Color.FromArgb(0x7E, 0x01, 0x01));
+					UpdateDisplay(fleet.Id, $"{fleet.Id}번 함대", "출격중", Color.FromArgb(0x7E, 0x01, 0x01));
 
 				else if (fleet.State.Situation == FleetSituation.Empty)
 					UpdateDisplay(fleet.Id, $"{fleet.Id}번 함대", "없음", Color.FromArgb(0x3E, 0x3E, 0x42));
@@ -241,39 +246,6 @@ namespace BeerViewer.Views.Contents
 
 				else
 					UpdateDisplay(fleet.Id, $"{fleet.Id}번 함대", "출격 가능", Color.FromArgb(0x28, 0x64, 0x14));
-			}
-		}
-		private void UpdateExpedition(Fleet fleet)
-		{
-			if (fleet.Id <= 1) return;
-
-			Action<int, string, string> UpdateDisplay = (idx, name, time) =>
-			{
-				var cell = tableExpedition.TableCells[idx - 1];
-				cell.Header = name;
-				cell.Value = time;
-				cell.Visible = time != null;
-				if (time == "" || time == "--:--:--")
-					cell.ForeColor = Color.Gray;
-				else
-					cell.ForeColor = Color.White;
-
-				tableExpedition.RequestUpdate();
-			};
-
-			if (fleet == null)
-				UpdateDisplay(fleet.Id - 1, "", null);
-
-			else if (fleet.Expedition.Id == -1)
-				UpdateDisplay(fleet.Id - 1, $"제 {fleet.Id} 함대", "--:--:--");
-
-			else
-			{
-				var time = fleet.Expedition.Remaining;
-				var remaining = time.HasValue
-					? $"{(int)time.Value.TotalHours:D2}:{time.Value.ToString(@"mm\:ss")}"
-					: "--:--:--";
-				UpdateDisplay(fleet.Id - 1, $"{fleet.Expedition.Id}번 원정", remaining);
 			}
 		}
 		private void UpdateNDock(RepairingDock dock)
@@ -377,6 +349,8 @@ namespace BeerViewer.Views.Contents
 			tableHQRecord.TableCells[0].Visible = true;
 			tableHQRecord.TableCells[1].Visible = true;
 			tableHQRecord.TableCells[2].Visible = true;
+
+			tableHQRecord.RequestUpdate();
 		}
 
 		private catalogCalc catalogCalculator { get; set; }

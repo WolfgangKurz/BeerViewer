@@ -169,6 +169,7 @@ namespace BeerViewer.Views.Controls
 		{
 			this.DoubleBuffered = true;
 
+			this.DoubleClick += (s, e) => this.OnClick(e);
 			this.MouseEnter += (s, e) =>this.State |= ButtonState.Over;
 			this.MouseLeave += (s, e) => this.State &= ~ButtonState.Over;
 			this.MouseDown += (s, e) => this.State |= ButtonState.Down;
@@ -200,14 +201,30 @@ namespace BeerViewer.Views.Controls
 				using (Pen p = new Pen(borderColor, 1.0f))
 					g.DrawRectangle(p, new Rectangle(0, 0, this.Width - 1, this.Height - 1));
 
-				TextRenderer.DrawText(
-					g,
-					this.Text,
-					this.Font,
-					this.ClientRectangle,
-					this.Enabled ? this.ForeColor : Color.Gray,
-					TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter
-				);
+				if (this.BackgroundImage != null)
+				{
+					var image = this.BackgroundImage;
+					g.DrawImage(
+						image,
+						new Rectangle(
+							this.Width / 2 - image.Width / 2,
+							this.Height / 2 - image.Height / 2,
+							image.Width,
+							image.Height
+						)
+					);
+				}
+				else
+				{
+					TextRenderer.DrawText(
+						g,
+						this.Text,
+						this.Font,
+						this.ClientRectangle,
+						this.Enabled ? this.ForeColor : Color.Gray,
+						TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter
+					);
+				}
 			};
 		}
 	}

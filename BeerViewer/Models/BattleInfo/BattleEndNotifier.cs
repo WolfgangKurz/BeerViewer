@@ -53,7 +53,7 @@ namespace BeerViewer.Models.BattleInfo
 			proxy.Register(Proxy.api_req_sortie_battleresult, e => this.NotifyEndOfBattle());
 			proxy.Register(Proxy.api_req_map_start, e => this.IsCriticalCheck());
 			proxy.Register("/kcsapi/api_req_map/next", e => this.IsCriticalCheck());
-			proxy.Register(Proxy.api_port, e => Helper.SetCritical(false));
+			proxy.Register(Proxy.api_port, e => this.BackHome());
 		}
 		private bool IsCriticalCheck()
 		{
@@ -78,6 +78,12 @@ namespace BeerViewer.Models.BattleInfo
 					"전투종료",
 					"전투가 종료되었습니다"
 				);
+		}
+		private void BackHome()
+		{
+			Helper.SetCritical(false);
+			if (Settings.BackHome_AutoSelectTab.Value && (DataStorage.Instance?.IsInSortie ?? false))
+				frmMain.Instance?.UpdateTab("General");
 		}
 
 		private void Notify(string type, string title, string message, bool IsCritical = false)

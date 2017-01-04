@@ -15,7 +15,7 @@ using System.IO;
 using System.Drawing.Imaging;
 using WebBrowser = System.Windows.Forms.WebBrowser;
 using Control = System.Windows.Forms.Control;
-using MethodInvoker = System.Windows.Forms.MethodInvoker;
+using IServiceProvider = BeerViewer.Win32.IServiceProvider;
 
 using BeerViewer.Win32;
 
@@ -25,6 +25,14 @@ namespace BeerViewer.Core
 	{
 		[DllImport("user32.dll")]
 		private static extern long LockWindowUpdate(IntPtr Handle);
+
+		[DllImport("gdi32.dll")]
+		static extern int GetDeviceCaps(IntPtr hdc, int nIndex);
+		public enum DeviceCap
+		{
+			VERTRES = 10,
+			DESKTOPVERTRES = 117
+		}
 
 		private static int UseGPUAcceleration => 1;
 		private static int FeatureBrowserEmulation => 11000;
@@ -77,7 +85,7 @@ namespace BeerViewer.Core
 		/// <summary>
 		/// 시작 전 브라우저 준비
 		/// </summary>
-		public static void PrepareBrowser(WebBrowser browser, bool withoutEventAttaching =false)
+		public static void PrepareBrowser(WebBrowser browser, bool withoutEventAttaching = false)
 		{
 			if (!BrowserFirstLoaded)
 			{
@@ -85,11 +93,13 @@ namespace BeerViewer.Core
 				{
 					DataStorage.Instance.Ready = true;
 
+					#region Enterance Page
 					if (e.Url.OriginalString == "about:blank")
 					{
 						if (BrowserFirstLoaded) return;
 						BrowserFirstLoaded = true;
 
+						#region Setup Page
 						Assembly assembly = Assembly.GetExecutingAssembly();
 						Version Version = assembly.GetName().Version;
 
@@ -112,9 +122,6 @@ namespace BeerViewer.Core
 							"window.game_start = function(elem){{\n"
 							+ "try{ " + Const.PatchCookie + Const.GameURL + " }catch(e){ alert(e) }\n"
 							+ " elem.style.visibility=\"hidden\";\n"
-							+ "}};"
-							+ "window.patch_cookie = function(){{\n"
-							+ "try{ " + Const.PatchCookie + ";alert(\"Patch Complete\"); }catch(e){ alert(e) }"
 							+ "}};";
 						browser.Document.Body.AppendChild(script);
 
@@ -127,7 +134,6 @@ namespace BeerViewer.Core
 								+ "</div>"
 								+ "<h1>BeerViewer</h1>"
 								+ "<h3><span>{0}</span><span>{1}</span></h3>"
-								+ "<a href=\"#\" onclick=\"window.patch_cookie();\">Patch Cookie</a>"
 								+ "<a href=\"#\" onclick=\"window.game_start(this);\">GAME START</a>"
 								+ "<div id=\"update\"></div>"
 							+ " </div>",
@@ -135,7 +141,18 @@ namespace BeerViewer.Core
 							$"rev.{Version.Revision}"
 						);
 						browser.Document.Body.AppendChild(root);
+						#endregion
 
+						#region Apply Cookies
+						browser?.Navigate(
+							string.Format(
+								"javascript:void(eval(\"{0};\"));",
+								Const.PatchCookie
+							)
+						);
+						#endregion
+
+						#region Update Check
 						var updateLayer = browser.Document.GetElementById("update");
 						if (updateLayer != null)
 						{
@@ -151,12 +168,14 @@ namespace BeerViewer.Core
 									);
 								}
 								else if ((int)Checker.State < 0) // Error
-								updateLayer.InnerHtml = "<span style=\"padding:7px 0\">Update information pending failed</span>";
+									updateLayer.InnerHtml = "<span style=\"padding:7px 0\">Update information pending failed</span>";
 							});
 							Checker.RequestCheck();
 						}
+						#endregion
 						return;
 					}
+					#endregion
 
 					try
 					{
@@ -170,14 +189,51 @@ namespace BeerViewer.Core
 								gameFrame = document.Body;
 						}
 
+						#region Apply Stylesheet
 						var target = gameFrame?.Document;
 						if (target != null)
 						{
-							var elem = target.CreateElement("style");
-							elem.SetAttribute("type", "text/css");
-							elem.InnerHtml = Helper.UserStyleSheet;
-							document.Body.AppendChild(elem);
+							var style = target.CreateElement("style");
+							style.SetAttribute("type", "text/css");
+							style.InnerHtml = Helper.UserStyleSheet;
+							document.Body.AppendChild(style);
 						}
+						#endregion
+
+						#region Apply FlashQuality
+						var frames = (document.DomDocument as HTMLDocument).frames;
+						for (var i = 0; i < frames.length; i++)
+						{
+							var item = frames.item(i);
+							var provider = item as IServiceProvider;
+							if (provider == null) continue;
+
+							object ppvObject;
+							provider.QueryService(typeof(IWebBrowserApp).GUID, typeof(IWebBrowser2).GUID, out ppvObject);
+							var webBrowser = ppvObject as IWebBrowser2;
+
+							var iframeDocument = webBrowser?.Document as HTMLDocument;
+							if (iframeDocument == null) continue;
+
+							if (!iframeDocument.location.href.Contains("/ifr?")) continue;
+
+							string qualityString = "high";
+							switch (Settings.FlashQuality.Value)
+							{
+								case 0: qualityString = "high"; break;
+								case 1: qualityString = "medium"; break;
+								case 2: qualityString = "low"; break;
+							}
+
+							string scriptContent =
+								"window.kcsFlash_StartFlash = function(a){var b={id:'externalswf',width:'800',height:'480',wmode:'opaque',quality:'" + qualityString + "',bgcolor:'#000000',allowScriptAccess:'always'};document.getElementById('flashWrap').innerHTML=ConstMessageInfo.InstallFlashMessage,gadgets.flash.embedFlash(a+ConstURLInfo.MainFlashURL+'?api_token='+flashInfo.apiToken+'&api_starttime='+flashInfo.apiStartTime,document.getElementById('flashWrap'),6,b),document.getElementById('adFlashWrap').style.height='0px',document.getElementById('wsFlashWrap').style.height='0px',document.getElementById('flashWrap').style.height='480px',gadgets.window.adjustHeight(ConstGadgetInfo.height)};"
+							;
+							var elem = iframeDocument.createElement("SCRIPT");
+							elem.setAttribute("type", "text/javascript");
+							elem.innerHTML = scriptContent;
+							iframeDocument.appendChild(elem as IHTMLDOMNode);
+						}
+						#endregion
 					}
 					catch (Exception ex)
 					{
@@ -307,6 +363,17 @@ namespace BeerViewer.Core
 			action?.Invoke();
 			control.ResumeLayout(false);
 			LockWindowUpdate(IntPtr.Zero);
+		}
+
+		public static double GetDPIFactor()
+		{
+			Graphics g = Graphics.FromHwnd(IntPtr.Zero);
+			IntPtr desktop = g.GetHdc();
+			int LogicalScreenHeight = GetDeviceCaps(desktop, (int)DeviceCap.VERTRES);
+			int PhysicalScreenHeight = GetDeviceCaps(desktop, (int)DeviceCap.DESKTOPVERTRES);
+
+			double ScreenScalingFactor = (double)PhysicalScreenHeight / LogicalScreenHeight;
+			return ScreenScalingFactor; // 1.25 = 125%
 		}
 	}
 }
