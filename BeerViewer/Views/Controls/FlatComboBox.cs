@@ -106,8 +106,6 @@ namespace BeerViewer.Views.Controls
 
 		protected override void OnDropDown(EventArgs e)
 		{
-			this.DropDownHeight = (GetPreferredSize(Size.Empty).Height + 6) * Math.Min(15, this.Items.Count) + 2;
-
 			isDropdowned = true;
 			Invalidate();
 		}
@@ -120,7 +118,6 @@ namespace BeerViewer.Views.Controls
 				this.Capture = true;
 				base.OnMouseLeave(e);
 			}
-
 			Invalidate();
 		}
 
@@ -129,11 +126,12 @@ namespace BeerViewer.Views.Controls
 			try { e.Graphics.Clear(BackColor); }
 			catch { Invalidate(); }
 		}
-
 		protected override void OnPaint(PaintEventArgs e)
 		{
 			try
 			{
+				this.DropDownHeight = (this.Height + 6) * Math.Min(15, this.Items?.Count ?? 0) + 2;
+
 				if (GetStyle(ControlStyles.AllPaintingInWmPaint))
 					OnPaintBackground(e);
 
@@ -141,7 +139,6 @@ namespace BeerViewer.Views.Controls
 			}
 			catch { Invalidate(); }
 		}
-
 		protected virtual void OnPaintForeground(PaintEventArgs e)
 		{
 			var g = e.Graphics;
@@ -314,7 +311,6 @@ namespace BeerViewer.Views.Controls
 			using (Graphics graphics = CreateGraphics())
 				DrawTextPrompt(graphics);
 		}
-
 		private void DrawTextPrompt(Graphics g)
 		{
 			Rectangle textRect = new Rectangle(4, 2, Width - 24, Height - 4);
@@ -339,7 +335,6 @@ namespace BeerViewer.Views.Controls
 			}
 			base.OnKeyDown(e);
 		}
-
 		protected override void OnKeyUp(KeyEventArgs e)
 		{
 			Invalidate();
@@ -352,7 +347,6 @@ namespace BeerViewer.Views.Controls
 			Invalidate();
 			base.OnMouseEnter(e);
 		}
-
 		protected override void OnMouseDown(MouseEventArgs e)
 		{
 			if (e.Button == MouseButtons.Left)
@@ -362,21 +356,18 @@ namespace BeerViewer.Views.Controls
 			}
 			base.OnMouseDown(e);
 		}
-
 		protected override void OnMouseUp(MouseEventArgs e)
 		{
 			isPressed = false;
 			Invalidate();
 			base.OnMouseUp(e);
 		}
-
 		protected override void OnMouseLeave(EventArgs e)
 		{
 			isHovered = false;
 			Invalidate();
 			base.OnMouseLeave(e);
 		}
-
 		protected override void OnMouseMove(MouseEventArgs e)
 		{
 			if (!this.Capture) return;
@@ -411,13 +402,22 @@ namespace BeerViewer.Views.Controls
 		private const int OCM_COMMAND = 0x2111;
 		private const int WM_PAINT = 15;
 
-		[System.Runtime.ExceptionServices.HandleProcessCorruptedStateExceptions]
+		private const int CB_ADDSTRING = 0x143;
+		private const int CB_DELETESTRING = 0x144;
+		private const int CB_INSERTSTRING = 330;
+		private const int CB_RESETCONTENT = 0x14B;
+
 		protected override void WndProc(ref Message m)
 		{
 			base.WndProc(ref m);
 
-			if (((m.Msg == WM_PAINT) || (m.Msg == OCM_COMMAND)) && DrawPrompt)
-				DrawTextPrompt();
+			switch (m.Msg)
+			{
+				case WM_PAINT:
+					if ((m.Msg == OCM_COMMAND) && DrawPrompt)
+						DrawTextPrompt();
+					break;
+			}
 		}
 
 		private Color GetBackColor()

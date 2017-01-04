@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using ImageFormat = System.Drawing.Imaging.ImageFormat;
+using IServiceProvider = BeerViewer.Win32.IServiceProvider;
+using SHDocVw;
 
 using BeerViewer.Core;
 using BeerViewer.Views.Catalogs;
@@ -17,6 +19,8 @@ namespace BeerViewer
 	{
 		public static frmMain Instance { get; private set; }
 		public string CurrentTab { get; private set; }
+
+		public System.Windows.Forms.WebBrowser Browser => this.browserMain;
 
 		private Dictionary<Label, Control> tabList { get; set; }
 		public void UpdateTab(string TabName)
@@ -74,10 +78,11 @@ namespace BeerViewer
 
 		public frmMain()
 		{
+			InitializeComponent();
+
 			frmMain.Instance = this;
 			MessageProvider.Instance.SetProvider(this);
 
-			InitializeComponent();
 			InitializeTabs();
 
 			Helper.SetRegistryFeatureBrowserEmulation();
@@ -109,6 +114,23 @@ namespace BeerViewer
 				else
 					LayoutChange();
 			}, true);
+
+			Proxy.Instance.Register(e =>
+			{
+				if (!e.Request.PathAndQuery.StartsWith("/kcsapi/")) return;
+
+				var x = e.TryParse();
+				if(x==null || !x.IsSuccess)
+				{
+					MessageProvider.Instance.Submit(
+						string.Format(
+							"서버에서 {0} 오류를 전달했습니다.",
+							x?.RawData.api_result ?? -1
+						),
+						"BeerViewer"
+					);
+				}
+			});
 		}
 		private void InitializeTabs()
 		{
@@ -137,6 +159,47 @@ namespace BeerViewer
 			}
 
 			Helper.SetCritical(true);
+		}
+
+		public void SetBackColor(Color color)
+		{
+			if (this.InvokeRequired)
+			{
+				this.Invoke(() => SetBackColor(color));
+				return;
+			}
+
+			this.BackColor = color;
+			this.contentSettings?.SetBackColor(color);
+		}
+		public void SetZoom(double zoomFactor)
+		{
+			try
+			{
+				var provider = this.browserMain.Document.DomDocument as IServiceProvider;
+				if (provider == null) return;
+
+				object ppvObject;
+				provider.QueryService(typeof(IWebBrowserApp).GUID, typeof(IWebBrowser2).GUID, out ppvObject);
+				var webBrowser = ppvObject as IWebBrowser2;
+				if (webBrowser == null) return;
+
+				object pvaIn = (int)(zoomFactor * 100);
+				webBrowser.ExecWB(OLECMDID.OLECMDID_OPTICAL_ZOOM, OLECMDEXECOPT.OLECMDEXECOPT_DONTPROMPTUSER, ref pvaIn);
+
+				browserMain.Size = new Size(
+					(int)(800 * zoomFactor),
+					(int)(480 * zoomFactor)
+				);
+			}
+			catch (Exception ex)
+			{
+				System.Diagnostics.Debug.WriteLine(ex);
+				MessageProvider.Instance.Submit(
+					string.Format("게임화면 크기 변경 실패: {0}", ex.Message),
+					"BeerViewer"
+				);
+			}
 		}
 	}
 }

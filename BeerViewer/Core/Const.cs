@@ -26,6 +26,11 @@ namespace BeerViewer.Core
 			+ @"location.href='http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/';";
 
 		/// <summary>
+		/// 로그아웃 URL
+		/// </summary>
+		public static string LogoutURL { get; } = "http://www.dmm.com/my/-/login/logout/=/path=Sg__/";
+
+		/// <summary>
 		/// <see cref="NotificationTime"/>초 남았을 때 알림
 		/// </summary>
 		public static int NotificationTime { get; } = 60;

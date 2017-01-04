@@ -380,9 +380,6 @@
     <EmbeddedResource Include="Views\Catalogs\catalogSlotitems.resx">
       <DependentUpon>catalogSlotitems.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Views\Contents\SettingsView.resx">
-      <DependentUpon>SettingsView.cs</DependentUpon>
-    </EmbeddedResource>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>

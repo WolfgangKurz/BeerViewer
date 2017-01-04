@@ -22,10 +22,61 @@ namespace BeerViewer.Views.Contents
 
 			public override string ToString() => Display;
 		}
+		private class ZoomDisplayPair
+		{
+			public double Zoom { get; set; }
+			public override string ToString() =>
+				string.Format(
+					"{0} % ({1}x{2})",
+					Math.Floor(Zoom * 100),
+					Math.Floor(800 * Zoom),
+					Math.Floor(480 * Zoom)
+				);
+		}
+
+		private double neutral;
+		private static readonly double[] zoomTable =
+		{
+			0.25, 0.50, 0.75, 0.80, 0.85,
+			1.00, 1.25, 1.50, 1.75,
+			2.00, 2.50,
+			3.00,
+			4.00,
+		};
 
 		public SettingsView()
 		{
 			InitializeComponent();
+
+			neutral = Settings.BrowserZoom.Value;
+			bool ZoomComboEventAttached = false;
+
+			foreach (var zoom in zoomTable)
+			{
+				this.comboZoom.Items.Add(new ZoomDisplayPair { Zoom = zoom });
+				if (zoom == neutral)
+					this.comboZoom.SelectedIndex = this.comboZoom.Items.Count - 1;
+			}
+			DataStorage.Instance.PropertyEvent(nameof(DataStorage.Ready), () =>
+			{
+				if (!DataStorage.Instance.Ready) return;
+				if (ZoomComboEventAttached) return;
+
+				ZoomComboEventAttached = true;
+				this.comboZoom.SelectedIndexChanged += (s, e) =>
+				{
+					var item = comboZoom.SelectedItem as ZoomDisplayPair;
+					if (item != null)
+					{
+						frmMain.Instance.SetZoom(item.Zoom);
+						Settings.BrowserZoom.Value = item.Zoom;
+					}
+				};
+
+				var _item = comboZoom.SelectedItem as ZoomDisplayPair;
+				if (_item != null)
+					frmMain.Instance.SetZoom(_item.Zoom);
+			}, true);
 
 			this.comboMainLayout.Items.Add("가로");
 			this.comboMainLayout.Items.Add("세로");
@@ -79,6 +130,27 @@ namespace BeerViewer.Views.Contents
 			chkCriticalNotify.CheckedChanged += (s, e) => Settings.BattleInfo_CriticalEnabled.Value = chkCriticalNotify.Checked;
 			chkBattleEndNotify.Checked = Settings.BattleInfo_IsEnabledBattleEndNotify.Value;
 			chkBattleEndNotify.CheckedChanged += (s, e) => Settings.BattleInfo_IsEnabledBattleEndNotify.Value = chkBattleEndNotify.Checked;
+		}
+
+		public void SetBackColor(Color color)
+		{
+			if(this.layoutMain.InvokeRequired)
+			{
+				this.layoutMain.Invoke(() => SetBackColor(color));
+				return;
+			}
+
+			this.layoutMain.BackColor = color;
+		}
+
+		private void btnGameStart_Click(object sender, EventArgs e)
+		{
+			Helper.PrepareBrowser(frmMain.Instance?.Browser, true);
+		}
+
+		private void btnLogout_Click(object sender, EventArgs e)
+		{
+			frmMain.Instance?.Browser?.Navigate(Const.LogoutURL);
 		}
 	}
 }

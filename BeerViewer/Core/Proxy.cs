@@ -87,13 +87,13 @@ namespace BeerViewer.Core
 		public static SvData TryParse(this Session x)
 		{
 			SvData result;
-			return SvData.TryParse(x, out result) && result.IsSuccess
+			return SvData.TryParse(x, out result)
 				? result : null;
 		}
 		public static SvData<T> TryParse<T>(this Session x)
 		{
 			SvData<T> result;
-			return SvData.TryParse(x, out result) && result.IsSuccess
+			return SvData.TryParse(x, out result)
 				? result : null;
 		}
 	}

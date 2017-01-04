@@ -114,6 +114,9 @@ namespace BeerViewer.Core
 				Assembly assembly = Assembly.GetExecutingAssembly();
 				Version Version = assembly.GetName().Version;
 
+				this.Version = lines[0];
+				this.UpdateURL = lines[1];
+
 				int[] part = lines[0].Split('.').Select(x => int.Parse(x)).ToArray();
 				if (part[0] > Version.Major)
 					State = CheckState.Updatable;
