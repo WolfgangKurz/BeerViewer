@@ -28,16 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.toolTip = new BeerViewer.Views.Controls.BattleShipTooltip();
 			this.SuspendLayout();
-			// 
-			// toolTip
-			// 
-			this.toolTip.AutoPopDelay = 60000;
-			this.toolTip.InitialDelay = 500;
-			this.toolTip.OwnerDraw = true;
-			this.toolTip.ReshowDelay = 100;
-			this.toolTip.ShowAlways = true;
 			// 
 			// BattleFleetView
 			// 
@@ -54,6 +45,5 @@
 		}
 
 		#endregion
-		private BattleShipTooltip toolTip;
 	}
 }
