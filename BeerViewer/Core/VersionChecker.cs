@@ -122,9 +122,9 @@ namespace BeerViewer.Core
 					State = CheckState.Updatable;
 				else if (part[0] == Version.Major && part[1] > Version.Minor)
 					State = CheckState.Updatable;
-				else if (part[0] == Version.Major && part[1] == Version.Minor && part[2] > Version.Revision)
+				else if (part[0] == Version.Major && part[1] == Version.Minor && part[2] > Version.Build)
 					State = CheckState.Updatable;
-				else if (part[0] == Version.Major && part[1] == Version.Minor && part[2] == Version.Revision && part[3] > Version.Build)
+				else if (part[0] == Version.Major && part[1] == Version.Minor && part[2] == Version.Build && part[3] > Version.Revision)
 					State = CheckState.Updatable;
 				else
 					State = CheckState.Latest;
