@@ -196,7 +196,7 @@ namespace BeerViewer
 				);
 				try
 				{
-					Captured.Save(filename, ImageFormat.Png);
+					Captured.Save(path, ImageFormat.Png);
 					MessageProvider.Instance.Submit("스크린샷을 저장했습니다: " + filename, "BeerViewer");
 				}
 				catch
