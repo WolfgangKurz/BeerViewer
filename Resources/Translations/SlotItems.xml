@@ -1,0 +1,1123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SlotItems Version="1.0.0">
+	<SlotItem>
+		<Source>12cm単装砲</Source>
+		<Value>12cm 단장포</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>12.7cm連装砲</Source>
+		<Value>12.7cm 연장포</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>10cm連装高角砲</Source>
+		<Value>10cm 연장고각포</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>14cm単装砲</Source>
+		<Value>14cm 단장포</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>15.5cm三連装砲</Source>
+		<Value>15.5cm 3연장포</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>20.3cm連装砲</Source>
+		<Value>20.3cm 연장포</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>35.6cm連装砲</Source>
+		<Value>35.6cm 연장포</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>41cm連装砲</Source>
+		<Value>41cm 연장포</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>46cm三連装砲</Source>
+		<Value>46cm 3연장포</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>四式水中聴音機</Source>
+		<Value>4식 소나</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>12.7cm連装高角砲</Source>
+		<Value>12.7cm 연장고각포</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>15.2cm単装砲</Source>
+		<Value>15.2cm 단장포</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>15.5cm三連装副砲</Source>
+		<Value>15.5cm 3연장포(부포)</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>61cm三連装魚雷</Source>
+		<Value>61cm 3연장어뢰</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>61cm四連装魚雷</Source>
+		<Value>61cm 4연장어뢰</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>61cm四連装(酸素)魚雷</Source>
+		<Value>61cm 4연장(산소)어뢰</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>九七式艦攻</Source>
+		<Value>97식 함상공격기</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>天山</Source>
+		<Value>텐잔</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>流星</Source>
+		<Value>류세이</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>九六式艦戦</Source>
+		<Value>96식 함상전투기</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>零式艦戦21型</Source>
+		<Value>영식 함상전투기 21형</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>零式艦戦52型</Source>
+		<Value>영식 함상전투기 52형</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>烈風</Source>
+		<Value>렛푸</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>九九式艦爆</Source>
+		<Value>99식 함상폭격기</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>彗星</Source>
+		<Value>스이세이</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>零式水上偵察機</Source>
+		<Value>영식 수상정찰기</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>瑞雲</Source>
+		<Value>즈이운</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>13号対空電探</Source>
+		<Value>13호 대공 레이더</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>22号対水上電探</Source>
+		<Value>22호 대수상 레이더</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>33号対水上電探</Source>
+		<Value>33호 대수상 레이더</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>21号対空電探</Source>
+		<Value>21호 대공 레이더</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>32号対水上電探</Source>
+		<Value>32호 대수상 레이더</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>14号対空電探</Source>
+		<Value>14호 대공 레이더</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>改良型艦本式タービン</Source>
+		<Value>개량형 함본식 터빈</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>強化型艦本式缶</Source>
+		<Value>강화형 함본식 보일러</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>三式弾</Source>
+		<Value>삼식탄</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>九一式徹甲弾</Source>
+		<Value>91식 철갑탄</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>7.7mm機銃</Source>
+		<Value>7.7mm 기관총</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>12.7mm単装機銃</Source>
+		<Value>12.7mm 단장기관총</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>25mm連装機銃</Source>
+		<Value>25mm 연장기관총</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>25mm三連装機銃</Source>
+		<Value>25mm 3연장기관총</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>甲標的</Source>
+		<Value>갑표적</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>応急修理要員</Source>
+		<Value>응급수리요원</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>応急修理女神</Source>
+		<Value>응급수리여신</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>九四式爆雷投射機</Source>
+		<Value>94식 폭뢰투사기</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>三式爆雷投射機</Source>
+		<Value>3식 폭뢰투사기</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>九三式水中聴音機</Source>
+		<Value>93식 소나</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>三式水中探信儀</Source>
+		<Value>3식 소나</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>12.7cm単装高角砲</Source>
+		<Value>12.7cm 단장고각포</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>25mm単装機銃</Source>
+		<Value>25mm 단장기관총</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>20.3cm(3号)連装砲</Source>
+		<Value>20.3cm (3호)연장포</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>12cm30連装噴進砲</Source>
+		<Value>12cm 30연장분진포</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>流星改</Source>
+		<Value>류세이 改</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>烈風改</Source>
+		<Value>렛푸 改</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>彩雲</Source>
+		<Value>사이운</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>紫電改二</Source>
+		<Value>시덴 改2</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>震電改</Source>
+		<Value>신덴 改</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>彗星一二型甲</Source>
+		<Value>스이세이12형 갑</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>61cm五連装(酸素)魚雷</Source>
+		<Value>61cm 5연장(산소)어뢰</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>零式水上観測機</Source>
+		<Value>영식 수상관측기</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>零式艦戦62型(爆戦)</Source>
+		<Value>영식 함상전투기 62형(폭격장비)</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>二式艦上偵察機</Source>
+		<Value>2식 함상정찰기</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>試製晴嵐</Source>
+		<Value>시제 세이란</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>12.7cm連装砲B型改二</Source>
+		<Value>12.7cm 연장포B형 改2</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>Ju87C改</Source>
+		<Value>Ju87C 改</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>15.2cm連装砲</Source>
+		<Value>15.2cm 연장포</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>8cm高角砲</Source>
+		<Value>8cm 고각포</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>53cm艦首(酸素)魚雷</Source>
+		<Value>53cm 함수(산소)어뢰</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>大発動艇</Source>
+		<Value>대발동정</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>カ号観測機</Source>
+		<Value>카호관측기</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>三式指揮連絡機(対潜)</Source>
+		<Value>삼식 지휘연락기(대잠)</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>10cm連装高角砲(砲架)</Source>
+		<Value>10cm 연장고각포(포가)</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>増設バルジ(中型艦)</Source>
+		<Value>증설벌지(중형함)</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>増設バルジ(大型艦)</Source>
+		<Value>증설벌지(대형함)</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>ドラム缶(輸送用)</Source>
+		<Value>드럼통(수송용)</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>12.7cm単装砲</Source>
+		<Value>12.7cm 단장포</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>瑞雲(六三四空)</Source>
+		<Value>즈이운(634 해군항공대)</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>38cm連装砲</Source>
+		<Value>38cm 연장포</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>15cm連装副砲</Source>
+		<Value>15cm 연장부포</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>探照灯</Source>
+		<Value>탐조등</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>九七式艦攻(九三一空)</Source>
+		<Value>97식 함상공격기(931 해군항공대)</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>天山(九三一空)</Source>
+		<Value>텐잔(931 해군항공대)</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>瑞雲(六三四空)</Source>
+		<Value>즈이운(634 해군항공대)</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>瑞雲12型</Source>
+		<Value>즈이운12형</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>艦艇修理施設</Source>
+		<Value>선박수리시설</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>2cm 四連装FlaK 38</Source>
+		<Value>2cm 4연장FlaK 38</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>3.7cm FlaK M42</Source>
+		<Value>3.7cm FlaK M42</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>新型高温高圧缶</Source>
+		<Value>신형 고온 고압 보일러</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>毘式40mm連装機銃</Source>
+		<Value>비식 40mm 연장기관총</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>九七式艦攻(友永隊)</Source>
+		<Value>97식 함상공격기(토모나가대)</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>天山一二型(友永隊)</Source>
+		<Value>텐잔12형(토모나가대)</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>潜水艦53cm艦首魚雷(8門)</Source>
+		<Value>잠수함 53cm 함수어뢰(8문)</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>零式艦戦21型(熟練)</Source>
+		<Value>영식 함상 전투기21형(숙련)</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>九九式艦爆(熟練)</Source>
+		<Value>99식 함상폭격기(숙련)</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>12.7cm連装高角砲(後期型)</Source>
+		<Value>12.7cm 연장고각포(후기형)</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>22号対水上電探改四</Source>
+		<Value>22호 대수상 레이더改四</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>21号対空電探改</Source>
+		<Value>21호 대공 레이더改</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>20.3cm(2号)連装砲</Source>
+		<Value>20.3cm(2호) 연장포</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>試製35.6cm三連装砲</Source>
+		<Value>시제 35.6cm 3연장포</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>彗星(江草隊)</Source>
+		<Value>스이세이(에구사대)</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>九九式艦爆(江草隊)</Source>
+		<Value>99식 함상폭격기(에구사대)</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>九七式艦攻(熟練)</Source>
+		<Value>97식 함상공격기(숙련)</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>35.6cm連装砲(ダズル迷彩)</Source>
+		<Value>35.6cm 연장포(다즐위장)</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>照明弾</Source>
+		<Value>조명탄</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>試製41cm三連装砲</Source>
+		<Value>시제 41cm 3연장포</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>13号対空電探改</Source>
+		<Value>13호 대공 레이더改</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>熟練艦載機整備員</Source>
+		<Value>숙련 함재기 정비원</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>九八式水上偵察機(夜偵)</Source>
+		<Value>98식 수상정찰기(야간정찰)</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>零戦52型丙(六〇一空)</Source>
+		<Value>영식 함상전투기 52병형(601 항공대)</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>零戦52型丙(付岩井小隊)</Source>
+		<Value>영식 함상전투기 52병형(이와이 소대)</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>彗星(六〇一空)</Source>
+		<Value>스이세이(601 항공대)</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>天山(六〇一空)</Source>
+		<Value>텐잔(601 항공대)</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>艦隊司令部施設</Source>
+		<Value>함대 사령부 시설</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>烈風(六〇一空)</Source>
+		<Value>렛푸(601 항공대)</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>Ar196改</Source>
+		<Value>Ar196 改</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>38cm連装砲改</Source>
+		<Value>38cm 연장포 改</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>一式徹甲弾</Source>
+		<Value>1식 철갑탄</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>試製46cm連装砲</Source>
+		<Value>시제 46cm 연장포</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>紫雲</Source>
+		<Value>시운</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>14cm連装砲</Source>
+		<Value>14cm 연장포</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>91式高射装置</Source>
+		<Value>91식 고사장치</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>94式高射装置</Source>
+		<Value>94식 고사장치</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>SKC34 20.3cm連装砲</Source>
+		<Value>SKC34 20.3cm 연장포</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>FuMO25 レーダー</Source>
+		<Value>FuMO25 레이더</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>10cm連装高角砲+高射装置</Source>
+		<Value>10cm 연장고각포+고사장치</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>61cm三連装(酸素)魚雷</Source>
+		<Value>61cm 3연장(산소)어뢰</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>流星(六〇一空)</Source>
+		<Value>류세이(601 항공대)</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>試製51cm連装砲</Source>
+		<Value>시제 51cm 연장포</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>WG42 (Wurfgerät 42)</Source>
+		<Value>WG42 (Wurfgerät 42)</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>試製FaT仕様九五式酸素魚雷改</Source>
+		<Value>시제 FaT사양 95식 산소어뢰 改</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>熟練見張員</Source>
+		<Value>숙련견시원</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>12.7cm高角砲+高射装置</Source>
+		<Value>12.7cm 고각포+고사장치</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>25mm三連装機銃 集中配備</Source>
+		<Value>25mm 3연장기관총 집중배치</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>瑞雲12型(六三四空)</Source>
+		<Value>즈이운12형(634 해군항공대)</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>零式水中聴音機</Source>
+		<Value>영식수중청음기</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>5inch単装砲</Source>
+		<Value>5inch 단장포</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>5inch連装砲</Source>
+		<Value>5inch 연장포</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>3inch単装高角砲</Source>
+		<Value>3inch 단장고각포</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>5inch単装高射砲</Source>
+		<Value>5inch 단장고각포</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>8inch三連装砲</Source>
+		<Value>8inch 삼연장포</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>6inch連装速射砲</Source>
+		<Value>6inch 연장속사포</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>14inch連装砲</Source>
+		<Value>14inch 연장포</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>16inch連装砲</Source>
+		<Value>16inch 연장포</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>16inch三連装砲</Source>
+		<Value>16inch 삼연장포</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>6inch単装砲</Source>
+		<Value>6inch 연장포</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>12.5inch連装副砲</Source>
+		<Value>12.5inch 연장부포</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>21inch魚雷前期型</Source>
+		<Value>21inch 어뢰 전기형</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>21inch魚雷後期型</Source>
+		<Value>21inch 어뢰 후기형</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>高速深海魚雷</Source>
+		<Value>고속심해어뢰</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>深海棲艦攻</Source>
+		<Value>심해서함 공격기</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>深海棲艦攻 Mark.II</Source>
+		<Value>심해서함 공격기 Mark.II</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>深海棲艦攻 Mark.III</Source>
+		<Value>심해서함 공격기 Mark.III</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>深海棲艦戦</Source>
+		<Value>심해서함 전투기</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>深海棲艦戦 Mark.II</Source>
+		<Value>심해서함 전투기 Mark.II</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>深海棲艦戦 Mark.III</Source>
+		<Value>심해서함 전투기 Mark.III</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>飛び魚艦戦</Source>
+		<Value>날치 함상전투기</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>深海棲艦爆</Source>
+		<Value>심해서함 폭격기</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>深海棲艦爆 Mark.II</Source>
+		<Value>심해서함 폭격기 Mark.II</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>深海棲艦偵察機</Source>
+		<Value>심해서함 정찰기</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>飛び魚偵察機</Source>
+		<Value>날치 정찰기</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>対空レーダ― Mark.I</Source>
+		<Value>대공레이더 Mark.I</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>水上レーダ― Mark.I</Source>
+		<Value>수상레이더 Mark.I</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>水上レーダ― Mark.II</Source>
+		<Value>수상레이더 Mark.II</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>対空レーダ― Mark.II</Source>
+		<Value>대공레이더 Mark.II</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>深海水上レーダー</Source>
+		<Value>심해수상레이더</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>深海対空レーダ―</Source>
+		<Value>심해대공레이더</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>改良型深海タービン</Source>
+		<Value>개량형 심해 터빈</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>強化型深海缶</Source>
+		<Value>강화형 심해 보일러</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>対空散弾</Source>
+		<Value>대공산탄</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>劣化徹甲弾</Source>
+		<Value>열화철갑탄</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>12.7mm機銃</Source>
+		<Value>12.7mm 기관총</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>20mm機銃</Source>
+		<Value>20mm 기관총</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>40mm二連装機関砲</Source>
+		<Value>40mm 2연장기관포</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>40mm四連装機関砲</Source>
+		<Value>40mm 4연장기관포</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>深海烏賊魚雷</Source>
+		<Value>심해 오징어 어뢰</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>深海爆雷投射機</Source>
+		<Value>심해 폭뢰투사기</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>深海ソナー</Source>
+		<Value>심해 소나</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>深海爆雷投射機 Mk.II</Source>
+		<Value>심해 폭뢰투사기 Mk.II</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>深海ソナー Mk.II</Source>
+		<Value>심해 소나 Mk.II</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>飛び魚艦爆</Source>
+		<Value>날치 함상폭격기</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>深海猫艦戦</Source>
+		<Value>심해 고양이 함상전투기</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>深海地獄艦爆</Source>
+		<Value>심해 지옥 함상폭격기</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>深海復讐艦攻</Source>
+		<Value>심해 지옥 함상공격기</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>5inch連装両用莢砲</Source>
+		<Value>5inch 연장양용협포</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>20inch連装砲</Source>
+		<Value>20inch 연장포</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>381mm/50 三連装砲</Source>
+		<Value>381mm/50 3연장포</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>二式大艇</Source>
+		<Value>이식대정</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>OTO 152mm三連装速射砲</Source>
+		<Value>OTO 152mm 3연장 속사포</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>381mm/50 三連装砲改</Source>
+		<Value>381mm/50 3연장포 改</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>90mm単装高角砲</Source>
+		<Value>90mm 단장고각포</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>プリエーゼ式水中防御隔壁</Source>
+		<Value>프리에제식 수중 방어 격벽</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>96式150cm探照灯</Source>
+		<Value>96식 150cm 탐조등</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>15.2cm連装砲改</Source>
+		<Value>15.2cm 연장포 改</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>32号対水上電探改</Source>
+		<Value>32호 대수상 레이더 改</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>15inch要塞砲</Source>
+		<Value>15inch 요새포</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>15m二重測距儀+21号電探改二</Source>
+		<Value>15m 이중 측거의+21호 전탐 改2</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>九七式艦攻(村田隊)</Source>
+		<Value>97식 함상공격기(무라타대)</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>天山一二型(村田隊)</Source>
+		<Value>텐잔12형(무라타대)</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>戦闘糧食</Source>
+		<Value>전투식량</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>洋上補給</Source>
+		<Value>해상보급</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>120mm連装砲</Source>
+		<Value>120mm 단장포</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>4inch連装両用砲+CIC</Source>
+		<Value>4inch 연장양용포+CIC</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>深海水上攻撃機</Source>
+		<Value>심해 해상공격기</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>深海水上攻撃機改</Source>
+		<Value>심해 해상공격기改</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>深海猫艦戦改</Source>
+		<Value>심해 고양이 함상전투기改</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>深海地獄艦爆改</Source>
+		<Value>심해 지옥 함상전투기改</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>深海復讐艦攻改</Source>
+		<Value>심해 복수 함상공격기改</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>深海FCS+CIC</Source>
+		<Value>심해 FCS+CIC</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>試製南山</Source>
+		<Value>시제 난잔</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>零式艦戦52型(熟練)</Source>
+		<Value>영식 함상전투기 52형(숙련)</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>零戦62型(爆戦/岩井隊)</Source>
+		<Value>영식 함상전투기 62형(폭격/이와이대)</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>零戦21型(付岩本小隊)</Source>
+		<Value>영식 함상전투기 21형(이와모토대)</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>零戦52型甲(付岩本小隊)</Source>
+		<Value>영식 함상전투기 52형 갑(이와모토대)</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>零式艦戦53型(岩本隊)</Source>
+		<Value>영식 함상전투기 53형(이와모토대)</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>Bf109T改</Source>
+		<Value>Bf109T 改</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>Fw190T改</Source>
+		<Value>Fw190T 改</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>10.5cm連装砲</Source>
+		<Value>10.5cm 연장포</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>203mm/53 連装砲</Source>
+		<Value>203mm/53 연장포</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>Ro.43水偵</Source>
+		<Value>Ro.43 수상정찰기</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>16inch三連装砲 Mk.7</Source>
+		<Value>16inch 삼연장포 Mk.7</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>Ro.44水上戦闘機</Source>
+		<Value>Ro.44 수상전투기</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>二式水戦改</Source>
+		<Value>2식 수상전투기改</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>特二式内火艇</Source>
+		<Value>특2식 내화정</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>九六式陸攻</Source>
+		<Value>96식 육상공격기</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>一式陸攻</Source>
+		<Value>1식 육상공격기</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>Bofors 40mm四連装機関砲</Source>
+		<Value>Bofors 40mm 4연장 기관포</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>一式陸攻(野中隊)</Source>
+		<Value>1식 육상공격기(노나카대)</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>53cm連装魚雷</Source>
+		<Value>53cm 연장어뢰</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>三式戦 飛燕</Source>
+		<Value>3식 전투기 히엔</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>三式戦 飛燕(飛行第244戦隊)</Source>
+		<Value>3식 전투기 히엔(244 비행전대)</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>PBY-5A Catalina</Source>
+		<Value>PBY-5A 카탈리나</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>雷電</Source>
+		<Value>라이덴</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>大発動艇(八九式中戦車&amp;陸戦隊)</Source>
+		<Value>대발동정(89식 중전차&amp;육전대)</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>5inch沿岸設置砲</Source>
+		<Value>5inch 연안 설치포</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>沿岸設置レーダー</Source>
+		<Value>연안 설치 레이더</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>深海解放陸爆</Source>
+		<Value>심해 해방 육상폭격기</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>深海解放陸爆Ace</Source>
+		<Value>심해 해방 육상폭격기 Ace</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>深海猫艦戦(爆装)</Source>
+		<Value>심해 고양이 함상전투기(폭장)</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>深海偵察飛行艇</Source>
+		<Value>심해 정찰 비행정</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>5inch連装砲 Mk.28 mod.2</Source>
+		<Value>5inch연장포 Mk.28 mod.2</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>一式陸攻 二二型甲</Source>
+		<Value>1식 육상공격기 22형甲</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>試製61cm六連装(酸素)魚雷</Source>
+		<Value>시제 61cm 6연장(산소)어뢰</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>零式艦戦32型</Source>
+		<Value>영식 함상전투기 32형</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>零式艦戦32型(熟練)</Source>
+		<Value>영식 함상전투기 32형(숙련)</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>16inch三連装砲 Mk.7＋GFCS</Source>
+		<Value>16inch 삼연장포 Mk.7＋GFCS</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>？？？</Source>
+		<Value>???</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>OS2U</Source>
+		<Value>OS2U</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>秋刀魚の缶詰</Source>
+		<Value>꽁치 통조림</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>試製景雲(艦偵型)</Source>
+		<Value>시제 케이운(함정형)</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>16inch三連装砲 Mk.7+GFCS</Source>
+		<Value>16inch 삼연장포 Mk.7+GFCS</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>深海探照灯</Source>
+		<Value>심해 탐조등</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>8inch長射程連装砲</Source>
+		<Value>8inch 장사거리 연장포</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>深海水上偵察観測機</Source>
+		<Value>심해 수상 정찰 관측기</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>Re.2001 OR改</Source>
+		<Value>Re.2001 OR改</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>高速深海魚雷 mod.2</Source>
+		<Value>고속 심해 어뢰 mod.2</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>Re.2001 G改</Source>
+		<Value>Re.2001 G改</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>Re.2005 改</Source>
+		<Value>Re.2005 改</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>38.1cm Mk.I連装砲</Source>
+		<Value>38.1cm Mk.I 연장포</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>QF 2ポンド8連装ポンポン砲</Source>
+		<Value>QF 2파운드 8연장 퐁퐁 포</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>Re.2001 OR改</Source>
+		<Value>Re.2001 OR개</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>高速深海魚雷 mod.2</Source>
+		<Value>고속 심해 어뢰 mod.2</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>一式陸攻 三四型</Source>
+		<Value>1식 육상공격기 34형</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>三式戦 飛燕一型丁</Source>
+		<Value>3식 전투기 히엔 1형丁</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>銀河</Source>
+		<Value>은하</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>38.1cm Mk.I/N連装砲改</Source>
+		<Value>38.1cm Mk.I/N 연장포改</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>特大発動艇</Source>
+		<Value>특대발동정</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>特大発動艇</Source>
+		<Value>특대발동정</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>特大発動艇</Source>
+		<Value>특대발동정</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>深海水母小鬼機</Source>
+		<Value>심해 수모수귀기</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>深海熊猫艦戦</Source>
+		<Value>심해 곰고양이 함상전투기</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>Laté 298B</Source>
+		<Value>Laté 298B</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>SBD</Source>
+		<Value>SBD</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>TBD</Source>
+		<Value>TBD</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>F4F-3</Source>
+		<Value>F4F-3</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>F4F-4</Source>
+		<Value>F4F-4</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>SB2U</Source>
+		<Value>SB2U</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>艦本新設計 増設バルジ(大型艦)</Source>
+		<Value>함본신설계 증설벌지(대형함)</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>噴式景雲改</Source>
+		<Value>분식케이운改</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>橘花改</Source>
+		<Value>킷카改</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>F6F-3</Source>
+		<Value>F6F-3</Value>
+	</SlotItem>
+</SlotItems>
