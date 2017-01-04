@@ -70,6 +70,20 @@ namespace BeerViewer.Views.Contents
 
 			notifyHost = new NotifyHost(homeport);
 
+			Action UpdateInfo = () =>
+			{
+				var shipsMax = homeport.Admiral?.MaxShipCount ?? 0;
+				var ships = homeport.Organization?.Ships.Count(x => x.Value != null) ?? 0;
+
+				var slotMax = homeport.Admiral?.MaxSlotItemCount ?? 0;
+				var slots = homeport.Itemyard?.SlotItemsCount;
+
+				if (labelHomeportInfo.InvokeRequired)
+					labelHomeportInfo.Invoke(() => labelHomeportInfo.Text = $"소속칸무스: {ships}/{shipsMax}    보유장비: {slots}/{slotMax}");
+				else
+					labelHomeportInfo.Text = $"소속칸무스: {ships}/{shipsMax}    보유장비: {slots}/{slotMax}";
+			};
+
 			// Resources
 			homeport.PropertyEvent(nameof(homeport.Materials), () =>
 			{
@@ -89,8 +103,9 @@ namespace BeerViewer.Views.Contents
 			// Fleets & Expedition
 			homeport.Organization.PropertyEvent(nameof(homeport.Organization.Fleets), () =>
 			{
-				var fleets = homeport.Organization.Fleets.Select(x => x.Value);
+				homeport.Admiral.PropertyEvent(nameof(homeport.Organization.Ships), () => UpdateInfo(), true);
 
+				var fleets = homeport.Organization.Fleets.Select(x => x.Value);
 				foreach (var fleet in fleets)
 				{
 					UpdateFleetState(fleet);
@@ -138,10 +153,21 @@ namespace BeerViewer.Views.Contents
 			}, true);
 
 			// Admiral
-			homeport.PropertyEvent(nameof(homeport.Admiral), () => this.UpdateHQRecord(this.homeport.Admiral), true);
+			homeport.PropertyEvent(nameof(homeport.Admiral), () =>
+			{
+				this.UpdateHQRecord(this.homeport.Admiral);
+				UpdateInfo();
+			}, true);
+
+			// Itemyard
+			homeport.PropertyEvent(nameof(homeport.Itemyard), () =>
+			{
+				homeport.Itemyard.PropertyEvent(nameof(homeport.Itemyard.SlotItemsCount), () => UpdateInfo());
+			});
 
 			catalogCalculator?.SetHomeport(this.homeport);
 			catalogShips?.SetHomeport(this.homeport);
+			UpdateInfo();
 		}
 
 		private void AttachResources(Materials materials)

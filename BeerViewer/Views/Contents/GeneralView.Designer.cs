@@ -45,6 +45,7 @@
 			BeerViewer.Views.Controls.GeneralTableView.HeaderValue headerValue15 = new BeerViewer.Views.Controls.GeneralTableView.HeaderValue();
 			this.layoutButtons = new System.Windows.Forms.FlowLayoutPanel();
 			this.layoutResources = new System.Windows.Forms.FlowLayoutPanel();
+			this.labelHomeportInfo = new System.Windows.Forms.Label();
 			this.tableHQRecord = new BeerViewer.Views.Controls.GeneralTableView();
 			this.listQuests = new BeerViewer.Views.Controls.QuestsView();
 			this.tableBuild = new BeerViewer.Views.Controls.GeneralTableView();
@@ -86,9 +87,23 @@
 			this.layoutResources.Location = new System.Drawing.Point(0, 32);
 			this.layoutResources.Margin = new System.Windows.Forms.Padding(0);
 			this.layoutResources.Name = "layoutResources";
-			this.layoutResources.Padding = new System.Windows.Forms.Padding(4, 4, 4, 8);
-			this.layoutResources.Size = new System.Drawing.Size(399, 40);
-			this.layoutResources.TabIndex = 16;
+			this.layoutResources.Padding = new System.Windows.Forms.Padding(4);
+			this.layoutResources.Size = new System.Drawing.Size(399, 36);
+			this.layoutResources.TabIndex = 53;
+			// 
+			// labelHomeportInfo
+			// 
+			this.labelHomeportInfo.AutoSize = true;
+			this.labelHomeportInfo.Dock = System.Windows.Forms.DockStyle.Top;
+			this.labelHomeportInfo.ForeColor = System.Drawing.Color.White;
+			this.labelHomeportInfo.Location = new System.Drawing.Point(0, 68);
+			this.labelHomeportInfo.Margin = new System.Windows.Forms.Padding(0);
+			this.labelHomeportInfo.Name = "labelHomeportInfo";
+			this.labelHomeportInfo.Padding = new System.Windows.Forms.Padding(8, 4, 8, 4);
+			this.labelHomeportInfo.Size = new System.Drawing.Size(200, 29);
+			this.labelHomeportInfo.TabIndex = 59;
+			this.labelHomeportInfo.Text = "소속칸무스: 0/0    보유장비: 0/0";
+			this.labelHomeportInfo.UseCompatibleTextRendering = true;
 			// 
 			// tableHQRecord
 			// 
@@ -96,12 +111,12 @@
 			this.tableHQRecord.Dock = System.Windows.Forms.DockStyle.Top;
 			this.tableHQRecord.Font = new System.Drawing.Font("맑은 고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
 			this.tableHQRecord.ForeColor = System.Drawing.Color.White;
-			this.tableHQRecord.Location = new System.Drawing.Point(0, 317);
+			this.tableHQRecord.Location = new System.Drawing.Point(0, 342);
 			this.tableHQRecord.Margin = new System.Windows.Forms.Padding(0);
 			this.tableHQRecord.Name = "tableHQRecord";
 			this.tableHQRecord.Padding = new System.Windows.Forms.Padding(0, 0, 0, 8);
 			this.tableHQRecord.Size = new System.Drawing.Size(399, 63);
-			this.tableHQRecord.TabIndex = 44;
+			this.tableHQRecord.TabIndex = 64;
 			headerValue1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))));
 			headerValue1.ForeColor = System.Drawing.Color.White;
 			headerValue1.Header = "이달";
@@ -134,7 +149,7 @@
 			this.listQuests.Dock = System.Windows.Forms.DockStyle.Top;
 			this.listQuests.Font = new System.Drawing.Font("맑은 고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
 			this.listQuests.HeaderName = "임무";
-			this.listQuests.Location = new System.Drawing.Point(0, 261);
+			this.listQuests.Location = new System.Drawing.Point(0, 286);
 			this.listQuests.Margin = new System.Windows.Forms.Padding(0);
 			this.listQuests.MinimumSize = new System.Drawing.Size(0, 24);
 			this.listQuests.Name = "listQuests";
@@ -142,7 +157,7 @@
 			this.listQuests.PlaceHolder = "게임 내 [임무(퀘스트)] 화면을 열어서, 임무 목록을 갱신 해 주십시오.";
 			this.listQuests.Quests = null;
 			this.listQuests.Size = new System.Drawing.Size(399, 56);
-			this.listQuests.TabIndex = 43;
+			this.listQuests.TabIndex = 63;
 			// 
 			// tableBuild
 			// 
@@ -150,12 +165,12 @@
 			this.tableBuild.Dock = System.Windows.Forms.DockStyle.Top;
 			this.tableBuild.Font = new System.Drawing.Font("맑은 고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
 			this.tableBuild.ForeColor = System.Drawing.Color.White;
-			this.tableBuild.Location = new System.Drawing.Point(0, 198);
+			this.tableBuild.Location = new System.Drawing.Point(0, 223);
 			this.tableBuild.Margin = new System.Windows.Forms.Padding(0);
 			this.tableBuild.Name = "tableBuild";
 			this.tableBuild.Padding = new System.Windows.Forms.Padding(0, 0, 0, 8);
 			this.tableBuild.Size = new System.Drawing.Size(399, 63);
-			this.tableBuild.TabIndex = 42;
+			this.tableBuild.TabIndex = 62;
 			headerValue4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))));
 			headerValue4.ForeColor = System.Drawing.Color.White;
 			headerValue4.Header = "-";
@@ -193,12 +208,12 @@
 			this.tableRepair.Dock = System.Windows.Forms.DockStyle.Top;
 			this.tableRepair.Font = new System.Drawing.Font("맑은 고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
 			this.tableRepair.ForeColor = System.Drawing.Color.White;
-			this.tableRepair.Location = new System.Drawing.Point(0, 135);
+			this.tableRepair.Location = new System.Drawing.Point(0, 160);
 			this.tableRepair.Margin = new System.Windows.Forms.Padding(0);
 			this.tableRepair.Name = "tableRepair";
 			this.tableRepair.Padding = new System.Windows.Forms.Padding(0, 0, 0, 8);
 			this.tableRepair.Size = new System.Drawing.Size(399, 63);
-			this.tableRepair.TabIndex = 41;
+			this.tableRepair.TabIndex = 61;
 			headerValue8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))));
 			headerValue8.ForeColor = System.Drawing.Color.White;
 			headerValue8.Header = "-";
@@ -236,12 +251,12 @@
 			this.tableFleet.Dock = System.Windows.Forms.DockStyle.Top;
 			this.tableFleet.Font = new System.Drawing.Font("맑은 고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
 			this.tableFleet.ForeColor = System.Drawing.Color.White;
-			this.tableFleet.Location = new System.Drawing.Point(0, 72);
+			this.tableFleet.Location = new System.Drawing.Point(0, 97);
 			this.tableFleet.Margin = new System.Windows.Forms.Padding(0);
 			this.tableFleet.Name = "tableFleet";
 			this.tableFleet.Padding = new System.Windows.Forms.Padding(0, 0, 0, 8);
 			this.tableFleet.Size = new System.Drawing.Size(399, 63);
-			this.tableFleet.TabIndex = 40;
+			this.tableFleet.TabIndex = 60;
 			headerValue12.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))));
 			headerValue12.ForeColor = System.Drawing.Color.White;
 			headerValue12.Header = "-";
@@ -382,6 +397,7 @@
 			this.Controls.Add(this.tableBuild);
 			this.Controls.Add(this.tableRepair);
 			this.Controls.Add(this.tableFleet);
+			this.Controls.Add(this.labelHomeportInfo);
 			this.Controls.Add(this.layoutResources);
 			this.Controls.Add(this.layoutButtons);
 			this.Font = new System.Drawing.Font("맑은 고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
@@ -404,6 +420,7 @@
 		private System.Windows.Forms.FlowLayoutPanel layoutResources;
 		private Controls.FlatComboBox comboResources1;
 		private Controls.FlatComboBox comboResources2;
+		private System.Windows.Forms.Label labelHomeportInfo;
 		private Controls.GeneralTableView tableHQRecord;
 		private Controls.QuestsView listQuests;
 		private Controls.GeneralTableView tableBuild;
