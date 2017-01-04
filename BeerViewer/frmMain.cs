@@ -140,15 +140,21 @@ namespace BeerViewer
 
 			this.Move += (s, e) =>
 			{
-				Settings.Application_X.Value = this.Left;
-				Settings.Application_Y.Value = this.Top;
 				Settings.Application_State.Value = (int)this.WindowState;
+				if (this.WindowState != FormWindowState.Maximized)
+				{
+					Settings.Application_X.Value = this.Left;
+					Settings.Application_Y.Value = this.Top;
+				}
 			};
 			this.Resize += (s, e) =>
 			{
-				Settings.Application_Width.Value = this.Width;
-				Settings.Application_Height.Value = this.Height;
 				Settings.Application_State.Value = (int)this.WindowState;
+				if (this.WindowState != FormWindowState.Maximized)
+				{
+					Settings.Application_Width.Value = this.Width;
+					Settings.Application_Height.Value = this.Height;
+				}
 			};
 
 			this.FormClosing += (s, e) =>
