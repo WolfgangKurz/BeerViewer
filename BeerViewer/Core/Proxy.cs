@@ -84,17 +84,19 @@ namespace BeerViewer.Core
 
 	public static class ProxySession
 	{
-		public static SvData TryParse(this Session x)
+		public static SvData TryParse(this Session x, bool IsSuccess = true)
 		{
 			SvData result;
 			return SvData.TryParse(x, out result)
-				? result : null;
+				? ((!IsSuccess || result.IsSuccess) ? result : null)
+				: null;
 		}
-		public static SvData<T> TryParse<T>(this Session x)
+		public static SvData<T> TryParse<T>(this Session x, bool IsSuccess = true)
 		{
 			SvData<T> result;
 			return SvData.TryParse(x, out result)
-				? result : null;
+				? ((!IsSuccess || result.IsSuccess) ? result : null)
+				: null;
 		}
 	}
 }

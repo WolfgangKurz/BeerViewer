@@ -15,6 +15,11 @@ namespace BeerViewer.Core
 {
 	internal class Settings
 	{
+		public static SettingValue<int> Application_X { get; set; } = new SettingValue<int>(GetKey(), int.MinValue);
+		public static SettingValue<int> Application_Y { get; set; } = new SettingValue<int>(GetKey(), int.MinValue);
+		public static SettingValue<int> Application_Width { get; set; } = new SettingValue<int>(GetKey(), int.MinValue);
+		public static SettingValue<int> Application_Height { get; set; } = new SettingValue<int>(GetKey(), int.MinValue);
+
 		public static SettingValue<double> BrowserZoom { get; set; } = new SettingValue<double>(GetKey(), 1.0);
 		public static SettingValue<bool> VerticalMode { get; set; } = new SettingValue<bool>(GetKey(), false);
 
@@ -93,11 +98,20 @@ namespace BeerViewer.Core
 		private static string GetKey([CallerMemberName] string propertyName = "")
 			=> nameof(Settings) + "." + propertyName;
 
-		private static string SettingsPath =>
-			Path.Combine(
-				Path.GetDirectoryName(Assembly.GetEntryAssembly().Location),
-				"Settings.config"
-			);
+		private static string SettingsPath
+		{
+			get
+			{
+				string dir = "";
+				var entry = Assembly.GetEntryAssembly();
+
+				if (entry != null)
+					dir = Path.GetDirectoryName(entry.Location);
+				else
+					dir = "";
+				return Path.Combine(dir, "Settings.config");
+			}
+		}
 
 		public static List<object> settingValueList { get; private set; }
 		private static void Save()

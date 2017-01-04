@@ -30,20 +30,20 @@
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
 			this.contentContainer = new System.Windows.Forms.TableLayoutPanel();
-			this.contentBattle = new BeerViewer.Views.Contents.BattleView();
-			this.contentFleets = new BeerViewer.Views.Contents.FleetsView();
-			this.contentGeneral = new BeerViewer.Views.Contents.GeneralView();
-			this.contentSettings = new BeerViewer.Views.Contents.SettingsView();
 			this.panelBrowser = new System.Windows.Forms.Panel();
-			this.browserMain = new System.Windows.Forms.WebBrowser();
 			this.layoutTab = new System.Windows.Forms.TableLayoutPanel();
 			this.layoutTabHost = new System.Windows.Forms.Panel();
 			this.tabSettings = new System.Windows.Forms.Label();
 			this.layoutTabRight = new System.Windows.Forms.Panel();
-			this.btnScreenshot = new BeerViewer.Views.Controls.FlatButton();
 			this.tabBattle = new System.Windows.Forms.Label();
 			this.tabFleets = new System.Windows.Forms.Label();
 			this.tabGeneral = new System.Windows.Forms.Label();
+			this.contentBattle = new BeerViewer.Views.Contents.BattleView();
+			this.contentFleets = new BeerViewer.Views.Contents.FleetsView();
+			this.contentGeneral = new BeerViewer.Views.Contents.GeneralView();
+			this.contentSettings = new BeerViewer.Views.Contents.SettingsView();
+			this.btnScreenshot = new BeerViewer.Views.Controls.FlatButton();
+			this.browserMain = new System.Windows.Forms.WebBrowser();
 			this.contentContainer.SuspendLayout();
 			this.panelBrowser.SuspendLayout();
 			this.layoutTab.SuspendLayout();
@@ -77,63 +77,6 @@
 			this.contentContainer.TabIndex = 3;
 			this.contentContainer.Visible = false;
 			// 
-			// contentBattle
-			// 
-			this.contentBattle.AutoScroll = true;
-			this.contentBattle.AutoScrollMinSize = new System.Drawing.Size(400, 0);
-			this.contentBattle.AutoSize = true;
-			this.contentBattle.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.contentBattle.BackColor = System.Drawing.Color.Transparent;
-			this.contentBattle.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.contentBattle.Font = new System.Drawing.Font("맑은 고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-			this.contentBattle.ForeColor = System.Drawing.Color.White;
-			this.contentBattle.Location = new System.Drawing.Point(0, 191);
-			this.contentBattle.Margin = new System.Windows.Forms.Padding(0);
-			this.contentBattle.Name = "contentBattle";
-			this.contentBattle.Size = new System.Drawing.Size(320, 192);
-			this.contentBattle.TabIndex = 19;
-			// 
-			// contentFleets
-			// 
-			this.contentFleets.AutoScroll = true;
-			this.contentFleets.AutoSize = true;
-			this.contentFleets.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.contentFleets.BackColor = System.Drawing.Color.Transparent;
-			this.contentFleets.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.contentFleets.Location = new System.Drawing.Point(320, 0);
-			this.contentFleets.Margin = new System.Windows.Forms.Padding(0);
-			this.contentFleets.Name = "contentFleets";
-			this.contentFleets.Size = new System.Drawing.Size(320, 191);
-			this.contentFleets.TabIndex = 17;
-			// 
-			// contentGeneral
-			// 
-			this.contentGeneral.AutoScroll = true;
-			this.contentGeneral.AutoScrollMinSize = new System.Drawing.Size(340, 0);
-			this.contentGeneral.AutoSize = true;
-			this.contentGeneral.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.contentGeneral.BackColor = System.Drawing.Color.Transparent;
-			this.contentGeneral.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.contentGeneral.Font = new System.Drawing.Font("맑은 고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-			this.contentGeneral.Location = new System.Drawing.Point(0, 0);
-			this.contentGeneral.Margin = new System.Windows.Forms.Padding(0);
-			this.contentGeneral.Name = "contentGeneral";
-			this.contentGeneral.Size = new System.Drawing.Size(320, 191);
-			this.contentGeneral.TabIndex = 8;
-			// 
-			// contentSettings
-			// 
-			this.contentSettings.AutoScroll = true;
-			this.contentSettings.BackColor = System.Drawing.Color.Transparent;
-			this.contentSettings.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.contentSettings.Font = new System.Drawing.Font("맑은 고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-			this.contentSettings.ForeColor = System.Drawing.Color.White;
-			this.contentSettings.Location = new System.Drawing.Point(320, 191);
-			this.contentSettings.Margin = new System.Windows.Forms.Padding(0);
-			this.contentSettings.Name = "contentSettings";
-			this.contentSettings.Size = new System.Drawing.Size(320, 192);
-			this.contentSettings.TabIndex = 20;
-			// 
 			// panelBrowser
 			// 
 			this.panelBrowser.AutoSize = true;
@@ -143,18 +86,6 @@
 			this.panelBrowser.Name = "panelBrowser";
 			this.panelBrowser.Size = new System.Drawing.Size(800, 681);
 			this.panelBrowser.TabIndex = 14;
-			// 
-			// browserMain
-			// 
-			this.browserMain.AllowWebBrowserDrop = false;
-			this.browserMain.IsWebBrowserContextMenuEnabled = false;
-			this.browserMain.Location = new System.Drawing.Point(0, 0);
-			this.browserMain.Margin = new System.Windows.Forms.Padding(0);
-			this.browserMain.MinimumSize = new System.Drawing.Size(20, 20);
-			this.browserMain.Name = "browserMain";
-			this.browserMain.ScriptErrorsSuppressed = true;
-			this.browserMain.Size = new System.Drawing.Size(800, 480);
-			this.browserMain.TabIndex = 15;
 			// 
 			// layoutTab
 			// 
@@ -216,23 +147,6 @@
 			this.layoutTabRight.Size = new System.Drawing.Size(79, 36);
 			this.layoutTabRight.TabIndex = 7;
 			// 
-			// btnScreenshot
-			// 
-			this.btnScreenshot.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(39)))), ((int)(((byte)(47)))));
-			this.btnScreenshot.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(83)))), ((int)(((byte)(83)))), ((int)(((byte)(83)))));
-			this.btnScreenshot.Dock = System.Windows.Forms.DockStyle.Right;
-			this.btnScreenshot.DownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(81)))), ((int)(((byte)(117)))), ((int)(((byte)(142)))));
-			this.btnScreenshot.DownBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(71)))), ((int)(((byte)(83)))));
-			this.btnScreenshot.Font = new System.Drawing.Font("맑은 고딕", 10F);
-			this.btnScreenshot.ForeColor = System.Drawing.Color.White;
-			this.btnScreenshot.Location = new System.Drawing.Point(2, 2);
-			this.btnScreenshot.Name = "btnScreenshot";
-			this.btnScreenshot.OverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(89)))), ((int)(((byte)(89)))), ((int)(((byte)(89)))));
-			this.btnScreenshot.OverBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(71)))), ((int)(((byte)(83)))));
-			this.btnScreenshot.Size = new System.Drawing.Size(75, 32);
-			this.btnScreenshot.TabIndex = 11;
-			this.btnScreenshot.Text = "스크린샷";
-			// 
 			// tabBattle
 			// 
 			this.tabBattle.BackColor = System.Drawing.Color.Transparent;
@@ -275,15 +189,102 @@
 			this.tabGeneral.Text = "종합";
 			this.tabGeneral.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
+			// contentBattle
+			// 
+			this.contentBattle.AutoScroll = true;
+			this.contentBattle.AutoScrollMinSize = new System.Drawing.Size(400, 0);
+			this.contentBattle.AutoSize = true;
+			this.contentBattle.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.contentBattle.BackColor = System.Drawing.Color.Transparent;
+			this.contentBattle.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.contentBattle.Font = new System.Drawing.Font("맑은 고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+			this.contentBattle.ForeColor = System.Drawing.Color.White;
+			this.contentBattle.Location = new System.Drawing.Point(0, 191);
+			this.contentBattle.Margin = new System.Windows.Forms.Padding(0);
+			this.contentBattle.Name = "contentBattle";
+			this.contentBattle.Size = new System.Drawing.Size(320, 192);
+			this.contentBattle.TabIndex = 19;
+			// 
+			// contentFleets
+			// 
+			this.contentFleets.AutoScroll = true;
+			this.contentFleets.AutoSize = true;
+			this.contentFleets.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.contentFleets.BackColor = System.Drawing.Color.Transparent;
+			this.contentFleets.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.contentFleets.Location = new System.Drawing.Point(320, 0);
+			this.contentFleets.Margin = new System.Windows.Forms.Padding(0);
+			this.contentFleets.Name = "contentFleets";
+			this.contentFleets.Size = new System.Drawing.Size(320, 191);
+			this.contentFleets.TabIndex = 17;
+			// 
+			// contentGeneral
+			// 
+			this.contentGeneral.AutoScroll = true;
+			this.contentGeneral.AutoScrollMinSize = new System.Drawing.Size(340, 0);
+			this.contentGeneral.AutoSize = true;
+			this.contentGeneral.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.contentGeneral.BackColor = System.Drawing.Color.Transparent;
+			this.contentGeneral.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.contentGeneral.Font = new System.Drawing.Font("맑은 고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+			this.contentGeneral.Location = new System.Drawing.Point(0, 0);
+			this.contentGeneral.Margin = new System.Windows.Forms.Padding(0);
+			this.contentGeneral.Name = "contentGeneral";
+			this.contentGeneral.Size = new System.Drawing.Size(320, 191);
+			this.contentGeneral.TabIndex = 8;
+			// 
+			// contentSettings
+			// 
+			this.contentSettings.AutoScroll = true;
+			this.contentSettings.BackColor = System.Drawing.Color.Transparent;
+			this.contentSettings.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.contentSettings.Font = new System.Drawing.Font("맑은 고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+			this.contentSettings.ForeColor = System.Drawing.Color.White;
+			this.contentSettings.Location = new System.Drawing.Point(320, 191);
+			this.contentSettings.Margin = new System.Windows.Forms.Padding(0);
+			this.contentSettings.Name = "contentSettings";
+			this.contentSettings.Size = new System.Drawing.Size(320, 192);
+			this.contentSettings.TabIndex = 20;
+			// 
+			// btnScreenshot
+			// 
+			this.btnScreenshot.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(39)))), ((int)(((byte)(47)))));
+			this.btnScreenshot.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(83)))), ((int)(((byte)(83)))), ((int)(((byte)(83)))));
+			this.btnScreenshot.Dock = System.Windows.Forms.DockStyle.Right;
+			this.btnScreenshot.DownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(81)))), ((int)(((byte)(117)))), ((int)(((byte)(142)))));
+			this.btnScreenshot.DownBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(71)))), ((int)(((byte)(83)))));
+			this.btnScreenshot.Font = new System.Drawing.Font("맑은 고딕", 10F);
+			this.btnScreenshot.ForeColor = System.Drawing.Color.White;
+			this.btnScreenshot.Location = new System.Drawing.Point(2, 2);
+			this.btnScreenshot.Name = "btnScreenshot";
+			this.btnScreenshot.OverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(89)))), ((int)(((byte)(89)))), ((int)(((byte)(89)))));
+			this.btnScreenshot.OverBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(71)))), ((int)(((byte)(83)))));
+			this.btnScreenshot.Size = new System.Drawing.Size(75, 32);
+			this.btnScreenshot.TabIndex = 11;
+			this.btnScreenshot.Text = "스크린샷";
+			// 
+			// browserMain
+			// 
+			this.browserMain.AllowWebBrowserDrop = false;
+			this.browserMain.IsWebBrowserContextMenuEnabled = false;
+			this.browserMain.Location = new System.Drawing.Point(0, 0);
+			this.browserMain.Margin = new System.Windows.Forms.Padding(0);
+			this.browserMain.MinimumSize = new System.Drawing.Size(20, 20);
+			this.browserMain.Name = "browserMain";
+			this.browserMain.ScriptErrorsSuppressed = true;
+			this.browserMain.Size = new System.Drawing.Size(800, 480);
+			this.browserMain.TabIndex = 15;
+			this.browserMain.WebBrowserShortcutsEnabled = false;
+			// 
 			// frmMain
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
 			this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(58)))), ((int)(((byte)(72)))));
 			this.ClientSize = new System.Drawing.Size(1264, 681);
+			this.Controls.Add(this.contentContainer);
 			this.Controls.Add(this.layoutTab);
 			this.Controls.Add(this.panelBrowser);
-			this.Controls.Add(this.contentContainer);
 			this.Font = new System.Drawing.Font("맑은 고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
 			this.ForeColor = System.Drawing.Color.White;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));

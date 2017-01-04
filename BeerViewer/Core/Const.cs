@@ -19,11 +19,11 @@ namespace BeerViewer.Core
 		/// 게임 접속 URL (해외 차단 우회)
 		/// </summary>
 		public static string GameURL { get; } =
-			@"javascript:void(eval('document.cookie=\'cklg=ja;expires=Sun, 09 Feb 2019 09:00:09 GMT;domain=dmm.com;path=/\';"
-			+ @"document.cookie=\'ckcy=1;expires=Sun, 09 Feb 2019 09:00:09 GMT;domain=osapi.dmm.com;path=/\';"
-			+ @"document.cookie=\'ckcy=1;expires=Sun, 09 Feb 2019 09:00:09 GMT;domain=203.104.209.7;path=/\';"
-			+ @"document.cookie=\'ckcy=1;expires=Sun, 09 Feb 2019 09:00:09 GMT;domain=www.dmm.com;path=/netgame/\';'));"
-			+ @"location.href='http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/';";
+			@"document.cookie='cklg=ja;expires=Sun, 09 Feb 2055 09:00:09 GMT;domain=dmm.com;path=/';"
+			+ @"document.cookie='ckcy=1;expires=Sun, 09 Feb 2055 09:00:09 GMT;domain=osapi.dmm.com;path=/';"
+			+ @"document.cookie='ckcy=1;expires=Sun, 09 Feb 2055 09:00:09 GMT;domain=203.104.209.7;path=/';"
+			+ @"document.cookie='ckcy=1;expires=Sun, 09 Feb 2055 09:00:09 GMT;domain=www.dmm.com;path=/netgame/';"
+			+ @"window.location.href='http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/';";
 
 		/// <summary>
 		/// 로그아웃 URL

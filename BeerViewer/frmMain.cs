@@ -22,6 +22,8 @@ namespace BeerViewer
 
 		public System.Windows.Forms.WebBrowser Browser => this.browserMain;
 
+		private Logger logger { get; }
+
 		private Dictionary<Label, Control> tabList { get; set; }
 		public void UpdateTab(string TabName)
 		{
@@ -82,6 +84,7 @@ namespace BeerViewer
 
 			frmMain.Instance = this;
 			MessageProvider.Instance.SetProvider(this);
+			logger = new Logger();
 
 			InitializeTabs();
 
@@ -115,11 +118,37 @@ namespace BeerViewer
 					LayoutChange();
 			}, true);
 
+			{
+				int x = this.Left, y = this.Top;
+				int w = this.Width, h = this.Height;
+
+				if (Settings.Application_X.Value != int.MinValue) x = Settings.Application_X.Value;
+				if (Settings.Application_Y.Value != int.MinValue) y = Settings.Application_Y.Value;
+				if (Settings.Application_Width.Value != int.MinValue) w = Settings.Application_Width.Value;
+				if (Settings.Application_Height.Value != int.MinValue) h = Settings.Application_Height.Value;
+
+				this.StartPosition = FormStartPosition.Manual;
+				this.Location = new Point(x, y);
+				this.Size = new Size(w, h);
+			}
+
+			this.Move += (s, e) =>
+			{
+				Settings.Application_X.Value = this.Left;
+				Settings.Application_Y.Value = this.Top;
+			};
+			this.Resize += (s, e) =>
+			{
+				Settings.Application_Width.Value = this.Width;
+				Settings.Application_Height.Value = this.Height;
+			};
+			this.FormClosed += (s, e) => Application.Exit();
+
 			Proxy.Instance.Register(e =>
 			{
 				if (!e.Request.PathAndQuery.StartsWith("/kcsapi/")) return;
 
-				var x = e.TryParse();
+				var x = e.TryParse(false);
 				if(x==null || !x.IsSuccess)
 				{
 					MessageProvider.Instance.Submit(
