@@ -131,7 +131,7 @@ namespace BeerViewer.Views.Controls
 				cells[3] = w2 + Ships.Max(x =>
 					TextRenderer.MeasureText(x.HP.Current.ToString(), new Font(this.Font.FontFamily, 11)).Width - 8
 					+ TextRenderer.MeasureText("/" + x.HP.Maximum.ToString(), new Font(this.Font.FontFamily, 9)).Width
-				)+8;
+				) + 8;
 
 				SlotItemMap.Clear();
 
@@ -240,6 +240,13 @@ namespace BeerViewer.Views.Controls
 						TextFormatFlags.Left | TextFormatFlags.Top
 					);
 					x += 48;
+					#endregion
+
+					#region 함선 연료/탄약
+					DrawProgress(g, new Rectangle(x - 6, y + 6, 44, 6), ship.Fuel);
+					DrawProgress(g, new Rectangle(x - 6, y + 18, 44, 6), ship.Bull);
+
+					x += 44;
 					#endregion
 
 					#region 장비

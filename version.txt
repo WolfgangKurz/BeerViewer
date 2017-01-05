@@ -1,2 +1,2 @@
-1.0.0.7
-https://github.com/WolfgangKurz/BeerViewer/releases/download/v1.0.0r7/BeerViewer.v1.0.0.rev7.zip
+1.0.0.8
+https://github.com/WolfgangKurz/BeerViewer/releases/download/v1.0.0r8/BeerViewer.v1.0.0.rev8.zip

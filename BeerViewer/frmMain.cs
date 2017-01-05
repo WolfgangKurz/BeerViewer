@@ -160,7 +160,7 @@ namespace BeerViewer
 			this.FormClosing += (s, e) =>
 			{
 				if (DataStorage.Instance?.IsInSortie ?? false) {
-					if (MessageBox.Show("정말로 종료하시겠습니까?" ,"BeerViewer",MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation)== DialogResult.No)
+					if (MessageBox.Show("정말로 종료하시겠습니까?" ,Const.ApplicationName,MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation)== DialogResult.No)
 						e.Cancel = true;
 				}
 			};
@@ -183,10 +183,12 @@ namespace BeerViewer
 							"서버에서 {0} 오류를 전달했습니다.",
 							x?.RawData.api_result ?? -1
 						),
-						"BeerViewer"
+						Const.ApplicationName
 					);
 				}
 			});
+
+			this.Text = Const.ApplicationName;
 		}
 		private void InitializeTabs()
 		{
@@ -204,7 +206,7 @@ namespace BeerViewer
 		{
 			var Captured = Helper.Capture(this.browserMain);
 			if (Captured == null)
-				MessageProvider.Instance.Submit("스크린샷 저장에 실패했습니다", "BeerViewer");
+				MessageProvider.Instance.Submit("스크린샷 저장에 실패했습니다", Const.ApplicationName);
 
 			else
 			{
@@ -216,11 +218,11 @@ namespace BeerViewer
 				try
 				{
 					Captured.Save(path, ImageFormat.Png);
-					MessageProvider.Instance.Submit("스크린샷을 저장했습니다: " + filename, "BeerViewer");
+					MessageProvider.Instance.Submit("스크린샷을 저장했습니다: " + filename, Const.ApplicationName);
 				}
 				catch
 				{
-					MessageProvider.Instance.Submit("스크린샷 저장에 실패했습니다", "BeerViewer");
+					MessageProvider.Instance.Submit("스크린샷 저장에 실패했습니다", Const.ApplicationName);
 				}
 			}
 		}
@@ -281,7 +283,7 @@ namespace BeerViewer
 				System.Diagnostics.Debug.WriteLine(ex);
 				MessageProvider.Instance.Submit(
 					string.Format("게임화면 크기 변경 실패: {0}", ex.Message),
-					"BeerViewer"
+					Const.ApplicationName
 				);
 			}
 		}

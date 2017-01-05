@@ -64,7 +64,7 @@ namespace BeerViewer.Views.Controls
 			this.Paint += (s, e) =>
 			{
 				if (e == null) return;
-				if (this.FleetData == null) return;
+				if (this.FleetData == null || (this.FleetData.Ships?.Count() ?? 0) == 0) return;
 
 				var g = e.Graphics;
 				var Width = this.Width - this.Padding.Left - this.Padding.Right;
@@ -398,14 +398,12 @@ namespace BeerViewer.Views.Controls
 				return;
 			}
 			this.Invalidate();
-			this.PerformAutoScale();
-			this.PerformLayout();
 		}
 
 		public override Size GetPreferredSize(Size proposedSize)
 		{
 			if (this.FleetData == null || (this.FleetData.Ships?.Count() ?? 0) == 0)
-				LatestSize = new Size(1, 1);
+				LatestSize = new Size(2, 2);
 			return LatestSize;
 		}
 
