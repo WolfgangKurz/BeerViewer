@@ -217,7 +217,7 @@ namespace BeerViewer.Core
 
 							if (!iframeDocument.location.href.Contains("/ifr?")) continue;
 
-							string qualityString = "high";
+							string qualityString = null;
 							switch (Settings.FlashQuality.Value)
 							{
 								case 0: qualityString = "high"; break;
@@ -369,6 +369,9 @@ namespace BeerViewer.Core
 			LockWindowUpdate(IntPtr.Zero);
 		}
 
+		/// <summary>
+		/// 디스플레이의 DPI 배율을 가져옴
+		/// </summary>
 		public static double GetDPIFactor()
 		{
 			Graphics g = Graphics.FromHwnd(IntPtr.Zero);
