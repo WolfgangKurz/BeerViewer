@@ -402,8 +402,9 @@ namespace BeerViewer.Views.Controls
 
 		public override Size GetPreferredSize(Size proposedSize)
 		{
-			return (this.FleetData == null || (this.FleetData.Ships?.Count() ?? 0) == 0)
-				? new Size(0, 0) : LatestSize;
+			if (this.FleetData == null || (this.FleetData.Ships?.Count() ?? 0) == 0)
+				LatestSize = Size.Empty;
+			return LatestSize;
 		}
 
 		private void DrawProgress(Graphics g, Rectangle size, LimitedValue HP)
