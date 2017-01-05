@@ -398,12 +398,14 @@ namespace BeerViewer.Views.Controls
 				return;
 			}
 			this.Invalidate();
+			this.PerformAutoScale();
+			this.PerformLayout();
 		}
 
 		public override Size GetPreferredSize(Size proposedSize)
 		{
 			if (this.FleetData == null || (this.FleetData.Ships?.Count() ?? 0) == 0)
-				LatestSize = Size.Empty;
+				LatestSize = new Size(1, 1);
 			return LatestSize;
 		}
 
