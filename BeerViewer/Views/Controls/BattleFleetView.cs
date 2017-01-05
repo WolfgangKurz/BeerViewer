@@ -408,8 +408,11 @@ namespace BeerViewer.Views.Controls
 
 		private void DrawProgress(Graphics g, Rectangle size, LimitedValue HP)
 		{
-			int width = (HP.Current - HP.Minimum) * size.Width / (HP.Maximum - HP.Minimum);
 			Color color = GetHPColor(HP);
+
+			int width = 0;
+			if (HP.Maximum - HP.Minimum > 0)
+				width = (HP.Current - HP.Minimum) * size.Width / (HP.Maximum - HP.Minimum);
 
 			using (SolidBrush b = new SolidBrush(Color.FromArgb(0x44, 0x90, 0x90, 0x90)))
 				g.FillRectangle(b, size);
@@ -426,7 +429,9 @@ namespace BeerViewer.Views.Controls
 		}
 		private Color GetHPColor(LimitedValue HP)
 		{
-			double ratio = (double)(HP.Current - HP.Minimum) / (HP.Maximum - HP.Minimum);
+			double ratio = 0;
+			if (HP.Maximum - HP.Minimum > 0)
+				ratio = (double)(HP.Current - HP.Minimum) / (HP.Maximum - HP.Minimum);
 
 			if (ratio <= 0.25) // 대파
 				return Color.FromArgb(255, 32, 32);

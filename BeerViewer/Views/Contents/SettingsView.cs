@@ -136,6 +136,7 @@ namespace BeerViewer.Views.Contents
 			this.comboFlashQuality.Items.Add("High");
 			this.comboFlashQuality.Items.Add("Medium");
 			this.comboFlashQuality.Items.Add("Low");
+			this.comboFlashQuality.Items.Add("변경안함");
 			this.comboFlashQuality.SelectedIndex = Settings.FlashQuality.Value;
 			this.comboFlashQuality.SelectedIndexChanged += (s, e) =>
 				Settings.FlashQuality.Value = this.comboFlashQuality.SelectedIndex;
