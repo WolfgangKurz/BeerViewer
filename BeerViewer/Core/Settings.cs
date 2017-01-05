@@ -50,7 +50,7 @@ namespace BeerViewer.Core
 		public static SettingValue<bool> BattleInfo_CriticalEnabled { get; set; } = new SettingValue<bool>(GetKey(), true);
 		public static SettingValue<bool> BattleInfo_IsEnabledBattleEndNotify { get; set; } = new SettingValue<bool>(GetKey(), true);
 
-		public static SettingValue<int> FlashQuality { get; set; } = new SettingValue<int>(GetKey(), 0);
+		public static SettingValue<int> FlashQuality { get; set; } = new SettingValue<int>(GetKey(), 3);
 
 
 		internal class SettingValue<T> : Notifier
