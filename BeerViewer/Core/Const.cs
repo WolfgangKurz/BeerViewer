@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Reflection;
 
 namespace BeerViewer.Core
 {
@@ -14,6 +15,19 @@ namespace BeerViewer.Core
 		/// UNIX 타임스탬프 시작지점
 		/// </summary>
 		public static DateTimeOffset UnixEpoch { get; } = new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero);
+
+		/// <summary>
+		/// 버전을 포함하는 프로그램 이름
+		/// </summary>
+		public static string ApplicationName
+		{
+			get
+			{
+				Assembly assembly = Assembly.GetExecutingAssembly();
+				Version Version = assembly.GetName().Version;
+				return $"BeerViewer v{Version.Major}.{Version.Minor}.{Version.Build} rev{Version.Revision}";
+			}
+		}
 
 		/// <summary>
 		/// 게임 접속 URL
