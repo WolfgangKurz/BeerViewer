@@ -48,6 +48,9 @@ namespace BeerViewer.Views.Contents
 		{
 			InitializeComponent();
 
+			chkAlwaysOnTop.Checked = Settings.AlwaysOnTop.Value;
+			chkAlwaysOnTop.CheckedChanged += (s, e) => Settings.AlwaysOnTop.Value = chkAlwaysOnTop.Checked;
+
 			neutral = Settings.BrowserZoom.Value;
 			bool ZoomComboEventAttached = false;
 
@@ -87,7 +90,7 @@ namespace BeerViewer.Views.Contents
 			this.comboViewRangeType.SelectedIndexChanged += (s, e) =>
 			{
 				ViewRangeCalcLogicDisplayPair selected = this.comboViewRangeType.SelectedItem as ViewRangeCalcLogicDisplayPair;
-				if(selected==null)
+				if (selected == null)
 					labelViewRangeDescription.Text = "-";
 				else
 					labelViewRangeDescription.Text = selected.Key.Description;
@@ -144,7 +147,7 @@ namespace BeerViewer.Views.Contents
 
 		public void SetBackColor(Color color)
 		{
-			if(this.layoutMain.InvokeRequired)
+			if (this.layoutMain.InvokeRequired)
 			{
 				this.layoutMain.Invoke(() => SetBackColor(color));
 				return;

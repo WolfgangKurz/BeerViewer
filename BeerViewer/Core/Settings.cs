@@ -23,6 +23,8 @@ namespace BeerViewer.Core
 		public static SettingValue<int> Application_Height { get; set; } = new SettingValue<int>(GetKey(), int.MinValue);
 		public static SettingValue<int> Application_State { get; set; } = new SettingValue<int>(GetKey(), int.MinValue);
 
+		public static SettingValue<bool> AlwaysOnTop { get; set; } = new SettingValue<bool>(GetKey(), false);
+
 		public static SettingValue<double> BrowserZoom { get; set; } = new SettingValue<double>(GetKey(), 1.0);
 		public static SettingValue<bool> VerticalMode { get; set; } = new SettingValue<bool>(GetKey(), false);
 
@@ -142,7 +144,7 @@ namespace BeerViewer.Core
 				.Select(x => x.Trim())
 				.Where(x => x.Length > 0);
 
-			foreach(var line in lines)
+			foreach (var line in lines)
 			{
 				if (!line.Contains("=")) continue;
 

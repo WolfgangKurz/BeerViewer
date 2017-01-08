@@ -37,6 +37,7 @@ namespace BeerViewer
 			}
 
 			CurrentTab = TabName;
+
 			foreach (var item in tabList)
 			{
 				if (layoutTab.Controls.Contains(item.Value))
@@ -79,6 +80,8 @@ namespace BeerViewer
 				x.BackColor = Color.Transparent;
 			};
 			x.MouseDown += (s, e) => UpdateTab(TabName);
+
+			UpdateTab(TabName);
 		}
 
 		public frmMain()
@@ -159,24 +162,27 @@ namespace BeerViewer
 
 			this.FormClosing += (s, e) =>
 			{
-				if (DataStorage.Instance?.IsInSortie ?? false) {
-					if (MessageBox.Show("정말로 종료하시겠습니까?" ,Const.ApplicationName,MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation)== DialogResult.No)
+				if (DataStorage.Instance?.IsInSortie ?? false)
+				{
+					if (MessageBox.Show("정말로 종료하시겠습니까?", Const.ApplicationName, MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.No)
 						e.Cancel = true;
 				}
 			};
-			this.FormClosed += (s, e) =>Application.Exit();
+			this.FormClosed += (s, e) => Application.Exit();
 
 			VolumeMixer.SetApplicationMute(
 				Process.GetCurrentProcess().Id,
 				Settings.Application_Muted.Value
 			);
 
+			Settings.AlwaysOnTop.PropertyEvent(nameof(Settings.AlwaysOnTop.Value), () => this.TopMost = Settings.AlwaysOnTop.Value, true);
+
 			Proxy.Instance.Register(e =>
 			{
 				if (!e.Request.PathAndQuery.StartsWith("/kcsapi/")) return;
 
 				var x = e.TryParse(false);
-				if(x==null || !x.IsSuccess)
+				if (x == null || !x.IsSuccess)
 				{
 					MessageProvider.Instance.Submit(
 						string.Format(
@@ -273,9 +279,13 @@ namespace BeerViewer
 				webBrowser.ExecWB(OLECMDID.OLECMDID_OPTICAL_ZOOM, OLECMDEXECOPT.OLECMDEXECOPT_DONTPROMPTUSER, ref pvaIn);
 
 				var dpiFactor = Helper.GetDPIFactor();
-				browserMain.Size = this.MinimumSize = new Size(
+				browserMain.Size = new Size(
 					(int)(800 * zoomFactor),// / dpiFactor),
 					(int)(480 * zoomFactor)// / dpiFactor)
+				);
+				this.MinimumSize = new Size(
+					browserMain.Size.Width + (this.Width - this.ClientSize.Width),
+					browserMain.Size.Height + (this.Height - this.ClientSize.Height)
 				);
 			}
 			catch (Exception ex)
