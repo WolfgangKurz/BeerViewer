@@ -396,9 +396,6 @@
     <EmbeddedResource Include="Views\Catalogs\catalogSlotitems.resx">
       <DependentUpon>catalogSlotitems.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Views\Contents\GeneralView.resx">
-      <DependentUpon>GeneralView.cs</DependentUpon>
-    </EmbeddedResource>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
