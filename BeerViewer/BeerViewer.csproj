@@ -73,6 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\HQRecurd.cs" />
+    <Compile Include="Core\HTTPRequest.cs" />
     <Compile Include="Core\Logger.cs" />
     <Compile Include="Core\MessageProvider.cs" />
     <Compile Include="Core\NotifyHost.cs" />
@@ -125,6 +126,7 @@
     <Compile Include="Models\BattleInfo\UsedSupport.cs" />
     <Compile Include="Models\BattleInfo\MapCellData.cs" />
     <Compile Include="Models\DynamicJson.cs" />
+    <Compile Include="Models\OpenDB.cs" />
     <Compile Include="Models\QuestNameTable.cs" />
     <Compile Include="Models\Raw\kcsapi_battleresult.cs" />
     <Compile Include="Models\Raw\kcsapi_mst_mapcell.cs" />
@@ -136,6 +138,12 @@
     </Compile>
     <Compile Include="Views\Catalogs\catalogCalc.Designer.cs">
       <DependentUpon>catalogCalc.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Catalogs\catalogOpenDBEnable.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\Catalogs\catalogOpenDBEnable.Designer.cs">
+      <DependentUpon>catalogOpenDBEnable.cs</DependentUpon>
     </Compile>
     <Compile Include="Views\Catalogs\catalogShips.cs">
       <SubType>Form</SubType>
@@ -378,6 +386,9 @@
     </Compile>
     <EmbeddedResource Include="Views\Catalogs\catalogCalc.resx">
       <DependentUpon>catalogCalc.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Catalogs\catalogOpenDBEnable.resx">
+      <DependentUpon>catalogOpenDBEnable.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\Catalogs\catalogShips.resx">
       <DependentUpon>catalogShips.cs</DependentUpon>

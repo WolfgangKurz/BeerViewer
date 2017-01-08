@@ -33,6 +33,7 @@
 			this.btnGameStart = new BeerViewer.Views.Controls.FlatButton();
 			this.btnLogout = new BeerViewer.Views.Controls.FlatButton();
 			this.btnCookie = new BeerViewer.Views.Controls.FlatButton();
+			this.chkAlwaysOnTop = new BeerViewer.Views.Controls.FlatCheckBox();
 			this.optZoom = new System.Windows.Forms.FlowLayoutPanel();
 			this.labelZoom = new System.Windows.Forms.Label();
 			this.comboZoom = new BeerViewer.Views.Controls.FlatComboBox();
@@ -61,7 +62,7 @@
 			this.labelFlashQuality = new System.Windows.Forms.Label();
 			this.comboFlashQuality = new BeerViewer.Views.Controls.FlatComboBox();
 			this.labelFlashQualityDesc = new System.Windows.Forms.Label();
-			this.chkAlwaysOnTop = new BeerViewer.Views.Controls.FlatCheckBox();
+			this.chkUseOpenDB = new BeerViewer.Views.Controls.FlatCheckBox();
 			this.layoutMain.SuspendLayout();
 			this.optButtons.SuspendLayout();
 			this.optZoom.SuspendLayout();
@@ -95,12 +96,13 @@
 			this.layoutMain.Controls.Add(this.chkBattleEndNotify);
 			this.layoutMain.Controls.Add(this.optFlashQuality);
 			this.layoutMain.Controls.Add(this.labelFlashQualityDesc);
+			this.layoutMain.Controls.Add(this.chkUseOpenDB);
 			this.layoutMain.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
 			this.layoutMain.Location = new System.Drawing.Point(0, 0);
 			this.layoutMain.Margin = new System.Windows.Forms.Padding(0);
 			this.layoutMain.Name = "layoutMain";
 			this.layoutMain.Padding = new System.Windows.Forms.Padding(4);
-			this.layoutMain.Size = new System.Drawing.Size(269, 535);
+			this.layoutMain.Size = new System.Drawing.Size(269, 556);
 			this.layoutMain.TabIndex = 1;
 			this.layoutMain.WrapContents = false;
 			// 
@@ -170,6 +172,19 @@
 			this.btnCookie.Text = "쿠키설정";
 			this.btnCookie.Click += new System.EventHandler(this.btnCookie_Click);
 			// 
+			// chkAlwaysOnTop
+			// 
+			this.chkAlwaysOnTop.AutoSize = true;
+			this.chkAlwaysOnTop.Checked = true;
+			this.chkAlwaysOnTop.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.chkAlwaysOnTop.Location = new System.Drawing.Point(7, 49);
+			this.chkAlwaysOnTop.Margin = new System.Windows.Forms.Padding(3, 13, 3, 3);
+			this.chkAlwaysOnTop.Name = "chkAlwaysOnTop";
+			this.chkAlwaysOnTop.Size = new System.Drawing.Size(131, 15);
+			this.chkAlwaysOnTop.TabIndex = 18;
+			this.chkAlwaysOnTop.Text = "창을 항상 위에 표시";
+			this.chkAlwaysOnTop.UseVisualStyleBackColor = false;
+			// 
 			// optZoom
 			// 
 			this.optZoom.AutoSize = true;
@@ -209,8 +224,8 @@
 			this.optMainLayout.AutoSize = true;
 			this.optMainLayout.Controls.Add(this.labelMainLayout);
 			this.optMainLayout.Controls.Add(this.comboMainLayout);
-			this.optMainLayout.Location = new System.Drawing.Point(4, 107);
-			this.optMainLayout.Margin = new System.Windows.Forms.Padding(0, 10, 0, 0);
+			this.optMainLayout.Location = new System.Drawing.Point(4, 97);
+			this.optMainLayout.Margin = new System.Windows.Forms.Padding(0);
 			this.optMainLayout.Name = "optMainLayout";
 			this.optMainLayout.Size = new System.Drawing.Size(175, 30);
 			this.optMainLayout.TabIndex = 0;
@@ -243,7 +258,7 @@
 			this.optViewRangeType.AutoSize = true;
 			this.optViewRangeType.Controls.Add(this.labelViewRangeType);
 			this.optViewRangeType.Controls.Add(this.comboViewRangeType);
-			this.optViewRangeType.Location = new System.Drawing.Point(4, 147);
+			this.optViewRangeType.Location = new System.Drawing.Point(4, 137);
 			this.optViewRangeType.Margin = new System.Windows.Forms.Padding(0, 10, 0, 0);
 			this.optViewRangeType.Name = "optViewRangeType";
 			this.optViewRangeType.Size = new System.Drawing.Size(247, 30);
@@ -276,7 +291,7 @@
 			this.labelViewRangeDescription.AutoSize = true;
 			this.labelViewRangeDescription.Font = new System.Drawing.Font("맑은 고딕", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
 			this.labelViewRangeDescription.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(194)))), ((int)(((byte)(194)))), ((int)(((byte)(194)))));
-			this.labelViewRangeDescription.Location = new System.Drawing.Point(17, 177);
+			this.labelViewRangeDescription.Location = new System.Drawing.Point(17, 167);
 			this.labelViewRangeDescription.Margin = new System.Windows.Forms.Padding(13, 0, 3, 0);
 			this.labelViewRangeDescription.Name = "labelViewRangeDescription";
 			this.labelViewRangeDescription.Size = new System.Drawing.Size(9, 19);
@@ -290,7 +305,7 @@
 			this.optViewRangeFleet.Controls.Add(this.labelViewRangeFleet);
 			this.optViewRangeFleet.Controls.Add(this.chkViewRangeCalcFirstFleet);
 			this.optViewRangeFleet.Controls.Add(this.chkViewRangeCalcSecondFleet);
-			this.optViewRangeFleet.Location = new System.Drawing.Point(4, 209);
+			this.optViewRangeFleet.Location = new System.Drawing.Point(4, 199);
 			this.optViewRangeFleet.Margin = new System.Windows.Forms.Padding(0, 13, 0, 0);
 			this.optViewRangeFleet.Name = "optViewRangeFleet";
 			this.optViewRangeFleet.Size = new System.Drawing.Size(261, 23);
@@ -338,7 +353,7 @@
 			this.chkExpeditionNotify.AutoSize = true;
 			this.chkExpeditionNotify.Checked = true;
 			this.chkExpeditionNotify.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.chkExpeditionNotify.Location = new System.Drawing.Point(7, 245);
+			this.chkExpeditionNotify.Location = new System.Drawing.Point(7, 235);
 			this.chkExpeditionNotify.Margin = new System.Windows.Forms.Padding(3, 13, 3, 3);
 			this.chkExpeditionNotify.Name = "chkExpeditionNotify";
 			this.chkExpeditionNotify.Size = new System.Drawing.Size(151, 15);
@@ -351,7 +366,7 @@
 			this.chkBuildNotify.AutoSize = true;
 			this.chkBuildNotify.Checked = true;
 			this.chkBuildNotify.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.chkBuildNotify.Location = new System.Drawing.Point(7, 266);
+			this.chkBuildNotify.Location = new System.Drawing.Point(7, 256);
 			this.chkBuildNotify.Name = "chkBuildNotify";
 			this.chkBuildNotify.Size = new System.Drawing.Size(139, 15);
 			this.chkBuildNotify.TabIndex = 9;
@@ -363,7 +378,7 @@
 			this.chkRepairNotify.AutoSize = true;
 			this.chkRepairNotify.Checked = true;
 			this.chkRepairNotify.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.chkRepairNotify.Location = new System.Drawing.Point(7, 287);
+			this.chkRepairNotify.Location = new System.Drawing.Point(7, 277);
 			this.chkRepairNotify.Name = "chkRepairNotify";
 			this.chkRepairNotify.Size = new System.Drawing.Size(139, 15);
 			this.chkRepairNotify.TabIndex = 11;
@@ -375,7 +390,7 @@
 			this.chkConditionNotify.AutoSize = true;
 			this.chkConditionNotify.Checked = true;
 			this.chkConditionNotify.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.chkConditionNotify.Location = new System.Drawing.Point(7, 308);
+			this.chkConditionNotify.Location = new System.Drawing.Point(7, 298);
 			this.chkConditionNotify.Name = "chkConditionNotify";
 			this.chkConditionNotify.Size = new System.Drawing.Size(203, 15);
 			this.chkConditionNotify.TabIndex = 12;
@@ -387,7 +402,7 @@
 			this.chkBattleInfoAutoSelectTab.AutoSize = true;
 			this.chkBattleInfoAutoSelectTab.Checked = true;
 			this.chkBattleInfoAutoSelectTab.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.chkBattleInfoAutoSelectTab.Location = new System.Drawing.Point(7, 339);
+			this.chkBattleInfoAutoSelectTab.Location = new System.Drawing.Point(7, 329);
 			this.chkBattleInfoAutoSelectTab.Margin = new System.Windows.Forms.Padding(3, 13, 3, 3);
 			this.chkBattleInfoAutoSelectTab.Name = "chkBattleInfoAutoSelectTab";
 			this.chkBattleInfoAutoSelectTab.Size = new System.Drawing.Size(167, 15);
@@ -400,7 +415,7 @@
 			this.chkBattleInfoDetailAirCombat.AutoSize = true;
 			this.chkBattleInfoDetailAirCombat.Checked = true;
 			this.chkBattleInfoDetailAirCombat.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.chkBattleInfoDetailAirCombat.Location = new System.Drawing.Point(7, 360);
+			this.chkBattleInfoDetailAirCombat.Location = new System.Drawing.Point(7, 350);
 			this.chkBattleInfoDetailAirCombat.Name = "chkBattleInfoDetailAirCombat";
 			this.chkBattleInfoDetailAirCombat.Size = new System.Drawing.Size(235, 15);
 			this.chkBattleInfoDetailAirCombat.TabIndex = 5;
@@ -412,7 +427,7 @@
 			this.chkCriticalColor.AutoSize = true;
 			this.chkCriticalColor.Checked = true;
 			this.chkCriticalColor.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.chkCriticalColor.Location = new System.Drawing.Point(7, 381);
+			this.chkCriticalColor.Location = new System.Drawing.Point(7, 371);
 			this.chkCriticalColor.Name = "chkCriticalColor";
 			this.chkCriticalColor.Size = new System.Drawing.Size(255, 15);
 			this.chkCriticalColor.TabIndex = 6;
@@ -424,7 +439,7 @@
 			this.chkGeneralAutoSelect.AutoSize = true;
 			this.chkGeneralAutoSelect.Checked = true;
 			this.chkGeneralAutoSelect.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.chkGeneralAutoSelect.Location = new System.Drawing.Point(7, 412);
+			this.chkGeneralAutoSelect.Location = new System.Drawing.Point(7, 402);
 			this.chkGeneralAutoSelect.Margin = new System.Windows.Forms.Padding(3, 13, 3, 3);
 			this.chkGeneralAutoSelect.Name = "chkGeneralAutoSelect";
 			this.chkGeneralAutoSelect.Size = new System.Drawing.Size(247, 15);
@@ -437,7 +452,7 @@
 			this.chkCriticalNotify.AutoSize = true;
 			this.chkCriticalNotify.Checked = true;
 			this.chkCriticalNotify.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.chkCriticalNotify.Location = new System.Drawing.Point(7, 433);
+			this.chkCriticalNotify.Location = new System.Drawing.Point(7, 423);
 			this.chkCriticalNotify.Name = "chkCriticalNotify";
 			this.chkCriticalNotify.Size = new System.Drawing.Size(199, 15);
 			this.chkCriticalNotify.TabIndex = 7;
@@ -449,7 +464,7 @@
 			this.chkBattleEndNotify.AutoSize = true;
 			this.chkBattleEndNotify.Checked = true;
 			this.chkBattleEndNotify.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.chkBattleEndNotify.Location = new System.Drawing.Point(7, 454);
+			this.chkBattleEndNotify.Location = new System.Drawing.Point(7, 444);
 			this.chkBattleEndNotify.Name = "chkBattleEndNotify";
 			this.chkBattleEndNotify.Size = new System.Drawing.Size(139, 15);
 			this.chkBattleEndNotify.TabIndex = 8;
@@ -461,7 +476,7 @@
 			this.optFlashQuality.AutoSize = true;
 			this.optFlashQuality.Controls.Add(this.labelFlashQuality);
 			this.optFlashQuality.Controls.Add(this.comboFlashQuality);
-			this.optFlashQuality.Location = new System.Drawing.Point(4, 482);
+			this.optFlashQuality.Location = new System.Drawing.Point(4, 472);
 			this.optFlashQuality.Margin = new System.Windows.Forms.Padding(0, 10, 0, 0);
 			this.optFlashQuality.Name = "optFlashQuality";
 			this.optFlashQuality.Size = new System.Drawing.Size(191, 30);
@@ -495,7 +510,7 @@
 			this.labelFlashQualityDesc.AutoSize = true;
 			this.labelFlashQualityDesc.Font = new System.Drawing.Font("맑은 고딕", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
 			this.labelFlashQualityDesc.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(194)))), ((int)(((byte)(194)))), ((int)(((byte)(194)))));
-			this.labelFlashQualityDesc.Location = new System.Drawing.Point(17, 512);
+			this.labelFlashQualityDesc.Location = new System.Drawing.Point(17, 502);
 			this.labelFlashQualityDesc.Margin = new System.Windows.Forms.Padding(13, 0, 3, 0);
 			this.labelFlashQualityDesc.Name = "labelFlashQualityDesc";
 			this.labelFlashQualityDesc.Size = new System.Drawing.Size(181, 19);
@@ -503,18 +518,18 @@
 			this.labelFlashQualityDesc.Text = "※ 게임을 새로고침해야 적용됩니다.";
 			this.labelFlashQualityDesc.UseCompatibleTextRendering = true;
 			// 
-			// chkAlwaysOnTop
+			// chkUseOpenDB
 			// 
-			this.chkAlwaysOnTop.AutoSize = true;
-			this.chkAlwaysOnTop.Checked = true;
-			this.chkAlwaysOnTop.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.chkAlwaysOnTop.Location = new System.Drawing.Point(7, 49);
-			this.chkAlwaysOnTop.Margin = new System.Windows.Forms.Padding(3, 13, 3, 3);
-			this.chkAlwaysOnTop.Name = "chkAlwaysOnTop";
-			this.chkAlwaysOnTop.Size = new System.Drawing.Size(131, 15);
-			this.chkAlwaysOnTop.TabIndex = 18;
-			this.chkAlwaysOnTop.Text = "창을 항상 위에 표시";
-			this.chkAlwaysOnTop.UseVisualStyleBackColor = false;
+			this.chkUseOpenDB.AutoSize = true;
+			this.chkUseOpenDB.Checked = true;
+			this.chkUseOpenDB.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.chkUseOpenDB.Location = new System.Drawing.Point(7, 534);
+			this.chkUseOpenDB.Margin = new System.Windows.Forms.Padding(3, 13, 3, 3);
+			this.chkUseOpenDB.Name = "chkUseOpenDB";
+			this.chkUseOpenDB.Size = new System.Drawing.Size(188, 15);
+			this.chkUseOpenDB.TabIndex = 20;
+			this.chkUseOpenDB.Text = "OpenDB 서버에 데이터를 전송";
+			this.chkUseOpenDB.UseVisualStyleBackColor = false;
 			// 
 			// SettingsView
 			// 
@@ -525,7 +540,7 @@
 			this.ForeColor = System.Drawing.Color.White;
 			this.Margin = new System.Windows.Forms.Padding(0);
 			this.Name = "SettingsView";
-			this.Size = new System.Drawing.Size(457, 563);
+			this.Size = new System.Drawing.Size(457, 605);
 			this.layoutMain.ResumeLayout(false);
 			this.layoutMain.PerformLayout();
 			this.optButtons.ResumeLayout(false);
@@ -580,5 +595,6 @@
 		private Controls.FlatComboBox comboFlashQuality;
 		private System.Windows.Forms.Label labelFlashQualityDesc;
 		private Controls.FlatCheckBox chkAlwaysOnTop;
+		private Controls.FlatCheckBox chkUseOpenDB;
 	}
 }
