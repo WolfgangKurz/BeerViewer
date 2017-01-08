@@ -41,6 +41,7 @@
 			this.optMainLayout = new System.Windows.Forms.FlowLayoutPanel();
 			this.labelMainLayout = new System.Windows.Forms.Label();
 			this.comboMainLayout = new BeerViewer.Views.Controls.FlatComboBox();
+			this.chkContentLayout = new BeerViewer.Views.Controls.FlatCheckBox();
 			this.chkBattleInfoLayout = new BeerViewer.Views.Controls.FlatCheckBox();
 			this.optViewRangeType = new System.Windows.Forms.FlowLayoutPanel();
 			this.labelViewRangeType = new System.Windows.Forms.Label();
@@ -96,7 +97,7 @@
 			this.layoutMain.Margin = new System.Windows.Forms.Padding(0);
 			this.layoutMain.Name = "layoutMain";
 			this.layoutMain.Padding = new System.Windows.Forms.Padding(4);
-			this.layoutMain.Size = new System.Drawing.Size(269, 577);
+			this.layoutMain.Size = new System.Drawing.Size(269, 598);
 			this.layoutMain.TabIndex = 1;
 			// 
 			// optButtons
@@ -172,6 +173,7 @@
 			this.groupLayout.Controls.Add(this.chkAlwaysOnTop);
 			this.groupLayout.Controls.Add(this.optZoom);
 			this.groupLayout.Controls.Add(this.optMainLayout);
+			this.groupLayout.Controls.Add(this.chkContentLayout);
 			this.groupLayout.Controls.Add(this.chkBattleInfoLayout);
 			this.groupLayout.Controls.Add(this.optViewRangeType);
 			this.groupLayout.Controls.Add(this.labelViewRangeDescription);
@@ -180,7 +182,7 @@
 			this.groupLayout.Location = new System.Drawing.Point(4, 46);
 			this.groupLayout.Margin = new System.Windows.Forms.Padding(0, 10, 0, 0);
 			this.groupLayout.Name = "groupLayout";
-			this.groupLayout.Size = new System.Drawing.Size(261, 197);
+			this.groupLayout.Size = new System.Drawing.Size(261, 218);
 			this.groupLayout.TabIndex = 2;
 			// 
 			// chkAlwaysOnTop
@@ -263,12 +265,24 @@
 			this.comboMainLayout.Size = new System.Drawing.Size(73, 24);
 			this.comboMainLayout.TabIndex = 1;
 			// 
+			// chkContentLayout
+			// 
+			this.chkContentLayout.AutoSize = true;
+			this.chkContentLayout.Checked = true;
+			this.chkContentLayout.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.chkContentLayout.Location = new System.Drawing.Point(3, 84);
+			this.chkContentLayout.Name = "chkContentLayout";
+			this.chkContentLayout.Size = new System.Drawing.Size(223, 15);
+			this.chkContentLayout.TabIndex = 26;
+			this.chkContentLayout.Text = "레이아웃 방향에 맞춰 탭 내용도 변경";
+			this.chkContentLayout.UseVisualStyleBackColor = false;
+			// 
 			// chkBattleInfoLayout
 			// 
 			this.chkBattleInfoLayout.AutoSize = true;
 			this.chkBattleInfoLayout.Checked = true;
 			this.chkBattleInfoLayout.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.chkBattleInfoLayout.Location = new System.Drawing.Point(3, 84);
+			this.chkBattleInfoLayout.Location = new System.Drawing.Point(3, 105);
 			this.chkBattleInfoLayout.Name = "chkBattleInfoLayout";
 			this.chkBattleInfoLayout.Size = new System.Drawing.Size(252, 15);
 			this.chkBattleInfoLayout.TabIndex = 25;
@@ -280,7 +294,7 @@
 			this.optViewRangeType.AutoSize = true;
 			this.optViewRangeType.Controls.Add(this.labelViewRangeType);
 			this.optViewRangeType.Controls.Add(this.comboViewRangeType);
-			this.optViewRangeType.Location = new System.Drawing.Point(0, 112);
+			this.optViewRangeType.Location = new System.Drawing.Point(0, 133);
 			this.optViewRangeType.Margin = new System.Windows.Forms.Padding(0, 10, 0, 0);
 			this.optViewRangeType.Name = "optViewRangeType";
 			this.optViewRangeType.Size = new System.Drawing.Size(247, 30);
@@ -313,7 +327,7 @@
 			this.labelViewRangeDescription.AutoSize = true;
 			this.labelViewRangeDescription.Font = new System.Drawing.Font("맑은 고딕", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
 			this.labelViewRangeDescription.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(194)))), ((int)(((byte)(194)))), ((int)(((byte)(194)))));
-			this.labelViewRangeDescription.Location = new System.Drawing.Point(13, 142);
+			this.labelViewRangeDescription.Location = new System.Drawing.Point(13, 163);
 			this.labelViewRangeDescription.Margin = new System.Windows.Forms.Padding(13, 0, 3, 0);
 			this.labelViewRangeDescription.Name = "labelViewRangeDescription";
 			this.labelViewRangeDescription.Size = new System.Drawing.Size(9, 19);
@@ -327,7 +341,7 @@
 			this.optViewRangeFleet.Controls.Add(this.labelViewRangeFleet);
 			this.optViewRangeFleet.Controls.Add(this.chkViewRangeCalcFirstFleet);
 			this.optViewRangeFleet.Controls.Add(this.chkViewRangeCalcSecondFleet);
-			this.optViewRangeFleet.Location = new System.Drawing.Point(0, 174);
+			this.optViewRangeFleet.Location = new System.Drawing.Point(0, 195);
 			this.optViewRangeFleet.Margin = new System.Windows.Forms.Padding(0, 13, 0, 0);
 			this.optViewRangeFleet.Name = "optViewRangeFleet";
 			this.optViewRangeFleet.Size = new System.Drawing.Size(261, 23);
@@ -379,7 +393,7 @@
 			this.groupNotification.Controls.Add(this.chkRepairNotify);
 			this.groupNotification.Controls.Add(this.chkConditionNotify);
 			this.groupNotification.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-			this.groupNotification.Location = new System.Drawing.Point(4, 253);
+			this.groupNotification.Location = new System.Drawing.Point(4, 274);
 			this.groupNotification.Margin = new System.Windows.Forms.Padding(0, 10, 0, 0);
 			this.groupNotification.Name = "groupNotification";
 			this.groupNotification.Size = new System.Drawing.Size(209, 84);
@@ -444,7 +458,7 @@
 			this.groupBattleInfo.Controls.Add(this.chkCriticalNotify);
 			this.groupBattleInfo.Controls.Add(this.chkBattleEndNotify);
 			this.groupBattleInfo.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-			this.groupBattleInfo.Location = new System.Drawing.Point(4, 347);
+			this.groupBattleInfo.Location = new System.Drawing.Point(4, 368);
 			this.groupBattleInfo.Margin = new System.Windows.Forms.Padding(0, 10, 0, 0);
 			this.groupBattleInfo.Name = "groupBattleInfo";
 			this.groupBattleInfo.Size = new System.Drawing.Size(261, 136);
@@ -531,7 +545,7 @@
 			this.groupETC.Controls.Add(this.labelFlashQualityDesc);
 			this.groupETC.Controls.Add(this.chkUseOpenDB);
 			this.groupETC.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-			this.groupETC.Location = new System.Drawing.Point(4, 493);
+			this.groupETC.Location = new System.Drawing.Point(4, 514);
 			this.groupETC.Margin = new System.Windows.Forms.Padding(0, 10, 0, 0);
 			this.groupETC.Name = "groupETC";
 			this.groupETC.Size = new System.Drawing.Size(197, 80);
@@ -675,5 +689,6 @@
 		private System.Windows.Forms.Label labelFlashQualityDesc;
 		private Controls.FlatCheckBox chkUseOpenDB;
 		private Controls.FlatCheckBox chkBattleInfoLayout;
+		private Controls.FlatCheckBox chkContentLayout;
 	}
 }

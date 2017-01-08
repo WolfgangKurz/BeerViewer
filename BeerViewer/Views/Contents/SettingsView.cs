@@ -90,6 +90,9 @@ namespace BeerViewer.Views.Contents
 			this.comboMainLayout.SelectedIndexChanged += (s, e) =>
 				Settings.VerticalMode.Value = (this.comboMainLayout.SelectedIndex == 0 ? false : true);
 
+			chkContentLayout.Checked = Settings.ContentLayoutMode.Value;
+			chkContentLayout.CheckedChanged += (s, e) => Settings.ContentLayoutMode.Value = chkContentLayout.Checked;
+
 			this.comboViewRangeType.SelectedIndexChanged += (s, e) =>
 			{
 				ViewRangeCalcLogicDisplayPair selected = this.comboViewRangeType.SelectedItem as ViewRangeCalcLogicDisplayPair;

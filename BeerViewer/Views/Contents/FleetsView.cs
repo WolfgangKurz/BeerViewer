@@ -23,10 +23,23 @@ namespace BeerViewer.Views.Contents
 			if (!Helper.IsInDesignMode)
 				layoutFleets.Controls.Clear();
 
-			Settings.VerticalMode.PropertyEvent(nameof(Settings.VerticalMode.Value), () =>
-				layoutFleets.FlowDirection
-					= (Settings.VerticalMode.Value ? FlowDirection.LeftToRight : FlowDirection.TopDown)
-			, true);
+			Action UpdateLayout = null;
+			UpdateLayout = () =>
+			{
+				if (this.InvokeRequired)
+				{
+					this.Invoke(UpdateLayout);
+					return;
+				}
+
+				if (Settings.ContentLayoutMode.Value && Settings.VerticalMode.Value)
+					layoutFleets.FlowDirection = FlowDirection.LeftToRight;
+				else
+					layoutFleets.FlowDirection = FlowDirection.TopDown;
+			};
+			Settings.VerticalMode.PropertyEvent(nameof(Settings.VerticalMode.Value), () => UpdateLayout());
+			Settings.ContentLayoutMode.PropertyEvent(nameof(Settings.ContentLayoutMode.Value), () => UpdateLayout());
+			UpdateLayout();
 		}
 
 		public void SetHomeport(Homeport homeport)
