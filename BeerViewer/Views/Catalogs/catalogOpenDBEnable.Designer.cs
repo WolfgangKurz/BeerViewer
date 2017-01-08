@@ -72,7 +72,6 @@
 			this.btnNotUse.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(83)))), ((int)(((byte)(83)))), ((int)(((byte)(83)))));
 			this.btnNotUse.DownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(81)))), ((int)(((byte)(117)))), ((int)(((byte)(142)))));
 			this.btnNotUse.DownBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(71)))), ((int)(((byte)(83)))));
-			this.btnNotUse.Enabled = false;
 			this.btnNotUse.Font = new System.Drawing.Font("맑은 고딕", 9F);
 			this.btnNotUse.ForeColor = System.Drawing.Color.White;
 			this.btnNotUse.Location = new System.Drawing.Point(292, 82);
@@ -90,7 +89,6 @@
 			this.btnUse.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(83)))), ((int)(((byte)(83)))), ((int)(((byte)(83)))));
 			this.btnUse.DownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(81)))), ((int)(((byte)(117)))), ((int)(((byte)(142)))));
 			this.btnUse.DownBorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(71)))), ((int)(((byte)(83)))));
-			this.btnUse.Enabled = false;
 			this.btnUse.Font = new System.Drawing.Font("맑은 고딕", 9F);
 			this.btnUse.ForeColor = System.Drawing.Color.White;
 			this.btnUse.Location = new System.Drawing.Point(196, 82);

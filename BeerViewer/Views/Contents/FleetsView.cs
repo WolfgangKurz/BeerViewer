@@ -22,6 +22,11 @@ namespace BeerViewer.Views.Contents
 
 			if (!Helper.IsInDesignMode)
 				layoutFleets.Controls.Clear();
+
+			Settings.VerticalMode.PropertyEvent(nameof(Settings.VerticalMode.Value), () =>
+				layoutFleets.FlowDirection
+					= (Settings.VerticalMode.Value ? FlowDirection.LeftToRight : FlowDirection.TopDown)
+			, true);
 		}
 
 		public void SetHomeport(Homeport homeport)
@@ -33,7 +38,7 @@ namespace BeerViewer.Views.Contents
 			{
 				var fleets = homeport.Organization.Fleets.Select(x => x.Value);
 
-				this.Invoke(() =>
+				layoutFleets.Invoke(() =>
 				{
 					// 기존 목록 제거
 					layoutFleets.Controls.Clear();
@@ -45,7 +50,7 @@ namespace BeerViewer.Views.Contents
 						FleetView fleetView = new FleetView();
 						// fleetView.Dock = DockStyle.Top;
 						fleetView.AutoSize = true;
-						fleetView.Padding = new Padding { Bottom = 8 };
+						fleetView.Padding = new Padding(0, 0, 8, 8);
 						fleetView.SetFleet(fleet);
 
 						layoutFleets.Controls.Add(fleetView);

@@ -407,7 +407,7 @@ namespace BeerViewer.Views.Controls
 			return LatestSize;
 		}
 
-		private void DrawProgress(Graphics g, Rectangle size, LimitedValue HP)
+		private void DrawProgress(Graphics g, Rectangle size, LimitedValue HP, int Separates = 4)
 		{
 			Color color = GetHPColor(HP);
 
@@ -421,11 +421,10 @@ namespace BeerViewer.Views.Controls
 			using (SolidBrush b = new SolidBrush(color))
 				g.FillRectangle(b, new Rectangle(size.Left, size.Top, width, size.Height));
 
-			var step = size.Width / 4;
 			using (Pen p = new Pen(frmMain.Instance.BackColor, 1.0f))
 			{
-				for (var i = 1; i <= 3; i++)
-					g.DrawLine(p, size.Left + step * i, size.Top, size.Left + step * i, size.Top + size.Height / 2 - 1);
+				for (var i = 1; i <= (Separates - 1); i++)
+					g.DrawLine(p, size.Left + (size.Width * i / Separates), size.Top, size.Left + (size.Width * i / Separates), size.Top + size.Height / 2 - 1);
 			}
 		}
 		private Color GetHPColor(LimitedValue HP)

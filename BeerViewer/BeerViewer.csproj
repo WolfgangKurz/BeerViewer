@@ -126,7 +126,7 @@
     <Compile Include="Models\BattleInfo\UsedSupport.cs" />
     <Compile Include="Models\BattleInfo\MapCellData.cs" />
     <Compile Include="Models\DynamicJson.cs" />
-    <Compile Include="Models\OpenDB.cs" />
+    <Compile Include="Core\OpenDB.cs" />
     <Compile Include="Models\QuestNameTable.cs" />
     <Compile Include="Models\Raw\kcsapi_battleresult.cs" />
     <Compile Include="Models\Raw\kcsapi_mst_mapcell.cs" />
@@ -395,6 +395,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Views\Catalogs\catalogSlotitems.resx">
       <DependentUpon>catalogSlotitems.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\Contents\GeneralView.resx">
+      <DependentUpon>GeneralView.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="packages.config" />

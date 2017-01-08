@@ -6,12 +6,11 @@ using System.Linq;
 
 using System.Threading;
 
-using BeerViewer.Core;
 using BeerViewer.Models;
 using BeerViewer.Views.Catalogs;
 using BeerViewer.Models.Raw;
 
-namespace BeerViewer.Models
+namespace BeerViewer.Core
 {
 	public class OpenDB
 	{
@@ -35,15 +34,8 @@ namespace BeerViewer.Models
 
 			var client = DataStorage.Instance;
 			client.PropertyEvent(nameof(client.Initialized), () => Initialize());
-		}
-
-		private void Initialize()
-		{
-			if (Initialized) return;
-			Initialized = true;
 
 			bool IsFirst = Settings.OpenDB_IsFirst.Value;
-
 			Settings.OpenDB_Enabled.PropertyEvent(nameof(Settings.OpenDB_Enabled.Value), () => this.Enabled = Settings.OpenDB_Enabled.Value, true);
 
 			if (IsFirst || DEBUG) // Is the first load after install?
@@ -55,6 +47,12 @@ namespace BeerViewer.Models
 
 			// Save IsFirst setting
 			Settings.OpenDB_IsFirst.Value = false;
+		}
+
+		private void Initialize()
+		{
+			if (Initialized) return;
+			Initialized = true;
 
 			var homeport = DataStorage.Instance.Homeport;
 			var proxy = Proxy.Instance;
