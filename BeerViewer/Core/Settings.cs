@@ -23,11 +23,17 @@ namespace BeerViewer.Core
 		public static SettingValue<int> Application_Height { get; set; } = new SettingValue<int>(GetKey(), int.MinValue);
 		public static SettingValue<int> Application_State { get; set; } = new SettingValue<int>(GetKey(), int.MinValue);
 
-		public static SettingValue<double> BrowserZoom { get; set; } = new SettingValue<double>(GetKey(), 1.0);
-		public static SettingValue<bool> VerticalMode { get; set; } = new SettingValue<bool>(GetKey(), false);
+		public static SettingValue<bool> OpenDB_IsFirst { get; set; } = new SettingValue<bool>(GetKey(), true);
+		public static SettingValue<bool> OpenDB_Enabled { get; set; } = new SettingValue<bool>(GetKey(), false);
 
 		public static SettingValue<int> ResourceSelected1 { get; set; } = new SettingValue<int>(GetKey(), 0);
 		public static SettingValue<int> ResourceSelected2 { get; set; } = new SettingValue<int>(GetKey(), 1);
+
+		public static SettingValue<bool> AlwaysOnTop { get; set; } = new SettingValue<bool>(GetKey(), false);
+
+		public static SettingValue<double> BrowserZoom { get; set; } = new SettingValue<double>(GetKey(), 1.0);
+		public static SettingValue<bool> VerticalMode { get; set; } = new SettingValue<bool>(GetKey(), false);
+		public static SettingValue<bool> BattleInfoLayout { get; set; } = new SettingValue<bool>(GetKey(), false);
 
 		public static SettingValue<bool> IsViewRangeCalcIncludeFirstFleet { get; set; } = new SettingValue<bool>(GetKey(), true);
 		public static SettingValue<bool> IsViewRangeCalcIncludeSecondFleet { get; set; } = new SettingValue<bool>(GetKey(), false);
@@ -142,7 +148,7 @@ namespace BeerViewer.Core
 				.Select(x => x.Trim())
 				.Where(x => x.Length > 0);
 
-			foreach(var line in lines)
+			foreach (var line in lines)
 			{
 				if (!line.Contains("=")) continue;
 

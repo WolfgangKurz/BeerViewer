@@ -78,10 +78,16 @@ namespace BeerViewer.Views.Contents
 				var slotMax = homeport.Admiral?.MaxSlotItemCount ?? 0;
 				var slots = homeport.Itemyard?.SlotItemsCount;
 
-				if (labelHomeportInfo.InvokeRequired)
-					labelHomeportInfo.Invoke(() => labelHomeportInfo.Text = $"소속칸무스: {ships}/{shipsMax}    보유장비: {slots}/{slotMax}");
+				if (labelShipCount.InvokeRequired)
+				{
+					labelShipCount.Invoke(() => labelShipCount.Text = $"소속칸무스: {ships}/{shipsMax}");
+					labelSlotitemCount.Invoke(() => labelSlotitemCount.Text = $"보유장비: {slots}/{slotMax}");
+				}
 				else
-					labelHomeportInfo.Text = $"소속칸무스: {ships}/{shipsMax}    보유장비: {slots}/{slotMax}";
+				{
+					labelShipCount.Text = $"소속칸무스: {ships}/{shipsMax}";
+					labelSlotitemCount.Text = $"보유장비: {slots}/{slotMax}";
+				}
 			};
 
 			// Resources

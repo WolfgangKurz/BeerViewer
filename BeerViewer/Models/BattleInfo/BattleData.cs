@@ -441,7 +441,7 @@ namespace BeerViewer.Models.BattleInfo
 
 		private void AutoSelectTab()
 		{
-			if (Settings.BattleInfo_AutoSelectTab.Value)
+			if (Settings.BattleInfo_AutoSelectTab.Value && !Settings.BattleInfoLayout.Value)
 				frmMain.Instance.UpdateTab("Battle");
 		}
 

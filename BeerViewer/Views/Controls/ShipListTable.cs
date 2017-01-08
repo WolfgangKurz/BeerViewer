@@ -518,7 +518,7 @@ namespace BeerViewer.Views.Controls
 										TextFormatFlags.VerticalCenter | TextFormatFlags.Left
 									);
 								}
-								else
+								else if(ship.RemodelLevel > 0)
 								{
 									TextRenderer.DrawText(
 										g,

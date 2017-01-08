@@ -26,6 +26,7 @@ namespace BeerViewer
 		public System.Windows.Forms.WebBrowser Browser => this.browserMain;
 
 		private Logger logger { get; }
+		private OpenDB openDB { get; }
 
 		private Dictionary<Label, Control> tabList { get; set; }
 		public void UpdateTab(string TabName)
@@ -37,20 +38,22 @@ namespace BeerViewer
 			}
 
 			CurrentTab = TabName;
+
 			foreach (var item in tabList)
 			{
+				if (item.Value == contentBattle && Settings.BattleInfoLayout.Value)
+					continue;
+
 				if (layoutTab.Controls.Contains(item.Value))
 					layoutTab.Controls.Remove(item.Value);
 
 				item.Key.BackColor = Color.Transparent;
-				item.Value.Visible = false;
 			}
 
 			var TabButton = tabList.FirstOrDefault(x => TabName == x.Key.Name.Substring(3)).Key;
 			if (TabButton == null) return;
 
 			TabButton.BackColor = Color.FromArgb(81, 117, 142);
-			tabList[TabButton].Visible = true;
 
 			layoutTab.Controls.Add(tabList[TabButton]);
 			layoutTab.SetRow(tabList[TabButton], 1);
@@ -87,14 +90,65 @@ namespace BeerViewer
 
 			frmMain.Instance = this;
 			MessageProvider.Instance.SetProvider(this);
-			logger = new Logger();
 
 			InitializeTabs();
 
 			Helper.SetRegistryFeatureBrowserEmulation();
 			Helper.PrepareBrowser(this.browserMain);
-			panelBrowser.Resize += (s, e) =>
-				browserMain.Left = panelBrowser.ClientSize.Width / 2 - browserMain.ClientSize.Width / 2;
+
+			Action<bool> UpdateLayout = null;
+			UpdateLayout = (x) =>
+			{
+				if (this.InvokeRequired)
+				{
+					this.Invoke(UpdateLayout);
+					return;
+				}
+
+				if (Settings.VerticalMode.Value)
+				{
+					panelBrowser.Dock = DockStyle.Top;
+
+					if (!Settings.BattleInfoLayout.Value)
+						browserMain.Left = panelBrowser.ClientSize.Width / 2 - browserMain.ClientSize.Width / 2;
+
+					else
+					{
+						browserMain.Left = 0;
+						panelRemain.Padding = new Padding(browserMain.Width + 4, 0, 0, 0);
+						contentBattle.Invalidate();
+					}
+				}
+				else
+				{
+					panelBrowser.Dock = DockStyle.Left;
+					browserMain.Left = 0;
+					panelRemain.Padding = new Padding(0, browserMain.Height + 4, 0, 0);
+				}
+
+				if (x)
+				{
+					if (Settings.BattleInfoLayout.Value)
+					{
+						if (CurrentTab == "Battle")
+							UpdateTab("General");
+
+						if(contentBattle.Parent!=null)
+							contentBattle.Parent.Controls.Remove(contentBattle);
+
+						panelRemain.Controls.Add(contentBattle);
+						panelRemain.Visible = true;
+
+						tabBattle.Visible = false;
+					}
+					else
+					{
+						panelRemain.Controls.Remove(contentBattle);
+						tabBattle.Visible = true;
+					}
+				}
+			};
+			panelBrowser.Resize += (s, e) => UpdateLayout(false);
 
 			Translator.Initialize();
 
@@ -105,21 +159,8 @@ namespace BeerViewer
 				this.contentFleets.SetHomeport(DataStorage.Instance.Homeport);
 			});
 
-			Settings.VerticalMode.PropertyEvent(nameof(Settings.VerticalMode.Value), () =>
-			{
-				Action LayoutChange = () =>
-				{
-					if (Settings.VerticalMode.Value)
-						panelBrowser.Dock = DockStyle.Top;
-					else
-						panelBrowser.Dock = DockStyle.Left;
-				};
-
-				if (this.InvokeRequired)
-					this.Invoke(LayoutChange);
-				else
-					LayoutChange();
-			}, true);
+			Settings.VerticalMode.PropertyEvent(nameof(Settings.VerticalMode.Value), () => UpdateLayout(true), true);
+			Settings.BattleInfoLayout.PropertyEvent(nameof(Settings.BattleInfoLayout.Value), () => UpdateLayout(true), true);
 
 			{
 				int x = this.Left, y = this.Top;
@@ -159,24 +200,27 @@ namespace BeerViewer
 
 			this.FormClosing += (s, e) =>
 			{
-				if (DataStorage.Instance?.IsInSortie ?? false) {
-					if (MessageBox.Show("정말로 종료하시겠습니까?" ,Const.ApplicationName,MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation)== DialogResult.No)
+				if (DataStorage.Instance?.IsInSortie ?? false)
+				{
+					if (MessageBox.Show("정말로 종료하시겠습니까?", Const.ApplicationName, MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.No)
 						e.Cancel = true;
 				}
 			};
-			this.FormClosed += (s, e) =>Application.Exit();
+			this.FormClosed += (s, e) => Application.Exit();
 
 			VolumeMixer.SetApplicationMute(
 				Process.GetCurrentProcess().Id,
 				Settings.Application_Muted.Value
 			);
 
+			Settings.AlwaysOnTop.PropertyEvent(nameof(Settings.AlwaysOnTop.Value), () => this.TopMost = Settings.AlwaysOnTop.Value, true);
+
 			Proxy.Instance.Register(e =>
 			{
 				if (!e.Request.PathAndQuery.StartsWith("/kcsapi/")) return;
 
 				var x = e.TryParse(false);
-				if(x==null || !x.IsSuccess)
+				if (x == null || !x.IsSuccess)
 				{
 					MessageProvider.Instance.Submit(
 						string.Format(
@@ -189,6 +233,10 @@ namespace BeerViewer
 			});
 
 			this.Text = Const.ApplicationName;
+			this.Show();
+
+			logger = new Logger();
+			openDB = new OpenDB();
 		}
 		private void InitializeTabs()
 		{
@@ -273,9 +321,13 @@ namespace BeerViewer
 				webBrowser.ExecWB(OLECMDID.OLECMDID_OPTICAL_ZOOM, OLECMDEXECOPT.OLECMDEXECOPT_DONTPROMPTUSER, ref pvaIn);
 
 				var dpiFactor = Helper.GetDPIFactor();
-				browserMain.Size = this.MinimumSize = new Size(
+				browserMain.Size = new Size(
 					(int)(800 * zoomFactor),// / dpiFactor),
 					(int)(480 * zoomFactor)// / dpiFactor)
+				);
+				this.MinimumSize = new Size(
+					browserMain.Size.Width + (this.Width - this.ClientSize.Width),
+					browserMain.Size.Height + (this.Height - this.ClientSize.Height)
 				);
 			}
 			catch (Exception ex)
