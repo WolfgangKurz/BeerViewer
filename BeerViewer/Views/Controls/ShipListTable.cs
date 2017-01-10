@@ -22,6 +22,9 @@ namespace BeerViewer.Views.Controls
 
 			Fast = 1,
 			Slow = 2,
+			FastPlus = 4,
+			SuperFast = 8,
+			Fast_All = 1 | 2 | 4 | 8,
 
 			End = 1,
 			NotEnd = 2,
@@ -302,7 +305,11 @@ namespace BeerViewer.Views.Controls
 						else if (this.LockFilter == FilterValues.No)
 							Ships = Ships.Where(_ => !_.IsLocked);
 
-						if (this.SpeedFilter == FilterValues.Fast)
+						if (this.SpeedFilter == FilterValues.SuperFast)
+							Ships = Ships.Where(_ => _.Info.Speed == ShipSpeed.SuperFast);
+						else if (this.SpeedFilter == FilterValues.FastPlus)
+							Ships = Ships.Where(_ => _.Info.Speed == ShipSpeed.FastPlus);
+						else if(this.SpeedFilter == FilterValues.Fast)
 							Ships = Ships.Where(_ => _.Info.Speed == ShipSpeed.Fast);
 						else if (this.SpeedFilter == FilterValues.Slow)
 							Ships = Ships.Where(_ => _.Info.Speed == ShipSpeed.Slow);

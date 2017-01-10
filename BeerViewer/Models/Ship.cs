@@ -115,6 +115,11 @@ namespace BeerViewer.Models
 		}
 		#endregion
 
+		/// <summary>
+		/// 함선 속도
+		/// </summary>
+		public ShipSpeed Speed => (ShipSpeed)this.RawData.api_soku;
+
 		#region Fuel 프로퍼티
 		private LimitedValue _Fuel;
 		public LimitedValue Fuel

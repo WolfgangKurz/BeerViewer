@@ -33,39 +33,41 @@
 			this.layoutShipType = new System.Windows.Forms.FlowLayoutPanel();
 			this.layoutShipTypeHeader = new System.Windows.Forms.FlowLayoutPanel();
 			this.labelShipType = new System.Windows.Forms.Label();
+			this.chkShipTypeAll = new BeerViewer.Views.Controls.FlatCheckBox();
 			this.layoutShipTypeList = new System.Windows.Forms.FlowLayoutPanel();
 			this.layoutShipTypePreset = new System.Windows.Forms.FlowLayoutPanel();
 			this.layoutShipFilter = new System.Windows.Forms.FlowLayoutPanel();
 			this.layoutLevelFilter = new System.Windows.Forms.Panel();
-			this.labelLevelFromTo = new System.Windows.Forms.Label();
-			this.labelLevels = new System.Windows.Forms.Label();
-			this.layoutLockExpFilter = new System.Windows.Forms.Panel();
-			this.groupLockFilter = new System.Windows.Forms.Panel();
-			this.labelExpedition = new System.Windows.Forms.Label();
-			this.labelLock = new System.Windows.Forms.Label();
-			this.layoutSpeedPowerUpFilter = new System.Windows.Forms.Panel();
-			this.groupPowerupFilter = new System.Windows.Forms.Panel();
-			this.groupSpeedFilter = new System.Windows.Forms.Panel();
-			this.labelPowerupFilter = new System.Windows.Forms.Label();
-			this.labelSpeedFilter = new System.Windows.Forms.Label();
-			this.shipListTable = new BeerViewer.Views.Controls.ShipListTable();
-			this.chkShipTypeAll = new BeerViewer.Views.Controls.FlatCheckBox();
 			this.btnLevelAbove2 = new BeerViewer.Views.Controls.FlatButton();
 			this.btnLevel1 = new BeerViewer.Views.Controls.FlatButton();
 			this.btnLevelAll = new BeerViewer.Views.Controls.FlatButton();
+			this.labelLevelFromTo = new System.Windows.Forms.Label();
 			this.textLevelTo = new BeerViewer.Views.Controls.FlatTextBox();
 			this.textLevelFrom = new BeerViewer.Views.Controls.FlatTextBox();
+			this.labelLevels = new System.Windows.Forms.Label();
+			this.layoutLockExpFilter = new System.Windows.Forms.Panel();
+			this.groupLockFilter = new System.Windows.Forms.Panel();
 			this.radioLockNo = new BeerViewer.Views.Controls.FlatRadioButton();
 			this.radioLockYes = new BeerViewer.Views.Controls.FlatRadioButton();
 			this.radioLockAll = new BeerViewer.Views.Controls.FlatRadioButton();
 			this.chkExceptExpedition = new BeerViewer.Views.Controls.FlatCheckBox();
+			this.labelExpedition = new System.Windows.Forms.Label();
+			this.labelLock = new System.Windows.Forms.Label();
+			this.layoutSpeedPowerUpFilter = new System.Windows.Forms.Panel();
+			this.groupPowerupFilter = new System.Windows.Forms.Panel();
 			this.radioPowerUpNotEnd = new BeerViewer.Views.Controls.FlatRadioButton();
 			this.radioPowerUpEnd = new BeerViewer.Views.Controls.FlatRadioButton();
 			this.radioPowerUpAll = new BeerViewer.Views.Controls.FlatRadioButton();
+			this.groupSpeedFilter = new System.Windows.Forms.Panel();
+			this.radioSpeedFastPlus = new BeerViewer.Views.Controls.FlatRadioButton();
+			this.radioSpeedSuperFast = new BeerViewer.Views.Controls.FlatRadioButton();
+			this.radioSpeedAll = new BeerViewer.Views.Controls.FlatRadioButton();
+			this.labelPowerupFilter = new System.Windows.Forms.Label();
+			this.labelSpeedFilter = new System.Windows.Forms.Label();
+			this.shipListTable = new BeerViewer.Views.Controls.ShipListTable();
+			this.expandFilter = new BeerViewer.Views.Controls.FlatExpanderButton();
 			this.radioSpeedSlow = new BeerViewer.Views.Controls.FlatRadioButton();
 			this.radioSpeedFast = new BeerViewer.Views.Controls.FlatRadioButton();
-			this.radioSpeedAll = new BeerViewer.Views.Controls.FlatRadioButton();
-			this.expandFilter = new BeerViewer.Views.Controls.FlatExpanderButton();
 			this.layoutFilters.SuspendLayout();
 			this.layoutShipType.SuspendLayout();
 			this.layoutShipTypeHeader.SuspendLayout();
@@ -131,6 +133,18 @@
 			this.labelShipType.TabIndex = 14;
 			this.labelShipType.Text = "함종 :";
 			// 
+			// chkShipTypeAll
+			// 
+			this.chkShipTypeAll.AutoSize = true;
+			this.chkShipTypeAll.Checked = true;
+			this.chkShipTypeAll.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.chkShipTypeAll.Location = new System.Drawing.Point(41, 3);
+			this.chkShipTypeAll.Name = "chkShipTypeAll";
+			this.chkShipTypeAll.Size = new System.Drawing.Size(71, 15);
+			this.chkShipTypeAll.TabIndex = 15;
+			this.chkShipTypeAll.Text = "모두선택";
+			this.chkShipTypeAll.UseVisualStyleBackColor = true;
+			// 
 			// layoutShipTypeList
 			// 
 			this.layoutShipTypeList.AutoSize = true;
@@ -163,7 +177,7 @@
 			this.layoutShipFilter.Margin = new System.Windows.Forms.Padding(0);
 			this.layoutShipFilter.Name = "layoutShipFilter";
 			this.layoutShipFilter.Padding = new System.Windows.Forms.Padding(5, 5, 5, 13);
-			this.layoutShipFilter.Size = new System.Drawing.Size(783, 81);
+			this.layoutShipFilter.Size = new System.Drawing.Size(824, 81);
 			this.layoutShipFilter.TabIndex = 9;
 			// 
 			// layoutLevelFilter
@@ -183,166 +197,6 @@
 			this.layoutLevelFilter.Padding = new System.Windows.Forms.Padding(2);
 			this.layoutLevelFilter.Size = new System.Drawing.Size(243, 55);
 			this.layoutLevelFilter.TabIndex = 0;
-			// 
-			// labelLevelFromTo
-			// 
-			this.labelLevelFromTo.AutoSize = true;
-			this.labelLevelFromTo.Location = new System.Drawing.Point(111, 4);
-			this.labelLevelFromTo.Name = "labelLevelFromTo";
-			this.labelLevelFromTo.Size = new System.Drawing.Size(13, 21);
-			this.labelLevelFromTo.TabIndex = 5;
-			this.labelLevelFromTo.Text = "~";
-			this.labelLevelFromTo.UseCompatibleTextRendering = true;
-			// 
-			// labelLevels
-			// 
-			this.labelLevels.AutoSize = true;
-			this.labelLevels.Location = new System.Drawing.Point(2, 4);
-			this.labelLevels.Margin = new System.Windows.Forms.Padding(0);
-			this.labelLevels.Name = "labelLevels";
-			this.labelLevels.Size = new System.Drawing.Size(65, 21);
-			this.labelLevels.TabIndex = 2;
-			this.labelLevels.Text = "레벨 범위 :";
-			this.labelLevels.UseCompatibleTextRendering = true;
-			// 
-			// layoutLockExpFilter
-			// 
-			this.layoutLockExpFilter.AutoSize = true;
-			this.layoutLockExpFilter.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.layoutLockExpFilter.Controls.Add(this.groupLockFilter);
-			this.layoutLockExpFilter.Controls.Add(this.chkExceptExpedition);
-			this.layoutLockExpFilter.Controls.Add(this.labelExpedition);
-			this.layoutLockExpFilter.Controls.Add(this.labelLock);
-			this.layoutLockExpFilter.Location = new System.Drawing.Point(260, 9);
-			this.layoutLockExpFilter.Margin = new System.Windows.Forms.Padding(4);
-			this.layoutLockExpFilter.Name = "layoutLockExpFilter";
-			this.layoutLockExpFilter.Padding = new System.Windows.Forms.Padding(2);
-			this.layoutLockExpFilter.Size = new System.Drawing.Size(222, 48);
-			this.layoutLockExpFilter.TabIndex = 1;
-			// 
-			// groupLockFilter
-			// 
-			this.groupLockFilter.AutoSize = true;
-			this.groupLockFilter.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.groupLockFilter.Controls.Add(this.radioLockNo);
-			this.groupLockFilter.Controls.Add(this.radioLockYes);
-			this.groupLockFilter.Controls.Add(this.radioLockAll);
-			this.groupLockFilter.Location = new System.Drawing.Point(49, 2);
-			this.groupLockFilter.Margin = new System.Windows.Forms.Padding(0);
-			this.groupLockFilter.Name = "groupLockFilter";
-			this.groupLockFilter.Size = new System.Drawing.Size(171, 21);
-			this.groupLockFilter.TabIndex = 7;
-			// 
-			// labelExpedition
-			// 
-			this.labelExpedition.AutoSize = true;
-			this.labelExpedition.Location = new System.Drawing.Point(2, 25);
-			this.labelExpedition.Margin = new System.Windows.Forms.Padding(0);
-			this.labelExpedition.Name = "labelExpedition";
-			this.labelExpedition.Size = new System.Drawing.Size(36, 21);
-			this.labelExpedition.TabIndex = 5;
-			this.labelExpedition.Text = "원정 :";
-			this.labelExpedition.UseCompatibleTextRendering = true;
-			// 
-			// labelLock
-			// 
-			this.labelLock.AutoSize = true;
-			this.labelLock.Location = new System.Drawing.Point(2, 4);
-			this.labelLock.Margin = new System.Windows.Forms.Padding(0);
-			this.labelLock.Name = "labelLock";
-			this.labelLock.Size = new System.Drawing.Size(49, 21);
-			this.labelLock.TabIndex = 2;
-			this.labelLock.Text = "자물쇠 :";
-			this.labelLock.UseCompatibleTextRendering = true;
-			// 
-			// layoutSpeedPowerUpFilter
-			// 
-			this.layoutSpeedPowerUpFilter.AutoSize = true;
-			this.layoutSpeedPowerUpFilter.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.layoutSpeedPowerUpFilter.Controls.Add(this.groupPowerupFilter);
-			this.layoutSpeedPowerUpFilter.Controls.Add(this.groupSpeedFilter);
-			this.layoutSpeedPowerUpFilter.Controls.Add(this.labelPowerupFilter);
-			this.layoutSpeedPowerUpFilter.Controls.Add(this.labelSpeedFilter);
-			this.layoutSpeedPowerUpFilter.Location = new System.Drawing.Point(490, 9);
-			this.layoutSpeedPowerUpFilter.Margin = new System.Windows.Forms.Padding(4);
-			this.layoutSpeedPowerUpFilter.Name = "layoutSpeedPowerUpFilter";
-			this.layoutSpeedPowerUpFilter.Padding = new System.Windows.Forms.Padding(2);
-			this.layoutSpeedPowerUpFilter.Size = new System.Drawing.Size(284, 48);
-			this.layoutSpeedPowerUpFilter.TabIndex = 2;
-			// 
-			// groupPowerupFilter
-			// 
-			this.groupPowerupFilter.AutoSize = true;
-			this.groupPowerupFilter.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.groupPowerupFilter.Controls.Add(this.radioPowerUpNotEnd);
-			this.groupPowerupFilter.Controls.Add(this.radioPowerUpEnd);
-			this.groupPowerupFilter.Controls.Add(this.radioPowerUpAll);
-			this.groupPowerupFilter.Location = new System.Drawing.Point(75, 23);
-			this.groupPowerupFilter.Margin = new System.Windows.Forms.Padding(0);
-			this.groupPowerupFilter.Name = "groupPowerupFilter";
-			this.groupPowerupFilter.Size = new System.Drawing.Size(207, 21);
-			this.groupPowerupFilter.TabIndex = 9;
-			// 
-			// groupSpeedFilter
-			// 
-			this.groupSpeedFilter.AutoSize = true;
-			this.groupSpeedFilter.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.groupSpeedFilter.Controls.Add(this.radioSpeedSlow);
-			this.groupSpeedFilter.Controls.Add(this.radioSpeedFast);
-			this.groupSpeedFilter.Controls.Add(this.radioSpeedAll);
-			this.groupSpeedFilter.Location = new System.Drawing.Point(38, 2);
-			this.groupSpeedFilter.Margin = new System.Windows.Forms.Padding(0);
-			this.groupSpeedFilter.Name = "groupSpeedFilter";
-			this.groupSpeedFilter.Size = new System.Drawing.Size(159, 21);
-			this.groupSpeedFilter.TabIndex = 8;
-			// 
-			// labelPowerupFilter
-			// 
-			this.labelPowerupFilter.AutoSize = true;
-			this.labelPowerupFilter.Location = new System.Drawing.Point(2, 25);
-			this.labelPowerupFilter.Margin = new System.Windows.Forms.Padding(0);
-			this.labelPowerupFilter.Name = "labelPowerupFilter";
-			this.labelPowerupFilter.Size = new System.Drawing.Size(73, 21);
-			this.labelPowerupFilter.TabIndex = 5;
-			this.labelPowerupFilter.Text = "근대화개수 :";
-			this.labelPowerupFilter.UseCompatibleTextRendering = true;
-			// 
-			// labelSpeedFilter
-			// 
-			this.labelSpeedFilter.AutoSize = true;
-			this.labelSpeedFilter.Location = new System.Drawing.Point(2, 4);
-			this.labelSpeedFilter.Margin = new System.Windows.Forms.Padding(0);
-			this.labelSpeedFilter.Name = "labelSpeedFilter";
-			this.labelSpeedFilter.Size = new System.Drawing.Size(36, 21);
-			this.labelSpeedFilter.TabIndex = 2;
-			this.labelSpeedFilter.Text = "속력 :";
-			this.labelSpeedFilter.UseCompatibleTextRendering = true;
-			// 
-			// shipListTable
-			// 
-			this.shipListTable.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.shipListTable.ExceptExpedition = false;
-			this.shipListTable.Font = new System.Drawing.Font("맑은 고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-			this.shipListTable.LevelFrom = 0;
-			this.shipListTable.LevelTo = 0;
-			this.shipListTable.Location = new System.Drawing.Point(8, 159);
-			this.shipListTable.Margin = new System.Windows.Forms.Padding(0);
-			this.shipListTable.Name = "shipListTable";
-			this.shipListTable.ShipTypes = null;
-			this.shipListTable.Size = new System.Drawing.Size(979, 375);
-			this.shipListTable.TabIndex = 16;
-			// 
-			// chkShipTypeAll
-			// 
-			this.chkShipTypeAll.AutoSize = true;
-			this.chkShipTypeAll.Checked = true;
-			this.chkShipTypeAll.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.chkShipTypeAll.Location = new System.Drawing.Point(41, 3);
-			this.chkShipTypeAll.Name = "chkShipTypeAll";
-			this.chkShipTypeAll.Size = new System.Drawing.Size(71, 15);
-			this.chkShipTypeAll.TabIndex = 15;
-			this.chkShipTypeAll.Text = "모두선택";
-			this.chkShipTypeAll.UseVisualStyleBackColor = true;
 			// 
 			// btnLevelAbove2
 			// 
@@ -395,6 +249,16 @@
 			this.btnLevelAll.TabIndex = 6;
 			this.btnLevelAll.Text = "모두";
 			// 
+			// labelLevelFromTo
+			// 
+			this.labelLevelFromTo.AutoSize = true;
+			this.labelLevelFromTo.Location = new System.Drawing.Point(111, 4);
+			this.labelLevelFromTo.Name = "labelLevelFromTo";
+			this.labelLevelFromTo.Size = new System.Drawing.Size(13, 21);
+			this.labelLevelFromTo.TabIndex = 5;
+			this.labelLevelFromTo.Text = "~";
+			this.labelLevelFromTo.UseCompatibleTextRendering = true;
+			// 
 			// textLevelTo
 			// 
 			this.textLevelTo.Font = new System.Drawing.Font("맑은 고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
@@ -432,6 +296,45 @@
 			this.textLevelFrom.Size = new System.Drawing.Size(37, 23);
 			this.textLevelFrom.TabIndex = 3;
 			this.textLevelFrom.Text = "2";
+			// 
+			// labelLevels
+			// 
+			this.labelLevels.AutoSize = true;
+			this.labelLevels.Location = new System.Drawing.Point(2, 4);
+			this.labelLevels.Margin = new System.Windows.Forms.Padding(0);
+			this.labelLevels.Name = "labelLevels";
+			this.labelLevels.Size = new System.Drawing.Size(65, 21);
+			this.labelLevels.TabIndex = 2;
+			this.labelLevels.Text = "레벨 범위 :";
+			this.labelLevels.UseCompatibleTextRendering = true;
+			// 
+			// layoutLockExpFilter
+			// 
+			this.layoutLockExpFilter.AutoSize = true;
+			this.layoutLockExpFilter.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.layoutLockExpFilter.Controls.Add(this.groupLockFilter);
+			this.layoutLockExpFilter.Controls.Add(this.chkExceptExpedition);
+			this.layoutLockExpFilter.Controls.Add(this.labelExpedition);
+			this.layoutLockExpFilter.Controls.Add(this.labelLock);
+			this.layoutLockExpFilter.Location = new System.Drawing.Point(260, 9);
+			this.layoutLockExpFilter.Margin = new System.Windows.Forms.Padding(4);
+			this.layoutLockExpFilter.Name = "layoutLockExpFilter";
+			this.layoutLockExpFilter.Padding = new System.Windows.Forms.Padding(2);
+			this.layoutLockExpFilter.Size = new System.Drawing.Size(222, 48);
+			this.layoutLockExpFilter.TabIndex = 1;
+			// 
+			// groupLockFilter
+			// 
+			this.groupLockFilter.AutoSize = true;
+			this.groupLockFilter.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.groupLockFilter.Controls.Add(this.radioLockNo);
+			this.groupLockFilter.Controls.Add(this.radioLockYes);
+			this.groupLockFilter.Controls.Add(this.radioLockAll);
+			this.groupLockFilter.Location = new System.Drawing.Point(49, 2);
+			this.groupLockFilter.Margin = new System.Windows.Forms.Padding(0);
+			this.groupLockFilter.Name = "groupLockFilter";
+			this.groupLockFilter.Size = new System.Drawing.Size(171, 21);
+			this.groupLockFilter.TabIndex = 7;
 			// 
 			// radioLockNo
 			// 
@@ -475,6 +378,56 @@
 			this.chkExceptExpedition.Text = "원정중인 칸무스를 제외";
 			this.chkExceptExpedition.UseVisualStyleBackColor = true;
 			// 
+			// labelExpedition
+			// 
+			this.labelExpedition.AutoSize = true;
+			this.labelExpedition.Location = new System.Drawing.Point(2, 25);
+			this.labelExpedition.Margin = new System.Windows.Forms.Padding(0);
+			this.labelExpedition.Name = "labelExpedition";
+			this.labelExpedition.Size = new System.Drawing.Size(36, 21);
+			this.labelExpedition.TabIndex = 5;
+			this.labelExpedition.Text = "원정 :";
+			this.labelExpedition.UseCompatibleTextRendering = true;
+			// 
+			// labelLock
+			// 
+			this.labelLock.AutoSize = true;
+			this.labelLock.Location = new System.Drawing.Point(2, 4);
+			this.labelLock.Margin = new System.Windows.Forms.Padding(0);
+			this.labelLock.Name = "labelLock";
+			this.labelLock.Size = new System.Drawing.Size(49, 21);
+			this.labelLock.TabIndex = 2;
+			this.labelLock.Text = "자물쇠 :";
+			this.labelLock.UseCompatibleTextRendering = true;
+			// 
+			// layoutSpeedPowerUpFilter
+			// 
+			this.layoutSpeedPowerUpFilter.AutoSize = true;
+			this.layoutSpeedPowerUpFilter.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.layoutSpeedPowerUpFilter.Controls.Add(this.groupPowerupFilter);
+			this.layoutSpeedPowerUpFilter.Controls.Add(this.groupSpeedFilter);
+			this.layoutSpeedPowerUpFilter.Controls.Add(this.labelPowerupFilter);
+			this.layoutSpeedPowerUpFilter.Controls.Add(this.labelSpeedFilter);
+			this.layoutSpeedPowerUpFilter.Location = new System.Drawing.Point(490, 9);
+			this.layoutSpeedPowerUpFilter.Margin = new System.Windows.Forms.Padding(4);
+			this.layoutSpeedPowerUpFilter.Name = "layoutSpeedPowerUpFilter";
+			this.layoutSpeedPowerUpFilter.Padding = new System.Windows.Forms.Padding(2);
+			this.layoutSpeedPowerUpFilter.Size = new System.Drawing.Size(325, 48);
+			this.layoutSpeedPowerUpFilter.TabIndex = 2;
+			// 
+			// groupPowerupFilter
+			// 
+			this.groupPowerupFilter.AutoSize = true;
+			this.groupPowerupFilter.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.groupPowerupFilter.Controls.Add(this.radioPowerUpNotEnd);
+			this.groupPowerupFilter.Controls.Add(this.radioPowerUpEnd);
+			this.groupPowerupFilter.Controls.Add(this.radioPowerUpAll);
+			this.groupPowerupFilter.Location = new System.Drawing.Point(75, 23);
+			this.groupPowerupFilter.Margin = new System.Windows.Forms.Padding(0);
+			this.groupPowerupFilter.Name = "groupPowerupFilter";
+			this.groupPowerupFilter.Size = new System.Drawing.Size(207, 21);
+			this.groupPowerupFilter.TabIndex = 9;
+			// 
 			// radioPowerUpNotEnd
 			// 
 			this.radioPowerUpNotEnd.AutoSize = true;
@@ -507,25 +460,40 @@
 			this.radioPowerUpAll.Text = "전부";
 			this.radioPowerUpAll.UseVisualStyleBackColor = true;
 			// 
-			// radioSpeedSlow
+			// groupSpeedFilter
 			// 
-			this.radioSpeedSlow.AutoSize = true;
-			this.radioSpeedSlow.Location = new System.Drawing.Point(109, 3);
-			this.radioSpeedSlow.Name = "radioSpeedSlow";
-			this.radioSpeedSlow.Size = new System.Drawing.Size(47, 15);
-			this.radioSpeedSlow.TabIndex = 14;
-			this.radioSpeedSlow.Text = "저속";
-			this.radioSpeedSlow.UseVisualStyleBackColor = true;
+			this.groupSpeedFilter.AutoSize = true;
+			this.groupSpeedFilter.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.groupSpeedFilter.Controls.Add(this.radioSpeedSlow);
+			this.groupSpeedFilter.Controls.Add(this.radioSpeedFast);
+			this.groupSpeedFilter.Controls.Add(this.radioSpeedFastPlus);
+			this.groupSpeedFilter.Controls.Add(this.radioSpeedSuperFast);
+			this.groupSpeedFilter.Controls.Add(this.radioSpeedAll);
+			this.groupSpeedFilter.Location = new System.Drawing.Point(38, 2);
+			this.groupSpeedFilter.Margin = new System.Windows.Forms.Padding(0);
+			this.groupSpeedFilter.Name = "groupSpeedFilter";
+			this.groupSpeedFilter.Size = new System.Drawing.Size(285, 21);
+			this.groupSpeedFilter.TabIndex = 8;
 			// 
-			// radioSpeedFast
+			// radioSpeedFastPlus
 			// 
-			this.radioSpeedFast.AutoSize = true;
-			this.radioSpeedFast.Location = new System.Drawing.Point(56, 3);
-			this.radioSpeedFast.Name = "radioSpeedFast";
-			this.radioSpeedFast.Size = new System.Drawing.Size(47, 15);
-			this.radioSpeedFast.TabIndex = 13;
-			this.radioSpeedFast.Text = "고속";
-			this.radioSpeedFast.UseVisualStyleBackColor = true;
+			this.radioSpeedFastPlus.AutoSize = true;
+			this.radioSpeedFastPlus.Location = new System.Drawing.Point(121, 3);
+			this.radioSpeedFastPlus.Name = "radioSpeedFastPlus";
+			this.radioSpeedFastPlus.Size = new System.Drawing.Size(55, 15);
+			this.radioSpeedFastPlus.TabIndex = 14;
+			this.radioSpeedFastPlus.Text = "고속+";
+			this.radioSpeedFastPlus.UseVisualStyleBackColor = true;
+			// 
+			// radioSpeedSuperFast
+			// 
+			this.radioSpeedSuperFast.AutoSize = true;
+			this.radioSpeedSuperFast.Location = new System.Drawing.Point(56, 3);
+			this.radioSpeedSuperFast.Name = "radioSpeedSuperFast";
+			this.radioSpeedSuperFast.Size = new System.Drawing.Size(59, 15);
+			this.radioSpeedSuperFast.TabIndex = 13;
+			this.radioSpeedSuperFast.Text = "초고속";
+			this.radioSpeedSuperFast.UseVisualStyleBackColor = true;
 			// 
 			// radioSpeedAll
 			// 
@@ -538,6 +506,42 @@
 			this.radioSpeedAll.TabStop = true;
 			this.radioSpeedAll.Text = "전부";
 			this.radioSpeedAll.UseVisualStyleBackColor = true;
+			// 
+			// labelPowerupFilter
+			// 
+			this.labelPowerupFilter.AutoSize = true;
+			this.labelPowerupFilter.Location = new System.Drawing.Point(2, 25);
+			this.labelPowerupFilter.Margin = new System.Windows.Forms.Padding(0);
+			this.labelPowerupFilter.Name = "labelPowerupFilter";
+			this.labelPowerupFilter.Size = new System.Drawing.Size(73, 21);
+			this.labelPowerupFilter.TabIndex = 5;
+			this.labelPowerupFilter.Text = "근대화개수 :";
+			this.labelPowerupFilter.UseCompatibleTextRendering = true;
+			// 
+			// labelSpeedFilter
+			// 
+			this.labelSpeedFilter.AutoSize = true;
+			this.labelSpeedFilter.Location = new System.Drawing.Point(2, 4);
+			this.labelSpeedFilter.Margin = new System.Windows.Forms.Padding(0);
+			this.labelSpeedFilter.Name = "labelSpeedFilter";
+			this.labelSpeedFilter.Size = new System.Drawing.Size(36, 21);
+			this.labelSpeedFilter.TabIndex = 2;
+			this.labelSpeedFilter.Text = "속력 :";
+			this.labelSpeedFilter.UseCompatibleTextRendering = true;
+			// 
+			// shipListTable
+			// 
+			this.shipListTable.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.shipListTable.ExceptExpedition = false;
+			this.shipListTable.Font = new System.Drawing.Font("맑은 고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+			this.shipListTable.LevelFrom = 0;
+			this.shipListTable.LevelTo = 0;
+			this.shipListTable.Location = new System.Drawing.Point(8, 159);
+			this.shipListTable.Margin = new System.Windows.Forms.Padding(0);
+			this.shipListTable.Name = "shipListTable";
+			this.shipListTable.ShipTypes = null;
+			this.shipListTable.Size = new System.Drawing.Size(979, 375);
+			this.shipListTable.TabIndex = 16;
 			// 
 			// expandFilter
 			// 
@@ -553,6 +557,26 @@
 			this.expandFilter.Size = new System.Drawing.Size(979, 27);
 			this.expandFilter.TabIndex = 1;
 			this.expandFilter.Text = "필터 설정";
+			// 
+			// radioSpeedSlow
+			// 
+			this.radioSpeedSlow.AutoSize = true;
+			this.radioSpeedSlow.Location = new System.Drawing.Point(235, 3);
+			this.radioSpeedSlow.Name = "radioSpeedSlow";
+			this.radioSpeedSlow.Size = new System.Drawing.Size(47, 15);
+			this.radioSpeedSlow.TabIndex = 16;
+			this.radioSpeedSlow.Text = "저속";
+			this.radioSpeedSlow.UseVisualStyleBackColor = true;
+			// 
+			// radioSpeedFast
+			// 
+			this.radioSpeedFast.AutoSize = true;
+			this.radioSpeedFast.Location = new System.Drawing.Point(182, 3);
+			this.radioSpeedFast.Name = "radioSpeedFast";
+			this.radioSpeedFast.Size = new System.Drawing.Size(47, 15);
+			this.radioSpeedFast.TabIndex = 15;
+			this.radioSpeedFast.Text = "고속";
+			this.radioSpeedFast.UseVisualStyleBackColor = true;
 			// 
 			// catalogShips
 			// 
@@ -626,11 +650,13 @@
 		private Controls.FlatRadioButton radioPowerUpEnd;
 		private Controls.FlatRadioButton radioPowerUpAll;
 		private System.Windows.Forms.Panel groupSpeedFilter;
-		private Controls.FlatRadioButton radioSpeedSlow;
-		private Controls.FlatRadioButton radioSpeedFast;
+		private Controls.FlatRadioButton radioSpeedFastPlus;
+		private Controls.FlatRadioButton radioSpeedSuperFast;
 		private Controls.FlatRadioButton radioSpeedAll;
 		private System.Windows.Forms.Label labelPowerupFilter;
 		private System.Windows.Forms.Label labelSpeedFilter;
 		private Controls.ShipListTable shipListTable;
+		private Controls.FlatRadioButton radioSpeedSlow;
+		private Controls.FlatRadioButton radioSpeedFast;
 	}
 }
