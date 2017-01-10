@@ -28,289 +28,72 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			BeerViewer.Views.Controls.GeneralTableView.HeaderValue headerValue1 = new BeerViewer.Views.Controls.GeneralTableView.HeaderValue();
-			BeerViewer.Views.Controls.GeneralTableView.HeaderValue headerValue2 = new BeerViewer.Views.Controls.GeneralTableView.HeaderValue();
-			BeerViewer.Views.Controls.GeneralTableView.HeaderValue headerValue3 = new BeerViewer.Views.Controls.GeneralTableView.HeaderValue();
-			BeerViewer.Views.Controls.GeneralTableView.HeaderValue headerValue4 = new BeerViewer.Views.Controls.GeneralTableView.HeaderValue();
-			BeerViewer.Views.Controls.GeneralTableView.HeaderValue headerValue5 = new BeerViewer.Views.Controls.GeneralTableView.HeaderValue();
-			BeerViewer.Views.Controls.GeneralTableView.HeaderValue headerValue6 = new BeerViewer.Views.Controls.GeneralTableView.HeaderValue();
-			BeerViewer.Views.Controls.GeneralTableView.HeaderValue headerValue7 = new BeerViewer.Views.Controls.GeneralTableView.HeaderValue();
-			BeerViewer.Views.Controls.GeneralTableView.HeaderValue headerValue8 = new BeerViewer.Views.Controls.GeneralTableView.HeaderValue();
-			BeerViewer.Views.Controls.GeneralTableView.HeaderValue headerValue9 = new BeerViewer.Views.Controls.GeneralTableView.HeaderValue();
-			BeerViewer.Views.Controls.GeneralTableView.HeaderValue headerValue10 = new BeerViewer.Views.Controls.GeneralTableView.HeaderValue();
-			BeerViewer.Views.Controls.GeneralTableView.HeaderValue headerValue11 = new BeerViewer.Views.Controls.GeneralTableView.HeaderValue();
-			BeerViewer.Views.Controls.GeneralTableView.HeaderValue headerValue12 = new BeerViewer.Views.Controls.GeneralTableView.HeaderValue();
-			BeerViewer.Views.Controls.GeneralTableView.HeaderValue headerValue13 = new BeerViewer.Views.Controls.GeneralTableView.HeaderValue();
-			BeerViewer.Views.Controls.GeneralTableView.HeaderValue headerValue14 = new BeerViewer.Views.Controls.GeneralTableView.HeaderValue();
-			BeerViewer.Views.Controls.GeneralTableView.HeaderValue headerValue15 = new BeerViewer.Views.Controls.GeneralTableView.HeaderValue();
+			BeerViewer.Views.Controls.GeneralTableView.HeaderValue headerValue16 = new BeerViewer.Views.Controls.GeneralTableView.HeaderValue();
+			BeerViewer.Views.Controls.GeneralTableView.HeaderValue headerValue17 = new BeerViewer.Views.Controls.GeneralTableView.HeaderValue();
+			BeerViewer.Views.Controls.GeneralTableView.HeaderValue headerValue18 = new BeerViewer.Views.Controls.GeneralTableView.HeaderValue();
+			BeerViewer.Views.Controls.GeneralTableView.HeaderValue headerValue19 = new BeerViewer.Views.Controls.GeneralTableView.HeaderValue();
+			BeerViewer.Views.Controls.GeneralTableView.HeaderValue headerValue20 = new BeerViewer.Views.Controls.GeneralTableView.HeaderValue();
+			BeerViewer.Views.Controls.GeneralTableView.HeaderValue headerValue21 = new BeerViewer.Views.Controls.GeneralTableView.HeaderValue();
+			BeerViewer.Views.Controls.GeneralTableView.HeaderValue headerValue22 = new BeerViewer.Views.Controls.GeneralTableView.HeaderValue();
+			BeerViewer.Views.Controls.GeneralTableView.HeaderValue headerValue23 = new BeerViewer.Views.Controls.GeneralTableView.HeaderValue();
+			BeerViewer.Views.Controls.GeneralTableView.HeaderValue headerValue24 = new BeerViewer.Views.Controls.GeneralTableView.HeaderValue();
+			BeerViewer.Views.Controls.GeneralTableView.HeaderValue headerValue25 = new BeerViewer.Views.Controls.GeneralTableView.HeaderValue();
+			BeerViewer.Views.Controls.GeneralTableView.HeaderValue headerValue26 = new BeerViewer.Views.Controls.GeneralTableView.HeaderValue();
+			BeerViewer.Views.Controls.GeneralTableView.HeaderValue headerValue27 = new BeerViewer.Views.Controls.GeneralTableView.HeaderValue();
+			BeerViewer.Views.Controls.GeneralTableView.HeaderValue headerValue28 = new BeerViewer.Views.Controls.GeneralTableView.HeaderValue();
+			BeerViewer.Views.Controls.GeneralTableView.HeaderValue headerValue29 = new BeerViewer.Views.Controls.GeneralTableView.HeaderValue();
+			BeerViewer.Views.Controls.GeneralTableView.HeaderValue headerValue30 = new BeerViewer.Views.Controls.GeneralTableView.HeaderValue();
+			this.layoutHomeportInfo = new System.Windows.Forms.FlowLayoutPanel();
 			this.layoutButtons = new System.Windows.Forms.FlowLayoutPanel();
+			this.btnShipList = new BeerViewer.Views.Controls.FlatButton();
+			this.btnItemList = new BeerViewer.Views.Controls.FlatButton();
+			this.btnCalculator = new BeerViewer.Views.Controls.FlatButton();
+			this.btnAkashi = new BeerViewer.Views.Controls.FlatButton();
 			this.layoutResources = new System.Windows.Forms.FlowLayoutPanel();
-			this.labelHomeportInfo = new System.Windows.Forms.Label();
+			this.comboResources1 = new BeerViewer.Views.Controls.FlatComboBox();
+			this.comboResources2 = new BeerViewer.Views.Controls.FlatComboBox();
+			this.layoutCountInfo = new System.Windows.Forms.FlowLayoutPanel();
+			this.labelShipCount = new System.Windows.Forms.Label();
+			this.labelSlotitemCount = new System.Windows.Forms.Label();
 			this.tableHQRecord = new BeerViewer.Views.Controls.GeneralTableView();
 			this.listQuests = new BeerViewer.Views.Controls.QuestsView();
 			this.tableBuild = new BeerViewer.Views.Controls.GeneralTableView();
 			this.tableRepair = new BeerViewer.Views.Controls.GeneralTableView();
 			this.tableFleet = new BeerViewer.Views.Controls.GeneralTableView();
-			this.comboResources1 = new BeerViewer.Views.Controls.FlatComboBox();
-			this.comboResources2 = new BeerViewer.Views.Controls.FlatComboBox();
-			this.btnShipList = new BeerViewer.Views.Controls.FlatButton();
-			this.btnItemList = new BeerViewer.Views.Controls.FlatButton();
-			this.btnCalculator = new BeerViewer.Views.Controls.FlatButton();
-			this.btnAkashi = new BeerViewer.Views.Controls.FlatButton();
+			this.layoutHomeportInfo.SuspendLayout();
 			this.layoutButtons.SuspendLayout();
 			this.layoutResources.SuspendLayout();
+			this.layoutCountInfo.SuspendLayout();
 			this.SuspendLayout();
+			// 
+			// layoutHomeportInfo
+			// 
+			this.layoutHomeportInfo.AutoSize = true;
+			this.layoutHomeportInfo.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.layoutHomeportInfo.Controls.Add(this.layoutButtons);
+			this.layoutHomeportInfo.Controls.Add(this.layoutResources);
+			this.layoutHomeportInfo.Controls.Add(this.layoutCountInfo);
+			this.layoutHomeportInfo.Dock = System.Windows.Forms.DockStyle.Top;
+			this.layoutHomeportInfo.Location = new System.Drawing.Point(0, 0);
+			this.layoutHomeportInfo.Name = "layoutHomeportInfo";
+			this.layoutHomeportInfo.Size = new System.Drawing.Size(384, 99);
+			this.layoutHomeportInfo.TabIndex = 171;
 			// 
 			// layoutButtons
 			// 
+			this.layoutButtons.Anchor = System.Windows.Forms.AnchorStyles.None;
 			this.layoutButtons.AutoSize = true;
 			this.layoutButtons.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.layoutButtons.Controls.Add(this.btnShipList);
 			this.layoutButtons.Controls.Add(this.btnItemList);
 			this.layoutButtons.Controls.Add(this.btnCalculator);
 			this.layoutButtons.Controls.Add(this.btnAkashi);
-			this.layoutButtons.Dock = System.Windows.Forms.DockStyle.Top;
 			this.layoutButtons.Location = new System.Drawing.Point(0, 0);
 			this.layoutButtons.Margin = new System.Windows.Forms.Padding(0);
 			this.layoutButtons.Name = "layoutButtons";
 			this.layoutButtons.Padding = new System.Windows.Forms.Padding(6, 0, 6, 0);
-			this.layoutButtons.Size = new System.Drawing.Size(399, 32);
-			this.layoutButtons.TabIndex = 4;
-			// 
-			// layoutResources
-			// 
-			this.layoutResources.AutoSize = true;
-			this.layoutResources.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.layoutResources.Controls.Add(this.comboResources1);
-			this.layoutResources.Controls.Add(this.comboResources2);
-			this.layoutResources.Dock = System.Windows.Forms.DockStyle.Top;
-			this.layoutResources.Location = new System.Drawing.Point(0, 32);
-			this.layoutResources.Margin = new System.Windows.Forms.Padding(0);
-			this.layoutResources.Name = "layoutResources";
-			this.layoutResources.Padding = new System.Windows.Forms.Padding(4);
-			this.layoutResources.Size = new System.Drawing.Size(399, 36);
-			this.layoutResources.TabIndex = 53;
-			// 
-			// labelHomeportInfo
-			// 
-			this.labelHomeportInfo.AutoSize = true;
-			this.labelHomeportInfo.Dock = System.Windows.Forms.DockStyle.Top;
-			this.labelHomeportInfo.ForeColor = System.Drawing.Color.White;
-			this.labelHomeportInfo.Location = new System.Drawing.Point(0, 68);
-			this.labelHomeportInfo.Margin = new System.Windows.Forms.Padding(0);
-			this.labelHomeportInfo.Name = "labelHomeportInfo";
-			this.labelHomeportInfo.Padding = new System.Windows.Forms.Padding(8, 4, 8, 4);
-			this.labelHomeportInfo.Size = new System.Drawing.Size(200, 29);
-			this.labelHomeportInfo.TabIndex = 59;
-			this.labelHomeportInfo.Text = "소속칸무스: 0/0    보유장비: 0/0";
-			this.labelHomeportInfo.UseCompatibleTextRendering = true;
-			// 
-			// tableHQRecord
-			// 
-			this.tableHQRecord.BackColor = System.Drawing.Color.Transparent;
-			this.tableHQRecord.Dock = System.Windows.Forms.DockStyle.Top;
-			this.tableHQRecord.Font = new System.Drawing.Font("맑은 고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-			this.tableHQRecord.ForeColor = System.Drawing.Color.White;
-			this.tableHQRecord.Location = new System.Drawing.Point(0, 342);
-			this.tableHQRecord.Margin = new System.Windows.Forms.Padding(0);
-			this.tableHQRecord.Name = "tableHQRecord";
-			this.tableHQRecord.Padding = new System.Windows.Forms.Padding(0, 0, 0, 8);
-			this.tableHQRecord.Size = new System.Drawing.Size(399, 63);
-			this.tableHQRecord.TabIndex = 64;
-			headerValue1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))));
-			headerValue1.ForeColor = System.Drawing.Color.White;
-			headerValue1.Header = "이달";
-			headerValue1.HeaderVisible = true;
-			headerValue1.Value = "-";
-			headerValue1.Visible = false;
-			headerValue2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))));
-			headerValue2.ForeColor = System.Drawing.Color.White;
-			headerValue2.Header = "오늘";
-			headerValue2.HeaderVisible = true;
-			headerValue2.Value = "-";
-			headerValue2.Visible = false;
-			headerValue3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))));
-			headerValue3.ForeColor = System.Drawing.Color.White;
-			headerValue3.Header = "이번";
-			headerValue3.HeaderVisible = true;
-			headerValue3.Value = "-";
-			headerValue3.Visible = false;
-			this.tableHQRecord.TableCells = new BeerViewer.Views.Controls.GeneralTableView.HeaderValue[] {
-        headerValue1,
-        headerValue2,
-        headerValue3};
-			this.tableHQRecord.TableName = "전과";
-			// 
-			// listQuests
-			// 
-			this.listQuests.AutoSize = true;
-			this.listQuests.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.listQuests.BackColor = System.Drawing.Color.Transparent;
-			this.listQuests.Dock = System.Windows.Forms.DockStyle.Top;
-			this.listQuests.Font = new System.Drawing.Font("맑은 고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-			this.listQuests.HeaderName = "임무";
-			this.listQuests.Location = new System.Drawing.Point(0, 286);
-			this.listQuests.Margin = new System.Windows.Forms.Padding(0);
-			this.listQuests.MinimumSize = new System.Drawing.Size(0, 24);
-			this.listQuests.Name = "listQuests";
-			this.listQuests.Padding = new System.Windows.Forms.Padding(0, 0, 0, 8);
-			this.listQuests.PlaceHolder = "게임 내 [임무(퀘스트)] 화면을 열어서, 임무 목록을 갱신 해 주십시오.";
-			this.listQuests.Quests = null;
-			this.listQuests.Size = new System.Drawing.Size(399, 56);
-			this.listQuests.TabIndex = 63;
-			// 
-			// tableBuild
-			// 
-			this.tableBuild.BackColor = System.Drawing.Color.Transparent;
-			this.tableBuild.Dock = System.Windows.Forms.DockStyle.Top;
-			this.tableBuild.Font = new System.Drawing.Font("맑은 고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-			this.tableBuild.ForeColor = System.Drawing.Color.White;
-			this.tableBuild.Location = new System.Drawing.Point(0, 223);
-			this.tableBuild.Margin = new System.Windows.Forms.Padding(0);
-			this.tableBuild.Name = "tableBuild";
-			this.tableBuild.Padding = new System.Windows.Forms.Padding(0, 0, 0, 8);
-			this.tableBuild.Size = new System.Drawing.Size(399, 63);
-			this.tableBuild.TabIndex = 62;
-			headerValue4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))));
-			headerValue4.ForeColor = System.Drawing.Color.White;
-			headerValue4.Header = "-";
-			headerValue4.HeaderVisible = true;
-			headerValue4.Value = "-";
-			headerValue4.Visible = false;
-			headerValue5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))));
-			headerValue5.ForeColor = System.Drawing.Color.White;
-			headerValue5.Header = "-";
-			headerValue5.HeaderVisible = true;
-			headerValue5.Value = "-";
-			headerValue5.Visible = false;
-			headerValue6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))));
-			headerValue6.ForeColor = System.Drawing.Color.White;
-			headerValue6.Header = "-";
-			headerValue6.HeaderVisible = true;
-			headerValue6.Value = "-";
-			headerValue6.Visible = false;
-			headerValue7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))));
-			headerValue7.ForeColor = System.Drawing.Color.White;
-			headerValue7.Header = "-";
-			headerValue7.HeaderVisible = true;
-			headerValue7.Value = "-";
-			headerValue7.Visible = false;
-			this.tableBuild.TableCells = new BeerViewer.Views.Controls.GeneralTableView.HeaderValue[] {
-        headerValue4,
-        headerValue5,
-        headerValue6,
-        headerValue7};
-			this.tableBuild.TableName = "건조";
-			// 
-			// tableRepair
-			// 
-			this.tableRepair.BackColor = System.Drawing.Color.Transparent;
-			this.tableRepair.Dock = System.Windows.Forms.DockStyle.Top;
-			this.tableRepair.Font = new System.Drawing.Font("맑은 고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-			this.tableRepair.ForeColor = System.Drawing.Color.White;
-			this.tableRepair.Location = new System.Drawing.Point(0, 160);
-			this.tableRepair.Margin = new System.Windows.Forms.Padding(0);
-			this.tableRepair.Name = "tableRepair";
-			this.tableRepair.Padding = new System.Windows.Forms.Padding(0, 0, 0, 8);
-			this.tableRepair.Size = new System.Drawing.Size(399, 63);
-			this.tableRepair.TabIndex = 61;
-			headerValue8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))));
-			headerValue8.ForeColor = System.Drawing.Color.White;
-			headerValue8.Header = "-";
-			headerValue8.HeaderVisible = true;
-			headerValue8.Value = "-";
-			headerValue8.Visible = false;
-			headerValue9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))));
-			headerValue9.ForeColor = System.Drawing.Color.White;
-			headerValue9.Header = "-";
-			headerValue9.HeaderVisible = true;
-			headerValue9.Value = "-";
-			headerValue9.Visible = false;
-			headerValue10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))));
-			headerValue10.ForeColor = System.Drawing.Color.White;
-			headerValue10.Header = "-";
-			headerValue10.HeaderVisible = true;
-			headerValue10.Value = "-";
-			headerValue10.Visible = false;
-			headerValue11.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))));
-			headerValue11.ForeColor = System.Drawing.Color.White;
-			headerValue11.Header = "-";
-			headerValue11.HeaderVisible = true;
-			headerValue11.Value = "-";
-			headerValue11.Visible = false;
-			this.tableRepair.TableCells = new BeerViewer.Views.Controls.GeneralTableView.HeaderValue[] {
-        headerValue8,
-        headerValue9,
-        headerValue10,
-        headerValue11};
-			this.tableRepair.TableName = "입거";
-			// 
-			// tableFleet
-			// 
-			this.tableFleet.BackColor = System.Drawing.Color.Transparent;
-			this.tableFleet.Dock = System.Windows.Forms.DockStyle.Top;
-			this.tableFleet.Font = new System.Drawing.Font("맑은 고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
-			this.tableFleet.ForeColor = System.Drawing.Color.White;
-			this.tableFleet.Location = new System.Drawing.Point(0, 97);
-			this.tableFleet.Margin = new System.Windows.Forms.Padding(0);
-			this.tableFleet.Name = "tableFleet";
-			this.tableFleet.Padding = new System.Windows.Forms.Padding(0, 0, 0, 8);
-			this.tableFleet.Size = new System.Drawing.Size(399, 63);
-			this.tableFleet.TabIndex = 60;
-			headerValue12.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))));
-			headerValue12.ForeColor = System.Drawing.Color.White;
-			headerValue12.Header = "-";
-			headerValue12.HeaderVisible = true;
-			headerValue12.Value = "-";
-			headerValue12.Visible = false;
-			headerValue13.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))));
-			headerValue13.ForeColor = System.Drawing.Color.White;
-			headerValue13.Header = "-";
-			headerValue13.HeaderVisible = true;
-			headerValue13.Value = "-";
-			headerValue13.Visible = false;
-			headerValue14.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))));
-			headerValue14.ForeColor = System.Drawing.Color.White;
-			headerValue14.Header = "-";
-			headerValue14.HeaderVisible = true;
-			headerValue14.Value = "-";
-			headerValue14.Visible = false;
-			headerValue15.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))));
-			headerValue15.ForeColor = System.Drawing.Color.White;
-			headerValue15.Header = "-";
-			headerValue15.HeaderVisible = true;
-			headerValue15.Value = "-";
-			headerValue15.Visible = false;
-			this.tableFleet.TableCells = new BeerViewer.Views.Controls.GeneralTableView.HeaderValue[] {
-        headerValue12,
-        headerValue13,
-        headerValue14,
-        headerValue15};
-			this.tableFleet.TableName = "함대";
-			// 
-			// comboResources1
-			// 
-			this.comboResources1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(39)))), ((int)(((byte)(47)))));
-			this.comboResources1.DropDownHeight = 2;
-			this.comboResources1.FormattingEnabled = true;
-			this.comboResources1.IntegralHeight = false;
-			this.comboResources1.Location = new System.Drawing.Point(6, 6);
-			this.comboResources1.Margin = new System.Windows.Forms.Padding(2);
-			this.comboResources1.Name = "comboResources1";
-			this.comboResources1.Size = new System.Drawing.Size(144, 24);
-			this.comboResources1.TabIndex = 6;
-			// 
-			// comboResources2
-			// 
-			this.comboResources2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(39)))), ((int)(((byte)(47)))));
-			this.comboResources2.DropDownHeight = 2;
-			this.comboResources2.FormattingEnabled = true;
-			this.comboResources2.IntegralHeight = false;
-			this.comboResources2.Location = new System.Drawing.Point(154, 6);
-			this.comboResources2.Margin = new System.Windows.Forms.Padding(2);
-			this.comboResources2.Name = "comboResources2";
-			this.comboResources2.Size = new System.Drawing.Size(144, 24);
-			this.comboResources2.TabIndex = 7;
+			this.layoutButtons.Size = new System.Drawing.Size(332, 32);
+			this.layoutButtons.TabIndex = 165;
 			// 
 			// btnShipList
 			// 
@@ -386,45 +169,307 @@
 			this.btnAkashi.Text = "개수공창";
 			this.btnAkashi.Visible = false;
 			// 
+			// layoutResources
+			// 
+			this.layoutResources.Anchor = System.Windows.Forms.AnchorStyles.None;
+			this.layoutResources.AutoSize = true;
+			this.layoutResources.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.layoutResources.Controls.Add(this.comboResources1);
+			this.layoutResources.Controls.Add(this.comboResources2);
+			this.layoutResources.Location = new System.Drawing.Point(0, 32);
+			this.layoutResources.Margin = new System.Windows.Forms.Padding(0);
+			this.layoutResources.Name = "layoutResources";
+			this.layoutResources.Padding = new System.Windows.Forms.Padding(4);
+			this.layoutResources.Size = new System.Drawing.Size(304, 36);
+			this.layoutResources.TabIndex = 150;
+			// 
+			// comboResources1
+			// 
+			this.comboResources1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(39)))), ((int)(((byte)(47)))));
+			this.comboResources1.DropDownHeight = 2;
+			this.comboResources1.FormattingEnabled = true;
+			this.comboResources1.IntegralHeight = false;
+			this.comboResources1.Location = new System.Drawing.Point(6, 6);
+			this.comboResources1.Margin = new System.Windows.Forms.Padding(2);
+			this.comboResources1.Name = "comboResources1";
+			this.comboResources1.Size = new System.Drawing.Size(144, 24);
+			this.comboResources1.TabIndex = 6;
+			// 
+			// comboResources2
+			// 
+			this.comboResources2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(39)))), ((int)(((byte)(39)))), ((int)(((byte)(47)))));
+			this.comboResources2.DropDownHeight = 2;
+			this.comboResources2.FormattingEnabled = true;
+			this.comboResources2.IntegralHeight = false;
+			this.comboResources2.Location = new System.Drawing.Point(154, 6);
+			this.comboResources2.Margin = new System.Windows.Forms.Padding(2);
+			this.comboResources2.Name = "comboResources2";
+			this.comboResources2.Size = new System.Drawing.Size(144, 24);
+			this.comboResources2.TabIndex = 7;
+			// 
+			// layoutCountInfo
+			// 
+			this.layoutCountInfo.Anchor = System.Windows.Forms.AnchorStyles.None;
+			this.layoutCountInfo.AutoSize = true;
+			this.layoutCountInfo.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.layoutCountInfo.Controls.Add(this.labelShipCount);
+			this.layoutCountInfo.Controls.Add(this.labelSlotitemCount);
+			this.layoutCountInfo.Location = new System.Drawing.Point(3, 71);
+			this.layoutCountInfo.Name = "layoutCountInfo";
+			this.layoutCountInfo.Padding = new System.Windows.Forms.Padding(0, 4, 0, 0);
+			this.layoutCountInfo.Size = new System.Drawing.Size(179, 25);
+			this.layoutCountInfo.TabIndex = 151;
+			// 
+			// labelShipCount
+			// 
+			this.labelShipCount.AutoSize = true;
+			this.labelShipCount.ForeColor = System.Drawing.Color.White;
+			this.labelShipCount.Location = new System.Drawing.Point(0, 4);
+			this.labelShipCount.Margin = new System.Windows.Forms.Padding(0);
+			this.labelShipCount.Name = "labelShipCount";
+			this.labelShipCount.Size = new System.Drawing.Size(92, 21);
+			this.labelShipCount.TabIndex = 121;
+			this.labelShipCount.Text = "소속칸무스: 0/0";
+			this.labelShipCount.UseCompatibleTextRendering = true;
+			// 
+			// labelSlotitemCount
+			// 
+			this.labelSlotitemCount.AutoSize = true;
+			this.labelSlotitemCount.ForeColor = System.Drawing.Color.White;
+			this.labelSlotitemCount.Location = new System.Drawing.Point(100, 4);
+			this.labelSlotitemCount.Margin = new System.Windows.Forms.Padding(8, 0, 0, 0);
+			this.labelSlotitemCount.Name = "labelSlotitemCount";
+			this.labelSlotitemCount.Size = new System.Drawing.Size(79, 21);
+			this.labelSlotitemCount.TabIndex = 122;
+			this.labelSlotitemCount.Text = "보유장비: 0/0";
+			this.labelSlotitemCount.UseCompatibleTextRendering = true;
+			// 
+			// tableHQRecord
+			// 
+			this.tableHQRecord.BackColor = System.Drawing.Color.Transparent;
+			this.tableHQRecord.Dock = System.Windows.Forms.DockStyle.Top;
+			this.tableHQRecord.Font = new System.Drawing.Font("맑은 고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+			this.tableHQRecord.ForeColor = System.Drawing.Color.White;
+			this.tableHQRecord.Location = new System.Drawing.Point(0, 344);
+			this.tableHQRecord.Margin = new System.Windows.Forms.Padding(0);
+			this.tableHQRecord.Name = "tableHQRecord";
+			this.tableHQRecord.Padding = new System.Windows.Forms.Padding(0, 0, 0, 8);
+			this.tableHQRecord.Size = new System.Drawing.Size(384, 63);
+			this.tableHQRecord.TabIndex = 176;
+			headerValue16.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))));
+			headerValue16.ForeColor = System.Drawing.Color.White;
+			headerValue16.Header = "이달";
+			headerValue16.HeaderVisible = true;
+			headerValue16.Value = "-";
+			headerValue16.Visible = false;
+			headerValue17.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))));
+			headerValue17.ForeColor = System.Drawing.Color.White;
+			headerValue17.Header = "오늘";
+			headerValue17.HeaderVisible = true;
+			headerValue17.Value = "-";
+			headerValue17.Visible = false;
+			headerValue18.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))));
+			headerValue18.ForeColor = System.Drawing.Color.White;
+			headerValue18.Header = "이번";
+			headerValue18.HeaderVisible = true;
+			headerValue18.Value = "-";
+			headerValue18.Visible = false;
+			this.tableHQRecord.TableCells = new BeerViewer.Views.Controls.GeneralTableView.HeaderValue[] {
+        headerValue16,
+        headerValue17,
+        headerValue18};
+			this.tableHQRecord.TableName = "전과";
+			// 
+			// listQuests
+			// 
+			this.listQuests.AutoSize = true;
+			this.listQuests.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+			this.listQuests.BackColor = System.Drawing.Color.Transparent;
+			this.listQuests.Dock = System.Windows.Forms.DockStyle.Top;
+			this.listQuests.Font = new System.Drawing.Font("맑은 고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+			this.listQuests.HeaderName = "임무";
+			this.listQuests.Location = new System.Drawing.Point(0, 288);
+			this.listQuests.Margin = new System.Windows.Forms.Padding(0);
+			this.listQuests.MinimumSize = new System.Drawing.Size(0, 24);
+			this.listQuests.Name = "listQuests";
+			this.listQuests.Padding = new System.Windows.Forms.Padding(0, 0, 0, 8);
+			this.listQuests.PlaceHolder = "게임 내 [임무(퀘스트)] 화면을 열어서, 임무 목록을 갱신 해 주십시오.";
+			this.listQuests.Quests = null;
+			this.listQuests.Size = new System.Drawing.Size(384, 56);
+			this.listQuests.TabIndex = 175;
+			// 
+			// tableBuild
+			// 
+			this.tableBuild.BackColor = System.Drawing.Color.Transparent;
+			this.tableBuild.Dock = System.Windows.Forms.DockStyle.Top;
+			this.tableBuild.Font = new System.Drawing.Font("맑은 고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+			this.tableBuild.ForeColor = System.Drawing.Color.White;
+			this.tableBuild.Location = new System.Drawing.Point(0, 225);
+			this.tableBuild.Margin = new System.Windows.Forms.Padding(0);
+			this.tableBuild.Name = "tableBuild";
+			this.tableBuild.Padding = new System.Windows.Forms.Padding(0, 0, 0, 8);
+			this.tableBuild.Size = new System.Drawing.Size(384, 63);
+			this.tableBuild.TabIndex = 174;
+			headerValue19.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))));
+			headerValue19.ForeColor = System.Drawing.Color.White;
+			headerValue19.Header = "-";
+			headerValue19.HeaderVisible = true;
+			headerValue19.Value = "-";
+			headerValue19.Visible = false;
+			headerValue20.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))));
+			headerValue20.ForeColor = System.Drawing.Color.White;
+			headerValue20.Header = "-";
+			headerValue20.HeaderVisible = true;
+			headerValue20.Value = "-";
+			headerValue20.Visible = false;
+			headerValue21.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))));
+			headerValue21.ForeColor = System.Drawing.Color.White;
+			headerValue21.Header = "-";
+			headerValue21.HeaderVisible = true;
+			headerValue21.Value = "-";
+			headerValue21.Visible = false;
+			headerValue22.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))));
+			headerValue22.ForeColor = System.Drawing.Color.White;
+			headerValue22.Header = "-";
+			headerValue22.HeaderVisible = true;
+			headerValue22.Value = "-";
+			headerValue22.Visible = false;
+			this.tableBuild.TableCells = new BeerViewer.Views.Controls.GeneralTableView.HeaderValue[] {
+        headerValue19,
+        headerValue20,
+        headerValue21,
+        headerValue22};
+			this.tableBuild.TableName = "건조";
+			// 
+			// tableRepair
+			// 
+			this.tableRepair.BackColor = System.Drawing.Color.Transparent;
+			this.tableRepair.Dock = System.Windows.Forms.DockStyle.Top;
+			this.tableRepair.Font = new System.Drawing.Font("맑은 고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+			this.tableRepair.ForeColor = System.Drawing.Color.White;
+			this.tableRepair.Location = new System.Drawing.Point(0, 162);
+			this.tableRepair.Margin = new System.Windows.Forms.Padding(0);
+			this.tableRepair.Name = "tableRepair";
+			this.tableRepair.Padding = new System.Windows.Forms.Padding(0, 0, 0, 8);
+			this.tableRepair.Size = new System.Drawing.Size(384, 63);
+			this.tableRepair.TabIndex = 173;
+			headerValue23.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))));
+			headerValue23.ForeColor = System.Drawing.Color.White;
+			headerValue23.Header = "-";
+			headerValue23.HeaderVisible = true;
+			headerValue23.Value = "-";
+			headerValue23.Visible = false;
+			headerValue24.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))));
+			headerValue24.ForeColor = System.Drawing.Color.White;
+			headerValue24.Header = "-";
+			headerValue24.HeaderVisible = true;
+			headerValue24.Value = "-";
+			headerValue24.Visible = false;
+			headerValue25.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))));
+			headerValue25.ForeColor = System.Drawing.Color.White;
+			headerValue25.Header = "-";
+			headerValue25.HeaderVisible = true;
+			headerValue25.Value = "-";
+			headerValue25.Visible = false;
+			headerValue26.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))));
+			headerValue26.ForeColor = System.Drawing.Color.White;
+			headerValue26.Header = "-";
+			headerValue26.HeaderVisible = true;
+			headerValue26.Value = "-";
+			headerValue26.Visible = false;
+			this.tableRepair.TableCells = new BeerViewer.Views.Controls.GeneralTableView.HeaderValue[] {
+        headerValue23,
+        headerValue24,
+        headerValue25,
+        headerValue26};
+			this.tableRepair.TableName = "입거";
+			// 
+			// tableFleet
+			// 
+			this.tableFleet.BackColor = System.Drawing.Color.Transparent;
+			this.tableFleet.Dock = System.Windows.Forms.DockStyle.Top;
+			this.tableFleet.Font = new System.Drawing.Font("맑은 고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+			this.tableFleet.ForeColor = System.Drawing.Color.White;
+			this.tableFleet.Location = new System.Drawing.Point(0, 99);
+			this.tableFleet.Margin = new System.Windows.Forms.Padding(0);
+			this.tableFleet.Name = "tableFleet";
+			this.tableFleet.Padding = new System.Windows.Forms.Padding(0, 0, 0, 8);
+			this.tableFleet.Size = new System.Drawing.Size(384, 63);
+			this.tableFleet.TabIndex = 172;
+			headerValue27.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))));
+			headerValue27.ForeColor = System.Drawing.Color.White;
+			headerValue27.Header = "-";
+			headerValue27.HeaderVisible = true;
+			headerValue27.Value = "-";
+			headerValue27.Visible = false;
+			headerValue28.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))));
+			headerValue28.ForeColor = System.Drawing.Color.White;
+			headerValue28.Header = "-";
+			headerValue28.HeaderVisible = true;
+			headerValue28.Value = "-";
+			headerValue28.Visible = false;
+			headerValue29.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))));
+			headerValue29.ForeColor = System.Drawing.Color.White;
+			headerValue29.Header = "-";
+			headerValue29.HeaderVisible = true;
+			headerValue29.Value = "-";
+			headerValue29.Visible = false;
+			headerValue30.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(48)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))), ((int)(((byte)(144)))));
+			headerValue30.ForeColor = System.Drawing.Color.White;
+			headerValue30.Header = "-";
+			headerValue30.HeaderVisible = true;
+			headerValue30.Value = "-";
+			headerValue30.Visible = false;
+			this.tableFleet.TableCells = new BeerViewer.Views.Controls.GeneralTableView.HeaderValue[] {
+        headerValue27,
+        headerValue28,
+        headerValue29,
+        headerValue30};
+			this.tableFleet.TableName = "함대";
+			// 
 			// GeneralView
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
 			this.AutoScroll = true;
 			this.AutoScrollMinSize = new System.Drawing.Size(340, 0);
-			this.BackColor = System.Drawing.Color.Transparent;
 			this.Controls.Add(this.tableHQRecord);
 			this.Controls.Add(this.listQuests);
 			this.Controls.Add(this.tableBuild);
 			this.Controls.Add(this.tableRepair);
 			this.Controls.Add(this.tableFleet);
-			this.Controls.Add(this.labelHomeportInfo);
-			this.Controls.Add(this.layoutResources);
-			this.Controls.Add(this.layoutButtons);
+			this.Controls.Add(this.layoutHomeportInfo);
 			this.Font = new System.Drawing.Font("맑은 고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
 			this.Margin = new System.Windows.Forms.Padding(4);
 			this.Name = "GeneralView";
-			this.Size = new System.Drawing.Size(399, 490);
+			this.Size = new System.Drawing.Size(384, 460);
+			this.layoutHomeportInfo.ResumeLayout(false);
+			this.layoutHomeportInfo.PerformLayout();
 			this.layoutButtons.ResumeLayout(false);
 			this.layoutResources.ResumeLayout(false);
+			this.layoutCountInfo.ResumeLayout(false);
+			this.layoutCountInfo.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
 		}
 
 		#endregion
+		private System.Windows.Forms.FlowLayoutPanel layoutHomeportInfo;
+		private System.Windows.Forms.FlowLayoutPanel layoutCountInfo;
+		private Controls.GeneralTableView tableFleet;
+		private Controls.GeneralTableView tableRepair;
+		private Controls.GeneralTableView tableBuild;
+		private Controls.QuestsView listQuests;
+		private Controls.GeneralTableView tableHQRecord;
 		private System.Windows.Forms.FlowLayoutPanel layoutButtons;
+		private Controls.FlatButton btnShipList;
+		private Controls.FlatButton btnItemList;
 		private Controls.FlatButton btnCalculator;
 		private Controls.FlatButton btnAkashi;
-		private Controls.FlatButton btnItemList;
-		private Controls.FlatButton btnShipList;
 		private System.Windows.Forms.FlowLayoutPanel layoutResources;
 		private Controls.FlatComboBox comboResources1;
 		private Controls.FlatComboBox comboResources2;
-		private System.Windows.Forms.Label labelHomeportInfo;
-		private Controls.GeneralTableView tableHQRecord;
-		private Controls.QuestsView listQuests;
-		private Controls.GeneralTableView tableBuild;
-		private Controls.GeneralTableView tableRepair;
-		private Controls.GeneralTableView tableFleet;
+		private System.Windows.Forms.Label labelShipCount;
+		private System.Windows.Forms.Label labelSlotitemCount;
 	}
 }

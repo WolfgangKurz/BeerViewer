@@ -243,8 +243,8 @@ namespace BeerViewer.Views.Controls
 					#endregion
 
 					#region 함선 연료/탄약
-					DrawProgress(g, new Rectangle(x - 6, y + 6, 44, 6), ship.Fuel);
-					DrawProgress(g, new Rectangle(x - 6, y + 18, 44, 6), ship.Bull);
+					DrawProgress(g, new Rectangle(x - 6, y + 6, 44, 6), ship.Fuel, 5);
+					DrawProgress(g, new Rectangle(x - 6, y + 18, 44, 6), ship.Bull,5 );
 
 					x += 44;
 					#endregion
@@ -380,10 +380,13 @@ namespace BeerViewer.Views.Controls
 			this.RequestUpdate();
 		}
 
-		private void DrawProgress(Graphics g, Rectangle size, LimitedValue HP)
+		private void DrawProgress(Graphics g, Rectangle size, LimitedValue HP, int Separates = 4)
 		{
-			int width = (HP.Current - HP.Minimum) * size.Width / (HP.Maximum - HP.Minimum);
 			Color color = GetHPColor(HP);
+
+			int width = 0;
+			if (HP.Maximum - HP.Minimum > 0)
+				width = (HP.Current - HP.Minimum) * size.Width / (HP.Maximum - HP.Minimum);
 
 			using (SolidBrush b = new SolidBrush(Color.FromArgb(0x44, 0x90, 0x90, 0x90)))
 				g.FillRectangle(b, size);
@@ -391,10 +394,10 @@ namespace BeerViewer.Views.Controls
 			using (SolidBrush b = new SolidBrush(color))
 				g.FillRectangle(b, new Rectangle(size.Left, size.Top, width, size.Height));
 
-			var step = size.Width / 4;
-			using (Pen p = new Pen(frmMain.Instance.BackColor, 1.0f)) {
-				for (var i = 1; i <= 3; i++)
-					g.DrawLine(p, size.Left + step * i, size.Top, size.Left + step * i, size.Top + size.Height / 2 - 1);
+			using (Pen p = new Pen(frmMain.Instance.BackColor, 1.0f))
+			{
+				for (var i = 1; i <= (Separates - 1); i++)
+					g.DrawLine(p, size.Left + (size.Width * i / Separates), size.Top, size.Left + (size.Width * i / Separates), size.Top + size.Height / 2 - 1);
 			}
 		}
 		private Color GetCondColor(ConditionType condType)

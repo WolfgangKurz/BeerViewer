@@ -48,6 +48,12 @@ namespace BeerViewer.Views.Contents
 		{
 			InitializeComponent();
 
+			chkAlwaysOnTop.Checked = Settings.AlwaysOnTop.Value;
+			chkAlwaysOnTop.CheckedChanged += (s, e) => Settings.AlwaysOnTop.Value = chkAlwaysOnTop.Checked;
+
+			chkBattleInfoLayout.Checked = Settings.BattleInfoLayout.Value;
+			chkBattleInfoLayout.CheckedChanged += (s, e) => Settings.BattleInfoLayout.Value = chkBattleInfoLayout.Checked;
+
 			neutral = Settings.BrowserZoom.Value;
 			bool ZoomComboEventAttached = false;
 
@@ -84,10 +90,13 @@ namespace BeerViewer.Views.Contents
 			this.comboMainLayout.SelectedIndexChanged += (s, e) =>
 				Settings.VerticalMode.Value = (this.comboMainLayout.SelectedIndex == 0 ? false : true);
 
+			chkContentLayout.Checked = Settings.ContentLayoutMode.Value;
+			chkContentLayout.CheckedChanged += (s, e) => Settings.ContentLayoutMode.Value = chkContentLayout.Checked;
+
 			this.comboViewRangeType.SelectedIndexChanged += (s, e) =>
 			{
 				ViewRangeCalcLogicDisplayPair selected = this.comboViewRangeType.SelectedItem as ViewRangeCalcLogicDisplayPair;
-				if(selected==null)
+				if (selected == null)
 					labelViewRangeDescription.Text = "-";
 				else
 					labelViewRangeDescription.Text = selected.Key.Description;
@@ -140,11 +149,40 @@ namespace BeerViewer.Views.Contents
 			this.comboFlashQuality.SelectedIndex = Settings.FlashQuality.Value;
 			this.comboFlashQuality.SelectedIndexChanged += (s, e) =>
 				Settings.FlashQuality.Value = this.comboFlashQuality.SelectedIndex;
+
+			chkUseOpenDB.CheckedChanged += (s, e) => Settings.OpenDB_Enabled.Value = chkUseOpenDB.Checked;
+			Settings.OpenDB_Enabled.PropertyEvent(nameof(Settings.OpenDB_Enabled.Value), () => chkUseOpenDB.Checked = Settings.OpenDB_Enabled.Value, true);
+
+
+			Settings.VerticalMode.PropertyEvent(nameof(Settings.VerticalMode.Value), () =>
+			{
+				layoutMain.FlowDirection = (Settings.VerticalMode.Value ? FlowDirection.LeftToRight : FlowDirection.TopDown);
+				optButtons.FlowDirection = (Settings.VerticalMode.Value ? FlowDirection.TopDown : FlowDirection.LeftToRight);
+
+				if (layoutMain.FlowDirection == FlowDirection.TopDown)
+				{
+					btnCookie.Margin = new Padding(12, 2, 2, 2);
+
+					groupLayout.Margin = new Padding(0, 10, 0, 0);
+					groupNotification.Margin = new Padding(0, 10, 0, 0);
+					groupBattleInfo.Margin = new Padding(0, 10, 0, 0);
+					groupETC.Margin = new Padding(0, 10, 0, 0);
+				}
+				else
+				{
+					btnCookie.Margin = new Padding(2, 12, 2, 2);
+
+					groupLayout.Margin = new Padding(10, 0, 0, 0);
+					groupNotification.Margin = new Padding(10, 0, 0, 0);
+					groupBattleInfo.Margin = new Padding(10, 0, 0, 0);
+					groupETC.Margin = new Padding(10, 0, 0, 0);
+				}
+			}, true);
 		}
 
 		public void SetBackColor(Color color)
 		{
-			if(this.layoutMain.InvokeRequired)
+			if (this.layoutMain.InvokeRequired)
 			{
 				this.layoutMain.Invoke(() => SetBackColor(color));
 				return;

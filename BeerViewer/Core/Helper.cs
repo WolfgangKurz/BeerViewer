@@ -228,8 +228,9 @@ namespace BeerViewer.Core
 
 							if (qualityString != null)
 							{
+								// wmode=direct important for performance
 								string scriptContent =
-									"window.kcsFlash_StartFlash = function(a){var b={id:'externalswf',width:'800',height:'480',wmode:'opaque',quality:'" + qualityString + "',bgcolor:'#000000',allowScriptAccess:'always'};document.getElementById('flashWrap').innerHTML=ConstMessageInfo.InstallFlashMessage,gadgets.flash.embedFlash(a+ConstURLInfo.MainFlashURL+'?api_token='+flashInfo.apiToken+'&api_starttime='+flashInfo.apiStartTime,document.getElementById('flashWrap'),6,b),document.getElementById('adFlashWrap').style.height='0px',document.getElementById('wsFlashWrap').style.height='0px',document.getElementById('flashWrap').style.height='480px',gadgets.window.adjustHeight(ConstGadgetInfo.height)};"
+									"window.kcsFlash_StartFlash = function(a){var b={id:'externalswf',width:'800',height:'480',wmode:'direct',quality:'" + qualityString + "',bgcolor:'#000000',allowScriptAccess:'always'};document.getElementById('flashWrap').innerHTML=ConstMessageInfo.InstallFlashMessage,gadgets.flash.embedFlash(a+ConstURLInfo.MainFlashURL+'?api_token='+flashInfo.apiToken+'&api_starttime='+flashInfo.apiStartTime,document.getElementById('flashWrap'),6,b),document.getElementById('adFlashWrap').style.height='0px',document.getElementById('wsFlashWrap').style.height='0px',document.getElementById('flashWrap').style.height='480px',gadgets.window.adjustHeight(ConstGadgetInfo.height)};"
 								;
 								var elem = iframeDocument.createElement("SCRIPT");
 								elem.setAttribute("type", "text/javascript");

@@ -81,6 +81,8 @@ namespace BeerViewer.Core
 
 				var admiral = DataStorage.Instance.Homeport?.Admiral;
 				if (admiral == null) return;
+				if (admiral.Level == 0) return;
+				if (admiral.Experience == 0) return;
 
 				Record.Add(
 					new HQRecordElement(
@@ -102,8 +104,9 @@ namespace BeerViewer.Core
 				sw.Write(0xBF);
 				sw.WriteLine(RecordHeader);
 
-				var list = new List<HQRecordElement>(Record);
-				list.Sort((e1, e2) => e1.Date.CompareTo(e2.Date));
+				var list = Record
+					.Where(x => x.HQLevel > 0 || x.HQExp > 0)
+					.OrderBy(x => x.Date);
 
 				foreach (var elem in list)
 					sw.WriteLine(
@@ -134,36 +137,25 @@ namespace BeerViewer.Core
 						continue;
 
 					string[] elem = line.Split(',');
-					Record.Add(
-						new HQRecordElement(
-							CSVStringToTime(elem[0]),
-							int.Parse(elem[1]),
-							int.Parse(elem[2])
-						)
-					);
+					DateTime? time;
+					int level, exp;
+
+					time = CSVStringToTime(elem[0]);
+					if (!time.HasValue) continue;
+					if (!int.TryParse(elem[1], out level)) continue;
+					if (!int.TryParse(elem[2], out exp)) continue;
+					if (level <= 0 || exp <= 0) continue;
+
+					Record.Add(new HQRecordElement(time.Value, level, exp));
 					linecount++;
 				}
 			}
 		}
 
 		public HQRecordElement GetRecord(DateTime target)
-		{
-			int i;
-			for (i = Record.Count - 1; i >= 0; i--)
-			{
-				if (Record[i].Date < target)
-				{
-					i++;
-					break;
-				}
-			}
-			if (i < 0) i = 0;
+			=> Record.OrderBy(x => x.Date).FirstOrDefault(x => x.Date >= target)
+			?? new HQRecordElement(DateTime.MinValue, 0, 0);
 
-			if (0 <= i && i < Record.Count)
-				return Record[i];
-			else
-				return null;
-		}
 		public HQRecordElement GetRecordPrevious()
 		{
 			DateTime now = DateTime.Now;
@@ -203,17 +195,11 @@ namespace BeerViewer.Core
 		public static string TimeToCSVString(DateTime time)
 			=> time.ToString("yyyy\\/MM\\/dd HH\\:mm\\:ss", System.Globalization.CultureInfo.InvariantCulture);
 
-		public static DateTime CSVStringToTime(string str)
+		public static DateTime? CSVStringToTime(string str)
 		{
-			string[] elem = str.Split("/ :".ToCharArray());
-			return new DateTime(
-				elem.Length > 0 ? int.Parse(elem[0]) : 1970,
-				elem.Length > 1 ? int.Parse(elem[1]) : 1,
-				elem.Length > 2 ? int.Parse(elem[2]) : 1,
-				elem.Length > 3 ? int.Parse(elem[3]) : 0,
-				elem.Length > 4 ? int.Parse(elem[4]) : 0,
-				elem.Length > 5 ? int.Parse(elem[5]) : 0
-			);
+			DateTime time;
+			if (!DateTime.TryParse(str, out time)) return null;
+			return time;
 		}
 	}
 }
