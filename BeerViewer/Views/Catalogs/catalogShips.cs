@@ -166,7 +166,17 @@ namespace BeerViewer.Views.Catalogs
 			this.radioSpeedAll.CheckedChanged += (s, e) =>
 			{
 				if (radioLockAll.Checked)
-					shipListTable.SpeedFilter = ShipListTable.FilterValues.Both;
+					shipListTable.SpeedFilter = ShipListTable.FilterValues.Fast_All;
+			};
+			this.radioSpeedSuperFast.CheckedChanged += (s, e) =>
+			{
+				if (radioSpeedSuperFast.Checked)
+					shipListTable.SpeedFilter = ShipListTable.FilterValues.SuperFast;
+			};
+			this.radioSpeedFastPlus.CheckedChanged += (s, e) =>
+			{
+				if (radioSpeedFastPlus.Checked)
+					shipListTable.SpeedFilter = ShipListTable.FilterValues.FastPlus;
 			};
 			this.radioSpeedFast.CheckedChanged += (s, e) =>
 			{
