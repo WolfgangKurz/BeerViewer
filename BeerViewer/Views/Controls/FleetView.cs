@@ -119,6 +119,7 @@ namespace BeerViewer.Views.Controls
 					return; // No elements to draw
 
 				Ships = this.Fleet.Ships;
+				if (Ships.Count() == 0) return;
 
 				#region Draw Ships
 				var w1 = TextRenderer.MeasureText("Lv.", new Font(this.Font.FontFamily, 9)).Width - 4;
