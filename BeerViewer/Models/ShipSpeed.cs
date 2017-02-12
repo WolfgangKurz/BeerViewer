@@ -25,5 +25,15 @@ namespace BeerViewer.Models
 		/// 고속
 		/// </summary>
 		Fast = 10,
+
+		/// <summary>
+		/// 고속+
+		/// </summary>
+		FastPlus = 15,
+
+		/// <summary>
+		/// 초고속(최속)
+		/// </summary>
+		SuperFast = 20,
 	}
 }
