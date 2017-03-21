@@ -141,7 +141,7 @@ namespace BeerViewer.Views.Controls
 				x = 4 + cols[0] + cols[1]; y = 3;
 				foreach (var slot in ship.Slots.Where(_ => _.Equipped))
 				{
-					var icon = GetSlotIconImage(slot.Source.IconType);
+					var icon = ImageAssets.GetSlotIconImage(slot.Source.IconType);
 					g.DrawImage(icon, new Rectangle(x + 1, y + 1, 14, 14));
 
 					TextRenderer.DrawText(g, slot.Source.Name, f, new Point(x + 14 + 2, y), colorWhite);
@@ -153,7 +153,7 @@ namespace BeerViewer.Views.Controls
 						g.DrawLine(p, x + 2, y, e.Bounds.Width - 2, y);
 
 					var slot = ship.ExSlot;
-					var icon = GetSlotIconImage(slot.Source.IconType);
+					var icon = ImageAssets.GetSlotIconImage(slot.Source.IconType);
 					g.DrawImage(icon, new Rectangle(x + 1, y + 1, 14, 14));
 
 					TextRenderer.DrawText(g, slot.Source.Name, f, new Point(x + 14 + 2, y), colorWhite);
@@ -241,70 +241,6 @@ namespace BeerViewer.Views.Controls
 			y = Math.Max(4, ship.Slots.Count(_ => _.Equipped) + ((ship.ExSlot?.Equipped ?? false) ? 1 : 0));
 			y *= TextRenderer.MeasureText(" ", f).Height;
 			return new Size(x + 8, y + 6);
-		}
-		private Image GetSlotIconImage(SlotItemIconType iconType)
-		{
-			switch (iconType)
-			{
-				case SlotItemIconType.MainCanonLight: return Properties.Resources.slotitem_MainCanonLight;
-				case SlotItemIconType.MainCanonMedium: return Properties.Resources.slotitem_MainCanonMedium;
-				case SlotItemIconType.MainCanonHeavy: return Properties.Resources.slotitem_MainCanonHeavy;
-				case SlotItemIconType.SecondaryCanon: return Properties.Resources.slotitem_SecondaryCanon;
-
-				case SlotItemIconType.Torpedo: return Properties.Resources.slotitem_Torpedo;
-
-				case SlotItemIconType.Fighter: return Properties.Resources.slotitem_Fighter;
-				case SlotItemIconType.DiveBomber: return Properties.Resources.slotitem_DiveBomber;
-				case SlotItemIconType.TorpedoBomber: return Properties.Resources.slotitem_TorpedoBomber;
-				case SlotItemIconType.ReconPlane: return Properties.Resources.slotitem_ReconPlane;
-				case SlotItemIconType.ReconSeaplane: return Properties.Resources.slotitem_ReconSeaplane;
-
-				case SlotItemIconType.Rader: return Properties.Resources.slotitem_Rader;
-				case SlotItemIconType.AAShell: return Properties.Resources.slotitem_AAShell;
-				case SlotItemIconType.APShell: return Properties.Resources.slotitem_APShell;
-				case SlotItemIconType.DamageControl: return Properties.Resources.slotitem_DamageControl;
-
-				case SlotItemIconType.AAGun: return Properties.Resources.slotitem_AAGun;
-				case SlotItemIconType.HighAngleGun: return Properties.Resources.slotitem_HighAngleGun;
-
-				case SlotItemIconType.ASW: return Properties.Resources.slotitem_ASW;
-				case SlotItemIconType.Soner: return Properties.Resources.slotitem_Soner;
-
-				case SlotItemIconType.EngineImprovement: return Properties.Resources.slotitem_EngineImprovement;
-				case SlotItemIconType.LandingCraft: return Properties.Resources.slotitem_LandingCraft;
-
-				case SlotItemIconType.Autogyro: return Properties.Resources.slotitem_Autogyro;
-				case SlotItemIconType.ArtillerySpotter: return Properties.Resources.slotitem_ArtillerySpotter;
-
-				case SlotItemIconType.AntiTorpedoBulge: return Properties.Resources.slotitem_AntiTorpedoBulge;
-
-				case SlotItemIconType.Searchlight: return Properties.Resources.slotitem_Searchlight;
-				case SlotItemIconType.DrumCanister: return Properties.Resources.slotitem_DrumCanister;
-				case SlotItemIconType.Facility: return Properties.Resources.slotitem_Facility;
-				case SlotItemIconType.Flare: return Properties.Resources.slotitem_Flare;
-
-				case SlotItemIconType.FleetCommandFacility: return Properties.Resources.slotitem_FleetCommandFacility;
-				case SlotItemIconType.MaintenancePersonnel: return Properties.Resources.slotitem_MaintenancePersonnel;
-
-				case SlotItemIconType.AntiAircraftFireDirector: return Properties.Resources.slotitem_AntiAircraftFireDirector;
-				case SlotItemIconType.RocketLauncher: return Properties.Resources.slotitem_RocketLauncher;
-
-				case SlotItemIconType.SurfaceShipPersonnel: return Properties.Resources.slotitem_SurfaceShipPersonnel;
-				case SlotItemIconType.FlyingBoat: return Properties.Resources.slotitem_FlyingBoat;
-
-				case SlotItemIconType.CombatRations: return Properties.Resources.slotitem_CombatRations;
-				case SlotItemIconType.OffshoreResupply: return Properties.Resources.slotitem_OffshoreResupply;
-
-				case SlotItemIconType.AmphibiousLandingCraft: return Properties.Resources.slotitem_AmphibiousLandingCraft;
-
-				case SlotItemIconType.LandBasedAttacker: return Properties.Resources.slotitem_LandBasedAttacker;
-				case SlotItemIconType.LandBasedFighter: return Properties.Resources.slotitem_LandBasedFighter;
-
-				case SlotItemIconType.JetbombFighter_A: return Properties.Resources.slotitem_JetbombFighter_A;
-				case SlotItemIconType.JetBombFighter_B: return Properties.Resources.slotitem_JetBombFighter_B;
-
-				default: return Properties.Resources.slotitem_Unknown;
-			}
 		}
 	}
 }

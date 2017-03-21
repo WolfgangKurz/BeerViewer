@@ -163,30 +163,33 @@ namespace BeerViewer.Views.Catalogs
 				shipListTable.ExceptExpedition = this.chkExceptExpedition.Checked;
 
 			#region Speed
-			this.radioSpeedAll.CheckedChanged += (s, e) =>
+			this.chkSpeedSuperfast.CheckedChanged += (s, e) =>
 			{
-				if (radioLockAll.Checked)
-					shipListTable.SpeedFilter = ShipListTable.FilterValues.Fast_All;
+				if (chkSpeedSuperfast.Checked)
+					shipListTable.SpeedFilter |= ShipListTable.FilterValues.SuperFast;
+				else
+					shipListTable.SpeedFilter &= ~ShipListTable.FilterValues.SuperFast;
 			};
-			this.radioSpeedSuperFast.CheckedChanged += (s, e) =>
+			this.chkSpeedFastPlus.CheckedChanged += (s, e) =>
 			{
-				if (radioSpeedSuperFast.Checked)
-					shipListTable.SpeedFilter = ShipListTable.FilterValues.SuperFast;
-			};
-			this.radioSpeedFastPlus.CheckedChanged += (s, e) =>
-			{
-				if (radioSpeedFastPlus.Checked)
+				if (chkSpeedFastPlus.Checked)
 					shipListTable.SpeedFilter = ShipListTable.FilterValues.FastPlus;
+				else
+					shipListTable.SpeedFilter &= ~ShipListTable.FilterValues.FastPlus;
 			};
-			this.radioSpeedFast.CheckedChanged += (s, e) =>
+			this.chkSpeedFast.CheckedChanged += (s, e) =>
 			{
-				if (radioSpeedFast.Checked)
+				if (chkSpeedFast.Checked)
 					shipListTable.SpeedFilter = ShipListTable.FilterValues.Fast;
+				else
+					shipListTable.SpeedFilter &= ~ShipListTable.FilterValues.Fast;
 			};
-			this.radioSpeedSlow.CheckedChanged += (s, e) =>
+			this.chkSpeedSlow.CheckedChanged += (s, e) =>
 			{
-				if (radioSpeedSlow.Checked)
+				if (chkSpeedSlow.Checked)
 					shipListTable.SpeedFilter = ShipListTable.FilterValues.Slow;
+				else
+					shipListTable.SpeedFilter &= ~ShipListTable.FilterValues.Slow;
 			};
 			#endregion
 

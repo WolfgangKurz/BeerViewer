@@ -89,16 +89,20 @@ namespace BeerViewer
 			InitializeComponent();
 
 			frmMain.Instance = this;
+			this.Text = Const.ApplicationName;
+
 			MessageProvider.Instance.SetProvider(this);
 
 			InitializeTabs();
 
 			Helper.SetRegistryFeatureBrowserEmulation();
-			Helper.PrepareBrowser(this.browserMain);
+			Helper.PrepareBrowser(frmMain.Instance?.Browser);
 
 			Action<bool> UpdateLayout = null;
 			UpdateLayout = (x) =>
 			{
+				var browser = frmMain.Instance?.Browser;
+
 				if (this.InvokeRequired)
 				{
 					this.Invoke(UpdateLayout);
@@ -110,20 +114,20 @@ namespace BeerViewer
 					panelBrowser.Dock = DockStyle.Top;
 
 					if (!Settings.BattleInfoLayout.Value)
-						browserMain.Left = panelBrowser.ClientSize.Width / 2 - browserMain.ClientSize.Width / 2;
+						browser.Left = panelBrowser.ClientSize.Width / 2 - browser.ClientSize.Width / 2;
 
 					else
 					{
-						browserMain.Left = 0;
-						panelRemain.Padding = new Padding(browserMain.Width + 4, 0, 0, 0);
+						browser.Left = 0;
+						panelRemain.Padding = new Padding(browser.Width + 4, 0, 0, 0);
 						contentBattle.Invalidate();
 					}
 				}
 				else
 				{
 					panelBrowser.Dock = DockStyle.Left;
-					browserMain.Left = 0;
-					panelRemain.Padding = new Padding(0, browserMain.Height + 4, 0, 0);
+					browser.Left = 0;
+					panelRemain.Padding = new Padding(0, browser.Height + 4, 0, 0);
 				}
 
 				if (x)
@@ -232,7 +236,6 @@ namespace BeerViewer
 				}
 			});
 
-			this.Text = Const.ApplicationName;
 			this.Show();
 
 			logger = new Logger();
@@ -252,7 +255,9 @@ namespace BeerViewer
 
 		private void btnScreenshot_Click(object sender, EventArgs e)
 		{
-			var Captured = Helper.Capture(this.browserMain);
+			var browser = frmMain.Instance?.Browser;
+
+			var Captured = Helper.Capture(browser);
 			if (Captured == null)
 				MessageProvider.Instance.Submit("스크린샷 저장에 실패했습니다", Const.ApplicationName);
 
@@ -276,7 +281,16 @@ namespace BeerViewer
 		}
 		private void btnRefresh_Click(object sender, EventArgs e)
 		{
-			Helper.PrepareBrowser(frmMain.Instance?.Browser, true);
+			if (DataStorage.Instance.IsInSortie)
+			{
+				if (MessageBox.Show("출격중입니다. 정말로 새로고침 하시겠습니까?", "BeerViewer", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.No)
+					return;
+			}
+
+			if(Settings.RefreshImmediately.Value)
+				frmMain.Instance?.Browser.Refresh(WebBrowserRefreshOption.Completely);
+			else
+				Helper.PrepareBrowser(frmMain.Instance?.Browser, true);
 		}
 		private void btnMute_Click(object sender, EventArgs e)
 		{
@@ -309,7 +323,9 @@ namespace BeerViewer
 		{
 			try
 			{
-				var provider = this.browserMain.Document.DomDocument as IServiceProvider;
+				var browser = frmMain.Instance?.Browser;
+
+				var provider = browser.Document.DomDocument as IServiceProvider;
 				if (provider == null) return;
 
 				object ppvObject;
@@ -321,13 +337,13 @@ namespace BeerViewer
 				webBrowser.ExecWB(OLECMDID.OLECMDID_OPTICAL_ZOOM, OLECMDEXECOPT.OLECMDEXECOPT_DONTPROMPTUSER, ref pvaIn);
 
 				var dpiFactor = Helper.GetDPIFactor();
-				browserMain.Size = new Size(
+				browser.Size = new Size(
 					(int)(800 * zoomFactor),// / dpiFactor),
 					(int)(480 * zoomFactor)// / dpiFactor)
 				);
 				this.MinimumSize = new Size(
-					browserMain.Size.Width + (this.Width - this.ClientSize.Width),
-					browserMain.Size.Height + (this.Height - this.ClientSize.Height)
+					browser.Size.Width + (this.Width - this.ClientSize.Width),
+					browser.Size.Height + (this.Height - this.ClientSize.Height)
 				);
 			}
 			catch (Exception ex)
@@ -338,6 +354,12 @@ namespace BeerViewer
 					Const.ApplicationName
 				);
 			}
+		}
+
+		private void frmMain_KeyDown(object sender, KeyEventArgs e)
+		{
+			if(e.KeyCode == Keys.F5)
+				frmMain.Instance?.Browser.Refresh(WebBrowserRefreshOption.Completely);
 		}
 	}
 }

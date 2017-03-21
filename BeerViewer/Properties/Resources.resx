@@ -124,9 +124,6 @@
   <data name="slotitem_OffshoreResupply" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\slotitem_OffshoreResupply.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="slotitem_JetbombFighter_A" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\slotitem_JetbombFighter_A.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="slotitem_MaintenancePersonnel" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\slotitem_MaintenancePersonnel.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -202,9 +199,6 @@
   <data name="slotitem_ASW" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\slotitem_ASW.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="slotitem_JetBombFighter_B" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\slotitem_JetBombFighter_B.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="slotitem_proficiency_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\slotitem_proficiency_2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -273,5 +267,20 @@
   </data>
   <data name="Volume" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Volume.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="slotitem_SeaplaneFighter" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\slotitem_SeaplaneFighter.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="slotitem_SubmarineEquipment" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\slotitem_SubmarineEquipment.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="slotitem_TransportEquipment" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\slotitem_TransportEquipment.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="slotitem_JetPowerededBomber1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\slotitem_JetPowerededBomber1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="slotitem_JetPowerededBomber2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\slotitem_JetPowerededBomber2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

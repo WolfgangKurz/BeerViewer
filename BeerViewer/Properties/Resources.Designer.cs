@@ -293,9 +293,9 @@ namespace BeerViewer.Properties {
         /// <summary>
         ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
         /// </summary>
-        internal static System.Drawing.Bitmap slotitem_JetbombFighter_A {
+        internal static System.Drawing.Bitmap slotitem_JetPowerededBomber1 {
             get {
-                object obj = ResourceManager.GetObject("slotitem_JetbombFighter_A", resourceCulture);
+                object obj = ResourceManager.GetObject("slotitem_JetPowerededBomber1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -303,9 +303,9 @@ namespace BeerViewer.Properties {
         /// <summary>
         ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
         /// </summary>
-        internal static System.Drawing.Bitmap slotitem_JetBombFighter_B {
+        internal static System.Drawing.Bitmap slotitem_JetPowerededBomber2 {
             get {
-                object obj = ResourceManager.GetObject("slotitem_JetBombFighter_B", resourceCulture);
+                object obj = ResourceManager.GetObject("slotitem_JetPowerededBomber2", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -503,6 +503,16 @@ namespace BeerViewer.Properties {
         /// <summary>
         ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
         /// </summary>
+        internal static System.Drawing.Bitmap slotitem_SeaplaneFighter {
+            get {
+                object obj = ResourceManager.GetObject("slotitem_SeaplaneFighter", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
+        /// </summary>
         internal static System.Drawing.Bitmap slotitem_Searchlight {
             get {
                 object obj = ResourceManager.GetObject("slotitem_Searchlight", resourceCulture);
@@ -533,6 +543,16 @@ namespace BeerViewer.Properties {
         /// <summary>
         ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
         /// </summary>
+        internal static System.Drawing.Bitmap slotitem_SubmarineEquipment {
+            get {
+                object obj = ResourceManager.GetObject("slotitem_SubmarineEquipment", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
+        /// </summary>
         internal static System.Drawing.Bitmap slotitem_SurfaceShipPersonnel {
             get {
                 object obj = ResourceManager.GetObject("slotitem_SurfaceShipPersonnel", resourceCulture);
@@ -556,6 +576,16 @@ namespace BeerViewer.Properties {
         internal static System.Drawing.Bitmap slotitem_TorpedoBomber {
             get {
                 object obj = ResourceManager.GetObject("slotitem_TorpedoBomber", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   System.Drawing.Bitmap 형식의 지역화된 리소스를 찾습니다.
+        /// </summary>
+        internal static System.Drawing.Bitmap slotitem_TransportEquipment {
+            get {
+                object obj = ResourceManager.GetObject("slotitem_TransportEquipment", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

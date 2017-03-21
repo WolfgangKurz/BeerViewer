@@ -51,6 +51,9 @@ namespace BeerViewer.Views.Contents
 			chkAlwaysOnTop.Checked = Settings.AlwaysOnTop.Value;
 			chkAlwaysOnTop.CheckedChanged += (s, e) => Settings.AlwaysOnTop.Value = chkAlwaysOnTop.Checked;
 
+			chkRefreshI​mmediately.Checked = Settings.RefreshI​mmediately.Value;
+			chkRefreshI​mmediately.CheckedChanged += (s, e) => Settings.RefreshI​mmediately.Value = chkRefreshI​mmediately.Checked;
+
 			chkBattleInfoLayout.Checked = Settings.BattleInfoLayout.Value;
 			chkBattleInfoLayout.CheckedChanged += (s, e) => Settings.BattleInfoLayout.Value = chkBattleInfoLayout.Checked;
 

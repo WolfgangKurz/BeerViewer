@@ -17,6 +17,8 @@
 		public int[][] api_fParam_combined { get; set; }
 		public int[] api_search { get; set; }
 		public int[] api_formation { get; set; }
+		public Api_Air_Base_Injection api_air_base_injection { get; set; }
+		public Api_Injection_Kouku api_injection_kouku { get; set; }
 		public Api_Air_Base_Attack[] api_air_base_attack { get; set; }
 		public int[] api_stage_flag { get; set; }
 		public Api_Kouku api_kouku { get; set; }

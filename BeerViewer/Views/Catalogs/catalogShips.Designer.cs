@@ -59,15 +59,14 @@
 			this.radioPowerUpEnd = new BeerViewer.Views.Controls.FlatRadioButton();
 			this.radioPowerUpAll = new BeerViewer.Views.Controls.FlatRadioButton();
 			this.groupSpeedFilter = new System.Windows.Forms.Panel();
-			this.radioSpeedFastPlus = new BeerViewer.Views.Controls.FlatRadioButton();
-			this.radioSpeedSuperFast = new BeerViewer.Views.Controls.FlatRadioButton();
-			this.radioSpeedAll = new BeerViewer.Views.Controls.FlatRadioButton();
 			this.labelPowerupFilter = new System.Windows.Forms.Label();
 			this.labelSpeedFilter = new System.Windows.Forms.Label();
 			this.shipListTable = new BeerViewer.Views.Controls.ShipListTable();
 			this.expandFilter = new BeerViewer.Views.Controls.FlatExpanderButton();
-			this.radioSpeedSlow = new BeerViewer.Views.Controls.FlatRadioButton();
-			this.radioSpeedFast = new BeerViewer.Views.Controls.FlatRadioButton();
+			this.chkSpeedSuperfast = new BeerViewer.Views.Controls.FlatCheckBox();
+			this.chkSpeedFastPlus = new BeerViewer.Views.Controls.FlatCheckBox();
+			this.chkSpeedFast = new BeerViewer.Views.Controls.FlatCheckBox();
+			this.chkSpeedSlow = new BeerViewer.Views.Controls.FlatCheckBox();
 			this.layoutFilters.SuspendLayout();
 			this.layoutShipType.SuspendLayout();
 			this.layoutShipTypeHeader.SuspendLayout();
@@ -177,7 +176,7 @@
 			this.layoutShipFilter.Margin = new System.Windows.Forms.Padding(0);
 			this.layoutShipFilter.Name = "layoutShipFilter";
 			this.layoutShipFilter.Padding = new System.Windows.Forms.Padding(5, 5, 5, 13);
-			this.layoutShipFilter.Size = new System.Drawing.Size(824, 81);
+			this.layoutShipFilter.Size = new System.Drawing.Size(783, 81);
 			this.layoutShipFilter.TabIndex = 9;
 			// 
 			// layoutLevelFilter
@@ -412,7 +411,7 @@
 			this.layoutSpeedPowerUpFilter.Margin = new System.Windows.Forms.Padding(4);
 			this.layoutSpeedPowerUpFilter.Name = "layoutSpeedPowerUpFilter";
 			this.layoutSpeedPowerUpFilter.Padding = new System.Windows.Forms.Padding(2);
-			this.layoutSpeedPowerUpFilter.Size = new System.Drawing.Size(325, 48);
+			this.layoutSpeedPowerUpFilter.Size = new System.Drawing.Size(284, 48);
 			this.layoutSpeedPowerUpFilter.TabIndex = 2;
 			// 
 			// groupPowerupFilter
@@ -464,48 +463,15 @@
 			// 
 			this.groupSpeedFilter.AutoSize = true;
 			this.groupSpeedFilter.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-			this.groupSpeedFilter.Controls.Add(this.radioSpeedSlow);
-			this.groupSpeedFilter.Controls.Add(this.radioSpeedFast);
-			this.groupSpeedFilter.Controls.Add(this.radioSpeedFastPlus);
-			this.groupSpeedFilter.Controls.Add(this.radioSpeedSuperFast);
-			this.groupSpeedFilter.Controls.Add(this.radioSpeedAll);
+			this.groupSpeedFilter.Controls.Add(this.chkSpeedSlow);
+			this.groupSpeedFilter.Controls.Add(this.chkSpeedFast);
+			this.groupSpeedFilter.Controls.Add(this.chkSpeedFastPlus);
+			this.groupSpeedFilter.Controls.Add(this.chkSpeedSuperfast);
 			this.groupSpeedFilter.Location = new System.Drawing.Point(38, 2);
 			this.groupSpeedFilter.Margin = new System.Windows.Forms.Padding(0);
 			this.groupSpeedFilter.Name = "groupSpeedFilter";
-			this.groupSpeedFilter.Size = new System.Drawing.Size(285, 21);
+			this.groupSpeedFilter.Size = new System.Drawing.Size(232, 21);
 			this.groupSpeedFilter.TabIndex = 8;
-			// 
-			// radioSpeedFastPlus
-			// 
-			this.radioSpeedFastPlus.AutoSize = true;
-			this.radioSpeedFastPlus.Location = new System.Drawing.Point(121, 3);
-			this.radioSpeedFastPlus.Name = "radioSpeedFastPlus";
-			this.radioSpeedFastPlus.Size = new System.Drawing.Size(55, 15);
-			this.radioSpeedFastPlus.TabIndex = 14;
-			this.radioSpeedFastPlus.Text = "고속+";
-			this.radioSpeedFastPlus.UseVisualStyleBackColor = true;
-			// 
-			// radioSpeedSuperFast
-			// 
-			this.radioSpeedSuperFast.AutoSize = true;
-			this.radioSpeedSuperFast.Location = new System.Drawing.Point(56, 3);
-			this.radioSpeedSuperFast.Name = "radioSpeedSuperFast";
-			this.radioSpeedSuperFast.Size = new System.Drawing.Size(59, 15);
-			this.radioSpeedSuperFast.TabIndex = 13;
-			this.radioSpeedSuperFast.Text = "초고속";
-			this.radioSpeedSuperFast.UseVisualStyleBackColor = true;
-			// 
-			// radioSpeedAll
-			// 
-			this.radioSpeedAll.AutoSize = true;
-			this.radioSpeedAll.Checked = true;
-			this.radioSpeedAll.Location = new System.Drawing.Point(3, 3);
-			this.radioSpeedAll.Name = "radioSpeedAll";
-			this.radioSpeedAll.Size = new System.Drawing.Size(47, 15);
-			this.radioSpeedAll.TabIndex = 12;
-			this.radioSpeedAll.TabStop = true;
-			this.radioSpeedAll.Text = "전부";
-			this.radioSpeedAll.UseVisualStyleBackColor = true;
 			// 
 			// labelPowerupFilter
 			// 
@@ -558,25 +524,53 @@
 			this.expandFilter.TabIndex = 1;
 			this.expandFilter.Text = "필터 설정";
 			// 
-			// radioSpeedSlow
+			// chkSpeedSuperfast
 			// 
-			this.radioSpeedSlow.AutoSize = true;
-			this.radioSpeedSlow.Location = new System.Drawing.Point(235, 3);
-			this.radioSpeedSlow.Name = "radioSpeedSlow";
-			this.radioSpeedSlow.Size = new System.Drawing.Size(47, 15);
-			this.radioSpeedSlow.TabIndex = 16;
-			this.radioSpeedSlow.Text = "저속";
-			this.radioSpeedSlow.UseVisualStyleBackColor = true;
+			this.chkSpeedSuperfast.AutoSize = true;
+			this.chkSpeedSuperfast.Checked = true;
+			this.chkSpeedSuperfast.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.chkSpeedSuperfast.Location = new System.Drawing.Point(3, 3);
+			this.chkSpeedSuperfast.Name = "chkSpeedSuperfast";
+			this.chkSpeedSuperfast.Size = new System.Drawing.Size(59, 15);
+			this.chkSpeedSuperfast.TabIndex = 7;
+			this.chkSpeedSuperfast.Text = "초고속";
+			this.chkSpeedSuperfast.UseVisualStyleBackColor = true;
 			// 
-			// radioSpeedFast
+			// chkSpeedFastPlus
 			// 
-			this.radioSpeedFast.AutoSize = true;
-			this.radioSpeedFast.Location = new System.Drawing.Point(182, 3);
-			this.radioSpeedFast.Name = "radioSpeedFast";
-			this.radioSpeedFast.Size = new System.Drawing.Size(47, 15);
-			this.radioSpeedFast.TabIndex = 15;
-			this.radioSpeedFast.Text = "고속";
-			this.radioSpeedFast.UseVisualStyleBackColor = true;
+			this.chkSpeedFastPlus.AutoSize = true;
+			this.chkSpeedFastPlus.Checked = true;
+			this.chkSpeedFastPlus.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.chkSpeedFastPlus.Location = new System.Drawing.Point(68, 3);
+			this.chkSpeedFastPlus.Name = "chkSpeedFastPlus";
+			this.chkSpeedFastPlus.Size = new System.Drawing.Size(55, 15);
+			this.chkSpeedFastPlus.TabIndex = 8;
+			this.chkSpeedFastPlus.Text = "고속+";
+			this.chkSpeedFastPlus.UseVisualStyleBackColor = true;
+			// 
+			// chkSpeedFast
+			// 
+			this.chkSpeedFast.AutoSize = true;
+			this.chkSpeedFast.Checked = true;
+			this.chkSpeedFast.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.chkSpeedFast.Location = new System.Drawing.Point(129, 3);
+			this.chkSpeedFast.Name = "chkSpeedFast";
+			this.chkSpeedFast.Size = new System.Drawing.Size(47, 15);
+			this.chkSpeedFast.TabIndex = 9;
+			this.chkSpeedFast.Text = "고속";
+			this.chkSpeedFast.UseVisualStyleBackColor = true;
+			// 
+			// chkSpeedSlow
+			// 
+			this.chkSpeedSlow.AutoSize = true;
+			this.chkSpeedSlow.Checked = true;
+			this.chkSpeedSlow.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.chkSpeedSlow.Location = new System.Drawing.Point(182, 3);
+			this.chkSpeedSlow.Name = "chkSpeedSlow";
+			this.chkSpeedSlow.Size = new System.Drawing.Size(47, 15);
+			this.chkSpeedSlow.TabIndex = 10;
+			this.chkSpeedSlow.Text = "저속";
+			this.chkSpeedSlow.UseVisualStyleBackColor = true;
 			// 
 			// catalogShips
 			// 
@@ -650,13 +644,12 @@
 		private Controls.FlatRadioButton radioPowerUpEnd;
 		private Controls.FlatRadioButton radioPowerUpAll;
 		private System.Windows.Forms.Panel groupSpeedFilter;
-		private Controls.FlatRadioButton radioSpeedFastPlus;
-		private Controls.FlatRadioButton radioSpeedSuperFast;
-		private Controls.FlatRadioButton radioSpeedAll;
 		private System.Windows.Forms.Label labelPowerupFilter;
 		private System.Windows.Forms.Label labelSpeedFilter;
 		private Controls.ShipListTable shipListTable;
-		private Controls.FlatRadioButton radioSpeedSlow;
-		private Controls.FlatRadioButton radioSpeedFast;
+		private Controls.FlatCheckBox chkSpeedSlow;
+		private Controls.FlatCheckBox chkSpeedFast;
+		private Controls.FlatCheckBox chkSpeedFastPlus;
+		private Controls.FlatCheckBox chkSpeedSuperfast;
 	}
 }

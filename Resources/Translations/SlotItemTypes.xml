@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<SlotItemTypes Version="1.0.0">
+<SlotItemTypes Version="1.0.1">
 	<SlotItemType>
 		<Source>小口径主砲</Source>
 		<Value>소구경주포</Value>
@@ -191,6 +191,14 @@
 	<SlotItemType>
 		<Source>局地戦闘機</Source>
 		<Value>국지전투기</Value>
+	</SlotItemType>
+	<SlotItemType>
+		<Source>輸送機材</Source>
+		<Value>운송장비</Value>
+	</SlotItemType>
+	<SlotItemType>
+		<Source>潜水艦装備</Source>
+		<Value>잠수함장비</Value>
 	</SlotItemType>
 	<SlotItemType>
 		<Source>噴式戦闘機</Source>

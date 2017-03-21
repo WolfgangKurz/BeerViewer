@@ -30,6 +30,7 @@ namespace BeerViewer.Core
 		public static SettingValue<int> ResourceSelected2 { get; set; } = new SettingValue<int>(GetKey(), 1);
 
 		public static SettingValue<bool> AlwaysOnTop { get; set; } = new SettingValue<bool>(GetKey(), false);
+		public static SettingValue<bool> RefreshI​mmediately { get; set; } = new SettingValue<bool>(GetKey(), false);
 		public static SettingValue<double> BrowserZoom { get; set; } = new SettingValue<double>(GetKey(), 1.0);
 
 		public static SettingValue<bool> VerticalMode { get; set; } = new SettingValue<bool>(GetKey(), false);

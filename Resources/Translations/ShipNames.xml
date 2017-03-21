@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Ships Version="1.0.0">
+<Ships Version="1.0.1">
 	<Ship>
 		<Source>U-511</Source>
 		<Value>U-511</Value>
@@ -2191,5 +2191,53 @@
 	<Ship>
 		<Source>深海海月姫</Source>
 		<Value>심해해월희</Value>
+	</Ship>
+	<Ship>
+		<Source>荒潮改二</Source>
+		<Value>아라시오改2</Value>
+	</Ship>
+	<Ship>
+		<Source>藤波</Source>
+		<Value>후지나미</Value>
+	</Ship>
+	<Ship>
+		<Source>藤波改</Source>
+		<Value>후지나미改</Value>
+	</Ship>
+	<Ship>
+		<Source>松風</Source>
+		<Value>마츠카제</Value>
+	</Ship>
+	<Ship>
+		<Source>松風改</Source>
+		<Value>마츠카제改</Value>
+	</Ship>
+	<Ship>
+		<Source>伊13</Source>
+		<Value>이-13</Value>
+	</Ship>
+	<Ship>
+		<Source>伊13改</Source>
+		<Value>이-13改</Value>
+	</Ship>
+	<Ship>
+		<Source>伊14</Source>
+		<Value>이-14</Value>
+	</Ship>
+	<Ship>
+		<Source>伊14改</Source>
+		<Value>이-14改</Value>
+	</Ship>
+	<Ship>
+		<Source>深海双子棲姫</Source>
+		<Value>심해쌍자서희</Value>
+	</Ship>
+	<Ship>
+		<Source>深海双子棲姫-壊</Source>
+		<Value>심해쌍자서희-괴</Value>
+	</Ship>
+	<Ship>
+		<Source>Zara due</Source>
+		<Value>자라 due</Value>
 	</Ship>
 </Ships>
