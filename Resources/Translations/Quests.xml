@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Quests Version="1.0.0">
+<Quests Version="1.0.1">
 	<Quest>
 		<ID>SF</ID>
 		<NameSource>初夏の整理整頓</NameSource>
@@ -298,8 +298,8 @@
 		<ID>A69</ID>
 		<NameSource>新編「水雷戦隊」を含む艦隊を再編成せよ！</NameSource>
 		<NameValue>신편 수뢰전대를 포함한 함대를 재편성하라!</NameValue>
-		<DetailSource>경순양함을 기함으로한 수뢰전대(구축함 4척)를 편성</DetailSource>
-		<DetailValue></DetailValue>
+		<DetailSource></DetailSource>
+		<DetailValue>경순양함을 기함으로한 수뢰전대(구축함 4척)를 편성</DetailValue>
 	</Quest>
 	<Quest>
 		<ID>A33</ID>
@@ -1735,10 +1735,94 @@
 		<DetailValue>수상기모함 기함+구축함 3척으로 1-3, 1-4 보스전 S승리 (자유편성 여부는 불명)</DetailValue>
 	</Quest>
 	<Quest>
-		<ID>174</ID>
-		<NameSource>新編「水雷戦隊」を含む艦隊を再編成せよ！</NameSource>
-		<NameValue>[174]신편&amp;quot;수뢰 전대&amp;quot;을 포함한 함대를 재편성하다!</NameValue>
-		<DetailSource>軽巡級を旗艦とした駆逐艦4隻からなる強力な水雷戦隊を含む艦隊を再編成せよ！</DetailSource>
-		<DetailValue>[174]경순급을 기함으로 한 구축함 4척으로 구성된 강력한 수뢰 전대를 포함한 함대를 재편성하다!</DetailValue>
+		<ID>843</ID>
+		<NameSource>節分特別出撃：制海権を確保せよ！</NameSource>
+		<NameValue>절분 특별 출격: 제해권을 확보하라!</NameValue>
+		<DetailSource>節分実施の準備として第1艦隊に4隻(内駆逐艦2隻含む)からなる精鋭艦隊を配備、鎮守府正面海域、&lt;br&gt;南西諸島沖、及び東部オリョール海へ展開、同海域の敵艦隊を撃滅し、節分の制海権を確保せよ！</DetailSource>
+		<DetailValue>1함대에 구축함 2척을 포함하는 4척으로 1-1, 1-4, 2-3 보스전 S승</DetailValue>
+	</Quest>
+	<Quest>
+		<ID>653</ID>
+		<NameSource>節分特別任務：節分準備！</NameSource>
+		<NameValue>절분 특별 임무: 절분 준비!</NameValue>
+		<DetailSource>「20.3cm連装砲(無印)」を二つ廃棄、家具コイン5,000と「12cm単装砲」「零式水上偵察機」各二つを準備せよ！　※任務達成後、用意した家具コイン及び必要装備(低改修値のもの優先)は消費します。</DetailSource>
+		<DetailValue>가구코인 5000, 12cm단장포 2개, 영식수상정찰기 2개를 소지한 상태로 20.3cm연장포 두개 폐기 (가구코인과 장비는 달성 후 소멸, 개수치가 낮은 장비부터 소멸)</DetailValue>
+	</Quest>
+	<Quest>
+		<ID>655</ID>
+		<NameSource>「彩雲」輸送分解</NameSource>
+		<NameValue>사이운 수송 분해</NameValue>
+		<DetailSource>彩雲分解任務：「零式水上偵察機」一つを廃棄、開発資材x20と「彩雲」一つを準備せよ！&lt;br&gt;※任務達成後、用意した開発資材及び必要装備(低改修値のもの優先)は消費します。</DetailSource>
+		<DetailValue>사이운 1개와 개발자재 20개를 소지한 상태로 영식수상정찰기 하나 폐기 (개발자재와 장비는 달성 후 소멸, 개수치가 낮은 장비부터 소멸)</DetailValue>
+	</Quest>
+	<Quest>
+		<ID>845</ID>
+		<NameSource>敵大規模泊地の後方兵站線を分断せよ！</NameSource>
+		<NameValue>적 대규모 정박지의 후방 병참선을 분단하라!</NameValue>
+		<DetailSource>敵の大規模泊地の後方兵站線を分断する！敵泊地の北東にある敵離島拠点を攻撃し、同拠点を無力化、&lt;br&gt;補強兵站線を破壊することで、敵大規模泊地の防衛力低下を図れ！</DetailSource>
+		<DetailValue>E-3 이도서희 전투방 S승리? 2회</DetailValue>
+	</Quest>
+	<Quest>
+		<ID>846</ID>
+		<NameSource>潜水艦隊、中部海域の哨戒を実施せよ！</NameSource>
+		<NameValue>잠수 함대, 중부해역의 초계를 실시하라!</NameValue>
+		<DetailSource>潜水艦を旗艦とし、4隻以上の有力な潜水艦を配備した第一艦隊、精鋭潜水艦隊で&lt;br&gt;中部海域哨戒線に進出、回航中の敵空母を捕捉、これを襲撃せよ！</DetailSource>
+		<DetailValue>잠수함 4척 기함, 나머지 자유편성 함대로 6-1 A승리 이상</DetailValue>
+	</Quest>
+	<Quest>
+		<ID>848</ID>
+		<NameSource>重装甲巡洋艦、鉄底海峡に突入せよ！</NameSource>
+		<NameValue>중장갑순양함, 철저해협에 돌입하라!</NameValue>
+		<DetailSource>第一艦隊旗艦に「Zara due」を配備、同艦隊で南方サブ島沖海域へ突入！同方面の敵艦隊群を突破し、鉄底海峡に展開する敵戦力を撃破せよ！</DetailSource>
+		<DetailValue>1함대에 Zara due를 배치하고 5-3 보스전 A승리 이상</DetailValue>
+	</Quest>
+	<Quest>
+		<ID>657</ID>
+		<NameSource>春の準備任務：桃の節句準備！</NameSource>
+		<NameValue>봄의 준비 임무: 복숭아의 명절 준비!</NameValue>
+		<DetailSource>春の準備任務：「14cm単装砲」を二つ廃棄、家具コイン5,000と「九九式艦爆」「61cm三連装魚雷」各二つを準備せよ！　※任務達成後、用意した家具コイン及び必要装備(低改修値のもの優先)は消費します。</DetailSource>
+		<DetailValue>가구코인 5000, 99식 함상폭격기 2개, 61cm 3연장어뢰 2개를 소지한 상태로 14cm 단장포 2개 폐기 (가구코인과 장비는 달성후 소멸, 개수치가 낮은 장비부터 소멸)</DetailValue>
+	</Quest>
+	<Quest>
+		<ID>847</ID>
+		<NameSource>春の準備任務：桃の節句準備を完遂せよ！</NameSource>
+		<NameValue>봄의 준비 임무: 복숭아의 명절 준비를 완수하라!</NameValue>
+		<DetailSource>春の準備任務：艦隊を東部オリョール海に反復出撃、同方面敵艦隊を覆滅し、&lt;br&gt;同海域周辺の制海権を完全に確保、桃の節句を迎える準備を完遂せよ！</DetailSource>
+		<DetailValue>2-3 보스전 S승리 5회</DetailValue>
+	</Quest>
+	<Quest>
+		<ID>658</ID>
+		<NameSource>潜水艦武装の強化</NameSource>
+		<NameValue>잠수함 무장 강화</NameValue>
+		<DetailSource>「61cm三連装魚雷」を四つ廃棄、開発資材x120と「61cm四連装(酸素)魚雷」「九三式水中聴音機」各三つを準備せよ！　※任務達成後、用意した開発資材及び必要装備(低改修値のもの優先)は消費します。</DetailSource>
+		<DetailValue>개발자재 120개, 61cm 4연장(산소)어뢰 3개, 94식 소나 3개를 소지한 상태로 61cm 3연장어뢰 4개 폐기 (개발자재와 장비는 달성후 소멸, 개수치가 낮은 장비부터 소멸)</DetailValue>
+	</Quest>
+	<Quest>
+		<ID>849</ID>
+		<NameSource>南西諸島方面の敵艦隊を撃破せよ！</NameSource>
+		<NameValue>남서제도방면의 적 함대를 격파하라!</NameValue>
+		<DetailSource>軽巡を旗艦とした艦隊を編成し、南西諸島防衛線、バシー島沖及び&lt;br&gt;東部オリョール海に展開、同海域に遊弋する敵艦隊を撃破せよ！</DetailSource>
+		<DetailValue>경순 기함으로 1-4, 2-2, 2-3 보스전 S승</DetailValue>
+	</Quest>
+	<Quest>
+		<ID>850</ID>
+		<NameSource>洋上航空戦力を拡充せよ！</NameSource>
+		<NameValue>해상 항공 전력을 확충하라!</NameValue>
+		<DetailSource>航空母艦、または水上機母艦を旗艦とした有力な艦隊を編成、北方AL海域、&lt;br&gt;西方海域カスガダマ沖 、中部海域MS諸島沖に展開し、各海域の敵艦隊を撃滅せよ！</DetailSource>
+		<DetailValue>항모 또는 수상기모함 기함으로 3-5, 4-4, 6-2 보스전 S승?</DetailValue>
+	</Quest>
+	<Quest>
+		<ID>659</ID>
+		<NameSource>精鋭「水戦」隊の新編成</NameSource>
+		<NameValue>정예 수상전투기 편대의 새 편성</NameValue>
+		<DetailSource>精鋭飛行隊の新編成：練度max及び改修maxの「二式水戦改」を一番スロットに搭載した秘書艦で、&lt;br&gt;「零式艦戦21型」x2「瑞雲」x2を廃棄！　※新飛行隊を編成する「熟練搭乗員」が必要です。</DetailSource>
+		<DetailValue>비서함에 숙련도max, 개수max인 "2식 수상전투기改"를 첫 슬롯에 장착하고 "영식 함상전투기21형"x2, "즈이운"x2 폐기 ※숙련탑승원 필요</DetailValue>
+	</Quest>
+	<Quest>
+		<ID>423</ID>
+		<NameSource>潜水艦派遣作戦による噴式技術の入手</NameSource>
+		<NameValue>잠수함 파견 작전으로 분식 기술의 입수</NameValue>
+		<DetailSource>鉄鋼5,000及びボーキサイト1,500を準備して、潜水艦派遣作戦により&lt;br&gt;噴式エンジン技術の導入に努めよ！※任務達成後、準備した資源は消費します。</DetailSource>
+		<DetailValue>강재 5000, 보크사이트 1500을 소지한 상태로 30번 원정 성공 ※임무 달성 후 준비한 자원은 사라집니다</DetailValue>
 	</Quest>
 </Quests>

@@ -201,13 +201,28 @@ namespace BeerViewer.Models
 		LandBasedFighter = 38,
 
 		/// <summary>
-		/// 噴式戦闘爆撃機 A (Jet Keiun Kai)
+		/// 噴式戦闘爆撃機 (Jet Keiun Kai)
 		/// </summary>
-		JetbombFighter_A = 39,
+		JetPowerededBomber1 = 39,
 
 		/// <summary>
-		/// 噴式戦闘爆撃機 B (Kikka Kai)
+		/// 噴式戦闘爆撃機 (Kikka Kai)
 		/// </summary>
-		JetBombFighter_B = 40,
+		JetPowerededBomber2 = 40,
+
+		/// <summary>
+		/// 輸送機材
+		/// </summary>
+		TransportEquipment = 41,
+
+		/// <summary>
+		/// 潜水艦装備
+		/// </summary>
+		SubmarineEquipment = 42,
+
+		/// <summary>
+		/// 水上戦闘機
+		/// </summary>
+		SeaplaneFighter = 43,
 	}
 }

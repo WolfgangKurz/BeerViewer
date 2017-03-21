@@ -399,9 +399,15 @@ namespace BeerViewer.Models.BattleInfo
 
 				this.Update(x.Data, false);
 			});
-			proxy.Register("/kcsapi/api_req_combined_battle/each_battle", e=>{
+			proxy.Register("/kcsapi/api_req_combined_battle/each_battle", e => {
 				var x = e.TryParse<combined_battle_each_battle>();
-				if(x == null) return;
+				if (x == null) return;
+
+				this.Update(x.Data, true);
+			});
+			proxy.Register("/kcsapi/api_req_combined_battle/each_battle_water", e => {
+				var x = e.TryParse<combined_battle_each_battle>();
+				if (x == null) return;
 
 				this.Update(x.Data, true);
 			});
@@ -446,6 +452,7 @@ namespace BeerViewer.Models.BattleInfo
 		}
 
 		#region Update From Battle SvData
+
 		public void Update(battle_midnight_battle data)
 		{
 			AutoSelectTab();
@@ -498,21 +505,30 @@ namespace BeerViewer.Models.BattleInfo
 			this.UpdateMaxHP(data.api_maxhps, data.api_maxhps_combined);
 			this.UpdateNowHP(data.api_nowhps, data.api_nowhps_combined);
 
-			this.UpdateUsedFlag(data.api_kouku?.api_stage2?.api_air_fire, data.api_kouku2?.api_stage2?.api_air_fire);
+			this.UpdateUsedFlag(
+				data.api_kouku?.api_stage2?.api_air_fire,
+				data.api_kouku2?.api_stage2?.api_air_fire
+			);
 			this.UpdateUsedFlag(data.api_support_info);
 
 			this.FirstFleet.CalcDamages(
+				data.api_air_base_injection.GetFirstFleetDamages(),
+				data.api_injection_kouku.GetFirstFleetDamages(),
 				data.api_kouku.GetFirstFleetDamages(),
 				data.api_kouku2.GetFirstFleetDamages()
 				);
 
 			this.SecondFleet.CalcDamages(
+				data.api_air_base_injection.GetSecondFleetDamages(),
+				data.api_injection_kouku.GetSecondFleetDamages(),
 				data.api_kouku.GetSecondFleetDamages(),
 				data.api_kouku2.GetSecondFleetDamages()
 				);
 
 			this.Enemies.CalcDamages(
-				data.api_air_base_attack.GetEnemyDamages(),
+				data.api_air_base_injection.GetEnemyDamages(),
+				data.api_injection_kouku.GetEnemyDamages(),
+				data.api_air_base_attack.GetEachFirstEnemyDamages(),
 				data.api_support_info.GetEnemyDamages(),
 				data.api_kouku.GetEnemyDamages(),
 				data.api_kouku2.GetEnemyDamages()
@@ -539,12 +555,16 @@ namespace BeerViewer.Models.BattleInfo
 			this.UpdateUsedFlag(data.api_support_info);
 
 			this.FirstFleet.CalcDamages(
+				data.api_air_base_injection.GetFirstFleetDamages(),
+				data.api_injection_kouku.GetFirstFleetDamages(),
 				data.api_kouku.GetFirstFleetDamages(),
 				data.api_hougeki2.GetFriendDamages(),
 				data.api_hougeki3.GetFriendDamages()
 			);
 
 			this.SecondFleet.CalcDamages(
+				data.api_air_base_injection.GetSecondFleetDamages(),
+				data.api_injection_kouku.GetSecondFleetDamages(),
 				data.api_kouku.GetSecondFleetDamages(),
 				data.api_opening_taisen.GetFriendDamages(),
 				data.api_opening_atack.GetFriendDamages(),
@@ -553,7 +573,9 @@ namespace BeerViewer.Models.BattleInfo
 			);
 
 			this.Enemies.CalcDamages(
-				data.api_air_base_attack.GetEnemyDamages(),
+				data.api_air_base_injection.GetEnemyDamages(),
+				data.api_injection_kouku.GetEnemyDamages(),
+				data.api_air_base_attack.GetEachFirstEnemyDamages(),
 				data.api_support_info.GetEnemyDamages(),
 				data.api_kouku.GetEnemyDamages(),
 				data.api_opening_taisen.GetEnemyDamages(),
@@ -584,12 +606,16 @@ namespace BeerViewer.Models.BattleInfo
 			this.UpdateUsedFlag(data.api_support_info);
 
 			this.FirstFleet.CalcDamages(
+				data.api_air_base_injection.GetFirstFleetDamages(),
+				data.api_injection_kouku.GetFirstFleetDamages(),
 				data.api_kouku.GetFirstFleetDamages(),
 				data.api_hougeki1.GetFriendDamages(),
 				data.api_hougeki2.GetFriendDamages()
 				);
 
 			this.SecondFleet.CalcDamages(
+				data.api_air_base_injection.GetSecondFleetDamages(),
+				data.api_injection_kouku.GetSecondFleetDamages(),
 				data.api_kouku.GetSecondFleetDamages(),
 				data.api_opening_taisen.GetFriendDamages(),
 				data.api_opening_atack.GetFriendDamages(),
@@ -598,7 +624,9 @@ namespace BeerViewer.Models.BattleInfo
 				);
 
 			this.Enemies.CalcDamages(
-				data.api_air_base_attack.GetEnemyDamages(),
+				data.api_air_base_injection.GetEnemyDamages(),
+				data.api_injection_kouku.GetEnemyDamages(),
+				data.api_air_base_attack.GetEachFirstEnemyDamages(),
 				data.api_support_info.GetEnemyDamages(),
 				data.api_kouku.GetEnemyDamages(),
 				data.api_opening_taisen.GetEnemyDamages(),
@@ -629,9 +657,9 @@ namespace BeerViewer.Models.BattleInfo
 				.Where(x => !x.Situation.HasFlag(ShipSituation.Tow) && !x.Situation.HasFlag(ShipSituation.Evacuation))
 				.Sum(x => x.BeforeNowHP);//리스트 갱신하기전에 아군 HP최대값을 저장
 
-			this.UpdateFleets(data.api_deck_id, data);
-			this.UpdateMaxHP(data.api_maxhps, data.api_maxhps_combined);
-			this.UpdateNowHP(data.api_nowhps, data.api_nowhps_combined);
+			// this.UpdateFleets(data.api_deck_id, data);
+			// this.UpdateMaxHP(data.api_maxhps, data.api_maxhps_combined);
+			// this.UpdateNowHP(data.api_nowhps, data.api_nowhps_combined);
 
 			this.UpdateUsedFlag(data.api_flare_pos, data.api_touch_plane);
 
@@ -681,6 +709,8 @@ namespace BeerViewer.Models.BattleInfo
 			this.UpdateUsedFlag(data.api_kouku?.api_stage2?.api_air_fire);
 
 			this.FirstFleet.CalcPracticeDamages(
+				data.api_air_base_injection.GetFirstFleetDamages(),
+				data.api_injection_kouku.GetFirstFleetDamages(),
 				data.api_kouku.GetFirstFleetDamages(),
 				data.api_opening_taisen.GetFriendDamages(),
 				data.api_opening_atack.GetFriendDamages(),
@@ -690,6 +720,8 @@ namespace BeerViewer.Models.BattleInfo
 				);
 
 			this.Enemies.CalcPracticeDamages(
+				data.api_air_base_injection.GetEnemyDamages(),
+				data.api_injection_kouku.GetEnemyDamages(),
 				data.api_kouku.GetEnemyDamages(),
 				data.api_opening_taisen.GetEnemyDamages(),
 				data.api_opening_atack.GetEnemyDamages(),
@@ -737,16 +769,23 @@ namespace BeerViewer.Models.BattleInfo
 			this.UpdateMaxHP(data.api_maxhps);
 			this.UpdateNowHP(data.api_nowhps);
 
-			this.UpdateUsedFlag(data.api_kouku?.api_stage2?.api_air_fire, data.api_kouku2?.api_stage2?.api_air_fire);
+			this.UpdateUsedFlag(
+				data.api_kouku?.api_stage2?.api_air_fire,
+				data.api_kouku2?.api_stage2?.api_air_fire
+			);
 			this.UpdateUsedFlag(data.api_support_info);
 
 			this.FirstFleet.CalcDamages(
+				data.api_air_base_injection.GetFirstFleetDamages(),
+				data.api_injection_kouku.GetFirstFleetDamages(),
 				data.api_kouku.GetFirstFleetDamages(),
 				data.api_kouku2.GetFirstFleetDamages()
 				);
 
 			this.Enemies.CalcDamages(
-				data.api_air_base_attack.GetEnemyDamages(),
+				data.api_air_base_injection.GetEnemyDamages(),
+				data.api_injection_kouku.GetEnemyDamages(),
+				data.api_air_base_attack.GetEachFirstEnemyDamages(),
 				data.api_support_info.GetEnemyDamages(),    //将来的に増える可能性を想定して追加しておく
 				data.api_kouku.GetEnemyDamages(),
 				data.api_kouku2.GetEnemyDamages()
@@ -773,6 +812,8 @@ namespace BeerViewer.Models.BattleInfo
 			this.UpdateUsedFlag(data.api_support_info);
 
 			this.FirstFleet.CalcDamages(
+				data.api_air_base_injection.GetFirstFleetDamages(),
+				data.api_injection_kouku.GetFirstFleetDamages(),
 				data.api_kouku.GetFirstFleetDamages(),
 				data.api_opening_taisen.GetFriendDamages(),
 				data.api_opening_atack.GetFriendDamages(),
@@ -782,7 +823,9 @@ namespace BeerViewer.Models.BattleInfo
 				);
 
 			this.Enemies.CalcDamages(
-				data.api_air_base_attack.GetEnemyDamages(),
+				data.api_air_base_injection.GetEnemyDamages(),
+				data.api_injection_kouku.GetEnemyDamages(),
+				data.api_air_base_attack.GetEachFirstEnemyDamages(),
 				data.api_support_info.GetEnemyDamages(),
 				data.api_kouku.GetEnemyDamages(),
 				data.api_opening_taisen.GetEnemyDamages(),
@@ -811,10 +854,14 @@ namespace BeerViewer.Models.BattleInfo
 			this.UpdateUsedFlag(data.api_kouku?.api_stage2?.api_air_fire);
 
 			this.FirstFleet.CalcDamages(
+				data.api_air_base_injection.GetFirstFleetDamages(),
+				data.api_injection_kouku.GetFirstFleetDamages(),
 				data.api_kouku.GetFirstFleetDamages()
 			);
 			this.Enemies.CalcDamages(
-				data.api_air_base_attack.GetEnemyDamages()
+				data.api_air_base_injection.GetEnemyDamages(),
+				data.api_injection_kouku.GetEnemyDamages(),
+				data.api_air_base_attack.GetEachFirstEnemyDamages()
 			);
 
 			this.FriendAirSupremacy = data.api_kouku.GetAirSupremacy();
@@ -837,14 +884,20 @@ namespace BeerViewer.Models.BattleInfo
 			this.UpdateUsedFlag(data.api_kouku?.api_stage2?.api_air_fire);
 
 			this.FirstFleet.CalcDamages(
+				data.api_air_base_injection.GetFirstFleetDamages(),
+				data.api_injection_kouku.GetFirstFleetDamages(),
 				data.api_kouku.GetFirstFleetDamages()
 			);
 			this.SecondFleet.CalcDamages(
+				data.api_air_base_injection.GetSecondFleetDamages(),
+				data.api_injection_kouku.GetSecondFleetDamages(),
 				data.api_kouku.GetSecondFleetDamages()
 			);
 
 			this.Enemies.CalcDamages(
-				data.api_air_base_attack.GetEnemyDamages()
+				data.api_air_base_injection.GetEnemyDamages(),
+				data.api_injection_kouku.GetEnemyDamages(),
+				data.api_air_base_attack.GetEachFirstEnemyDamages()
 			);
 
 			this.FriendAirSupremacy = data.api_kouku.GetAirSupremacy();
@@ -870,40 +923,52 @@ namespace BeerViewer.Models.BattleInfo
 			if (isCombined)
 			{
 				this.FirstFleet.CalcDamages(
+					data.api_air_base_injection.GetFirstFleetDamages(),
+					data.api_injection_kouku.GetFirstFleetDamages(),
 					data.api_kouku.GetFirstFleetDamages(),
 					data.api_opening_taisen.GetEachFirstFriendDamages(),
 					data.api_opening_atack.GetEachFirstFriendDamages(),
 					data.api_hougeki1.GetEachFirstFriendDamages(),
+					data.api_hougeki2.GetEachSecondFriendDamages(),
 					data.api_raigeki.GetEachFirstFriendDamages(),
 					data.api_hougeki3.GetEachFirstFriendDamages()
 				);
 
 				this.SecondFleet.CalcDamages(
+					data.api_air_base_injection.GetSecondFleetDamages(),
+					data.api_injection_kouku.GetSecondFleetDamages(),
 					data.api_kouku.GetSecondFleetDamages(),
 					data.api_opening_taisen.GetEachSecondFriendDamages(),
 					data.api_opening_atack.GetEachSecondFriendDamages(),
+					data.api_hougeki1.GetEachFirstFriendDamages(),
 					data.api_hougeki2.GetEachSecondFriendDamages(),
 					data.api_raigeki.GetEachSecondFriendDamages(),
 					data.api_hougeki3.GetEachSecondFriendDamages()
 				);
 
 				this.Enemies.CalcDamages(
+					data.api_air_base_injection.GetEnemyDamages(),
+					data.api_injection_kouku.GetEnemyDamages(),
 					data.api_air_base_attack.GetEachFirstEnemyDamages(),
 					data.api_support_info.GetEachFirstEnemyDamages(),
 					data.api_kouku.GetEnemyDamages(),
 					data.api_opening_taisen.GetEachFirstEnemyDamages(),
 					data.api_opening_atack.GetEachFirstEnemyDamages(),
 					data.api_hougeki1.GetEachFirstEnemyDamages(),
+					data.api_hougeki2.GetEachSecondFriendDamages(),
 					data.api_raigeki.GetEachFirstEnemyDamages(),
 					data.api_hougeki3.GetEachFirstEnemyDamages()
 				);
 
 				this.SecondEnemies.CalcDamages(
+					data.api_air_base_injection.GetSecondEnemyDamages(),
+					data.api_injection_kouku.GetSecondEnemyDamages(),
 					data.api_air_base_attack.GetEachSecondEnemyDamages(),
 					data.api_support_info.GetEachSecondEnemyDamages(),
 					data.api_kouku.GetSecondEnemyDamages(),
 					data.api_opening_taisen.GetEachSecondEnemyDamages(),
 					data.api_opening_atack.GetEachSecondEnemyDamages(),
+					data.api_hougeki1.GetEachFirstEnemyDamages(),
 					data.api_hougeki2.GetEachSecondEnemyDamages(),
 					data.api_raigeki.GetEachSecondEnemyDamages(),
 					data.api_hougeki3.GetEachSecondEnemyDamages()
@@ -912,6 +977,8 @@ namespace BeerViewer.Models.BattleInfo
 			else
 			{
 				this.FirstFleet.CalcDamages(
+					data.api_air_base_injection.GetFirstFleetDamages(),
+					data.api_injection_kouku.GetFirstFleetDamages(),
 					data.api_kouku.GetFirstFleetDamages(),
 					data.api_opening_taisen.GetEachFirstFriendDamages(),
 					data.api_opening_atack.GetEachFirstFriendDamages(),
@@ -922,6 +989,8 @@ namespace BeerViewer.Models.BattleInfo
 				);
 
 				this.Enemies.CalcDamages(
+					data.api_air_base_injection.GetEnemyDamages(),
+					data.api_injection_kouku.GetEnemyDamages(),
 					data.api_air_base_attack.GetEachFirstEnemyDamages(),
 					data.api_support_info.GetEachFirstEnemyDamages(),
 					data.api_kouku.GetEnemyDamages(),
@@ -934,6 +1003,8 @@ namespace BeerViewer.Models.BattleInfo
 				);
 
 				this.SecondEnemies.CalcDamages(
+					data.api_air_base_injection.GetSecondEnemyDamages(),
+					data.api_injection_kouku.GetSecondEnemyDamages(),
 					data.api_air_base_attack.GetEachSecondEnemyDamages(),
 					data.api_support_info.GetEachSecondEnemyDamages(),
 					data.api_kouku.GetSecondEnemyDamages(),

@@ -127,6 +127,7 @@
     <Compile Include="Models\BattleInfo\MapCellData.cs" />
     <Compile Include="Models\DynamicJson.cs" />
     <Compile Include="Core\OpenDB.cs" />
+    <Compile Include="Models\ImageAssets.cs" />
     <Compile Include="Models\QuestNameTable.cs" />
     <Compile Include="Models\Raw\kcsapi_battleresult.cs" />
     <Compile Include="Models\Raw\kcsapi_mst_mapcell.cs" />
@@ -575,6 +576,11 @@
   <ItemGroup>
     <Content Include="Assets\icon.ico" />
     <Content Include="Assets\DesktopToast.dll" />
+    <None Include="Resources\slotitem_JetPowerededBomber2.png" />
+    <None Include="Resources\slotitem_JetPowerededBomber1.png" />
+    <None Include="Resources\slotitem_TransportEquipment.png" />
+    <None Include="Resources\slotitem_SubmarineEquipment.png" />
+    <None Include="Resources\slotitem_SeaplaneFighter.png" />
     <None Include="Resources\Volume.png" />
     <None Include="Resources\Screenshot.png" />
     <None Include="Resources\Refresh.png" />

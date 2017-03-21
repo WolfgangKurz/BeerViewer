@@ -149,4 +149,37 @@
 	}
 
 	#endregion
+
+	#region 噴式基地航空隊攻撃
+
+	public class Api_Air_Base_Injection
+	{
+		public int[][] api_plane_from { get; set; }
+		public Api_Air_Base_Data[] api_air_base_data { get; set; }
+		public Api_Stage1 api_stage1 { get; set; }
+		public Api_Stage2 api_stage2 { get; set; }
+		public Api_Stage3 api_stage3 { get; set; }
+		public Api_Stage3 api_stage3_combined { get; set; }
+	}
+
+	public class Api_Air_Base_Data
+	{
+		public int api_mst_id { get; set; }
+		public int api_count { get; set; }
+	}
+
+	#endregion
+
+	#region 噴式基地航空隊
+
+	public class Api_Injection_Kouku
+	{
+		public int[][] api_plane_from { get; set; }
+		public Api_Stage1 api_stage1 { get; set; }
+		public Api_Stage2 api_stage2 { get; set; }
+		public Api_Stage3 api_stage3 { get; set; }
+		public Api_Stage3 api_stage3_combined { get; set; }
+	}
+
+	#endregion
 }

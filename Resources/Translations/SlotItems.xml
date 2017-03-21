@@ -1120,4 +1120,52 @@
 		<Source>F6F-3</Source>
 		<Value>F6F-3</Value>
 	</SlotItem>
+	<SlotItem>
+		<Source>瑞雲(六三一空)</Source>
+		<Value>즈이운(631 해군항공대)</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>晴嵐(六三一空)</Source>
+		<Value>세이란(631 해군항공대)</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>彩雲(輸送用分解済)</Source>
+		<Value>사이운(운송용분해됨)</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>潜水艦搭載電探&amp;水防式望遠鏡</Source>
+		<Value>잠수함탑재전탐&amp;수방식망원경</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>潜水艦搭載電探&amp;逆探(E27)</Source>
+		<Value>잠수함탑재전탐&amp;역탐(E27)</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>彩雲(東カロリン空)</Source>
+		<Value>사이운(동부 캐롤라인 항공대)</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>深海潜水下駄履き</Source>
+		<Value>심해 잠수함 수상기</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>後期型艦首魚雷(6門)</Source>
+		<Value>후기형 함수어뢰(6문)</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>熟練聴音員+後期型艦首魚雷(6門)</Source>
+		<Value>숙련청음원+후기형 함수어뢰(6문)</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>艦本新設計 増設バルジ(中型艦)</Source>
+		<Value>함본신설계 증설벌지(중형함)</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>Ro.44水上戦闘機bis</Source>
+		<Value>Ro.44 수상전투기 bis</Value>
+	</SlotItem>
+	<SlotItem>
+		<Source>二式水戦改(熟練)</Source>
+		<Value>2식 수상전투기改(숙련)</Value>
+	</SlotItem>
 </SlotItems>

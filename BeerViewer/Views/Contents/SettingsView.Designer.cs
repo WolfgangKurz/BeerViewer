@@ -69,6 +69,7 @@
 			this.comboFlashQuality = new BeerViewer.Views.Controls.FlatComboBox();
 			this.labelFlashQualityDesc = new System.Windows.Forms.Label();
 			this.chkUseOpenDB = new BeerViewer.Views.Controls.FlatCheckBox();
+			this.chkRefreshImmediately = new BeerViewer.Views.Controls.FlatCheckBox();
 			this.layoutMain.SuspendLayout();
 			this.optButtons.SuspendLayout();
 			this.groupLayout.SuspendLayout();
@@ -97,7 +98,7 @@
 			this.layoutMain.Margin = new System.Windows.Forms.Padding(0);
 			this.layoutMain.Name = "layoutMain";
 			this.layoutMain.Padding = new System.Windows.Forms.Padding(4);
-			this.layoutMain.Size = new System.Drawing.Size(269, 598);
+			this.layoutMain.Size = new System.Drawing.Size(269, 619);
 			this.layoutMain.TabIndex = 1;
 			// 
 			// optButtons
@@ -171,6 +172,7 @@
 			this.groupLayout.AutoSize = true;
 			this.groupLayout.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
 			this.groupLayout.Controls.Add(this.chkAlwaysOnTop);
+			this.groupLayout.Controls.Add(this.chkRefreshImmediately);
 			this.groupLayout.Controls.Add(this.optZoom);
 			this.groupLayout.Controls.Add(this.optMainLayout);
 			this.groupLayout.Controls.Add(this.chkContentLayout);
@@ -182,7 +184,7 @@
 			this.groupLayout.Location = new System.Drawing.Point(4, 46);
 			this.groupLayout.Margin = new System.Windows.Forms.Padding(0, 10, 0, 0);
 			this.groupLayout.Name = "groupLayout";
-			this.groupLayout.Size = new System.Drawing.Size(261, 218);
+			this.groupLayout.Size = new System.Drawing.Size(261, 239);
 			this.groupLayout.TabIndex = 2;
 			// 
 			// chkAlwaysOnTop
@@ -202,7 +204,7 @@
 			this.optZoom.AutoSize = true;
 			this.optZoom.Controls.Add(this.labelZoom);
 			this.optZoom.Controls.Add(this.comboZoom);
-			this.optZoom.Location = new System.Drawing.Point(0, 21);
+			this.optZoom.Location = new System.Drawing.Point(0, 42);
 			this.optZoom.Margin = new System.Windows.Forms.Padding(0);
 			this.optZoom.Name = "optZoom";
 			this.optZoom.Size = new System.Drawing.Size(239, 30);
@@ -236,7 +238,7 @@
 			this.optMainLayout.AutoSize = true;
 			this.optMainLayout.Controls.Add(this.labelMainLayout);
 			this.optMainLayout.Controls.Add(this.comboMainLayout);
-			this.optMainLayout.Location = new System.Drawing.Point(0, 51);
+			this.optMainLayout.Location = new System.Drawing.Point(0, 72);
 			this.optMainLayout.Margin = new System.Windows.Forms.Padding(0);
 			this.optMainLayout.Name = "optMainLayout";
 			this.optMainLayout.Size = new System.Drawing.Size(175, 30);
@@ -270,7 +272,7 @@
 			this.chkContentLayout.AutoSize = true;
 			this.chkContentLayout.Checked = true;
 			this.chkContentLayout.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.chkContentLayout.Location = new System.Drawing.Point(3, 84);
+			this.chkContentLayout.Location = new System.Drawing.Point(3, 105);
 			this.chkContentLayout.Name = "chkContentLayout";
 			this.chkContentLayout.Size = new System.Drawing.Size(223, 15);
 			this.chkContentLayout.TabIndex = 26;
@@ -282,7 +284,7 @@
 			this.chkBattleInfoLayout.AutoSize = true;
 			this.chkBattleInfoLayout.Checked = true;
 			this.chkBattleInfoLayout.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.chkBattleInfoLayout.Location = new System.Drawing.Point(3, 105);
+			this.chkBattleInfoLayout.Location = new System.Drawing.Point(3, 126);
 			this.chkBattleInfoLayout.Name = "chkBattleInfoLayout";
 			this.chkBattleInfoLayout.Size = new System.Drawing.Size(252, 15);
 			this.chkBattleInfoLayout.TabIndex = 25;
@@ -294,7 +296,7 @@
 			this.optViewRangeType.AutoSize = true;
 			this.optViewRangeType.Controls.Add(this.labelViewRangeType);
 			this.optViewRangeType.Controls.Add(this.comboViewRangeType);
-			this.optViewRangeType.Location = new System.Drawing.Point(0, 133);
+			this.optViewRangeType.Location = new System.Drawing.Point(0, 154);
 			this.optViewRangeType.Margin = new System.Windows.Forms.Padding(0, 10, 0, 0);
 			this.optViewRangeType.Name = "optViewRangeType";
 			this.optViewRangeType.Size = new System.Drawing.Size(247, 30);
@@ -327,7 +329,7 @@
 			this.labelViewRangeDescription.AutoSize = true;
 			this.labelViewRangeDescription.Font = new System.Drawing.Font("맑은 고딕", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
 			this.labelViewRangeDescription.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(194)))), ((int)(((byte)(194)))), ((int)(((byte)(194)))));
-			this.labelViewRangeDescription.Location = new System.Drawing.Point(13, 163);
+			this.labelViewRangeDescription.Location = new System.Drawing.Point(13, 184);
 			this.labelViewRangeDescription.Margin = new System.Windows.Forms.Padding(13, 0, 3, 0);
 			this.labelViewRangeDescription.Name = "labelViewRangeDescription";
 			this.labelViewRangeDescription.Size = new System.Drawing.Size(9, 19);
@@ -341,7 +343,7 @@
 			this.optViewRangeFleet.Controls.Add(this.labelViewRangeFleet);
 			this.optViewRangeFleet.Controls.Add(this.chkViewRangeCalcFirstFleet);
 			this.optViewRangeFleet.Controls.Add(this.chkViewRangeCalcSecondFleet);
-			this.optViewRangeFleet.Location = new System.Drawing.Point(0, 195);
+			this.optViewRangeFleet.Location = new System.Drawing.Point(0, 216);
 			this.optViewRangeFleet.Margin = new System.Windows.Forms.Padding(0, 13, 0, 0);
 			this.optViewRangeFleet.Name = "optViewRangeFleet";
 			this.optViewRangeFleet.Size = new System.Drawing.Size(261, 23);
@@ -393,7 +395,7 @@
 			this.groupNotification.Controls.Add(this.chkRepairNotify);
 			this.groupNotification.Controls.Add(this.chkConditionNotify);
 			this.groupNotification.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-			this.groupNotification.Location = new System.Drawing.Point(4, 274);
+			this.groupNotification.Location = new System.Drawing.Point(4, 295);
 			this.groupNotification.Margin = new System.Windows.Forms.Padding(0, 10, 0, 0);
 			this.groupNotification.Name = "groupNotification";
 			this.groupNotification.Size = new System.Drawing.Size(209, 84);
@@ -458,7 +460,7 @@
 			this.groupBattleInfo.Controls.Add(this.chkCriticalNotify);
 			this.groupBattleInfo.Controls.Add(this.chkBattleEndNotify);
 			this.groupBattleInfo.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-			this.groupBattleInfo.Location = new System.Drawing.Point(4, 368);
+			this.groupBattleInfo.Location = new System.Drawing.Point(4, 389);
 			this.groupBattleInfo.Margin = new System.Windows.Forms.Padding(0, 10, 0, 0);
 			this.groupBattleInfo.Name = "groupBattleInfo";
 			this.groupBattleInfo.Size = new System.Drawing.Size(261, 136);
@@ -545,7 +547,7 @@
 			this.groupETC.Controls.Add(this.labelFlashQualityDesc);
 			this.groupETC.Controls.Add(this.chkUseOpenDB);
 			this.groupETC.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-			this.groupETC.Location = new System.Drawing.Point(4, 514);
+			this.groupETC.Location = new System.Drawing.Point(4, 535);
 			this.groupETC.Margin = new System.Windows.Forms.Padding(0, 10, 0, 0);
 			this.groupETC.Name = "groupETC";
 			this.groupETC.Size = new System.Drawing.Size(197, 80);
@@ -610,6 +612,19 @@
 			this.chkUseOpenDB.TabIndex = 23;
 			this.chkUseOpenDB.Text = "OpenDB 서버에 데이터를 전송";
 			this.chkUseOpenDB.UseVisualStyleBackColor = false;
+			// 
+			// chkRefreshImmediately
+			// 
+			this.chkRefreshImmediately.AutoSize = true;
+			this.chkRefreshImmediately.Checked = true;
+			this.chkRefreshImmediately.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.chkRefreshImmediately.Location = new System.Drawing.Point(3, 24);
+			this.chkRefreshImmediately.Name = "chkRefreshImmediately";
+			this.chkRefreshImmediately.Size = new System.Drawing.Size(231, 15);
+			this.chkRefreshImmediately.TabIndex = 27;
+			this.chkRefreshImmediately.Tag = "chkRefreshI​mmediately";
+			this.chkRefreshImmediately.Text = "시작화면으로 가지 않고 즉시 새로고침";
+			this.chkRefreshImmediately.UseVisualStyleBackColor = false;
 			// 
 			// SettingsView
 			// 
@@ -690,5 +705,6 @@
 		private Controls.FlatCheckBox chkUseOpenDB;
 		private Controls.FlatCheckBox chkBattleInfoLayout;
 		private Controls.FlatCheckBox chkContentLayout;
+		private Controls.FlatCheckBox chkRefreshImmediately;
 	}
 }

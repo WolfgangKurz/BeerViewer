@@ -124,6 +124,46 @@ namespace BeerViewer.Models.BattleInfo.Raw
 		}
 		#endregion
 
+		#region 분식기지항공대공격
+
+		public static FleetDamages GetFirstFleetDamages(this Api_Air_Base_Injection injection)
+			=> injection?.api_stage3?.api_fdam.GetDamages()
+			   ?? defaultValue;
+
+		public static FleetDamages GetSecondFleetDamages(this Api_Air_Base_Injection injection)
+			=> injection?.api_stage3_combined?.api_fdam?.GetDamages()
+			   ?? defaultValue;
+
+		public static FleetDamages GetEnemyDamages(this Api_Air_Base_Injection injection)
+			=> injection?.api_stage3?.api_edam?.GetDamages()
+			   ?? defaultValue;
+
+		public static FleetDamages GetSecondEnemyDamages(this Api_Air_Base_Injection injection)
+			=> injection?.api_stage3_combined?.api_edam?.GetDamages()
+			   ?? defaultValue;
+
+		#endregion
+
+		#region 분식기지항공대
+
+		public static FleetDamages GetFirstFleetDamages(this Api_Injection_Kouku kouku)
+			=> kouku?.api_stage3?.api_fdam.GetDamages()
+			   ?? defaultValue;
+
+		public static FleetDamages GetSecondFleetDamages(this Api_Injection_Kouku kouku)
+			=> kouku?.api_stage3_combined?.api_fdam?.GetDamages()
+			   ?? defaultValue;
+
+		public static FleetDamages GetEnemyDamages(this Api_Injection_Kouku kouku)
+			=> kouku?.api_stage3?.api_edam?.GetDamages()
+			   ?? defaultValue;
+
+		public static FleetDamages GetSecondEnemyDamages(this Api_Injection_Kouku kouku)
+			=> kouku?.api_stage3_combined?.api_edam?.GetDamages()
+			   ?? defaultValue;
+
+		#endregion
+
 		#region 뇌격전
 		public static FleetDamages GetFriendDamages(this Raigeki raigeki)
 			=> raigeki?.api_fdam?.GetDamages()
