@@ -1,7 +1,7 @@
 맥주뷰어 (BeerViewer)
 --
 
-맥주뷰어는 DMM.com이 제공하는 웹게임 "함대컬렉션 ~칸코레~"를 태블릿에서도 즐길 수 있도록 돕는 툴입니다.
+맥주뷰어는 DMM.com이 제공하는 웹게임 "함대컬렉션 ～칸코레～"를 태블릿에서도 즐길 수 있도록 돕는 툴입니다.
 
 내부 데이터 모델의 대다수 부분을 [KanColleViewer](https://github.com/Grabacr07/KanColleViewer/)를 참고했습니다.
 
