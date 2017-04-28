@@ -44,7 +44,7 @@ namespace BeerViewer.Forms.Controls
 						);
 						g.DrawString(
 							string.Format("[{0}] {1}", expedition.Id, expedition.RemainingText),
-							new Font(Constants.fontDefault.FontFamily, 8),
+							Constants.fontSmall,
 							Brushes.White,
 							new Point(this.ClientBound.Width / 2, -1),
 							new StringFormat { Alignment = StringAlignment.Center }

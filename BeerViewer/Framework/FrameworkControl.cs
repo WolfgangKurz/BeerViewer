@@ -196,7 +196,7 @@ namespace BeerViewer.Framework
 
 		public virtual bool OnMouseMove(Point pt)
 		{
-			if (this.Visible && this.Contains(pt))
+			if (this.Visible && this.ClientBound.Contains(pt))
 			{
 				this.IsHover = true;
 
@@ -209,7 +209,7 @@ namespace BeerViewer.Framework
 		}
 		public virtual bool OnMouseDown(Point pt)
 		{
-			if (this.Visible && this.Contains(pt))
+			if (this.Visible && this.ClientBound.Contains(pt))
 			{
 				this.IsActive = true;
 
@@ -223,7 +223,7 @@ namespace BeerViewer.Framework
 			bool prev = this.IsActive;
 			this.IsActive = false;
 
-			if (this.Visible && this.Contains(pt))
+			if (this.Visible && this.ClientBound.Contains(pt))
 			{
 				this.MouseUp?.Invoke(this, new MouseEventArgs(MouseButtons.None, 0, pt.X, pt.Y, 0));
 
@@ -248,7 +248,7 @@ namespace BeerViewer.Framework
 
 			g.TranslateTransform(this.X, this.Y);
 			g.Clip = new Region(this.ClientBound);
-			this.Paint?.Invoke(this, new PaintEventArgs(g, this.Bound));
+			this.Update(g);
 
 			g.Restore(state);
 		}
@@ -262,9 +262,17 @@ namespace BeerViewer.Framework
 		}
 
 		/// <summary>
+		/// Paint control
+		/// </summary>
+		public void Update(Graphics g)
+		{
+			this.Paint?.Invoke(this, new PaintEventArgs(g, this.Bound));
+		}
+
+		/// <summary>
 		/// Dispose allocated resources
 		/// </summary>
-		public void Dispose()
+		public virtual void Dispose()
 		{
 		}
 	}

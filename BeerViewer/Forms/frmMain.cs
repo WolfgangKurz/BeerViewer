@@ -107,6 +107,35 @@ namespace BeerViewer.Forms
 			});
 			ExpeditionBars.ForEach(x => this.Renderer.AddControl(x));
 			#endregion
+
+			#region Menu Name Rendering
+			this.Paint += (s, e) =>
+			{
+				var g = e.Graphics;
+				g.DrawString(
+					"Overview",
+					Constants.fontBig,
+					Brushes.White,
+					new Point(801 + 12, 28 + 2)
+				);
+				g.DrawLine(
+					Constants.penActiveFace,
+					new Point(801, 29 + 27),
+					new Point(this.ClientSize.Width - 2, 29 + 27)
+				);
+			};
+			#endregion
+
+			#region Fleet TabHost
+			var FleetTabHost = new TabHost(801, 29 + 28, 400, 24);
+			FleetTabHost.AddTab(new TabHost.TabItem("I", null));
+			FleetTabHost.AddTab(new TabHost.TabItem("II", null));
+			FleetTabHost.AddTab(new TabHost.TabItem("III", null));
+			FleetTabHost.AddTab(new TabHost.TabItem("IV", null));
+			this.Renderer.AddControl(FleetTabHost);
+
+			this.Resize += (s, e) => FleetTabHost.Width = this.ClientSize.Width - 801;
+			#endregion
 		}
 
 		protected override Rectangle CaptionSize(int Width, int Height)
