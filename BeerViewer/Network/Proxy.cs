@@ -6,11 +6,11 @@ using Nekoxy;
 
 namespace BeerViewer.Network
 {
-	internal partial class Proxy
+	public partial class Proxy
 	{
-		private static bool IsInDesignMode => (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
+		internal static bool IsInDesignMode => (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
 
-		private class ProxyHandler
+		internal class ProxyHandler
 		{
 			public string Where { get; set; }
 			public Action<Session> Handler { get; set; }
@@ -18,7 +18,7 @@ namespace BeerViewer.Network
 
 		public static Proxy Instance { get; } = new Proxy();
 
-		private List<ProxyHandler> Handlers;
+		internal List<ProxyHandler> Handlers { get; private set; }
 		private object HandlerLock { get; } = new object();
 
 		private Proxy()

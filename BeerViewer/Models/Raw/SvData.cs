@@ -7,6 +7,8 @@ using System.Text;
 using System.Web;
 using Nekoxy;
 
+using BeerViewer.Models.kcsapi;
+
 namespace BeerViewer.Models.Raw
 {
 	public class SvData : SvDataBase
@@ -88,6 +90,8 @@ namespace BeerViewer.Models.Raw
 	{
 		public NameValueCollection Request { get; private set; }
 		public bool IsSuccess => this.api_result == 1;
+
+		public kcsapi_deck[] Fleets => this.api_data_deck;
 
 		public SvData(T RawData) : base(RawData)
 		{

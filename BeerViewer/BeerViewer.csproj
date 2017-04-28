@@ -65,6 +65,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Framework\BorderlessWindow.cs">
       <SubType>Form</SubType>
@@ -80,15 +81,59 @@
     <Compile Include="Forms\frmMain.Designer.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\Enums\AdmiralRank.cs" />
+    <Compile Include="Models\Enums\ConditionType.cs" />
+    <Compile Include="Models\Enums\ShipSituation.cs" />
+    <Compile Include="Models\Expedition.cs" />
+    <Compile Include="Models\Experience.cs" />
+    <Compile Include="Models\Fleet.cs" />
+    <Compile Include="Models\Homeport.cs" />
     <Compile Include="Models\Enums\ShipSpeed.cs" />
-    <Compile Include="Models\Enums\SlotItemIcons.cs" />
-    <Compile Include="Models\Enums\SlotItemTypes.cs" />
+    <Compile Include="Models\Enums\SlotItemIconType.cs" />
+    <Compile Include="Models\Enums\SlotItemType.cs" />
+    <Compile Include="Models\Itemyard.cs" />
+    <Compile Include="Models\kcsapi\kcdapi_slot_deprive_unset_list.cs" />
+    <Compile Include="Models\kcsapi\kcsapi_combined_battle_battleresult.cs" />
+    <Compile Include="Models\kcsapi\kcsapi_createitem.cs" />
+    <Compile Include="Models\kcsapi\kcsapi_hensei_combined.cs" />
+    <Compile Include="Models\kcsapi\kcsapi_kdock_getship.cs" />
+    <Compile Include="Models\kcsapi\kcsapi_remodel_after_slot.cs" />
+    <Compile Include="Models\kcsapi\kcsapi_remodel_slot.cs" />
+    <Compile Include="Models\kcsapi\kcsapi_slot_deprive_ship_data.cs" />
+    <Compile Include="Models\kcsapi\kcsapi_basic.cs" />
+    <Compile Include="Models\kcsapi\kcsapi_charge.cs" />
+    <Compile Include="Models\kcsapi\kcsapi_charge_ship.cs" />
+    <Compile Include="Models\kcsapi\kcsapi_deck.cs" />
+    <Compile Include="Models\kcsapi\kcsapi_destroyitem2.cs" />
+    <Compile Include="Models\kcsapi\kcsapi_destroyship.cs" />
+    <Compile Include="Models\kcsapi\kcsapi_kdock.cs" />
+    <Compile Include="Models\kcsapi\kcsapi_material.cs" />
+    <Compile Include="Models\kcsapi\kcsapi_powerup.cs" />
+    <Compile Include="Models\kcsapi\kcsapi_require_info.cs" />
+    <Compile Include="Models\kcsapi\kcsapi_ship2.cs" />
+    <Compile Include="Models\kcsapi\kcsapi_ship3.cs" />
+    <Compile Include="Models\kcsapi\kcsapi_ship_deck.cs" />
+    <Compile Include="Models\kcsapi\kcsapi_slot_deprive.cs" />
+    <Compile Include="Models\kcsapi\kcsapi_slot_exchange_index.cs" />
+    <Compile Include="Models\kcsapi\kcsapi_slotitem.cs" />
+    <Compile Include="Models\kcsapi\kcsapi_useitem.cs" />
+    <Compile Include="Models\LimitedValue.cs" />
+    <Compile Include="Models\Materials.cs" />
+    <Compile Include="Models\ModernizableStatus.cs" />
+    <Compile Include="Models\Organization.cs" />
+    <Compile Include="Models\Raw\DisposableNotifier.cs" />
     <Compile Include="Models\Raw\Extensions.cs" />
     <Compile Include="Models\Raw\IIdentifiable.cs" />
     <Compile Include="Models\Raw\MasterTable.cs" />
+    <Compile Include="Models\Raw\MemberTable.cs" />
+    <Compile Include="Models\Raw\Notifier.cs" />
+    <Compile Include="Models\Raw\TimerNotifier.cs" />
+    <Compile Include="Models\Ship.cs" />
+    <Compile Include="Models\Wrapper\Admiral.cs" />
     <Compile Include="Models\Wrapper\MapArea.cs" />
     <Compile Include="Models\Wrapper\MapInfo.cs" />
     <Compile Include="Models\Wrapper\Mission.cs" />
+    <Compile Include="Models\Wrapper\ShipSlot.cs" />
     <Compile Include="Models\Wrapper\ShipType.cs" />
     <Compile Include="Models\kcsapi\kcsapi_mission.cs" />
     <Compile Include="Models\kcsapi\kcsapi_start2.cs" />
@@ -104,11 +149,13 @@
     <Compile Include="Models\Raw\SvData.cs" />
     <Compile Include="Models\Raw\SvDataBase.cs" />
     <Compile Include="Models\Wrapper\ShipInfo.cs" />
-    <Compile Include="Models\Wrapper\SlotItemType.cs" />
+    <Compile Include="Models\Wrapper\SlotItem.cs" />
+    <Compile Include="Models\Wrapper\SlotItemEquipType.cs" />
     <Compile Include="Models\Wrapper\SlotItemInfo.cs" />
+    <Compile Include="Models\Wrapper\UseItem.cs" />
     <Compile Include="Models\Wrapper\UseItemInfo.cs" />
     <Compile Include="Network\Proxy.cs" />
-    <Compile Include="Network\ProxySession.cs" />
+    <Compile Include="Network\ProxyExtension.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Forms\frmMain.resx">

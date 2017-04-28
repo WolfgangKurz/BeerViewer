@@ -1,6 +1,8 @@
-﻿namespace BeerViewer.Models.Raw
+﻿using BeerViewer.Models.kcsapi;
+
+namespace BeerViewer.Models.Raw
 {
-	public class SvDataBase
+	public class SvDataBase : Notifier
 	{
 		public int api_result { get; set; }
 		public string api_result_msg { get; set; }
@@ -15,6 +17,7 @@
 	public class SvDataBase<T> : SvDataBase
 	{
 		public T api_data { get; set; }
+		public kcsapi_deck[] api_data_deck { get; set; }
 
 		public SvDataBase(T RawData) : base()
 		{
@@ -23,6 +26,11 @@
 		public SvDataBase(SvDataBase<T> RawData) : base(RawData)
 		{
 			this.api_data = RawData.api_data;
+		}
+
+		internal void UpdateRawData(T rawData)
+		{
+			this.api_data = rawData;
 		}
 	}
 }

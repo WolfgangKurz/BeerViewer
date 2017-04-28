@@ -50,5 +50,12 @@ namespace BeerViewer.Models.Wrapper
 
 		public override string ToString()
 			=> $"ID = {this.Id}, Name = \"{this.Name}\", ShipType = \"{this.ShipType.Name}\"";
+
+
+		public static ShipInfo Empty { get; } = new ShipInfo(new kcsapi_mst_ship
+		{
+			api_id = 0,
+			api_name = "???"
+		});
 	}
 }

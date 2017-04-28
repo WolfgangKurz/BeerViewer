@@ -14,6 +14,8 @@ namespace BeerViewer.Framework
 
 		public void Initialize()
 		{
+			// Nothing to do
+			// Initialize dependency binaries
 		}
 	}
 }

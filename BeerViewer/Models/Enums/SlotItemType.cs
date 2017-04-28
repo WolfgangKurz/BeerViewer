@@ -1,6 +1,6 @@
 ﻿namespace BeerViewer.Models.Enums
 {
-	public enum SlotItemTypes
+	public enum SlotItemType
 	{
 		None = 0,
 		SmallCaliberMainGun = 1,
@@ -57,36 +57,5 @@
 		JetPowered_ReconPlane = 59,
 		LargeRader_II = 93,
 		CarrierBased_ReconPlane_II = 94,
-	}
-
-	public static class SlotItemTypeExtensions
-	{
-		public static bool IsNumerable(this SlotItemTypes type)
-		{
-			switch (type)
-			{
-				case SlotItemTypes.CarrierBased_ReconPlane:
-				case SlotItemTypes.CarrierBased_ReconPlane_II:
-				case SlotItemTypes.CarrierBased_Fighter:
-				case SlotItemTypes.CarrierBased_TorpedoBomber:
-				case SlotItemTypes.CarrierBased_DiveBomber:
-				case SlotItemTypes.ReconSeaplane:
-				case SlotItemTypes.SeaplaneBomber:
-				case SlotItemTypes.SeaplaneFighter:
-				case SlotItemTypes.Autogyro:
-				case SlotItemTypes.AntiSubmarinePatrolAircraft:
-				case SlotItemTypes.LargeFlyingBoat:
-				case SlotItemTypes.LandBased_Attacker:
-				case SlotItemTypes.Interceptor_Fighter:
-				case SlotItemTypes.JetPowered_Fighter:
-				case SlotItemTypes.JetPowered_FighterBomber:
-				case SlotItemTypes.JetPowered_Bomber:
-				case SlotItemTypes.JetPowered_ReconPlane:
-					return true;
-
-				default:
-					return false;
-			}
-		}
 	}
 }

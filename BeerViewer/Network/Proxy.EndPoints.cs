@@ -1,6 +1,6 @@
 ﻿namespace BeerViewer.Network
 {
-	internal partial class Proxy
+	public partial class Proxy
 	{
 		/// <summary>
 		/// "/kcsapi/api_start2" endpoint

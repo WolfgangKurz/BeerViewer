@@ -13,19 +13,19 @@ namespace BeerViewer.Models.Wrapper
 	public class SlotItemInfo : SvData<kcsapi_mst_slotitem>, IIdentifiable
 	{
 		#region For singleton
-		private SlotItemTypes? _Type;
-		private SlotItemIcons? _IconType;
+		private SlotItemType? _Type;
+		private SlotItemIconType? _IconType;
 		private int? _CategoryId;
 		#endregion
 
 		public int Id => this.api_data.api_id;
 		public string Name => this.api_data.api_name;
 
-		public SlotItemTypes Type => this._Type
-			?? (SlotItemTypes)(this._Type = (SlotItemTypes)(this.api_data.api_type.Get(2) ?? 0));
+		public SlotItemType Type => this._Type
+			?? (SlotItemType)(this._Type = (SlotItemType)(this.api_data.api_type.Get(2) ?? 0));
 
-		public SlotItemIcons IconType => this._IconType
-			?? (SlotItemIcons)(this._IconType = (SlotItemIcons)(this.api_data.api_type.Get(3) ?? 0));
+		public SlotItemIconType IconType => this._IconType
+			?? (SlotItemIconType)(this._IconType = (SlotItemIconType)(this.api_data.api_type.Get(3) ?? 0));
 
 		public int CategoryId => this._CategoryId
 			?? (int)(this._CategoryId = this.api_data.api_type.Get(2) ?? int.MaxValue);
@@ -42,12 +42,12 @@ namespace BeerViewer.Models.Wrapper
 
 		public bool IsNumerable => this.Type.IsNumerable();
 
-		public bool IsFirstEncounter => this.Type == SlotItemTypes.CarrierBased_ReconPlane
-										|| this.Type == SlotItemTypes.ReconSeaplane;
+		public bool IsFirstEncounter => this.Type == SlotItemType.CarrierBased_ReconPlane
+										|| this.Type == SlotItemType.ReconSeaplane;
 
-		public bool IsSecondEncounter => this.Type == SlotItemTypes.CarrierBased_ReconPlane
-										|| this.Type == SlotItemTypes.CarrierBased_TorpedoBomber
-										|| this.Type == SlotItemTypes.ReconSeaplane;
+		public bool IsSecondEncounter => this.Type == SlotItemType.CarrierBased_ReconPlane
+										|| this.Type == SlotItemType.CarrierBased_TorpedoBomber
+										|| this.Type == SlotItemType.ReconSeaplane;
 
 		public double SecondEncounter => this.LOS * 0.07;
 
@@ -72,14 +72,23 @@ namespace BeerViewer.Models.Wrapper
 			}
 		}
 
-		public SlotItemType EquipType { get; }
+		public SlotItemEquipType EquipType { get; }
 
-		internal SlotItemInfo(kcsapi_mst_slotitem api_data, MasterTable<SlotItemType> types) : base(api_data)
+		internal SlotItemInfo(kcsapi_mst_slotitem api_data, MasterTable<SlotItemEquipType> types) : base(api_data)
 		{
-			this.EquipType = types[api_data.api_type?[2] ?? 0] ?? null;
+			this.EquipType = types[api_data.api_type?[2] ?? 0] ?? SlotItemEquipType.Empty;
 		}
 
 		public override string ToString()
 			=> $"ID = {this.Id}, Name = \"{this.Name}\", Type = {{{string.Join(", ",this.api_data.api_type)}}}";
+
+		public static SlotItemInfo Empty { get; } = new SlotItemInfo(
+			new kcsapi_mst_slotitem()
+			{
+				api_id = 0,
+				api_name = "???",
+			},
+			new MasterTable<SlotItemEquipType>()
+		);
 	}
 }

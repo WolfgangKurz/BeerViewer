@@ -6,7 +6,7 @@ namespace BeerViewer.Models.Raw
 {
 	public class MasterTable<T> : IReadOnlyDictionary<int, T> where T : class, IIdentifiable
 	{
-		private readonly IDictionary<int, T> dictionary;
+		protected readonly IDictionary<int, T> dictionary;
 		public T this[int key] => this.dictionary.ContainsKey(key) ? this.dictionary[key] : null;
 
 		public MasterTable() : this(new List<T>()) { }

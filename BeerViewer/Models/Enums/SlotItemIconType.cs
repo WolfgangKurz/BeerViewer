@@ -1,6 +1,6 @@
 ﻿namespace BeerViewer.Models.Enums
 {
-	public enum SlotItemIcons
+	public enum SlotItemIconType
 	{
 		Unknown = 0,
 
