@@ -6,16 +6,12 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using CefSharp;
-using CefSharp.WinForms;
 using BeerViewer.Framework;
 
 namespace BeerViewer.Forms
 {
 	public partial class frmMain : BorderlessWindow
 	{
-		private ChromiumWebBrowser browser;
-
 		protected Rectangle MenuButtonRectangle => new Rectangle(0, 0, 120, 28);
 
 		public frmMain() : base()
@@ -94,31 +90,8 @@ namespace BeerViewer.Forms
 			);
 		}
 
-		public class GameLoaderMessageHandler : IRenderProcessMessageHandler
-		{
-			void IRenderProcessMessageHandler.OnContextCreated(IWebBrowser browserControl, IBrowser browser, IFrame frame)
-			{
-				if (frame.Url == Constants.StartupPage)
-					frame.ExecuteJavaScriptAsync(Constants.GameURI);
-			}
-
-			public void OnContextReleased(IWebBrowser browserControl, IBrowser browser, IFrame frame) { }
-			public void OnFocusedNodeChanged(IWebBrowser browserControl, IBrowser browser, IFrame frame, IDomNode node) { }
-		}
-
-
 		private void frmMain_Load(object sender, EventArgs e)
 		{
-			browser = new ChromiumWebBrowser("")
-			{
-				Dock = DockStyle.None,
-				Location = new Point(1, 28),
-				Size = new Size(800, 480)
-			};
-			browser.RenderProcessMessageHandler = new GameLoaderMessageHandler();
-			browser.MenuHandler = new EmptyMenuHandler();
-			browser.Load(Constants.StartupPage);
-			this.Controls.Add(browser);
 		}
 
 		protected override Rectangle CaptionSize(int Width, int Height)
