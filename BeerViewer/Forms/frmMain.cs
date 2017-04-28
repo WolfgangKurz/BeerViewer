@@ -5,93 +5,88 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+
 using BeerViewer.Framework;
+using BeerViewer.Models;
 
 namespace BeerViewer.Forms
 {
 	public partial class frmMain : BorderlessWindow
 	{
-		protected Rectangle MenuButtonRectangle => new Rectangle(0, 0, 120, 28);
+		public static frmMain Instance { get; }
 
-		public frmMain() : base()
+		public WebBrowser Browser { get; private set; }
+
+		static frmMain()
+		{
+			frmMain.Instance = new frmMain();
+		}
+		private frmMain() : base()
 		{
 			InitializeComponent();
-
-			this.BackColor = FrameworkExtension.FromRgb(0x222225);
+			Master.Instance.Ready();
 
 			#region Menu Button rendering
-			var RenderInvalidate = new Action(() =>
+			var MenuButton = new FrameworkControl(1, 1, 120, 28);
+			MenuButton.Paint += (s, e) =>
 			{
-				var w = this.ClientSize.Width;
-				this.Invalidate(new Rectangle(0, 0, 120, 28));
-			});
-			var ProcButton = new Action<Point, Point>((x, y) =>
-			{
-				if (MenuButtonRectangle.Contains(x) && MenuButtonRectangle.Contains(y))
-					; // TODO: Open Menu
-			});
-			Point ptMouseDown = Point.Empty;
+				var c = s as FrameworkControl;
+				var g = e.Graphics;
 
-			this.MouseMove += (s, e) => RenderInvalidate();
-			this.MouseLeave += (s, e) => RenderInvalidate();
-
-			this.MouseDown += (s, e) =>
-			{
-				ptMouseDown = e.Location;
-				RenderInvalidate();
+				if (c.IsHover) g.FillRectangle(c.IsActive ? Constants.brushActiveFace : Constants.brushHoverFace, c.ClientBound);
+				g.DrawImage(
+					Properties.Resources.Menu_Button,
+					new Rectangle(0, 0, 28, 28),
+					new Rectangle(0, 0, 28, 28),
+					GraphicsUnit.Pixel
+				);
+				g.DrawString(
+					"BeerViewer 2.0",
+					this.Font,
+					Brushes.White,
+					new Point(28, 5)
+				);
 			};
-			this.MouseUp += (s, e) =>
+			MenuButton.Click += (s, e) =>
 			{
-				RenderInvalidate();
-				ProcButton(ptMouseDown, e.Location);
+				// TODO: Open Menu
 			};
+			this.Renderer.AddControl(MenuButton);
 			#endregion
 
-			this.Paint += frmMain_Paint;
-		}
-
-		private void frmMain_Paint(object sender, PaintEventArgs e)
-		{
-			var g = e.Graphics;
-			RenderMenuButton(g);
-		}
-
-		private void RenderMenuButton(Graphics g)
-		{
-			bool focus = false;
-			bool active = false;
-
-			var pt = this.PointToClient(Cursor.Position);
-			if (pt.Y >= 0 && pt.Y < 28)
+			#region Browser
+			this.Browser = new WebBrowser()
 			{
-				focus = MenuButtonRectangle.Contains(pt);
-				active = (MouseButtons == MouseButtons.Left);
-			}
+				Location = new Point(1, 29),
+				Size = new Size(800, 480),
 
-			var hoverBrush = new SolidBrush(FrameworkExtension.FromRgb(0x313131));
-			var activeBrush = new SolidBrush(FrameworkExtension.FromRgb(0x575757));
+				ScriptErrorsSuppressed = true,
+				AllowWebBrowserDrop = false,
+				IsWebBrowserContextMenuEnabled = false,
 
-			if (focus)
-				g.FillRectangle(active ? activeBrush : hoverBrush, new Rectangle(0, 0, 120, 28));
+				Url = new Uri(Constants.GameURL)
+			};
+			this.Browser.Navigated += (s, e) =>
+			{
+				// Cookie patch
+				if (e.Url.Host == "www.dmm.com")
+					this.Browser.Document.InvokeScript("eval", new object[] { Constants.DMMCookie });
 
-			// Icon
-			g.DrawImage(
-				Properties.Resources.Menu_Button,
-				new Rectangle(0, 0, 28, 28),
-				new Rectangle(0, 0, 28, 28),
-				GraphicsUnit.Pixel
-			);
-			g.DrawString(
-				"BeerViewer 2.0",
-				this.Font,
-				Brushes.White,
-				new Point(28, 5)
-			);
-		}
+				// CSS patch
+				if (e.Url.AbsoluteUri == Constants.GameURL)
+				{
+					var script = string.Format(
+						"document.addEventListener('DOMContentLoaded', function(){{ var x=document.createElement('style');x.type='text/css';x.innerHTML='{0}';document.body.appendChild(x); }});",
+						Constants.UserStyleSheet
+					);
+					this.Browser.Document.InvokeScript("eval", new object[] { script });
+				}
+			};
 
-		private void frmMain_Load(object sender, EventArgs e)
-		{
+			this.Controls.Add(this.Browser);
+			#endregion
 		}
 
 		protected override Rectangle CaptionSize(int Width, int Height)

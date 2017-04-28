@@ -35,12 +35,11 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-			this.ClientSize = new System.Drawing.Size(1264, 683);
+			this.ClientSize = new System.Drawing.Size(1264, 685);
 			this.Font = new System.Drawing.Font("맑은 고딕", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "frmMain";
 			this.Text = "BeerViewer 2.0";
-			this.Load += new System.EventHandler(this.frmMain_Load);
 			this.ResumeLayout(false);
 
         }

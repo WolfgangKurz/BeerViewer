@@ -146,8 +146,10 @@ namespace BeerViewer.Framework
 					&& (screen.WorkingArea.Bottom == nccsp.rgrc0.bottom - 8)
 				)
 				{
-					nccsp.rgrc0.bottom += -8 + 2 - 1;
-					nccsp.rgrc0.top = -2;
+					nccsp.rgrc0.left += 8 - 2;
+					nccsp.rgrc0.top += 8 - 2;
+					nccsp.rgrc0.bottom += -8 + 2;
+					nccsp.rgrc0.right += 2;
 				}
 
 				nccsp.rgrc0.bottom++;
@@ -165,9 +167,15 @@ namespace BeerViewer.Framework
 			int w = rc.right - rc.left;
 			int h = rc.bottom - rc.top;
 
+			/*
 			int x = m.LParam.ToInt32() & 0x0000FFFF;
 			int y = (int)((m.LParam.ToInt32() & 0xFFFF0000) >> 16);
+			if ((x & 0x8000) != 0) x = -(x ^ 0x8000 + 1);
+			if ((y & 0x8000) != 0) y = -(y ^ 0x8000 + 1);
+
 			Point pt = this.PointToClient(new Point(x, y));
+			*/
+			Point pt = this.PointToClient(new Point(m.LParam.ToInt32()));
 
 			if(this.WindowState != FormWindowState.Maximized)
 			{
@@ -195,35 +203,80 @@ namespace BeerViewer.Framework
 		protected virtual Rectangle CaptionSize(int Width, int Height)
 			=> new Rectangle(0, 0, Width - 96, 28);
 
-		public BorderlessWindow() : this(false) { }
+		protected FrameworkRenderer Renderer { get; private set; }
 
+		public BorderlessWindow() : this(false) { }
 		public BorderlessWindow(bool IsDialog = false)
 		{
-			this.DoubleBuffered = true;
+			Renderer = new Framework.FrameworkRenderer(this);
 
-			this.Resize += (s, e) => this.Invalidate();
+			this.BackColor = FrameworkExtension.FromRgb(0x222225);
+			this.DoubleBuffered = true;
 
 			if (!IsDialog)
 			{
-				var RenderInvalidate = new Action(() =>
+				#region System Buttons
+				var CloseButton = new FrameworkControl(0, 1, 32, 28);
+				var MaximizeButton = new FrameworkControl(0, 1, 32, 28);
+				var MinimizeButton = new FrameworkControl(0, 1, 32, 28);
+
+				CloseButton.Paint += (s, e) =>
+				{
+					var c = s as FrameworkControl;
+					var g = e.Graphics;
+
+					if (c.IsHover) g.FillRectangle(c.IsActive ? Constants.brushActiveFace : Constants.brushHoverFace, c.ClientBound);
+					g.DrawImage(
+						Properties.Resources.System_Buttons,
+						new Rectangle(0, 0, 32, 28),
+						new Rectangle(64, (this.WindowState == FormWindowState.Maximized ? 28 : 0), 32, 28),
+						GraphicsUnit.Pixel
+					);
+				};
+				MaximizeButton.Paint += (s, e) =>
+				{
+					var c = s as FrameworkControl;
+					var g = e.Graphics;
+
+					if (c.IsHover) g.FillRectangle(c.IsActive ? Constants.brushActiveFace : Constants.brushHoverFace, c.ClientBound);
+					g.DrawImage(
+						Properties.Resources.System_Buttons,
+						new Rectangle(0, 0, 32, 28),
+						new Rectangle(32, (this.WindowState == FormWindowState.Maximized ? 28 : 0), 32, 28),
+						GraphicsUnit.Pixel
+					);
+				};
+				MinimizeButton.Paint += (s, e) =>
+				{
+					var c = s as FrameworkControl;
+					var g = e.Graphics;
+
+					if (c.IsHover) g.FillRectangle(c.IsActive ? Constants.brushActiveFace : Constants.brushHoverFace, c.ClientBound);
+					g.DrawImage(
+						Properties.Resources.System_Buttons,
+						new Rectangle(0, 0, 32, 28),
+						new Rectangle(0, (this.WindowState == FormWindowState.Maximized ? 28 : 0), 32, 28),
+						GraphicsUnit.Pixel
+					);
+				};
+
+				CloseButton.Click += (s, e) => this.Close();
+				MaximizeButton.Click += (s, e) => this.WindowState = this.WindowState == FormWindowState.Maximized ? FormWindowState.Normal : FormWindowState.Maximized;
+				MinimizeButton.Click += (s, e) => this.WindowState = FormWindowState.Minimized;
+
+				this.Renderer.AddControl(CloseButton);
+				this.Renderer.AddControl(MaximizeButton);
+				this.Renderer.AddControl(MinimizeButton);
+				#endregion
+
+				this.Resize += (s, e) =>
 				{
 					var w = this.ClientSize.Width;
-					this.Invalidate(new Rectangle(w - 96, 0, 96, 28));
-				});
-				Point ptMouseDown = Point.Empty;
+					CloseButton.X = w - 32;
+					MaximizeButton.X = w - 64;
+					MinimizeButton.X = w - 96;
 
-				this.MouseMove += (s, e) => RenderInvalidate();
-				this.MouseLeave += (s, e) => RenderInvalidate();
-
-				this.MouseDown += (s, e) =>
-				{
-					ptMouseDown = e.Location;
-					RenderInvalidate();
-				};
-				this.MouseUp += (s, e) =>
-				{
-					RenderInvalidate();
-					ProcSystemButton(ptMouseDown, e.Location);
+					this.Invalidate();
 				};
 			}
 
@@ -231,9 +284,6 @@ namespace BeerViewer.Framework
 			{
 				e.Graphics.TranslateTransform(1, 1);
 				e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
-
-				if (!IsDialog)
-					this.RenderSystemButtons(e.Graphics);
 			};
 		}
 
@@ -253,53 +303,6 @@ namespace BeerViewer.Framework
 			{
 				base.ClientSize = value;
 			}
-		}
-
-
-		protected Rectangle CloseButtonRectangle => new Rectangle(this.ClientSize.Width - 32, 0, 32, 28);
-		protected Rectangle MaximizeButtonRectangle => new Rectangle(this.ClientSize.Width - 64, 0, 32, 28);
-		protected Rectangle RestoreButtonRectangle => this.MaximizeButtonRectangle;
-		protected Rectangle MinimizeButtonRectangle => new Rectangle(this.ClientSize.Width - 96, 0, 32, 28);
-
-		private void RenderSystemButtons(Graphics g)
-		{
-			var w = this.ClientSize.Width;
-			int focus = -1;
-			bool active = false;
-
-			var pt = this.PointToClient(Cursor.Position);
-			if (pt.Y >= 0 && pt.Y < 28)
-			{
-				if (CloseButtonRectangle.Contains(pt)) focus = 2;
-				else if (MaximizeButtonRectangle.Contains(pt)) focus = 1;
-				else if (MinimizeButtonRectangle.Contains(pt)) focus = 0;
-
-				active = (MouseButtons == MouseButtons.Left);
-			}
-
-			var hoverBrush = new SolidBrush(FrameworkExtension.FromRgb(0x313131));
-			var activeBrush = new SolidBrush(FrameworkExtension.FromRgb(0x575757));
-
-			if (focus >= 0)
-				g.FillRectangle(active ? activeBrush : hoverBrush, new Rectangle(w - 96 + (focus * 32), 0, 32, 28));
-
-			g.DrawImage(
-				Properties.Resources.System_Buttons,
-				new Rectangle(w - 96, 0, 96, 28),
-				new Rectangle(0, (this.WindowState == FormWindowState.Maximized ? 28 : 0), 96, 28),
-				GraphicsUnit.Pixel
-			);
-		}
-		private void ProcSystemButton(Point ptDown, Point ptUp)
-		{
-			if (CloseButtonRectangle.Contains(ptDown) && CloseButtonRectangle.Contains(ptUp))
-				this.Close();
-
-			else if (MaximizeButtonRectangle.Contains(ptDown) && MaximizeButtonRectangle.Contains(ptUp))
-				this.WindowState = (this.WindowState == FormWindowState.Maximized ? FormWindowState.Normal : FormWindowState.Maximized);
-
-			else if (MinimizeButtonRectangle.Contains(ptDown) && MinimizeButtonRectangle.Contains(ptUp))
-				this.WindowState = FormWindowState.Minimized;
 		}
 	}
 }

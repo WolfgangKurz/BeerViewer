@@ -21,7 +21,7 @@ namespace BeerViewer
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 
-			var mainWindow = new frmMain();
+			var mainWindow = frmMain.Instance;
 			FrameworkManager.Instance.Initialize();
 
 			Application.Run(mainWindow);
