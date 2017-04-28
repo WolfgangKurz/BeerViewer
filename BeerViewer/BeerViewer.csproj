@@ -81,8 +81,16 @@
     <Compile Include="Forms\frmMain.Designer.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\BuildingDock.cs" />
+    <Compile Include="Models\Dockyard.cs" />
     <Compile Include="Models\Enums\AdmiralRank.cs" />
+    <Compile Include="Models\Enums\BuildingDockState.cs" />
     <Compile Include="Models\Enums\ConditionType.cs" />
+    <Compile Include="Models\Enums\QuestCategory.cs" />
+    <Compile Include="Models\Enums\QuestProgress.cs" />
+    <Compile Include="Models\Enums\QuestState.cs" />
+    <Compile Include="Models\Enums\QuestType.cs" />
+    <Compile Include="Models\Enums\RepairingDockState.cs" />
     <Compile Include="Models\Enums\ShipSituation.cs" />
     <Compile Include="Models\Expedition.cs" />
     <Compile Include="Models\Experience.cs" />
@@ -97,6 +105,10 @@
     <Compile Include="Models\kcsapi\kcsapi_createitem.cs" />
     <Compile Include="Models\kcsapi\kcsapi_hensei_combined.cs" />
     <Compile Include="Models\kcsapi\kcsapi_kdock_getship.cs" />
+    <Compile Include="Models\kcsapi\kcsapi_ndock.cs" />
+    <Compile Include="Models\kcsapi\kcsapi_port.cs" />
+    <Compile Include="Models\kcsapi\kcsapi_quest.cs" />
+    <Compile Include="Models\kcsapi\kcsapi_questlist.cs" />
     <Compile Include="Models\kcsapi\kcsapi_remodel_after_slot.cs" />
     <Compile Include="Models\kcsapi\kcsapi_remodel_slot.cs" />
     <Compile Include="Models\kcsapi\kcsapi_slot_deprive_ship_data.cs" />
@@ -121,6 +133,7 @@
     <Compile Include="Models\Materials.cs" />
     <Compile Include="Models\ModernizableStatus.cs" />
     <Compile Include="Models\Organization.cs" />
+    <Compile Include="Models\Quests.cs" />
     <Compile Include="Models\Raw\DisposableNotifier.cs" />
     <Compile Include="Models\Raw\Extensions.cs" />
     <Compile Include="Models\Raw\IIdentifiable.cs" />
@@ -128,11 +141,15 @@
     <Compile Include="Models\Raw\MemberTable.cs" />
     <Compile Include="Models\Raw\Notifier.cs" />
     <Compile Include="Models\Raw\TimerNotifier.cs" />
+    <Compile Include="Models\RepairingDock.cs" />
+    <Compile Include="Models\Repairyard.cs" />
     <Compile Include="Models\Ship.cs" />
     <Compile Include="Models\Wrapper\Admiral.cs" />
+    <Compile Include="Models\Wrapper\CreatedSlotItem.cs" />
     <Compile Include="Models\Wrapper\MapArea.cs" />
     <Compile Include="Models\Wrapper\MapInfo.cs" />
     <Compile Include="Models\Wrapper\Mission.cs" />
+    <Compile Include="Models\Wrapper\Quest.cs" />
     <Compile Include="Models\Wrapper\ShipSlot.cs" />
     <Compile Include="Models\Wrapper\ShipType.cs" />
     <Compile Include="Models\kcsapi\kcsapi_mission.cs" />
