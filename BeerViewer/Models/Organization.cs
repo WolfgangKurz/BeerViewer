@@ -59,7 +59,6 @@ namespace BeerViewer.Models
 				if (this._Combined != value)
 				{
 					this._Combined = value;
-					this.Combine(value);
 					this.RaisePropertyChanged();
 				}
 			}
@@ -151,7 +150,6 @@ namespace BeerViewer.Models
 					if (target == null) continue;
 
 					target.Update(ship);
-					this.GetFleet(target.Id)?.State.Calculate();
 				}
 			}
 			else
@@ -231,7 +229,7 @@ namespace BeerViewer.Models
 				var ship = this.Ships[int.Parse(data.Request["api_id"])];
 				if (ship == null) return;
 
-				ship.RawData.api_slot = data.api_data.api_slot;
+				ship.api_data.api_slot = data.api_data.api_slot;
 				ship.UpdateSlots();
 
 				var fleet = this.Fleets.Values.FirstOrDefault(x => x.Ships.Any(y => y.Id == ship.Id));
@@ -330,7 +328,7 @@ namespace BeerViewer.Models
 				var x = e.TryParse();
 				if (x == null) return;
 
-				this.Sortie(x);
+				// this.Sortie(x);
 			});
 			proxy.Register(Proxy.api_port, e =>
 			{
@@ -347,7 +345,7 @@ namespace BeerViewer.Models
 				if (x.api_data.api_escape == null) return;
 
 				var ships = this.Fleets.Where(y => y.Key == 1 || y.Key == 2)
-					.SelectMany(f => f.Ships).ToArray();
+					.SelectMany(f => f.Value.Ships).ToArray();
 
 				evacuationOfferedShipIds = x.api_data.api_escape.api_escape_idx.Select(idx => ships[idx - 1].Id).ToArray();
 				towOfferedShipIds = x.api_data.api_escape.api_tow_idx.Select(idx => ships[idx - 1].Id).ToArray();
@@ -372,18 +370,20 @@ namespace BeerViewer.Models
 			});
 		}
 
+		/*
 		private void Sortie(SvData data)
 		{
 			try
 			{
 				var id = int.Parse(data.Request["api_deck_id"]);
 				var fleet = this.Fleets[id];
-				fleet.Sortie();
 
+				fleet.Sortie();
 				if (this.Combined && id == 1) this.Fleets[2].Sortie();
 			}
 			catch { }
 		}
+		*/
 
 		private void Homing()
 		{
@@ -396,10 +396,10 @@ namespace BeerViewer.Models
 				if (ship.Situation.HasFlag(ShipSituation.Tow)) ship.Situation &= ~ShipSituation.Tow;
 			}
 
+			/*
 			foreach (var target in this.Fleets.Values)
-			{
 				target.Homing();
-			}
+			*/
 		}
 
 		private void Update(kcsapi_ship_deck source)

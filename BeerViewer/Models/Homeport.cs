@@ -14,17 +14,24 @@ namespace BeerViewer.Models
 		public bool IsReady { get; private set; } = false;
 
 		public Admiral Admiral { get; private set; }
-		public Materials Materials { get; }
+		public Materials Materials { get; private set; }
 
-		public Organization Organization { get; }
-		public Itemyard Itemyard { get; }
-		public Dockyard Dockyard { get; }
-		public Repairyard Repairyard { get; }
-		public Quests Quests { get; }
+		public Organization Organization { get; private set; }
+		public Itemyard Itemyard { get; private set; }
+		public Dockyard Dockyard { get; private set; }
+		public Repairyard Repairyard { get; private set; }
+		public Quests Quests { get; private set; }
 
 		public void Ready()
 		{
 			if (IsReady) return;
+
+			this.Materials = new Materials();
+			this.Itemyard = new Itemyard(this);
+			this.Organization = new Organization(this);
+			this.Repairyard = new Repairyard(this);
+			this.Dockyard = new Dockyard();
+			this.Quests = new Quests();
 
 			var proxy = Proxy.Instance;
 			proxy.Register<kcsapi_require_info>(Proxy.api_get_member_require_info, x =>
@@ -33,6 +40,16 @@ namespace BeerViewer.Models
 				this.Itemyard.Update(x.api_data.api_slot_item);
 				this.Dockyard.Update(x.api_data.api_kdock);
 			});
+			proxy.Register<kcsapi_port>(Proxy.api_port, x =>
+			{
+				this.UpdateAdmiral(x.api_data.api_basic);
+				this.Organization.Update(x.api_data.api_ship);
+				this.Repairyard.Update(x.api_data.api_ndock);
+				this.Organization.Update(x.api_data.api_deck_port);
+				this.Organization.Combined = x.api_data.api_combined_flag != 0;
+				this.Materials.Update(x.api_data.api_material);
+			});
+			proxy.Register<kcsapi_basic>(Proxy.api_get_member_basic, x => this.UpdateAdmiral(x.api_data));
 		}
 
 		internal void UpdateAdmiral(kcsapi_basic data)
