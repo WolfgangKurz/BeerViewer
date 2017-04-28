@@ -67,21 +67,21 @@ namespace BeerViewer.Models
 
 		public Expedition Expedition { get; }
 
-		internal Fleet(Homeport parent, kcsapi_deck rawData)
+		internal Fleet(Homeport parent, kcsapi_deck Data)
 		{
 			this.homeport = parent;
 			this.CompositeDisposable.Add(this.Expedition = new Expedition(this));
 
-			this.Update(rawData);
+			this.Update(Data);
 		}
 
-		internal void Update(kcsapi_deck rawData)
+		internal void Update(kcsapi_deck Data)
 		{
-			this.Id = rawData.api_id;
-			this.Name = rawData.api_name;
+			this.Id = Data.api_id;
+			this.Name = Data.api_name;
 
-			this.Expedition.Update(rawData.api_mission);
-			this.UpdateShips(rawData.api_ship.Select(id => this.homeport.Organization.Ships[id]).ToArray());
+			this.Expedition.Update(Data.api_mission);
+			this.UpdateShips(Data.api_ship.Select(id => this.homeport.Organization.Ships[id]).ToArray());
 		}
 
 		#region Change, Unset

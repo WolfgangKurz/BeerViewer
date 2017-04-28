@@ -67,6 +67,7 @@
   <ItemGroup>
     <Compile Include="Configuration.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="Forms\Controls\ExpeditionBar.cs" />
     <Compile Include="Framework\BorderlessWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -139,6 +140,7 @@
     <Compile Include="Models\Raw\IIdentifiable.cs" />
     <Compile Include="Models\Raw\MasterTable.cs" />
     <Compile Include="Models\Raw\MemberTable.cs" />
+    <Compile Include="Models\Raw\RawDataWrapper.cs" />
     <Compile Include="Models\Raw\Notifier.cs" />
     <Compile Include="Models\Raw\TimerNotifier.cs" />
     <Compile Include="Models\RepairingDock.cs" />

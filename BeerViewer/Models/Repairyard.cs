@@ -33,7 +33,7 @@ namespace BeerViewer.Models
 			this.homeport = parent;
 			this.Docks = new MemberTable<RepairingDock>();
 
-			proxy.Register<kcsapi_ndock[]>(Proxy.api_get_member_ndock, x => this.Update(x.api_data));
+			proxy.Register<kcsapi_ndock[]>(Proxy.api_get_member_ndock, x => this.Update(x.Data));
 			proxy.Register(Proxy.api_req_nyukyo_start, e =>
 			{
 				var x = e.TryParse();

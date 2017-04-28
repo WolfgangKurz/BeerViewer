@@ -5,19 +5,19 @@ using BeerViewer.Models.kcsapi;
 
 namespace BeerViewer.Models.Wrapper
 {
-	public class CreatedSlotItem : SvData<kcsapi_createitem>
+	public class CreatedSlotItem : RawDataWrapper<kcsapi_createitem>
 	{
-		public bool Succeed => this.api_data.api_create_flag == 1;
+		public bool Succeed => this.RawData.api_create_flag == 1;
 
 		public SlotItemInfo SlotItemInfo { get; }
 
-		public CreatedSlotItem(kcsapi_createitem rawData) : base(rawData)
+		public CreatedSlotItem(kcsapi_createitem RawData) : base(RawData)
 		{
 			try
 			{
 				this.SlotItemInfo = this.Succeed
-					? Master.Instance.SlotItems[rawData.api_slot_item.api_slotitem_id]
-					: Master.Instance.SlotItems[int.Parse(rawData.api_fdata.Split(',')[1])];
+					? Master.Instance.SlotItems[this.RawData.api_slot_item.api_slotitem_id]
+					: Master.Instance.SlotItems[int.Parse(this.RawData.api_fdata.Split(',')[1])];
 
 				System.Diagnostics.Debug.WriteLine("createitem: {0} - {1}", this.Succeed, this.SlotItemInfo.Name);
 			}

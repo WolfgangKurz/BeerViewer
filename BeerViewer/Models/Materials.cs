@@ -140,10 +140,10 @@ namespace BeerViewer.Models
 		{
 			var proxy = Proxy.Instance;
 
-			proxy.Register<kcsapi_material[]>(Proxy.api_get_member_material, x => this.Update(x.api_data));
-			proxy.Register<kcsapi_charge>(Proxy.api_req_hokyu_charge, x => this.Update(x.api_data.api_material));
-			proxy.Register<kcsapi_destroyship>(Proxy.api_req_kousyou_destroyship, x => this.Update(x.api_data.api_material));
-			proxy.Register<kcsapi_destroyitem2>(Proxy.api_req_kousyou_destroyitem2, x => this.Update(x.api_data.api_material));
+			proxy.Register<kcsapi_material[]>(Proxy.api_get_member_material, x => this.Update(x.Data));
+			proxy.Register<kcsapi_charge>(Proxy.api_req_hokyu_charge, x => this.Update(x.Data.api_material));
+			proxy.Register<kcsapi_destroyship>(Proxy.api_req_kousyou_destroyship, x => this.Update(x.Data.api_material));
+			proxy.Register<kcsapi_destroyitem2>(Proxy.api_req_kousyou_destroyitem2, x => this.Update(x.Data.api_material));
 		}
 
 		internal void Update(kcsapi_material[] source)

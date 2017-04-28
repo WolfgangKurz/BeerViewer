@@ -187,7 +187,7 @@ namespace BeerViewer.Framework
 			this._X = X;
 			this._Y = Y;
 		}
-		public FrameworkControl(int X, int Y, int Width, int Height):this(X, Y)
+		public FrameworkControl(int X, int Y, int Width, int Height) : this(X, Y)
 		{
 			this._Width = Width;
 			this._Height = Height;

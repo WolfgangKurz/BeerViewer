@@ -73,24 +73,24 @@ namespace BeerViewer.Models
 			this.Ships = new MemberTable<Ship>();
 			this.Fleets = new MemberTable<Fleet>();
 
-			proxy.Register<kcsapi_ship2[]>(Proxy.api_get_member_ship, x => this.Update(x.api_data));
+			proxy.Register<kcsapi_ship2[]>(Proxy.api_get_member_ship, x => this.Update(x.Data));
 			proxy.Register<kcsapi_ship2[]>(Proxy.api_get_member_ship2, x =>
 			{
-				this.Update(x.api_data);
+				this.Update(x.Data);
 				this.Update(x.Fleets);
 			});
 
 			proxy.Register<kcsapi_ship3>(Proxy.api_get_member_ship3, x =>
 			{
-				this.Update(x.api_data.api_ship_data);
-				this.Update(x.api_data.api_deck_data);
+				this.Update(x.Data.api_ship_data);
+				this.Update(x.Data.api_deck_data);
 			});
 
-			proxy.Register<kcsapi_deck[]>(Proxy.api_get_member_deck, x => this.Update(x.api_data));
-			proxy.Register<kcsapi_deck[]>(Proxy.api_get_member_deck_port, x => this.Update(x.api_data));
-			proxy.Register<kcsapi_ship_deck>(Proxy.api_get_member_ship_deck, x => this.Update(x.api_data));
+			proxy.Register<kcsapi_deck[]>(Proxy.api_get_member_deck, x => this.Update(x.Data));
+			proxy.Register<kcsapi_deck[]>(Proxy.api_get_member_deck_port, x => this.Update(x.Data));
+			proxy.Register<kcsapi_ship_deck>(Proxy.api_get_member_ship_deck, x => this.Update(x.Data));
 
-			proxy.Register<kcsapi_deck>(Proxy.api_req_hensei_preset_select, x => this.Update(x.api_data));
+			proxy.Register<kcsapi_deck>(Proxy.api_req_hensei_preset_select, x => this.Update(x.Data));
 
 			proxy.Register(Proxy.api_req_hensei_change, e =>
 			{
@@ -99,12 +99,12 @@ namespace BeerViewer.Models
 
 				this.Change(x);
 			});
-			proxy.Register<kcsapi_charge>(Proxy.api_req_hokyu_charge, x => this.Charge(x.api_data));
+			proxy.Register<kcsapi_charge>(Proxy.api_req_hokyu_charge, x => this.Charge(x.Data));
 			proxy.Register<kcsapi_powerup>(Proxy.api_req_kaisou_powerup, x => this.Powerup(x));
 			proxy.Register<kcsapi_slot_exchange_index>(Proxy.api_req_kaisou_slot_exchange_index, x => this.ExchangeSlot(x));
-			proxy.Register<kcsapi_slot_deprive>(Proxy.api_req_kaisou_slot_deprive, x => this.DepriveSlotItem(x.api_data));
+			proxy.Register<kcsapi_slot_deprive>(Proxy.api_req_kaisou_slot_deprive, x => this.DepriveSlotItem(x.Data));
 
-			proxy.Register<kcsapi_kdock_getship>(Proxy.api_req_kousyou_getship, x => this.GetShip(x.api_data));
+			proxy.Register<kcsapi_kdock_getship>(Proxy.api_req_kousyou_getship, x => this.GetShip(x.Data));
 			proxy.Register<kcsapi_destroyship>(Proxy.api_req_kousyou_destroyship, x => this.DestoryShip(x));
 			proxy.Register(Proxy.api_req_member_updatedeckname, e =>
 			{
@@ -113,7 +113,7 @@ namespace BeerViewer.Models
 
 				this.UpdateFleetName(x);
 			});
-			proxy.Register<kcsapi_hensei_combined>(Proxy.api_req_hensei_combined, x => this.Combined = x.api_data.api_combined != 0);
+			proxy.Register<kcsapi_hensei_combined>(Proxy.api_req_hensei_combined, x => this.Combined = x.Data.api_combined != 0);
 
 			this.SubscribeSortieSessions();
 		}
@@ -229,7 +229,7 @@ namespace BeerViewer.Models
 				var ship = this.Ships[int.Parse(data.Request["api_id"])];
 				if (ship == null) return;
 
-				ship.api_data.api_slot = data.api_data.api_slot;
+				ship.RawData.api_slot = data.Data.api_slot;
 				ship.UpdateSlots();
 
 				var fleet = this.Fleets.Values.FirstOrDefault(x => x.Ships.Any(y => y.Id == ship.Id));
@@ -262,7 +262,7 @@ namespace BeerViewer.Models
 		{
 			try
 			{
-				this.Ships[svd.api_data.api_ship.api_id]?.Update(svd.api_data.api_ship);
+				this.Ships[svd.Data.api_ship.api_id]?.Update(svd.Data.api_ship);
 
 				var items = svd.Request["api_id_items"]
 					.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
@@ -278,7 +278,7 @@ namespace BeerViewer.Models
 				}
 
 				this.RaiseShipsChanged();
-				this.Update(svd.api_data.api_deck);
+				this.Update(svd.Data.api_deck);
 			}
 			catch { }
 		}
@@ -342,13 +342,13 @@ namespace BeerViewer.Models
 			int[] towOfferedShipIds = null;
 
 			proxy.Register< kcsapi_combined_battle_battleresult>(Proxy.api_req_combined_battle_battleresult, x => {
-				if (x.api_data.api_escape == null) return;
+				if (x.Data.api_escape == null) return;
 
 				var ships = this.Fleets.Where(y => y.Key == 1 || y.Key == 2)
 					.SelectMany(f => f.Value.Ships).ToArray();
 
-				evacuationOfferedShipIds = x.api_data.api_escape.api_escape_idx.Select(idx => ships[idx - 1].Id).ToArray();
-				towOfferedShipIds = x.api_data.api_escape.api_tow_idx.Select(idx => ships[idx - 1].Id).ToArray();
+				evacuationOfferedShipIds = x.Data.api_escape.api_escape_idx.Select(idx => ships[idx - 1].Id).ToArray();
+				towOfferedShipIds = x.Data.api_escape.api_tow_idx.Select(idx => ships[idx - 1].Id).ToArray();
 			});
 			proxy.Register(Proxy.api_req_combined_battle_goback_port, e => {
 				var x = e.TryParse();

@@ -6,42 +6,42 @@ using BeerViewer.Models.kcsapi.mst;
 
 namespace BeerViewer.Models.Wrapper
 {
-	public class ShipInfo : SvData<kcsapi_mst_ship>, IIdentifiable
+	public class ShipInfo : RawDataWrapper<kcsapi_mst_ship>, IIdentifiable
 	{
 		private ShipType _ShipType;
 
 		public static int[] AircraftShipTypes { get; } = new[] { 6, 7, 10, 11, 14, 16, 18, 20, 22 };
 
 		#region Wrapping
-		public int Id => base.api_data.api_id;
-		public int SortId => this.api_data.api_sortno;
+		public int Id => base.RawData.api_id;
+		public int SortId => this.RawData.api_sortno;
 
-		public string Name => this.api_data.api_name;
+		public string Name => this.RawData.api_name;
 		public ShipType ShipType => this._ShipType
-			?? (ShipType)(this._ShipType = Master.Instance.ShipTypes[this.api_data.api_stype])
+			?? (ShipType)(this._ShipType = Master.Instance.ShipTypes[this.RawData.api_stype])
 			?? null;
 
-		public int[] Slots => this.api_data.api_maxeq;
-		public ShipSpeed Speed => (ShipSpeed)this.api_data.api_soku;
+		public int[] Slots => this.RawData.api_maxeq;
+		public ShipSpeed Speed => (ShipSpeed)this.RawData.api_soku;
 
-		public int? NextRemodelingLevel => this.api_data.api_afterlv == 0 ? null : (int?)this.api_data.api_afterlv;
+		public int? NextRemodelingLevel => this.RawData.api_afterlv == 0 ? null : (int?)this.RawData.api_afterlv;
 
-		public string Kana => this.api_data.api_yomi;
+		public string Kana => this.RawData.api_yomi;
 
-		public int HP => this.api_data.api_taik.Get(0) ?? 0;
-		public int MaxArmor => this.api_data.api_souk.Get(1) ?? 0;
+		public int HP => this.RawData.api_taik.Get(0) ?? 0;
+		public int MaxArmor => this.RawData.api_souk.Get(1) ?? 0;
 
-		public int MaxFirepower => this.api_data.api_houg.Get(1) ?? 0;
-		public int MaxTorpedo => this.api_data.api_raig.Get(1) ?? 0;
-		public int MaxAA => this.api_data.api_tyku.Get(1) ?? 0;
+		public int MaxFirepower => this.RawData.api_houg.Get(1) ?? 0;
+		public int MaxTorpedo => this.RawData.api_raig.Get(1) ?? 0;
+		public int MaxAA => this.RawData.api_tyku.Get(1) ?? 0;
 
-		public int MinLuck => this.api_data.api_luck.Get(0) ?? 0;
-		public int MaxLuck => this.api_data.api_luck.Get(1) ?? 0;
+		public int MinLuck => this.RawData.api_luck.Get(0) ?? 0;
+		public int MaxLuck => this.RawData.api_luck.Get(1) ?? 0;
 
-		public int MaxFuel => this.api_data.api_fuel_max;
-		public int MaxBull => this.api_data.api_bull_max;
+		public int MaxFuel => this.RawData.api_fuel_max;
+		public int MaxBull => this.RawData.api_bull_max;
 
-		public int SlotCount => this.api_data.api_slot_num;
+		public int SlotCount => this.RawData.api_slot_num;
 		#endregion
 
 		public bool IsAirCraft => ShipInfo.AircraftShipTypes.Contains(this.ShipType.Id);

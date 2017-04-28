@@ -103,20 +103,20 @@ namespace BeerViewer.Models
 
 		public event EventHandler<BuildingCompletedEventArgs> Completed;
 
-		internal BuildingDock(kcsapi_kdock rawData)
+		internal BuildingDock(kcsapi_kdock Data)
 		{
-			this.Update(rawData);
+			this.Update(Data);
 		}
 
-		internal void Update(kcsapi_kdock rawData)
+		internal void Update(kcsapi_kdock Data)
 		{
-			this.Id = rawData.api_id;
-			this.State = (BuildingDockState)rawData.api_state;
+			this.Id = Data.api_id;
+			this.State = (BuildingDockState)Data.api_state;
 			this.Ship = this.State == BuildingDockState.Building || this.State == BuildingDockState.Completed
-				? Master.Instance.Ships[rawData.api_created_ship_id]
+				? Master.Instance.Ships[Data.api_created_ship_id]
 				: null;
 			this.CompleteTime = this.State == BuildingDockState.Building
-				? (DateTimeOffset?)Extensions.UnixEpoch.AddMilliseconds(rawData.api_complete_time)
+				? (DateTimeOffset?)Extensions.UnixEpoch.AddMilliseconds(Data.api_complete_time)
 				: null;
 		}
 

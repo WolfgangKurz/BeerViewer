@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 using BeerViewer.Framework;
+using BeerViewer.Forms.Controls;
 using BeerViewer.Models;
 
 namespace BeerViewer.Forms
@@ -27,6 +28,7 @@ namespace BeerViewer.Forms
 		{
 			InitializeComponent();
 			Master.Instance.Ready();
+			Homeport.Instance.Ready();
 
 			#region Menu Button rendering
 			var MenuButton = new FrameworkControl(1, 1, 120, 28);
@@ -44,7 +46,7 @@ namespace BeerViewer.Forms
 				);
 				g.DrawString(
 					"BeerViewer 2.0",
-					this.Font,
+					Constants.fontDefault,
 					Brushes.White,
 					new Point(28, 5)
 				);
@@ -86,6 +88,24 @@ namespace BeerViewer.Forms
 			};
 
 			this.Controls.Add(this.Browser);
+			#endregion
+
+			#region Expedition bar
+			var ExpeditionBars = new ExpeditionBar[3]
+			{
+				new ExpeditionBar(131, 8, 80, 14),
+				new ExpeditionBar(221, 8, 80, 14),
+				new ExpeditionBar(311, 8, 80, 14)
+			};
+			Homeport.Instance.Organization.PropertyEvent(nameof(Homeport.Instance.Organization.Fleets), () =>
+			{
+				var fleets = Homeport.Instance.Organization.Fleets;
+
+				if (fleets.Count >= 2) ExpeditionBars[0].SetFleet(fleets[2]);
+				if (fleets.Count >= 3) ExpeditionBars[1].SetFleet(fleets[3]);
+				if (fleets.Count >= 4) ExpeditionBars[2].SetFleet(fleets[4]);
+			});
+			ExpeditionBars.ForEach(x => this.Renderer.AddControl(x));
 			#endregion
 		}
 

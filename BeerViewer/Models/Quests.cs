@@ -54,7 +54,7 @@ namespace BeerViewer.Models
 			this.questPages = new List<ConcurrentDictionary<int, Quest>>();
 			this.All = this.Current = new List<Quest>();
 
-			proxy.Register<kcsapi_questlist>(Proxy.api_get_member_questlist, x => this.Update(x.api_data));
+			proxy.Register<kcsapi_questlist>(Proxy.api_get_member_questlist, x => this.Update(x.Data));
 		}
 
 		private void Update(kcsapi_questlist questlist)

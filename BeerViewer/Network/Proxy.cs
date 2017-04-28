@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -18,22 +19,22 @@ namespace BeerViewer.Network
 
 		public static Proxy Instance { get; } = new Proxy();
 
-		internal List<ProxyHandler> Handlers { get; private set; }
-		private object HandlerLock { get; } = new object();
+		internal ConcurrentDictionary<int, ProxyHandler> Handlers { get; private set; }
 
 		private Proxy()
 		{
-			this.Handlers = new List<ProxyHandler>();
+			this.Handlers = new ConcurrentDictionary<int, ProxyHandler>();
 			if (IsInDesignMode) return;
 
 			HttpProxy.Startup(49217, false, true);
 			HttpProxy.AfterSessionComplete += (_ =>
-				this.Handlers.ForEach(x =>
+			{
+				this.Handlers.Values.ToList().ForEach(x =>
 				{
 					if ((x.Where == null) || (_.Request.PathAndQuery == x.Where))
 						x.Handler.Invoke(_);
-				})
-			);
+				});
+			});
 		}
 		~Proxy()
 		{
@@ -58,7 +59,7 @@ namespace BeerViewer.Network
 
 			try
 			{
-				this.Handlers.Add(new Proxy.ProxyHandler
+				this.Handlers.TryAdd(this.Handlers.Count, new ProxyHandler
 				{
 					Where = Where,
 					Handler = e
@@ -76,7 +77,10 @@ namespace BeerViewer.Network
 		/// </summary>
 		public Proxy Unregister(Action<Session> e)
 		{
-			this.Handlers.Remove(this.Handlers.First(x => x.Handler == e));
+			var k = this.Handlers.FirstOrDefault(x => x.Value.Handler == e).Key;
+			ProxyHandler h;
+
+			this.Handlers.TryRemove(k, out h);
 			return this;
 		}
 		#endregion

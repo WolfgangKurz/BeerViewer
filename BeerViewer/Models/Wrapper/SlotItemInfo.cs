@@ -10,7 +10,7 @@ using BeerViewer.Models.kcsapi.mst;
 
 namespace BeerViewer.Models.Wrapper
 {
-	public class SlotItemInfo : SvData<kcsapi_mst_slotitem>, IIdentifiable
+	public class SlotItemInfo : RawDataWrapper<kcsapi_mst_slotitem>, IIdentifiable
 	{
 		#region For singleton
 		private SlotItemType? _Type;
@@ -18,27 +18,27 @@ namespace BeerViewer.Models.Wrapper
 		private int? _CategoryId;
 		#endregion
 
-		public int Id => this.api_data.api_id;
-		public string Name => this.api_data.api_name;
+		public int Id => this.RawData.api_id;
+		public string Name => this.RawData.api_name;
 
 		public SlotItemType Type => this._Type
-			?? (SlotItemType)(this._Type = (SlotItemType)(this.api_data.api_type.Get(2) ?? 0));
+			?? (SlotItemType)(this._Type = (SlotItemType)(this.RawData.api_type.Get(2) ?? 0));
 
 		public SlotItemIconType IconType => this._IconType
-			?? (SlotItemIconType)(this._IconType = (SlotItemIconType)(this.api_data.api_type.Get(3) ?? 0));
+			?? (SlotItemIconType)(this._IconType = (SlotItemIconType)(this.RawData.api_type.Get(3) ?? 0));
 
 		public int CategoryId => this._CategoryId
-			?? (int)(this._CategoryId = this.api_data.api_type.Get(2) ?? int.MaxValue);
+			?? (int)(this._CategoryId = this.RawData.api_type.Get(2) ?? int.MaxValue);
 
-		public virtual int Firepower => this.api_data.api_houg;
-		public virtual int Torpedo => this.api_data.api_raig;
-		public virtual int AA => this.api_data.api_tyku;
-		public virtual int Bombing => this.api_data.api_baku;
-		public virtual int ASW => this.api_data.api_tais;
-		public virtual int Armor => this.api_data.api_souk;
-		public virtual int Accuracy => this.api_data.api_houm;
-		public virtual int Evation => this.api_data.api_houk;
-		public virtual int LOS => this.api_data.api_saku;
+		public virtual int Firepower => this.RawData.api_houg;
+		public virtual int Torpedo => this.RawData.api_raig;
+		public virtual int AA => this.RawData.api_tyku;
+		public virtual int Bombing => this.RawData.api_baku;
+		public virtual int ASW => this.RawData.api_tais;
+		public virtual int Armor => this.RawData.api_souk;
+		public virtual int Accuracy => this.RawData.api_houm;
+		public virtual int Evation => this.RawData.api_houk;
+		public virtual int LOS => this.RawData.api_saku;
 
 		public bool IsNumerable => this.Type.IsNumerable();
 
@@ -80,7 +80,7 @@ namespace BeerViewer.Models.Wrapper
 		}
 
 		public override string ToString()
-			=> $"ID = {this.Id}, Name = \"{this.Name}\", Type = {{{string.Join(", ",this.api_data.api_type)}}}";
+			=> $"ID = {this.Id}, Name = \"{this.Name}\", Type = {{{string.Join(", ",this.RawData.api_type)}}}";
 
 		public static SlotItemInfo Empty { get; } = new SlotItemInfo(
 			new kcsapi_mst_slotitem()

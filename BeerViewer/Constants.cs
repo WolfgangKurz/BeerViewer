@@ -25,5 +25,15 @@ namespace BeerViewer
 
 		public static Brush brushHoverFace { get; } = new SolidBrush(FrameworkExtension.FromRgb(0x313131));
 		public static Brush brushActiveFace { get; } = new SolidBrush(FrameworkExtension.FromRgb(0x575757));
+		public static Brush brushDisabled => brushActiveFace;
+		public static Brush brushHint => brushActiveFace;
+
+		public static Brush brushRedAccent { get; } = new SolidBrush(FrameworkExtension.FromRgb(0xc62828));
+		public static Brush brushBlueAccent { get; } = new SolidBrush(FrameworkExtension.FromRgb(0x1565c0));
+		public static Brush brushGreenAccent { get; } = new SolidBrush(FrameworkExtension.FromRgb(0x388e3c));
+		public static Brush brushYellowAccent { get; } = new SolidBrush(FrameworkExtension.FromRgb(0xfdd835));
+		public static Brush brushOrangeAccent { get; } = new SolidBrush(FrameworkExtension.FromRgb(0xf57c00));
+
+		public static Font fontDefault { get; } = new Font("맑은 고딕", 9);
 	}
 }

@@ -5,10 +5,10 @@ using BeerViewer.Models.kcsapi.mst;
 
 namespace BeerViewer.Models.Wrapper
 {
-	public class MapArea : SvData<kcsapi_mst_maparea>, IIdentifiable
+	public class MapArea : RawDataWrapper<kcsapi_mst_maparea>, IIdentifiable
 	{
-		public int Id => this.api_data.api_id;
-		public string Name => this.api_data.api_name;
+		public int Id => this.RawData.api_id;
+		public string Name => this.RawData.api_name;
 
 		public MasterTable<MapInfo> MapInfos { get; }
 

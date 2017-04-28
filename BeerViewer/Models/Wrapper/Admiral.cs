@@ -6,10 +6,10 @@ using BeerViewer.Models.kcsapi;
 
 namespace BeerViewer.Models.Wrapper
 {
-	public class Admiral : SvData<kcsapi_basic>
+	public class Admiral : RawDataWrapper<kcsapi_basic>
 	{
-		public string MemberId => this.api_data.api_member_id;
-		public string Nickname => this.api_data.api_nickname;
+		public string MemberId => this.RawData.api_member_id;
+		public string Nickname => this.RawData.api_nickname;
 
 		#region Comment Property
 		private string _Comment;
@@ -27,31 +27,31 @@ namespace BeerViewer.Models.Wrapper
 		}
 		#endregion
 
-		public int Experience => this.api_data.api_experience;
-		public int ExperienceForNexeLevel => Models.Experience.GetAdmiralExpForNextLevel(this.api_data.api_level, this.api_data.api_experience);
+		public int Experience => this.RawData.api_experience;
+		public int ExperienceForNexeLevel => Models.Experience.GetAdmiralExpForNextLevel(this.RawData.api_level, this.RawData.api_experience);
 
-		public int Level => this.api_data.api_level;
-		public AdmiralRank Rank => (AdmiralRank)this.api_data.api_rank;
+		public int Level => this.RawData.api_level;
+		public AdmiralRank Rank => (AdmiralRank)this.RawData.api_rank;
 
-		public int SortieWins => this.api_data.api_st_win;
-		public int SortieLoses => this.api_data.api_st_lose;
+		public int SortieWins => this.RawData.api_st_win;
+		public int SortieLoses => this.RawData.api_st_lose;
 
 		public double SortieWinningRate
 		{
 			get
 			{
-				var battleCount = this.api_data.api_st_win + this.api_data.api_st_lose;
+				var battleCount = this.RawData.api_st_win + this.RawData.api_st_lose;
 				return battleCount == 0 ? 0
-					: this.api_data.api_st_win / (double)battleCount;
+					: this.RawData.api_st_win / (double)battleCount;
 			}
 		}
 
-		public int MaxShipCount => this.api_data.api_max_chara;
-		public int MaxSlotItemCount => this.api_data.api_max_slotitem + 3;
+		public int MaxShipCount => this.RawData.api_max_chara;
+		public int MaxSlotItemCount => this.RawData.api_max_slotitem + 3;
 
 		internal Admiral(kcsapi_basic api_data) : base(api_data)
 		{
-			this.Comment = this.api_data.api_comment;
+			this.Comment = this.RawData.api_comment;
 
 			Proxy.Instance.Register(Proxy.api_req_member_updatecomment, e =>
 			{

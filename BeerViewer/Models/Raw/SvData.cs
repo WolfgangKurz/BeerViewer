@@ -11,21 +11,17 @@ using BeerViewer.Models.kcsapi;
 
 namespace BeerViewer.Models.Raw
 {
-	public class SvData : SvDataBase
+	public class SvData : RawDataWrapper<SvDataBase>
 	{
 		public NameValueCollection Request { get; private set; }
-		public bool IsSuccess => this.api_result == 1;
+		public bool IsSuccess => this.RawData.api_result == 1;
 
 		private static string JsonParse(string ResponseBody)
 			=> ResponseBody.StartsWith("svdata=")
 				? ResponseBody.Substring(7)
 				: null;
 
-		public SvData(SvDataBase RawData) : base(RawData)
-		{
-			this.Request = null;
-		}
-		public SvData(SvDataBase RawData, string RequestURI) : base(RawData)
+		public SvData(SvDataBase Data, string RequestURI) : base(Data)
 		{
 			this.Request = HttpUtility.ParseQueryString(RequestURI);
 		}
@@ -86,21 +82,15 @@ namespace BeerViewer.Models.Raw
 			return result != null;
 		}
 	}
-	public class SvData<T> : SvDataBase<T>
+	public class SvData<T> : RawDataWrapper<SvDataBase<T>>
 	{
 		public NameValueCollection Request { get; private set; }
-		public bool IsSuccess => this.api_result == 1;
 
-		public kcsapi_deck[] Fleets => this.api_data_deck;
+		public bool IsSuccess => this.RawData.api_result == 1;
+		public T Data => this.RawData.api_data;
 
-		public SvData(T RawData) : base(RawData)
-		{
-			this.Request = null;
-		}
-		public SvData(SvDataBase<T> RawData) : base(RawData)
-		{
-			this.Request = null;
-		}
+		public kcsapi_deck[] Fleets => this.RawData.api_data_deck;
+
 		public SvData(SvDataBase<T> RawData, string RequestBody) : base(RawData)
 		{
 			this.Request = HttpUtility.ParseQueryString(RequestBody);

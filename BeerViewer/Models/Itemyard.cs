@@ -55,15 +55,15 @@ namespace BeerViewer.Models
 			this.SlotItems = new MemberTable<SlotItem>();
 			this.UseItems = new MemberTable<UseItem>();
 
-			proxy.Register<kcsapi_slotitem[]>(Proxy.api_get_member_slot_item, x => this.Update(x.api_data));
-			proxy.Register<kcsapi_createitem>(Proxy.api_req_kousyou_createitem, x=>this.CreateItem(x.api_data));
+			proxy.Register<kcsapi_slotitem[]>(Proxy.api_get_member_slot_item, x => this.Update(x.Data));
+			proxy.Register<kcsapi_createitem>(Proxy.api_req_kousyou_createitem, x=>this.CreateItem(x.Data));
 			proxy.Register<kcsapi_destroyitem2>(Proxy.api_req_kousyou_destroyitem2, x => this.DestroyItem(x));
 
-			proxy.Register<kcsapi_useitem[]>(Proxy.api_get_member_useitem, x => this.Update(x.api_data));
+			proxy.Register<kcsapi_useitem[]>(Proxy.api_get_member_useitem, x => this.Update(x.Data));
 			proxy.Register<kcsapi_remodel_slot>(Proxy.api_req_kousyou_remodel_slot, x =>
 			{
-				this.RemoveFromRemodel(x.api_data);
-				this.RemodelSlotItem(x.api_data);
+				this.RemoveFromRemodel(x.Data);
+				this.RemodelSlotItem(x.Data);
 			});
 		}
 

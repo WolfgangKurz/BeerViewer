@@ -31,17 +31,17 @@ namespace BeerViewer.Models
 
 			Proxy.Instance.Register<kcsapi_start2>(Proxy.api_start2, x =>
 			{
-				this.ShipTypes = new MasterTable<ShipType>(x.api_data.api_mst_stype.Select(y => new ShipType(y)));
-				this.Ships = new MasterTable<ShipInfo>(x.api_data.api_mst_ship.Select(y => new ShipInfo(y)));
+				this.ShipTypes = new MasterTable<ShipType>(x.Data.api_mst_stype.Select(y => new ShipType(y)));
+				this.Ships = new MasterTable<ShipInfo>(x.Data.api_mst_ship.Select(y => new ShipInfo(y)));
 
-				this.SlotItemEquipTypes = new MasterTable<SlotItemEquipType>(x.api_data.api_mst_slotitem_equiptype.Select(y => new SlotItemEquipType(y)));
-				this.SlotItems = new MasterTable<SlotItemInfo>(x.api_data.api_mst_slotitem.Select(y => new SlotItemInfo(y, this.SlotItemEquipTypes)));
-				this.UseItems = new MasterTable<UseItemInfo>(x.api_data.api_mst_useitem.Select(y => new UseItemInfo(y)));
+				this.SlotItemEquipTypes = new MasterTable<SlotItemEquipType>(x.Data.api_mst_slotitem_equiptype.Select(y => new SlotItemEquipType(y)));
+				this.SlotItems = new MasterTable<SlotItemInfo>(x.Data.api_mst_slotitem.Select(y => new SlotItemInfo(y, this.SlotItemEquipTypes)));
+				this.UseItems = new MasterTable<UseItemInfo>(x.Data.api_mst_useitem.Select(y => new UseItemInfo(y)));
 
-				this.Missions = new MasterTable<Mission>(x.api_data.api_mst_mission.Select(y => new Mission(y)));
+				this.Missions = new MasterTable<Mission>(x.Data.api_mst_mission.Select(y => new Mission(y)));
 
-				this.MapInfos = new MasterTable<MapInfo>(x.api_data.api_mst_mapinfo.Select(y => new MapInfo(y)));
-				this.MapAreas = new MasterTable<MapArea>(x.api_data.api_mst_maparea.Select(y => new MapArea(y, this.MapInfos)));
+				this.MapInfos = new MasterTable<MapInfo>(x.Data.api_mst_mapinfo.Select(y => new MapInfo(y)));
+				this.MapAreas = new MasterTable<MapArea>(x.Data.api_mst_maparea.Select(y => new MapArea(y, this.MapInfos)));
 			});
 		}
 	}

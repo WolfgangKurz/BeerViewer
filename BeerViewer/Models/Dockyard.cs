@@ -48,8 +48,8 @@ namespace BeerViewer.Models
 			var proxy = Proxy.Instance;
 			this.Docks = new MemberTable<BuildingDock>();
 
-			proxy.Register<kcsapi_kdock[]>(Proxy.api_get_member_kdock, x => this.Update(x.api_data));
-			proxy.Register<kcsapi_kdock_getship>(Proxy.api_req_kousyou_getship, x => this.GetShip(x.api_data));
+			proxy.Register<kcsapi_kdock[]>(Proxy.api_get_member_kdock, x => this.Update(x.Data));
+			proxy.Register<kcsapi_kdock_getship>(Proxy.api_req_kousyou_getship, x => this.GetShip(x.Data));
 			proxy.Register(Proxy.api_req_kousyou_createship_speedchange, e =>
 			{
 				var x = e.TryParse();
@@ -92,7 +92,7 @@ namespace BeerViewer.Models
 
 		private void CreateSlotItem(SvData<kcsapi_createitem> svd)
 		{
-			this.CreatedSlotItem = new CreatedSlotItem(svd.api_data);
+			this.CreatedSlotItem = new CreatedSlotItem(svd.Data);
 		}
 	}
 }

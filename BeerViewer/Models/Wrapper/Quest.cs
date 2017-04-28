@@ -6,17 +6,17 @@ using BeerViewer.Models.kcsapi;
 
 namespace BeerViewer.Models.Wrapper
 {
-	public class Quest : SvData<kcsapi_quest>, IIdentifiable
+	public class Quest : RawDataWrapper<kcsapi_quest>, IIdentifiable
 	{
-		public int Id => this.api_data.api_no;
+		public int Id => this.RawData.api_no;
 
-		public QuestCategory Category => (QuestCategory)this.api_data.api_category;
-		public QuestType Type => (QuestType)this.api_data.api_type;
-		public QuestState State => (QuestState)this.api_data.api_state;
-		public QuestProgress Progress => (QuestProgress)this.api_data.api_progress_flag;
+		public QuestCategory Category => (QuestCategory)this.RawData.api_category;
+		public QuestType Type => (QuestType)this.RawData.api_type;
+		public QuestState State => (QuestState)this.RawData.api_state;
+		public QuestProgress Progress => (QuestProgress)this.RawData.api_progress_flag;
 
-		public string Title => this.api_data.api_title;
-		public string Detail => this.api_data.api_detail.Replace("<br>", Environment.NewLine);
+		public string Title => this.RawData.api_title;
+		public string Detail => this.RawData.api_detail.Replace("<br>", Environment.NewLine);
 
 		public Quest(kcsapi_quest api_data) : base(api_data) { }
 

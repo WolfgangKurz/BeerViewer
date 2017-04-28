@@ -28,7 +28,7 @@ namespace BeerViewer.Network
 
 			try
 			{
-				proxy.Handlers.Add(new Proxy.ProxyHandler
+				proxy.Handlers.TryAdd(proxy.Handlers.Count, new Proxy.ProxyHandler
 				{
 					Where = Where,
 					Handler = (s =>

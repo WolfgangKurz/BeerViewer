@@ -3,12 +3,12 @@ using BeerViewer.Models.kcsapi.mst;
 
 namespace BeerViewer.Models.Wrapper
 {
-	public class SlotItemEquipType : SvData<kcsapi_mst_slotitem_equiptype>, IIdentifiable
+	public class SlotItemEquipType : RawDataWrapper<kcsapi_mst_slotitem_equiptype>, IIdentifiable
 	{
-		public int Id => this.api_data.api_id;
-		public string Name => this.api_data.api_name;
+		public int Id => this.RawData.api_id;
+		public string Name => this.RawData.api_name;
 
-		internal SlotItemEquipType(kcsapi_mst_slotitem_equiptype RawData) : base(RawData) { }
+		internal SlotItemEquipType(kcsapi_mst_slotitem_equiptype Data) : base(Data) { }
 
 		public override string ToString()
 			=> $"ID = {this.Id}, Name = \"{this.Name}\"";

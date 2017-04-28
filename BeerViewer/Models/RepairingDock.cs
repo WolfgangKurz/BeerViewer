@@ -143,20 +143,20 @@ namespace BeerViewer.Models
 
 		public event EventHandler<RepairingCompletedEventArgs> Completed;
 
-		internal RepairingDock(Homeport parent, kcsapi_ndock rawData)
+		internal RepairingDock(Homeport parent, kcsapi_ndock Data)
 		{
 			this.homeport = parent;
-			this.Update(rawData);
+			this.Update(Data);
 		}
 
-		internal void Update(kcsapi_ndock rawData)
+		internal void Update(kcsapi_ndock Data)
 		{
-			this.Id = rawData.api_id;
-			this.State = (RepairingDockState)rawData.api_state;
-			this.ShipId = rawData.api_ship_id;
+			this.Id = Data.api_id;
+			this.State = (RepairingDockState)Data.api_state;
+			this.ShipId = Data.api_ship_id;
 			this.Ship = this.State == RepairingDockState.Repairing ? this.homeport.Organization.Ships[this.ShipId] : null;
 			this.CompleteTime = this.State == RepairingDockState.Repairing
-				? (DateTimeOffset?)Extensions.UnixEpoch.AddMilliseconds(rawData.api_complete_time)
+				? (DateTimeOffset?)Extensions.UnixEpoch.AddMilliseconds(Data.api_complete_time)
 				: null;
 			this.Level = this.State == RepairingDockState.Repairing ? this.Ship.Level : 0;
 		}

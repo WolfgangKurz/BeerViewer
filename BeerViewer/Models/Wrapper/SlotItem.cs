@@ -5,26 +5,26 @@ using BeerViewer.Models.kcsapi;
 
 namespace BeerViewer.Models.Wrapper
 {
-	public class SlotItem : SvData<kcsapi_slotitem>, IIdentifiable
+	public class SlotItem : RawDataWrapper<kcsapi_slotitem>, IIdentifiable
 	{
-		public int Id => this.api_data.api_id;
+		public int Id => this.RawData.api_id;
 		public SlotItemInfo Info { get; private set; }
 
-		public int Level => this.api_data.api_level;
+		public int Level => this.RawData.api_level;
 		public string LevelText => this.Level >= 10 ? "★max" : this.Level >= 1 ? ("★+" + this.Level) : "";
 		public string NameWithLevel => $"{this.Info.Name}{(this.Level >= 1 ? (" " + this.LevelText) : "")}{(this.Proficiency >= 1 ? (" " + this.ProficiencyText) : "")}";
 
-		public int Proficiency => this.api_data.api_alv;
+		public int Proficiency => this.RawData.api_alv;
 		public string ProficiencyText => this.Proficiency >= 1 ? (" (Proficiency " + this.Proficiency + ")") : "";
 
-		internal SlotItem(kcsapi_slotitem RawData) : base(RawData)
+		internal SlotItem(kcsapi_slotitem Data) : base(Data)
 		{
-			this.Info = Master.Instance.SlotItems[this.api_data.api_slotitem_id] ?? SlotItemInfo.Empty;
+			this.Info = Master.Instance.SlotItems[this.RawData.api_slotitem_id] ?? SlotItemInfo.Empty;
 		}
 
 		public void Remodel(int level, int masterId)
 		{
-			this.api_data.api_level = level;
+			this.RawData.api_level = level;
 			this.Info = Master.Instance.SlotItems[masterId] ?? SlotItemInfo.Empty;
 
 			this.RaisePropertyChanged(nameof(this.Info));
