@@ -7,6 +7,8 @@ namespace BeerViewer.Models.Raw
 {
 	internal static class Extensions
 	{
+		public static readonly DateTimeOffset UnixEpoch = new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero);
+
 		public static int? Get(this int[] array, int index)
 			=> (index < 0 || index >= array.Length)
 				? (int?)null

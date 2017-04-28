@@ -23,8 +23,6 @@ namespace BeerViewer.Models
 
 	public class Expedition : TimerNotifier, IIdentifiable
 	{
-		public static readonly DateTimeOffset UnixEpoch = new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero);
-
 		private readonly Fleet fleet;
 		private bool notificated;
 
@@ -105,7 +103,7 @@ namespace BeerViewer.Models
 			{
 				this.Id = (int)rawData[1];
 				this.Mission = Master.Instance.Missions[this.Id];
-				this.ReturnTime = UnixEpoch.AddMilliseconds(rawData[2]);
+				this.ReturnTime = Extensions.UnixEpoch.AddMilliseconds(rawData[2]);
 				this.UpdateCore();
 			}
 		}
