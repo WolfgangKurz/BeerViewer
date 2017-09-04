@@ -1,4 +1,6 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
+using System.Windows.Forms;
 
 using BeerViewer.Framework;
 using BeerViewer.Models;
@@ -25,37 +27,70 @@ namespace BeerViewer.Forms.Controls
 
 		private void Initialize()
 		{
-			this.Paint += (s, e) =>
+			this.Paint += this.OnPaint;
+		}
+
+		private void DrawBitmapNumber(Graphics g, string Text, Point pos, bool OnCenter, bool UseWhite)
+		{
+			int p = 4, h = 7;
+			int p2 = p + 1, hh = h / 2;
+			var table = "0123456789[]:";
+			int x = -p2 + pos.X - (OnCenter ? Text.Length * p2 / 2 : 0);
+			int y = pos.Y - (OnCenter ? hh : 0);
+
+			foreach(var c in Text)
 			{
-				var g = e.Graphics;
+				x += (c==' ' ? 2 : p2);
 
-				if (this.Fleet != null)
+				int offset = table.IndexOf(c);
+				if (offset< 0) continue;
+
+				g.DrawImage(
+					Constants.BitmapNumber,
+					new Rectangle(x, y, p, h),
+					new Rectangle(offset * p, UseWhite ? h : 0, p, h),
+					GraphicsUnit.Pixel
+				);
+			}
+		}
+		private void OnPaint(object sender, PaintEventArgs e)
+		{
+			var g = e.Graphics;
+
+			if (this.Fleet != null)
+			{
+				var expedition = this.Fleet.Expedition;
+				var progress = expedition.Progress;
+
+				if (expedition.IsInExecution && progress.Maximum > 0)
 				{
-					var expedition = this.Fleet.Expedition;
-					var progress = expedition.Progress;
+					g.FillRectangle(Constants.brushActiveFace, this.ClientBound);
 
-					if (expedition.IsInExecution && progress.Maximum > 0)
-					{
-						g.FillRectangle(Constants.brushActiveFace, this.ClientBound);
-
-						g.FillRectangle(
-							Constants.brushBlueAccent,
-							new Rectangle(0, 0, this.ClientBound.Width * progress.Current / progress.Maximum, this.ClientBound.Height)
-						);
-						g.DrawString(
-							string.Format("[{0}] {1}", expedition.Id, expedition.RemainingText),
-							new Font(Constants.fontDefault.FontFamily, 8),
-							Brushes.White,
-							new Point(this.ClientBound.Width / 2, -1),
-							new StringFormat { Alignment = StringAlignment.Center }
-						);
-					}
-					else
-					{
-						g.FillRectangle(Constants.brushHoverFace, this.ClientBound);
-					}
+					g.FillRectangle(
+						Constants.brushBlueAccent,
+						new Rectangle(0, 0, this.ClientBound.Width * progress.Current / progress.Maximum, this.ClientBound.Height)
+					);
+					/*
+					g.DrawString(
+						string.Format("[{0}] {1}", expedition.Id, expedition.RemainingText),
+						new Font(Constants.fontDefault.FontFamily, 8),
+						Brushes.White,
+						new Point(this.ClientBound.Width / 2, -1),
+						new StringFormat { Alignment = StringAlignment.Center }
+					);
+					*/
+					this.DrawBitmapNumber(
+						g,
+						string.Format("[{0}] {1}", expedition.Id, expedition.RemainingText),
+						new Point(this.ClientBound.Width / 2, this.ClientBound.Height / 2),
+						true, true
+					);
 				}
-			};
+				else
+				{
+					g.FillRectangle(Constants.brushHoverFace, this.ClientBound);
+				}
+			}
 		}
 
 		public void SetFleet(Fleet Fleet)

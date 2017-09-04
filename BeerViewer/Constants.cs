@@ -23,6 +23,8 @@ namespace BeerViewer
 			+ "#game_frame { position:fixed; left:50%; top:-16px; margin-left:-450px; z-index:1 }"
 			+ ".area-pickupgame, .area-menu { display: none !important }";
 
+		public static Image BitmapNumber => BeerViewer.Properties.Resources.Numbers;
+
 		public static Brush brushHoverFace { get; } = new SolidBrush(FrameworkExtension.FromRgb(0x313131));
 		public static Brush brushActiveFace { get; } = new SolidBrush(FrameworkExtension.FromRgb(0x575757));
 		public static Brush brushDisabled => brushActiveFace;
