@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using System.Threading.Tasks;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using System.Runtime.CompilerServices;
 
 namespace BeerViewer.Framework
 {
@@ -128,14 +129,24 @@ namespace BeerViewer.Framework
 			this._Controls = null;
 		}
 
+		internal void _SetCapture() => FrameworkRenderer.SetCapture(this.Owner.Handle);
+		internal void _ReleaseCapture() => FrameworkRenderer.ReleaseCapture();
 
-		internal void _SetCapture()
+		internal void Invalidate(Rectangle rect)
+			=> this.Owner?.Invalidate(rect);
+	}
+
+	internal static class FrameworkControlExtension
+	{
+		public static void InvalidateRaw(this FrameworkContainer control)
+			=> control.Renderer.Invalidate(control.Bound);
+
+		public static void InvalidateRaw(this FrameworkControl control)
 		{
-			FrameworkRenderer.SetCapture(this.Owner.Handle);
-		}
-		internal void _ReleaseCapture()
-		{
-			FrameworkRenderer.ReleaseCapture();
+			if (control.IsChild)
+				control.Parent.Invalidate();
+			else
+				control.Renderer?.Invalidate(control.Bound);
 		}
 	}
 }

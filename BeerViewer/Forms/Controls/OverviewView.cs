@@ -54,12 +54,15 @@ namespace BeerViewer.Forms.Controls
 			FleetTabHost.AddTab(new TabHost.TabItem("IV", Fleets[3]));
 			this.AddControl(FleetTabHost);
 
-			Fleets.ForEach(f => f.Invalidated += (s, e) =>
-			{
-				var fv = s as FleetView;
-				if (!fv.Visible) return;
+			Fleets.ForEach(f => {
+				f.Invalidated += (s, e) =>
+				{
+					var fv = s as FleetView;
+					if (!fv.Visible) return;
 
-				this.Height = 24 + fv.Height;
+					this.Height = 24 + fv.Height;
+				};
+				this.AddControl(f);
 			});
 
 			this.Resize += (s, e) =>

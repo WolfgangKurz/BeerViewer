@@ -145,6 +145,7 @@ namespace BeerViewer.Framework
 		public void AddControl(FrameworkControl Control)
 		{
 			Control.Invalidated += this.ControlInvalidate;
+			Control.Parent = this;
 			this._Controls.Add(Control);
 
 			Control.Invalidate();

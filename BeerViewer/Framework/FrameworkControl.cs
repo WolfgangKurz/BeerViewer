@@ -110,7 +110,7 @@ namespace BeerViewer.Framework
 
 		#region IsActive
 		/// <summary>
-		/// Returns mouse is active(click) on control
+		/// Returns is mouse active(click) on control
 		/// </summary>
 		public bool IsActive
 		{
@@ -129,7 +129,7 @@ namespace BeerViewer.Framework
 
 		#region IsHover
 		/// <summary>
-		/// Returns mouse is hover on control
+		/// Returns is mouse hover on control
 		/// </summary>
 		public bool IsHover
 		{
@@ -147,6 +147,9 @@ namespace BeerViewer.Framework
 		#endregion
 
 		public FrameworkRenderer Renderer { get; private set; }
+
+		public FrameworkContainer Parent { get; set; }
+		public bool IsChild => this.Parent != null;
 
 
 		/// <summary>
@@ -222,8 +225,6 @@ namespace BeerViewer.Framework
 		{
 			if (this.Visible && this.ClientBound.Contains(pt))
 			{
-				System.Diagnostics.Debug.WriteLine("{0}: {1}", "MouseDown", this.GetType().FullName);
-
 				this.Renderer?._SetCapture();
 				this.IsActive = true;
 
@@ -234,8 +235,6 @@ namespace BeerViewer.Framework
 		}
 		public virtual bool OnMouseUp(Point pt)
 		{
-			System.Diagnostics.Debug.WriteLine("{0}: {1} (IsActive:{2})", "MouseUp", this.GetType().FullName, IsActive);
-
 			bool prev = this.IsActive;
 
 			this.IsActive = false;
@@ -276,6 +275,7 @@ namespace BeerViewer.Framework
 		/// </summary>
 		public void Invalidate()
 		{
+			this.InvalidateRaw();
 			this.Invalidated?.Invoke(this, EventArgs.Empty);
 		}
 
