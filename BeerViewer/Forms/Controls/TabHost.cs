@@ -49,18 +49,25 @@ namespace BeerViewer.Forms.Controls
 		#endregion
 
 
+		#region Initializers
 		public TabHost() : base()
-		{
-			this.Initialize();
-		}
+			=> this.Initialize();
+
+		public TabHost(FrameworkRenderer Renderer) : base(Renderer)
+			=> this.Initialize();
+
 		public TabHost(int X, int Y) : base(X, Y)
-		{
-			this.Initialize();
-		}
+			=> this.Initialize();
+
+		public TabHost(FrameworkRenderer Renderer, int X, int Y) : base(Renderer, X, Y)
+			=> this.Initialize();
+
 		public TabHost(int X, int Y, int Width, int Height) : base(X, Y, Width, Height)
-		{
-			this.Initialize();
-		}
+			=> this.Initialize();
+
+		public TabHost(FrameworkRenderer Renderer, int X, int Y, int Width, int Height) : base(Renderer, X, Y, Width, Height)
+			=> this.Initialize();
+		#endregion
 
 		private void Initialize()
 		{
@@ -79,12 +86,12 @@ namespace BeerViewer.Forms.Controls
 				hoverPoint = new Point(e.X, e.Y);
 
 				if (e.Button == MouseButtons.Left)
-					this.TabIndex = idx;
+					this.TabIndex = idx.InRange(0, this.TabItems.Count - 1);
 			};
 			this.MouseDown += (s, e) =>
 			{
 				int idx = e.X / this.TabWidth;
-				this.TabIndex = idx;
+				this.TabIndex = idx.InRange(0, this.TabItems.Count - 1);
 			};
 
 			this.Paint += (s, e) =>
@@ -106,7 +113,8 @@ namespace BeerViewer.Forms.Controls
 						Constants.fontDefault,
 						Brushes.White,
 						ItemBound,
-						new StringFormat {
+						new StringFormat
+						{
 							FormatFlags = StringFormatFlags.NoWrap,
 							Alignment = StringAlignment.Center,
 							LineAlignment = StringAlignment.Center

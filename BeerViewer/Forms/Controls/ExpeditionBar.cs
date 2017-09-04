@@ -12,18 +12,25 @@ namespace BeerViewer.Forms.Controls
 	{
 		public Fleet Fleet { get; private set; }
 
+		#region Initializers
 		public ExpeditionBar() : base()
-		{
-			this.Initialize();
-		}
+			=> this.Initialize();
+
+		public ExpeditionBar(FrameworkRenderer Renderer) : base(Renderer)
+			=> this.Initialize();
+
 		public ExpeditionBar(int X, int Y) : base(X, Y)
-		{
-			this.Initialize();
-		}
+			=> this.Initialize();
+
+		public ExpeditionBar(FrameworkRenderer Renderer, int X, int Y) : base(Renderer, X, Y)
+			=> this.Initialize();
+
 		public ExpeditionBar(int X, int Y, int Width, int Height) : base(X, Y, Width, Height)
-		{
-			this.Initialize();
-		}
+			=> this.Initialize();
+
+		public ExpeditionBar(FrameworkRenderer Renderer, int X, int Y, int Width, int Height) : base(Renderer, X, Y, Width, Height)
+			=> this.Initialize();
+		#endregion
 
 		private void Initialize()
 		{
@@ -38,12 +45,12 @@ namespace BeerViewer.Forms.Controls
 			int x = -p2 + pos.X - (OnCenter ? Text.Length * p2 / 2 : 0);
 			int y = pos.Y - (OnCenter ? hh : 0);
 
-			foreach(var c in Text)
+			foreach (var c in Text)
 			{
-				x += (c==' ' ? 2 : p2);
+				x += (c == ' ' ? 2 : p2);
 
 				int offset = table.IndexOf(c);
-				if (offset< 0) continue;
+				if (offset < 0) continue;
 
 				g.DrawImage(
 					Constants.BitmapNumber,

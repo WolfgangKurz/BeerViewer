@@ -60,6 +60,7 @@ namespace BeerViewer.Framework
 				if (this._Width != value)
 				{
 					this._Width = value;
+					this.Resize?.Invoke(this, EventArgs.Empty);
 					this.Invalidate();
 				}
 			}
@@ -79,6 +80,7 @@ namespace BeerViewer.Framework
 				if (this._Height != value)
 				{
 					this._Height = value;
+					this.Resize?.Invoke(this, EventArgs.Empty);
 					this.Invalidate();
 				}
 			}
@@ -144,6 +146,8 @@ namespace BeerViewer.Framework
 		private bool _IsHover { get; set; }
 		#endregion
 
+		public FrameworkRenderer Renderer { get; private set; }
+
 
 		/// <summary>
 		/// Bound rectangle of control
@@ -171,32 +175,39 @@ namespace BeerViewer.Framework
 		public event EventHandler MouseLeave;
 		public event EventHandler Click;
 
+		public event EventHandler Resize;
 		public event PaintEventHandler Paint;
 		#endregion
 
 		#region Initializers
-		public FrameworkControl()
+		public FrameworkControl(FrameworkRenderer Renderer)
 		{
+			this.Renderer = Renderer;
 			this._X = this._Y = 0;
 			this._Width = 100;
 			this._Height = 32;
 			this.Visible = true;
 		}
-		public FrameworkControl(int X, int Y) : this()
+		public FrameworkControl() : this(null) { }
+
+		public FrameworkControl(FrameworkRenderer Renderer, int X, int Y) : this(Renderer)
 		{
 			this._X = X;
 			this._Y = Y;
 		}
-		public FrameworkControl(int X, int Y, int Width, int Height) : this(X, Y)
+		public FrameworkControl(int X, int Y) : this(null, X, Y) { }
+
+		public FrameworkControl(FrameworkRenderer Renderer, int X, int Y, int Width, int Height) : this(Renderer, X, Y)
 		{
 			this._Width = Width;
 			this._Height = Height;
 		}
+		public FrameworkControl(int X, int Y, int Width, int Height) : this(null, X, Y, Width, Height) { }
 		#endregion
 
 		public virtual bool OnMouseMove(Point pt)
 		{
-			if (this.Visible && this.ClientBound.Contains(pt))
+			if (this.Visible && (this.IsActive || this.ClientBound.Contains(pt)))
 			{
 				this.IsHover = true;
 
@@ -211,6 +222,9 @@ namespace BeerViewer.Framework
 		{
 			if (this.Visible && this.ClientBound.Contains(pt))
 			{
+				System.Diagnostics.Debug.WriteLine("{0}: {1}", "MouseDown", this.GetType().FullName);
+
+				this.Renderer?._SetCapture();
 				this.IsActive = true;
 
 				this.MouseDown?.Invoke(this, new MouseEventArgs(MouseButtons.Left, 0, pt.X, pt.Y, 0));
@@ -220,14 +234,18 @@ namespace BeerViewer.Framework
 		}
 		public virtual bool OnMouseUp(Point pt)
 		{
-			bool prev = this.IsActive;
-			this.IsActive = false;
+			System.Diagnostics.Debug.WriteLine("{0}: {1} (IsActive:{2})", "MouseUp", this.GetType().FullName, IsActive);
 
-			if (this.Visible && this.ClientBound.Contains(pt))
+			bool prev = this.IsActive;
+
+			this.IsActive = false;
+			this.Renderer?._ReleaseCapture();
+
+			if (this.Visible && (this.ClientBound.Contains(pt) || prev))
 			{
 				this.MouseUp?.Invoke(this, new MouseEventArgs(MouseButtons.None, 0, pt.X, pt.Y, 0));
 
-				if (prev) this.Click?.Invoke(this, new EventArgs());
+				if (prev) this.Click?.Invoke(this, EventArgs.Empty);
 				return true;
 			}
 			return false;
@@ -237,7 +255,7 @@ namespace BeerViewer.Framework
 			if (!this.IsHover) return;
 
 			this.IsHover = false;
-			this.MouseLeave?.Invoke(this, new EventArgs());
+			this.MouseLeave?.Invoke(this, EventArgs.Empty);
 		}
 
 		public virtual void OnPaint(Graphics g)
@@ -258,7 +276,7 @@ namespace BeerViewer.Framework
 		/// </summary>
 		public void Invalidate()
 		{
-			this.Invalidated?.Invoke(this, new EventArgs());
+			this.Invalidated?.Invoke(this, EventArgs.Empty);
 		}
 
 		/// <summary>
@@ -275,5 +293,8 @@ namespace BeerViewer.Framework
 		public virtual void Dispose()
 		{
 		}
+
+		public void SetRenderer(FrameworkRenderer Renderer)
+			=> this.Renderer = Renderer;
 	}
 }

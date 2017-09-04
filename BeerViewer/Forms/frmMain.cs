@@ -10,6 +10,7 @@ using System.Windows.Forms;
 
 using BeerViewer.Framework;
 using BeerViewer.Forms.Controls;
+using BeerViewer.Forms.Controls.Fleets;
 using BeerViewer.Models;
 
 namespace BeerViewer.Forms
@@ -126,15 +127,14 @@ namespace BeerViewer.Forms
 			};
 			#endregion
 
-			#region Fleet TabHost
-			var FleetTabHost = new TabHost(801, 29 + 28, 400, 24);
-			FleetTabHost.AddTab(new TabHost.TabItem("I", null));
-			FleetTabHost.AddTab(new TabHost.TabItem("II", null));
-			FleetTabHost.AddTab(new TabHost.TabItem("III", null));
-			FleetTabHost.AddTab(new TabHost.TabItem("IV", null));
-			this.Renderer.AddControl(FleetTabHost);
-
-			this.Resize += (s, e) => FleetTabHost.Width = this.ClientSize.Width - 801;
+			#region Overview
+			var Overview = new OverviewView(801, 29 + 28, 400, 24);
+			Homeport.Instance.Organization.PropertyEvent(nameof(Homeport.Instance.Organization.Fleets), () =>
+			{
+				var fleets = Homeport.Instance.Organization.Fleets;
+				Overview.SetFleet(fleets.Select(_ => _.Value).ToArray());
+			});
+			this.Renderer.AddControl(Overview);
 			#endregion
 		}
 

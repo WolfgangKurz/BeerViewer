@@ -31,5 +31,8 @@ namespace BeerViewer.Framework
 
 			return collection;
 		}
+
+		internal static int InRange(this int Value, int Min, int Max)
+			=> (Value < Min) ? Min : ((Value > Max) ? Max : Value);
 	}
 }

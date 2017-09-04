@@ -14,17 +14,22 @@ namespace BeerViewer.Framework
 
 		#region Initializers
 		public FrameworkContainer() : base()
-		{
-			this.Initialize();
-		}
-		public FrameworkContainer(int X, int Y) : base(X, Y)
-		{
-			this.Initialize();
-		}
-		public FrameworkContainer(int X, int Y, int Width, int Height) : base(X, Y, Width, Height)
-		{
-			this.Initialize();
-		}
+			=> this.Initialize();
+
+		public FrameworkContainer(FrameworkRenderer Renderer) : base(Renderer)
+			=> this.Initialize();
+
+		public FrameworkContainer(int X, int Y) : base( X, Y)
+			=> this.Initialize();
+
+		public FrameworkContainer(FrameworkRenderer Renderer, int X, int Y) : base(Renderer, X, Y)
+			=> this.Initialize();
+
+		public FrameworkContainer(int X, int Y, int Width, int Height) : base( X, Y, Width, Height)
+			=> this.Initialize();
+
+		public FrameworkContainer(FrameworkRenderer Renderer, int X, int Y, int Width, int Height) : base(Renderer, X, Y, Width, Height)
+			=> this.Initialize();
 		#endregion
 
 		public void Initialize()
@@ -40,14 +45,26 @@ namespace BeerViewer.Framework
 			this.MouseMove += (s, e) =>
 			{
 				var pt = new Point(e.X, e.Y);
-				foreach (var control in this.Controls)
+				if (this.Controls.Any(_ => _.IsActive))
 				{
+					var control = this.Controls.First(_ => _.IsActive);
 					var cpt = new Point(pt.X - control.X, pt.Y - control.Y);
-					if (control.OnMouseMove(cpt))
+
+					control.OnMouseMove(cpt);
+				}
+				else
+				{
+					foreach (var control in this.Controls)
 					{
-						this.Controls.Where(x => x != control)
-							.ToList().ForEach(x => x.OnMouseLeave());
-						break;
+						var cpt = new Point(pt.X - control.X, pt.Y - control.Y);
+						if (control.OnMouseMove(cpt))
+						{
+							this.Controls.Where(x => x != control)
+								.ToList().ForEach(x => x.OnMouseLeave());
+
+							control.OnMouseMove(cpt);
+							break;
+						}
 					}
 				}
 			};
@@ -63,10 +80,20 @@ namespace BeerViewer.Framework
 			this.MouseUp += (s, e) =>
 			{
 				var pt = new Point(e.X, e.Y);
-				foreach (var control in this.Controls)
+				if (this.Controls.Any(_ => _.IsActive))
 				{
+					var control = this.Controls.First(_ => _.IsActive);
 					var cpt = new Point(pt.X - control.X, pt.Y - control.Y);
-					if (control.OnMouseUp(cpt)) break;
+
+					control.OnMouseUp(cpt);
+				}
+				else
+				{
+					foreach (var control in this.Controls)
+					{
+						var cpt = new Point(pt.X - control.X, pt.Y - control.Y);
+						if (control.OnMouseUp(cpt)) break;
+					}
 				}
 			};
 			this.MouseLeave += (s, e) =>
@@ -85,7 +112,6 @@ namespace BeerViewer.Framework
 
 					var state = g.Save();
 
-					g.TranslateTransform(this.X, this.Y);
 					g.TranslateTransform(control.X, control.Y);
 					g.Clip = new Region(control.ClientBound);
 					g.IntersectClip(new Rectangle(-control.X, -control.Y, this.ClientBound.Width, this.ClientBound.Height));
@@ -95,6 +121,21 @@ namespace BeerViewer.Framework
 					g.Restore(state);
 				}
 			};
+		}
+
+		public override bool OnMouseUp(Point pt)
+		{
+			if (base.OnMouseUp(pt))
+			{
+				foreach (var control in this.Controls)
+				{
+					var cpt = new Point(pt.X - control.X, pt.Y - control.Y);
+					if (control.OnMouseUp(cpt))
+						return true;
+				}
+				return true;
+			}
+			return false;
 		}
 
 		/// <summary>

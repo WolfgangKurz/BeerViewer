@@ -5,11 +5,20 @@ using System.Text;
 using System.Windows.Forms;
 using System.Threading.Tasks;
 using System.Drawing;
+using System.Runtime.InteropServices;
 
 namespace BeerViewer.Framework
 {
 	public sealed class FrameworkRenderer : IDisposable
 	{
+		#region WinAPI
+		[DllImport("user32")]
+		private static extern IntPtr SetCapture(IntPtr hWnd);
+
+		[DllImport("user32")]
+		private static extern bool ReleaseCapture();
+		#endregion
+
 		public IReadOnlyCollection<FrameworkControl> Controls => this._Controls;
 		private List<FrameworkControl> _Controls { get; set; } = new List<FrameworkControl>();
 
@@ -95,6 +104,7 @@ namespace BeerViewer.Framework
 		/// <param name="Control">Control to add</param>
 		public void AddControl(FrameworkControl Control)
 		{
+			Control.SetRenderer(this);
 			Control.Invalidated += this.ControlInvalidate;
 			this._Controls.Add(Control);
 
@@ -116,6 +126,16 @@ namespace BeerViewer.Framework
 			#endregion
 
 			this._Controls = null;
+		}
+
+
+		internal void _SetCapture()
+		{
+			FrameworkRenderer.SetCapture(this.Owner.Handle);
+		}
+		internal void _ReleaseCapture()
+		{
+			FrameworkRenderer.ReleaseCapture();
 		}
 	}
 }

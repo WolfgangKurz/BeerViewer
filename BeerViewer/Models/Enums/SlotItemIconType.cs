@@ -218,5 +218,15 @@
 		/// 水上戦闘機
 		/// </summary>
 		SeaplaneFighter = 43,
+
+		/// <summary>
+		/// 陸軍戦闘機
+		/// </summary>
+		LandBasedFighter = 44,
+
+		/// <summary>
+		/// 夜間戦闘機
+		/// </summary>
+		NightFighter = 45,
 	}
 }

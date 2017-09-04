@@ -68,7 +68,7 @@
     <Compile Include="Configuration.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Forms\Controls\ExpeditionBar.cs" />
-    <Compile Include="Forms\Controls\FleetView.cs" />
+    <Compile Include="Forms\Controls\Fleets\FleetView.cs" />
     <Compile Include="Forms\Controls\OverviewView.cs" />
     <Compile Include="Forms\Controls\TabHost.cs" />
     <Compile Include="Framework\BorderlessWindow.cs">
