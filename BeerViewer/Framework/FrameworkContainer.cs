@@ -108,17 +108,20 @@ namespace BeerViewer.Framework
 
 				foreach (var control in this.Controls)
 				{
-					if (!control.Visible) return;
+					if (!control.Visible) continue;
 
-					var state = g.Save();
+					if (g.Clip.IsVisible(control.Bound))
+					{
+						var state = g.Save();
 
-					g.TranslateTransform(control.X, control.Y);
-					g.Clip = new Region(control.ClientBound);
-					g.IntersectClip(new Rectangle(-control.X, -control.Y, this.ClientBound.Width, this.ClientBound.Height));
+						g.TranslateTransform(control.X, control.Y);
+						g.Clip = new Region(control.ClientBound);
+						g.IntersectClip(new Rectangle(-control.X, -control.Y, this.ClientBound.Width, this.ClientBound.Height));
 
-					control.Update(g);
+						control.Update(g);
 
-					g.Restore(state);
+						g.Restore(state);
+					}
 				}
 			};
 		}

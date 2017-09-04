@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using BeerViewer.Network;
+using BeerViewer.Models.Enums;
 using BeerViewer.Models.Raw;
 using BeerViewer.Models.kcsapi;
 
@@ -63,6 +64,12 @@ namespace BeerViewer.Models
 
 		[EditorBrowsable(EditorBrowsableState.Never)]
 		public object ShipsUpdated { get; set; }
+		#endregion
+
+		#region FleetSpeed Property
+		public ShipSpeed Speed
+			=> this.Ships?.Select(x => x.Speed).Min()
+				?? ShipSpeed.Immovable;
 		#endregion
 
 		public Expedition Expedition { get; }

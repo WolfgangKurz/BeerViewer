@@ -250,6 +250,12 @@ namespace BeerViewer.Models
 		}
 		#endregion
 
+		public ShipSlot[] EquippedItems
+			=> this.Slots
+				.Concat(this.ExSlotExists ? new ShipSlot[] { this.ExSlot } : new ShipSlot[] { })
+				.Where(x => x.Equipped)
+				.ToArray();
+
 		#region TimeToRepair Property
 		private TimeSpan _TimeToRepair;
 		public TimeSpan TimeToRepair

@@ -210,7 +210,7 @@ namespace BeerViewer.Framework
 		{
 			Renderer = new Framework.FrameworkRenderer(this);
 
-			this.BackColor = FrameworkExtension.FromRgb(0x222225);
+			this.BackColor = Constants.colorNormalFace;
 			this.DoubleBuffered = true;
 
 			if (!IsDialog)

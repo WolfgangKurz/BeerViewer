@@ -135,6 +135,12 @@ namespace BeerViewer.Forms
 				Overview.SetFleet(fleets.Select(_ => _.Value).ToArray());
 			});
 			this.Renderer.AddControl(Overview);
+
+			this.Resize += (s, e) =>
+			{
+				Overview.Width = this.ClientSize.Width - 800 - 1;
+				Overview.Height = this.ClientSize.Height - (29 + 28) - 1;
+			};
 			#endregion
 		}
 

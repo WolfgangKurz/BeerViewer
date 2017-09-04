@@ -32,7 +32,25 @@ namespace BeerViewer.Framework
 			return collection;
 		}
 
+		/// <summary>
+		/// Get limited value in range
+		/// </summary>
+		/// <param name="Value">Value to limit</param>
+		/// <param name="Min">Minimum value</param>
+		/// <param name="Max">Maximum value</param>
+		/// <returns></returns>
 		internal static int InRange(this int Value, int Min, int Max)
 			=> (Value < Min) ? Min : ((Value > Max) ? Max : Value);
+
+		/// <summary>
+		/// Get array's value safely
+		/// </summary>
+		/// <param name="Array">Source array</param>
+		/// <param name="Index">Index value</param>
+		/// <returns></returns>
+		internal static int? Get(this int[] Array, int Index)
+			=> Index < 0 || Index >= Array.Length
+				? null
+				: (int?)Array[Index];
 	}
 }

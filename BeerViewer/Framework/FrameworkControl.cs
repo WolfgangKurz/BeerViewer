@@ -261,13 +261,16 @@ namespace BeerViewer.Framework
 		{
 			if (!this.Visible) return;
 
-			var state = g.Save();
+			if (g.Clip.IsVisible(this.Bound))
+			{
+				var state = g.Save();
 
-			g.TranslateTransform(this.X, this.Y);
-			g.Clip = new Region(this.ClientBound);
-			this.Update(g);
+				g.TranslateTransform(this.X, this.Y);
+				g.Clip = new Region(this.ClientBound);
+				this.Update(g);
 
-			g.Restore(state);
+				g.Restore(state);
+			}
 		}
 
 		/// <summary>

@@ -25,17 +25,32 @@ namespace BeerViewer
 
 		public static Image BitmapNumber => BeerViewer.Properties.Resources.Numbers;
 
-		public static Brush brushHoverFace { get; } = new SolidBrush(FrameworkExtension.FromRgb(0x313131));
-		public static Brush brushActiveFace { get; } = new SolidBrush(FrameworkExtension.FromRgb(0x575757));
+		public static Color colorNormalFace { get; } = FrameworkExtension.FromRgb(0x222225);
+		public static Color colorHoverFace { get; } = FrameworkExtension.FromRgb(0x313131);
+		public static Color colorActiveFace { get; } = FrameworkExtension.FromRgb(0x575757);
+
+		public static Brush brushNormalFace { get; } = new SolidBrush(colorNormalFace);
+		public static Brush brushHoverFace { get; } = new SolidBrush(colorHoverFace);
+		public static Brush brushActiveFace { get; } = new SolidBrush(colorActiveFace);
 		public static Brush brushDisabled => brushActiveFace;
 		public static Brush brushHint => brushActiveFace;
 
-		public static Brush brushRedAccent { get; } = new SolidBrush(FrameworkExtension.FromRgb(0xc62828));
-		public static Brush brushBlueAccent { get; } = new SolidBrush(FrameworkExtension.FromRgb(0x1565c0));
-		public static Brush brushGreenAccent { get; } = new SolidBrush(FrameworkExtension.FromRgb(0x388e3c));
-		public static Brush brushYellowAccent { get; } = new SolidBrush(FrameworkExtension.FromRgb(0xfdd835));
-		public static Brush brushOrangeAccent { get; } = new SolidBrush(FrameworkExtension.FromRgb(0xf57c00));
 
+		public static Color colorRedAccent { get; } = FrameworkExtension.FromRgb(0xc62828);
+		public static Color colorBlueAccent { get; } = FrameworkExtension.FromRgb(0x1565c0);
+		public static Color colorGreenAccent { get; } = FrameworkExtension.FromRgb(0x388e3c);
+		public static Color colorYellowAccent { get; } = FrameworkExtension.FromRgb(0xfdd835);
+		public static Color colorOrangeAccent { get; } = FrameworkExtension.FromRgb(0xf57c00);
+		public static Color colorDeepGreenAccent { get; } = FrameworkExtension.FromRgb(0x289010);
+
+		public static Brush brushRedAccent { get; } = new SolidBrush(colorRedAccent);
+		public static Brush brushBlueAccent { get; } = new SolidBrush(colorBlueAccent);
+		public static Brush brushGreenAccent { get; } = new SolidBrush(colorGreenAccent);
+		public static Brush brushYellowAccent { get; } = new SolidBrush(colorYellowAccent);
+		public static Brush brushOrangeAccent { get; } = new SolidBrush(colorOrangeAccent);
+		public static Brush brushDeepGreenAccent { get; } = new SolidBrush(colorDeepGreenAccent);
+
+		public static Pen penNormalFace { get; } = new Pen(FrameworkExtension.FromRgb(0x222225));
 		public static Pen penHoverFace { get; } = new Pen(FrameworkExtension.FromRgb(0x313131));
 		public static Pen penActiveFace { get; } = new Pen(FrameworkExtension.FromRgb(0x575757));
 		public static Pen penDisabled => penActiveFace;
