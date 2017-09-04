@@ -1,42 +1,43 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using System.Threading.Tasks;
 using System.Drawing;
 
 namespace BeerViewer.Framework
 {
-	public sealed class FrameworkRenderer : IDisposable
+	public class FrameworkContainer : FrameworkControl, IDisposable
 	{
 		public IReadOnlyCollection<FrameworkControl> Controls => this._Controls;
 		private List<FrameworkControl> _Controls { get; set; } = new List<FrameworkControl>();
 
-		private Control Owner { get; set; }
-
-		private MouseEventHandler OwnerMouseMoveEvent = null;
-		private MouseEventHandler OwnerMouseDownEvent = null;
-		private MouseEventHandler OwnerMouseUpEvent = null;
-		private EventHandler OwnerMouseLeaveEvent = null;
-		private PaintEventHandler OwnerPaintEvent = null;
-
 		private EventHandler ControlInvalidate = null;
 
-		public FrameworkRenderer(Control Owner)
+		#region Initializers
+		public FrameworkContainer() : base()
 		{
-			this.Owner = Owner;
+			this.Initialize();
+		}
+		public FrameworkContainer(int X, int Y) : base(X, Y)
+		{
+			this.Initialize();
+		}
+		public FrameworkContainer(int X, int Y, int Width, int Height) : base(X, Y, Width, Height)
+		{
+			this.Initialize();
+		}
+		#endregion
 
-			#region Initialize event handlers
+		public void Initialize()
+		{
 			this.ControlInvalidate = (s, e) =>
 			{
 				var control = s as FrameworkControl;
 				if (control == null || !control.Visible) return;
 
-				this.Owner.Invalidate(control.Bound);
+				this.Invalidate();
 			};
 
-			this.OwnerMouseMoveEvent = (s, e) =>
+			this.MouseMove += (s, e) =>
 			{
 				var pt = new Point(e.X, e.Y);
 				foreach (var control in this.Controls)
@@ -50,7 +51,7 @@ namespace BeerViewer.Framework
 					}
 				}
 			};
-			this.OwnerMouseDownEvent = (s, e) =>
+			this.MouseDown += (s, e) =>
 			{
 				var pt = new Point(e.X, e.Y);
 				foreach (var control in this.Controls)
@@ -59,7 +60,7 @@ namespace BeerViewer.Framework
 					if (control.OnMouseDown(cpt)) break;
 				}
 			};
-			this.OwnerMouseUpEvent = (s, e) =>
+			this.MouseUp += (s, e) =>
 			{
 				var pt = new Point(e.X, e.Y);
 				foreach (var control in this.Controls)
@@ -68,25 +69,32 @@ namespace BeerViewer.Framework
 					if (control.OnMouseUp(cpt)) break;
 				}
 			};
-			this.OwnerPaintEvent = (s, e) =>
-			{
-				foreach (var control in this.Controls)
-					control.OnPaint(e.Graphics);
-			};
-			this.OwnerMouseLeaveEvent = (s, e) =>
+			this.MouseLeave += (s, e) =>
 			{
 				foreach (var control in this.Controls)
 					control.OnMouseLeave();
 			};
-			#endregion
 
-			#region Register event handlers
-			this.Owner.MouseMove += this.OwnerMouseMoveEvent;
-			this.Owner.MouseDown += this.OwnerMouseDownEvent;
-			this.Owner.MouseUp += this.OwnerMouseUpEvent;
-			this.Owner.MouseLeave += this.OwnerMouseLeaveEvent;
-			this.Owner.Paint += this.OwnerPaintEvent;
-			#endregion
+			this.Paint += (s, e) =>
+			{
+				var g = e.Graphics;
+
+				foreach (var control in this.Controls)
+				{
+					if (!control.Visible) return;
+
+					var state = g.Save();
+
+					g.TranslateTransform(this.X, this.Y);
+					g.TranslateTransform(control.X, control.Y);
+					g.Clip = new Region(control.ClientBound);
+					g.IntersectClip(new Rectangle(-control.X, -control.Y, this.ClientBound.Width, this.ClientBound.Height));
+
+					control.Update(g);
+
+					g.Restore(state);
+				}
+			};
 		}
 
 		/// <summary>
@@ -101,18 +109,14 @@ namespace BeerViewer.Framework
 			Control.Invalidate();
 		}
 
-		public void Dispose()
+		public override void Dispose()
 		{
-			#region Unregister event handlers
-			this.Owner.MouseMove -= this.OwnerMouseMoveEvent;
-			this.Owner.MouseDown -= this.OwnerMouseDownEvent;
-			this.Owner.MouseUp -= this.OwnerMouseUpEvent;
-			this.Owner.Paint -= this.OwnerPaintEvent;
-			#endregion
-
 			#region Unregister invalidate event handler
 			foreach (var control in this.Controls)
-				control.Invalidated -= ControlInvalidate;
+			{
+				control.Invalidated -= this.ControlInvalidate;
+				control.Dispose();
+			}
 			#endregion
 
 			this._Controls = null;

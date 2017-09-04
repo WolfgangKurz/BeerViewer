@@ -68,9 +68,13 @@
     <Compile Include="Configuration.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Forms\Controls\ExpeditionBar.cs" />
+    <Compile Include="Forms\Controls\FleetView.cs" />
+    <Compile Include="Forms\Controls\OverviewView.cs" />
+    <Compile Include="Forms\Controls\TabHost.cs" />
     <Compile Include="Framework\BorderlessWindow.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Framework\FrameworkContainer.cs" />
     <Compile Include="Framework\FrameworkControl.cs" />
     <Compile Include="Framework\FrameworkExtension.cs" />
     <Compile Include="Framework\FrameworkRenderer.cs" />

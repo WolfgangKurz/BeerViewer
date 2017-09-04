@@ -62,6 +62,7 @@ namespace BeerViewer.Forms.Controls
 				var expedition = this.Fleet.Expedition;
 				var progress = expedition.Progress;
 
+<<<<<<< HEAD
 				if (expedition.IsInExecution && progress.Maximum > 0)
 				{
 					g.FillRectangle(Constants.brushActiveFace, this.ClientBound);
@@ -89,6 +90,24 @@ namespace BeerViewer.Forms.Controls
 				else
 				{
 					g.FillRectangle(Constants.brushHoverFace, this.ClientBound);
+=======
+						g.FillRectangle(
+							Constants.brushBlueAccent,
+							new Rectangle(0, 0, this.ClientBound.Width * progress.Current / progress.Maximum, this.ClientBound.Height)
+						);
+						g.DrawString(
+							string.Format("[{0}] {1}", expedition.Id, expedition.RemainingText),
+							Constants.fontSmall,
+							Brushes.White,
+							new Point(this.ClientBound.Width / 2, -1),
+							new StringFormat { Alignment = StringAlignment.Center }
+						);
+					}
+					else
+					{
+						g.FillRectangle(Constants.brushHoverFace, this.ClientBound);
+					}
+>>>>>>> f8ec3fc9bb783c87a2a6b44ffe6a028601d34eca
 				}
 			}
 		}

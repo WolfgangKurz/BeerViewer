@@ -36,6 +36,23 @@ namespace BeerViewer
 		public static Brush brushYellowAccent { get; } = new SolidBrush(FrameworkExtension.FromRgb(0xfdd835));
 		public static Brush brushOrangeAccent { get; } = new SolidBrush(FrameworkExtension.FromRgb(0xf57c00));
 
-		public static Font fontDefault { get; } = new Font("맑은 고딕", 9);
+		public static Pen penHoverFace { get; } = new Pen(FrameworkExtension.FromRgb(0x313131));
+		public static Pen penActiveFace { get; } = new Pen(FrameworkExtension.FromRgb(0x575757));
+		public static Pen penDisabled => penActiveFace;
+		public static Pen penHint => penActiveFace;
+
+		public static Pen penRedAccent { get; } = new Pen(FrameworkExtension.FromRgb(0xc62828));
+		public static Pen penBlueAccent { get; } = new Pen(FrameworkExtension.FromRgb(0x1565c0));
+		public static Pen penGreenAccent { get; } = new Pen(FrameworkExtension.FromRgb(0x388e3c));
+		public static Pen penYellowAccent { get; } = new Pen(FrameworkExtension.FromRgb(0xfdd835));
+		public static Pen penOrangeAccent { get; } = new Pen(FrameworkExtension.FromRgb(0xf57c00));
+
+
+		public static string FontFamily { get; } = "Malgun Gothic";
+		public static float FontDPI { get; } = 0.75f;
+
+		public static Font fontDefault { get; } = new Font(FontFamily, 12 * FontDPI);
+		public static Font fontSmall { get; } = new Font(FontFamily, 11 * FontDPI);
+		public static Font fontBig { get; } = new Font(FontFamily, 14 * FontDPI);
 	}
 }
