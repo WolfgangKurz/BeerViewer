@@ -31,6 +31,12 @@ namespace BeerViewer.Forms
 			Master.Instance.Ready();
 			Homeport.Instance.Ready();
 
+			this.Size = new Size(1024, 576);
+			this.MinimumSize = new Size(
+				800 + 2,
+				480 + 28 + 2
+			);
+
 			#region Menu Button rendering
 			var MenuButton = new FrameworkControl(1, 1, 120, 28);
 			MenuButton.Paint += (s, e) =>
@@ -107,6 +113,15 @@ namespace BeerViewer.Forms
 				if (fleets.Count >= 4) ExpeditionBars[2].SetFleet(fleets[4]);
 			});
 			ExpeditionBars.ForEach(x => this.Renderer.AddControl(x));
+			#endregion
+
+			#region Resource bar
+			{
+				var bar = new ResourceBar(0, 5, 1, 18);
+				bar.Resize += (s, e) => bar.X = this.ClientSize.Width - 96 - 7 - bar.Width;
+				this.Resize += (s, e) => bar.X = this.ClientSize.Width - 96 - 7 - bar.Width;
+				this.Renderer.AddControl(bar);
+			}
 			#endregion
 
 			#region Menu Name Rendering

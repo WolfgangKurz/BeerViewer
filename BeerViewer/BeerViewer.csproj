@@ -65,11 +65,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Configuration.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Forms\Controls\ExpeditionBar.cs" />
     <Compile Include="Forms\Controls\Fleets\FleetView.cs" />
     <Compile Include="Forms\Controls\OverviewView.cs" />
+    <Compile Include="Forms\Controls\ResourceBar.cs" />
     <Compile Include="Forms\Controls\TabHost.cs" />
     <Compile Include="Framework\BorderlessWindow.cs">
       <SubType>Form</SubType>
@@ -221,6 +221,21 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Numbers.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon_ammo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon_bauxite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon_fuel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon_steel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon_bucket.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

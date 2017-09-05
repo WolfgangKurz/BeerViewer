@@ -46,8 +46,8 @@ namespace BeerViewer.Forms.Controls.Fleets
 			var g = e.Graphics;
 			var textColor = (this.Fleet == null ? Brushes.Gray : Brushes.White);
 
-			var pX = (this.Width - 6 * 2) / 2;
-			var pY = (60 - 2 * 2) / 3;
+			var pY = 18;
+			var bY = 0;
 
 			g.Clear(Constants.colorNormalFace);
 			#region Fleet Top Info
@@ -92,68 +92,97 @@ namespace BeerViewer.Forms.Controls.Fleets
 					};
 				}
 
-				for (var i = 0; i < 2; i++)
-				{
-					for (var j = 0; j < 2; j++)
-					{
-						var s = g.Save();
+				var itemWidth = this.Width - 12;
+				if (itemWidth < 180) itemWidth = (itemWidth - 0) / 1;
+				else itemWidth = (itemWidth - 4) / 2;
+				itemWidth = Math.Max(itemWidth, 1);
 
-						g.SetClip(new Rectangle(6 + pX * i, 2 + pY * j, pX, pY));
-						g.DrawString(
-							texts[i + j * 2],
-							Constants.fontDefault,
-							textColor,
-							new Point(6 + pX * i, 2 + pY * j)
-						);
+				var perLine = Math.Max(1, (this.Width - 12) / itemWidth);
+				var lines = (int)Math.Ceiling((double)texts.Length / perLine);
 
-						g.Restore(s);
-					}
+				for (var i = 0; i < texts.Length; i++) { 
+					var s = g.Save();
+
+					g.SetClip(new Rectangle(
+						6 + itemWidth * (i % perLine),
+						2 + pY * (i / perLine),
+						itemWidth, pY
+					));
+					g.DrawString(
+						texts[i],
+						Constants.fontDefault,
+						textColor,
+						new Point(
+							6 + itemWidth * (i % perLine),
+							2 + pY * (i / perLine)
+						)
+					);
+
+					g.Restore(s);
 				}
+
+				bY += lines * 20;
 				g.DrawLine(
 					Constants.penActiveFace,
-					new Point(4, 40 - 1),
-					new Point(this.Width - 4, 40 - 1)
+					new Point(4, bY - 1),
+					new Point(this.Width - 4, bY - 1)
 				);
 			}
 			#endregion
 
 			#region Fleet Info
-			var bY = 40;
 			if (this.Fleet != null)
 			{
 				var ships = this.Fleet.Ships;
-				this.Height = 40 + ships.Length * 40 + 4 // Fleet info
-					+ 72 * 2; // Repair & Construct dock;
 
 				var nameWidth = ships
 					.Max(x => (int)g.MeasureString(x.Info.Name, Constants.fontBig).Width);
 
+				var itemWidth = this.Width - 12;
+				if (itemWidth < 240) itemWidth = (itemWidth - 0) / 1;
+				else if (itemWidth < 480) itemWidth = (itemWidth - 4) / 2;
+				else itemWidth = (itemWidth - 8) / 3;
+				itemWidth = Math.Max(itemWidth, 1);
+
+				var rightWidth = (itemWidth - nameWidth - 8);
+				var miniMode = (rightWidth < 156);
+				var miniMode2 = (rightWidth < 84);
+
+				var perLine = Math.Max(1, (this.Width-12) / itemWidth);
+				var lines = (int)Math.Ceiling((double)ships.Length / perLine);
+
+				this.Height = bY + lines * 36 + 6; // Fleet info
+
 				int i = 0;
 				foreach (var ship in ships)
 				{
-					var rightWidth = (this.Width - 12 - nameWidth - 8);
-
 					#region Name & Level
 					g.DrawString(
 						ship.Info.Name,
 						Constants.fontBig,
 						textColor,
-						new Point(6, bY + 4 + i * 40)
+						new Point(
+							6 + (itemWidth + 4) * (i % perLine),
+							bY + 4 + (i / perLine) * 36
+						)
 					);
 
 					g.DrawString(
 						$"Lv. {ship.Level}",
 						Constants.fontSmall,
 						textColor,
-						new Point(6, bY + 4 + i * 40 + 18)
+						new Point(
+							6 + (itemWidth + 4) * (i % perLine),
+							bY + 4 + (i / perLine) * 36 + 18
+						)
 					);
 					#endregion
 
 					#region HP (or state)
 					DrawColorIndicator(
 						g,
-						6 + nameWidth + 8,
-						bY + 4 + i * 40 + 4,
+						6 + (itemWidth + 4) * (i % perLine) + nameWidth + 8,
+						bY + 4 + (i / perLine) * 36 + 4,
 						rightWidth,
 						6,
 						ship.HP
@@ -165,7 +194,10 @@ namespace BeerViewer.Forms.Controls.Fleets
 							i18n.Current.fleet_repairing,
 							Constants.fontDefault,
 							textColor,
-							new Point(6 + nameWidth + 6, bY + 4 + i * 40 + 12)
+							new Point(
+								6 + (itemWidth + 4) * (i % perLine) + nameWidth + 6,
+								bY + 4 + (i / perLine) * 36 + 12
+							)
 						);
 					}
 					else
@@ -174,54 +206,70 @@ namespace BeerViewer.Forms.Controls.Fleets
 							$"{ship.HP.Current}/{ship.HP.Maximum}",
 							Constants.fontDefault,
 							textColor,
-							new Point(6 + nameWidth + 6, bY + 4 + i * 40 + 12)
+							new Point(
+								6 + (itemWidth + 4) * (i % perLine) + nameWidth + 6,
+								bY + 4 + (i / perLine) * 36 + 12
+							)
 						);
 					}
 					#endregion
 
 					#region Fuel & Ammo
-					DrawColorIndicator(
-						g,
-						6 + nameWidth + 8 + rightWidth - (rightWidth / 4),
-						bY + 4 + i * 40 + 4 + 8,
-						rightWidth / 4, 6,
-						ship.Fuel, 5
-					);
-					DrawColorIndicator(
-						g,
-						6 + nameWidth + 8 + rightWidth - (rightWidth / 4),
-						bY + 4 + i * 40 + 4 + 8 + 8,
-						rightWidth / 4, 6,
-						ship.Bull, 5
-					);
+					if (!miniMode)
+					{
+						DrawColorIndicator(
+							g,
+							6 + (itemWidth + 4) * (i % perLine) + nameWidth + 8 + rightWidth - (rightWidth / 4),
+							bY + 4 + (i / perLine) * 36 + 4 + 11,
+							rightWidth / 4, 5,
+							ship.Fuel, 5
+						);
+						DrawColorIndicator(
+							g,
+							6 + (itemWidth + 4) * (i % perLine) + nameWidth + 8 + rightWidth - (rightWidth / 4),
+							bY + 4 + (i / perLine) * 36 + 4 + 11 + 7,
+							rightWidth / 4, 5,
+							ship.Bull, 5
+						);
+					}
 					#endregion
 
 					#region Condition
-					g.FillRectangle(
-						new SolidBrush(GetConditionColor(ship.ConditionType)),
-						6 + nameWidth + 8 + rightWidth - (rightWidth / 4) - 36,
-						bY + 4 + i * 40 + 4 + 8 + 1,
-						11, 11
-					);
-					g.DrawString(
-						ship.Condition.ToString(),
-						Constants.fontDefault,
-						textColor,
-						new Point(
-							6 + nameWidth + 8 + rightWidth - (rightWidth / 4) - 24,
-							bY + 4 + i * 40 + 4 + 8 + 1 - 3
-						)
-					);
+					if (miniMode2)
+					{
+						g.FillRectangle(
+							new SolidBrush(GetConditionColor(ship.ConditionType)),
+							6 + (itemWidth + 4) * (i % perLine) + nameWidth + 8 + rightWidth - (miniMode ? 0 : rightWidth / 4) - 15,
+							bY + 4 + (i / perLine) * 36 + 4 + 8 + 3,
+							11, 11
+						);
+					}
+					else
+					{
+						g.FillRectangle(
+							new SolidBrush(GetConditionColor(ship.ConditionType)),
+							6 + (itemWidth + 4) * (i % perLine) + nameWidth + 8 + rightWidth - (miniMode ? 0 : rightWidth / 4) - 36,
+							bY + 4 + (i / perLine) * 36 + 4 + 8 + 3,
+							11, 11
+						);
+						g.DrawString(
+							ship.Condition.ToString(),
+							Constants.fontDefault,
+							textColor,
+							new Point(
+								6 + (itemWidth + 4) * (i % perLine) + nameWidth + 8 + rightWidth - (miniMode ? 0 : rightWidth / 4) - 24,
+								bY + 4 + (i / perLine) * 36 + 4 + 8 + 3 - 3
+							)
+						);
+					}
 					#endregion
 
 					i++;
 				}
-
-				bY += ships.Length * 40;
+				bY += lines * 36 + 4;
 			}
 			else
-				this.Height = 40 + 4 // Fleet info
-					+ 72 * 2; // Repair & Construct dock
+				this.Height = bY + 4; // Fleet info
 
 			g.DrawLine(
 				Constants.penActiveFace,
@@ -229,145 +277,6 @@ namespace BeerViewer.Forms.Controls.Fleets
 				new Point(this.Width - 4, bY + 2 - 1)
 			);
 			bY += 4;
-			#endregion
-
-			#region Repair & Construct dock
-			textColor = Brushes.White;
-
-			var dockWidth = (this.Width - 18) / 2;
-			for (var i = 0; i < 4; i++)
-			{
-				var dock = Homeport.Instance.Repairyard.Docks[i+1];
-
-				if (dock?.State == RepairingDockState.Repairing)
-				{
-					g.FillRectangle(
-						Constants.brushBlueAccent,
-						6 + (dockWidth + 6) * (i % 2),
-						bY + 6 + (i / 2) * 34,
-						dockWidth, 28
-					);
-					g.DrawString(
-						dock.Ship.Info.Name,
-						Constants.fontDefault,
-						textColor,
-						new Point(
-							6 + (dockWidth + 6) * (i % 2) + (dockWidth / 2),
-							bY + 6 + (i / 2) * 34 - 1
-						),
-						new StringFormat { Alignment = StringAlignment.Center }
-					);
-
-					var txt = "00:00:00";
-					if (dock.Remaining.HasValue)
-						txt = $"{(int)dock.Remaining.Value.TotalHours:D2}:{dock.Remaining.Value.ToString(@"mm\:ss")}";
-
-					g.DrawString(
-						txt,
-						Constants.fontDefault,
-						textColor,
-						new Point(
-							6 + (dockWidth + 6) * (i % 2) + (dockWidth / 2),
-							bY + 6 + (i / 2) * 34 - 1 + 14
-						),
-						new StringFormat { Alignment = StringAlignment.Center }
-					);
-				}
-				else
-				{
-					g.FillRectangle(
-						Constants.brushActiveFace,
-						6 + (dockWidth + 6) * (i % 2),
-						bY + 6 + (i / 2) * 34,
-						dockWidth, 28
-					);
-
-					var txt = (
-						(dock?.State ?? RepairingDockState.Locked) == RepairingDockState.Locked
-						? i18n.Current.fleet_locked
-						: i18n.Current.fleet_repair_empty
-					) as string;
-					var s = g.MeasureString(txt, Constants.fontDefault);
-
-					g.DrawString(
-						txt,
-						Constants.fontDefault,
-						textColor,
-						new Point(
-							6 + (dockWidth + 6) * (i % 2) + (dockWidth / 2) - (int)(s.Width / 2),
-							bY + 6 + (i / 2) * 34 + 14 - (int)(s.Height / 2)
-						)
-					);
-				}
-			}
-			bY += 72;
-
-			for (var i = 0; i < 4; i++)
-			{
-				var dock = Homeport.Instance.Dockyard.Docks[i+1];
-
-				if (dock?.State == BuildingDockState.Building || dock?.State == BuildingDockState.Completed)
-				{
-					g.FillRectangle(
-						dock.State == BuildingDockState.Completed ? Constants.brushGreenAccent : Constants.brushBlueAccent,
-						6 + (dockWidth + 6) * (i % 2),
-						bY + 6 + (i / 2) * 34,
-						dockWidth, 28
-					);
-					g.DrawString(
-						dock.Ship.Name,
-						Constants.fontDefault,
-						textColor,
-						new Point(
-							6 + (dockWidth + 6) * (i % 2) + (dockWidth / 2),
-							bY + 6 + (i / 2) * 34 - 1
-						),
-						new StringFormat { Alignment = StringAlignment.Center }
-					);
-
-					var txt = "00:00:00";
-					if (dock.Remaining.HasValue)
-						txt = $"{(int)dock.Remaining.Value.TotalHours:D2}:{dock.Remaining.Value.ToString(@"mm\:ss")}";
-
-					g.DrawString(
-						txt,
-						Constants.fontDefault,
-						textColor,
-						new Point(
-							6 + (dockWidth + 6) * (i % 2) + (dockWidth / 2),
-							bY + 6 + (i / 2) * 34 - 1 + 14
-						),
-						new StringFormat { Alignment = StringAlignment.Center }
-					);
-				}
-				else
-				{
-					g.FillRectangle(
-						Constants.brushActiveFace,
-						6 + (dockWidth + 6) * (i % 2),
-						bY + 6 + (i / 2) * 34,
-						dockWidth, 28
-					);
-
-					var txt = (
-						(dock?.State ?? BuildingDockState.Locked) == BuildingDockState.Locked
-							? i18n.Current.fleet_locked
-							: i18n.Current.fleet_dock_empty
-					) as string;
-					var s = g.MeasureString(txt, Constants.fontDefault);
-
-					g.DrawString(
-						txt,
-						Constants.fontDefault,
-						textColor,
-						new Point(
-							6 + (dockWidth + 6) * (i % 2) + (dockWidth / 2) - (int)(s.Width / 2),
-							bY + 6 + (i / 2) * 34 + 14 - (int)(s.Height / 2)
-						)
-					);
-				}
-			}
-			bY += 72;
 			#endregion
 		}
 		private void DrawColorIndicator(Graphics g, int X, int Y, int Width, int Height, LimitedValue Value, int Sep = 4)
@@ -394,7 +303,7 @@ namespace BeerViewer.Forms.Controls.Fleets
 				g.DrawLine(
 					Constants.penNormalFace,
 					new Point(X + (int)(pX * i), Y),
-					new Point(X + (int)(pX * i), Y + hH)
+					new Point(X + (int)(pX * i), Y + hH - 1)
 				);
 
 			g.Restore(s);
@@ -421,7 +330,20 @@ namespace BeerViewer.Forms.Controls.Fleets
 		public void SetFleet(Fleet Fleet)
 		{
 			this.Fleet = Fleet;
-			this.Fleet.PropertyEvent(nameof(this.Fleet.ShipsUpdated), () => this.Invalidate());
+			this.Fleet.PropertyEvent(nameof(this.Fleet.ShipsUpdated), () =>
+			{
+				var ships = this.Fleet.Ships;
+				ships.ForEach(x =>
+				{
+					if (x == null) return;
+					x.PropertyEvent(nameof(x.Fuel), () => this.Invalidate());
+					x.PropertyEvent(nameof(x.Bull), () => this.Invalidate());
+					x.PropertyEvent(nameof(x.HP), () => this.Invalidate());
+					x.PropertyEvent(nameof(x.Level), () => this.Invalidate());
+				});
+
+				this.Invalidate();
+			}, true);
 
 			this.Invalidate();
 		}

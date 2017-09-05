@@ -180,7 +180,7 @@ namespace BeerViewer.Models
 
 				this.Remaining = remaining;
 
-				if (!this.notificated && this.Completed != null && remaining <= TimeSpan.FromSeconds(Configuration.NotificationTime))
+				if (!this.notificated && this.Completed != null && remaining <= TimeSpan.FromSeconds(Settings.NotificationTime.Value))
 				{
 					this.Completed(this, new RepairingCompletedEventArgs(this.Id, this.Ship));
 					this.notificated = true;

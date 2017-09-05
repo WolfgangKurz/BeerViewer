@@ -211,5 +211,10 @@ namespace BeerViewer
 		/// LOS calculator's formula
 		/// </summary>
 		public static SettingValue<string> LOSCalcType { get; } = new SettingValue<string>(getKey(), "Setting", "LOSCalc.Type4");
+
+		/// <summary>
+		/// Notification adjust time (for expedition, construction, etc.)
+		/// </summary>
+		public static SettingValue<int> NotificationTime { get; } = new SettingValue<int>(getKey(), "Setting", 60);
 	}
 }

@@ -12,6 +12,8 @@ namespace BeerViewer.Framework
 	public partial class BorderlessWindow : Form
 	{
 		#region Const Values
+		private const int BorderSizeSize = 6;
+
 		private const uint WM_NCPAINT = 0x85;
 		private const uint WM_NCCALCSIZE = 0x83;
 		private const uint WM_NCHITTEST = 0x84;
@@ -179,15 +181,15 @@ namespace BeerViewer.Framework
 
 			if(this.WindowState != FormWindowState.Maximized)
 			{
-				if (pt.X < 4 && pt.Y < 4) return HTTOPLEFT;
-				else if (pt.X >= w - 4 && pt.Y < 4) return HTTOPRIGHT;
-				else if (pt.X < 4 && pt.Y >= h - 4) return HTBOTTOMLEFT;
-				else if (pt.X >= w - 4 && pt.Y >= h - 4) return HTBOTTOMRIGHT;
+				if (pt.X < BorderSizeSize && pt.Y < BorderSizeSize) return HTTOPLEFT;
+				else if (pt.X >= w - BorderSizeSize && pt.Y < BorderSizeSize) return HTTOPRIGHT;
+				else if (pt.X < BorderSizeSize && pt.Y >= h - BorderSizeSize) return HTBOTTOMLEFT;
+				else if (pt.X >= w - BorderSizeSize && pt.Y >= h - BorderSizeSize) return HTBOTTOMRIGHT;
 
-				else if (pt.X < 4) return HTLEFT;
-				else if (pt.X >= w - 4) return HTRIGHT;
-				else if (pt.Y < 4) return HTTOP;
-				else if (pt.Y >= h - 4) return HTBOTTOM;
+				else if (pt.X < BorderSizeSize) return HTLEFT;
+				else if (pt.X >= w - BorderSizeSize) return HTRIGHT;
+				else if (pt.Y < BorderSizeSize) return HTTOP;
+				else if (pt.Y >= h - BorderSizeSize) return HTBOTTOM;
 			}
 
 			if (pt.Y < 28)

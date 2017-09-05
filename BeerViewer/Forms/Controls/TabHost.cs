@@ -22,7 +22,7 @@ namespace BeerViewer.Forms.Controls
 		}
 
 		public IReadOnlyList<TabItem> TabItems { get; protected set; }
-		protected int TabWidth => this.Width / (this.TabItems.Count == 0 ? 1 : this.TabItems.Count);
+		protected double TabWidth => (double)this.Width / (this.TabItems.Count == 0 ? 1 : this.TabItems.Count);
 
 		#region TabIndex
 		public int TabIndex
@@ -76,7 +76,7 @@ namespace BeerViewer.Forms.Controls
 
 			this.MouseMove += (s, e) =>
 			{
-				var idx = (e.X / this.TabWidth);
+				var idx = (int)(e.X / this.TabWidth);
 				if (idx != HoverIndex)
 				{
 					HoverIndex = idx;
@@ -90,7 +90,7 @@ namespace BeerViewer.Forms.Controls
 			};
 			this.MouseDown += (s, e) =>
 			{
-				int idx = e.X / this.TabWidth;
+				int idx = (int)(e.X / this.TabWidth);
 				this.TabIndex = idx.InRange(0, this.TabItems.Count - 1);
 			};
 
@@ -103,7 +103,10 @@ namespace BeerViewer.Forms.Controls
 				for (var i = 0; i < TabItems.Count; i++)
 				{
 					var x = TabItems[i];
-					var ItemBound = new Rectangle(i * TabWidth, 0, TabWidth, this.Height);
+					var ItemBound = new Rectangle(
+						(int)(i * TabWidth), 0,
+						(int)TabWidth, this.Height
+					);
 
 					if (this.TabIndex == i || (this.IsHover && HoverIndex == i))
 						g.FillRectangle(Constants.brushActiveFace, ItemBound);

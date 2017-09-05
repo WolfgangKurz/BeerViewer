@@ -192,7 +192,6 @@ namespace BeerViewer.Models
 			try
 			{
 				var fleet = this.Fleets[int.Parse(data.Request["api_id"])];
-				fleet.RaiseShipsUpdated();
 
 				var index = int.Parse(data.Request["api_ship_idx"]);
 				if (index == -1)
@@ -218,6 +217,8 @@ namespace BeerViewer.Models
 				var currentIndex = Array.IndexOf(currentFleet.Ships, ship);
 				var old = fleet.Change(index, ship);
 				currentFleet.Change(currentIndex, old);
+
+				fleet.RaiseShipsUpdated();
 			}
 			catch { }
 		}
