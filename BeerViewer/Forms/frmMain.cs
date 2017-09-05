@@ -32,10 +32,12 @@ namespace BeerViewer.Forms
 			Homeport.Instance.Ready();
 
 			this.Size = new Size(1024, 576);
+			/*
 			this.MinimumSize = new Size(
 				800 + 2,
 				480 + 28 + 2
 			);
+			*/
 
 			#region Menu Button rendering
 			var MenuButton = new FrameworkControl(1, 1, 120, 28);

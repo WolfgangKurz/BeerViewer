@@ -14,9 +14,14 @@ namespace BeerViewer.Framework
 		#region Const Values
 		private const int BorderSizeSize = 6;
 
+		private const int WS_EX_LAYERED = 0x00040000;
+		private const int WS_EX_APPWINDOW = 0x00080000;
+
 		private const uint WM_NCPAINT = 0x85;
 		private const uint WM_NCCALCSIZE = 0x83;
 		private const uint WM_NCHITTEST = 0x84;
+		private const uint WM_THEMECHANGED = 0x031A;
+		private const uint WM_DWMCOMPOSITIONCHANGED = 0x031E;
 
 		private const int HTCLIENT = 0x01;
 		private const int HTCAPTION = 0x02;
@@ -39,6 +44,36 @@ namespace BeerViewer.Framework
 		private const int HTOBJECT = 0x13;
 		private const int HTCLOSE = 0x14;
 		private const int HTHELP = 0x15;
+		#endregion
+
+		#region Enums
+		private enum DWMWINDOWATTRIBUTE : uint
+		{
+			DWMWA_NCRENDERING_ENABLED = 1,
+			DWMWA_NCRENDERING_POLICY,
+			DWMWA_TRANSITIONS_FORCEDISABLED,
+			DWMWA_ALLOW_NCPAINT,
+			DWMWA_CAPTION_BUTTON_BOUNDS,
+			DWMWA_NONCLIENT_RTL_LAYOUT,
+			DWMWA_FORCE_ICONIC_REPRESENTATION,
+			DWMWA_FLIP3D_POLICY,
+			DWMWA_EXTENDED_FRAME_BOUNDS,
+			DWMWA_HAS_ICONIC_BITMAP,
+			DWMWA_DISALLOW_PEEK,
+			DWMWA_EXCLUDED_FROM_PEEK,
+			DWMWA_CLOAK,
+			DWMWA_CLOAKED,
+			DWMWA_FREEZE_REPRESENTATION,
+			DWMWA_LAST
+		}
+
+		private enum DWMNCRENDERINGPOLICY : uint
+		{
+			DWMNCRP_USEWINDOWSTYLE,
+			DWMNCRP_DISABLED,
+			DWMNCRP_ENABLED,
+			DWMNCRP_LAST
+		}
 		#endregion
 
 		#region Structures
@@ -78,18 +113,25 @@ namespace BeerViewer.Framework
 		[DllImport("uxtheme", CharSet = CharSet.Unicode)]
 		private static extern Int32 SetWindowTheme(IntPtr hWnd, String subAppName, String subIdList);
 
+		[DllImport("uxtheme")]
+		[return: MarshalAs(UnmanagedType.Bool)]
+		private static extern bool IsThemeActive();
+
 		[DllImport("user32.dll", ExactSpelling = true)]
 		[return: MarshalAs(UnmanagedType.Bool)]
 		private static extern bool GetWindowRect(IntPtr hwnd, out RECT lpRect);
 
 		[DllImport("dwmapi.dll")]
-		private static extern int DwmSetWindowAttribute(IntPtr hwnd, int attr, ref int attrValue, int attrSize);
+		private static extern int DwmSetWindowAttribute(IntPtr hwnd, DWMWINDOWATTRIBUTE attr, ref uint attrValue, uint attrSize);
 
 		[DllImport("dwmapi.dll")]
 		private static extern int DwmExtendFrameIntoClientArea(IntPtr hWnd, ref MARGINS pMarInset);
 
 		[DllImport("dwmapi.dll")]
 		private static extern int DwmIsCompositionEnabled(ref int pfEnabled);
+
+		[DllImport("user32.dll")]
+		private static extern int SetLayeredWindowAttributes(IntPtr hWnd, uint crKey, byte bAlpha, uint dwFlags);
 		#endregion
 
 		protected override void WndProc(ref Message m)
@@ -105,33 +147,51 @@ namespace BeerViewer.Framework
 				case WM_NCCALCSIZE:
 					NCCalcSize(ref m);
 					break;
+				case WM_DWMCOMPOSITIONCHANGED:
+					handleCompositionChanged();
+					break;
 				case WM_NCPAINT:
-					if (Environment.OSVersion.Version.Major >= 6)
-					{
-						int enabled = 0;
-						DwmIsCompositionEnabled(ref enabled);
-
-						if (enabled == 1)
-						{
-							int v = 2;
-							DwmSetWindowAttribute(this.Handle, 2, ref v, 4);
-
-							MARGINS margins = new MARGINS()
-							{
-								bottomHeight = 1,
-								leftWidth = 1,
-								rightWidth = 1,
-								topHeight = 1
-							};
-							DwmExtendFrameIntoClientArea(this.Handle, ref margins);
-						}
-					}
 					base.WndProc(ref m);
 					break;
 				default:
 					base.WndProc(ref m);
 					break;
 			}
+		}
+
+		private bool CompositionEnabled = false;
+		private bool IsThemeEnabled => IsThemeActive();
+		private void handleCompositionChanged()
+		{
+			try
+			{
+				int enabled = 0;
+				DwmIsCompositionEnabled(ref enabled);
+				CompositionEnabled = (enabled == 1);
+
+				if (CompositionEnabled)
+				{
+					// SetWindowTheme(this.Handle, string.Empty, string.Empty);
+
+					uint v = (uint)DWMNCRENDERINGPOLICY.DWMNCRP_ENABLED;
+					DwmSetWindowAttribute(
+						this.Handle,
+						DWMWINDOWATTRIBUTE.DWMWA_NCRENDERING_POLICY,
+						ref v,
+						4 // sizeof(DWORD)
+					);
+
+					MARGINS margins = new MARGINS()
+					{
+						leftWidth = 1,
+						rightWidth = 1,
+						topHeight = 1,
+						bottomHeight = 1
+					};
+					DwmExtendFrameIntoClientArea(this.Handle, ref margins);
+				}
+			}
+			catch { }
 		}
 
 		private void NCCalcSize(ref Message m)
@@ -169,14 +229,6 @@ namespace BeerViewer.Framework
 			int w = rc.right - rc.left;
 			int h = rc.bottom - rc.top;
 
-			/*
-			int x = m.LParam.ToInt32() & 0x0000FFFF;
-			int y = (int)((m.LParam.ToInt32() & 0xFFFF0000) >> 16);
-			if ((x & 0x8000) != 0) x = -(x ^ 0x8000 + 1);
-			if ((y & 0x8000) != 0) y = -(y ^ 0x8000 + 1);
-
-			Point pt = this.PointToClient(new Point(x, y));
-			*/
 			Point pt = this.PointToClient(new Point(m.LParam.ToInt32()));
 
 			if(this.WindowState != FormWindowState.Maximized)
@@ -210,6 +262,9 @@ namespace BeerViewer.Framework
 		public BorderlessWindow() : this(false) { }
 		public BorderlessWindow(bool IsDialog = false)
 		{
+			SetLayeredWindowAttributes(this.Handle, 0xFF00FF, 0, 0x01); // LWA_COLORKEY
+			handleCompositionChanged();
+
 			Renderer = new Framework.FrameworkRenderer(this);
 
 			this.BackColor = Constants.colorNormalFace;
@@ -304,6 +359,17 @@ namespace BeerViewer.Framework
 			set
 			{
 				base.ClientSize = value;
+			}
+		}
+
+		protected override CreateParams CreateParams
+		{
+			get
+			{
+				var b = base.CreateParams;
+				if (!DesignMode)
+					b.ExStyle |= WS_EX_LAYERED | WS_EX_APPWINDOW;
+				return b;
 			}
 		}
 	}

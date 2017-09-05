@@ -11,6 +11,7 @@ fleet_repairing	Repairing
 fleet_locked	Locked
 fleet_repair_empty	Empty Repair
 fleet_dock_empty	Empty Dock
+fleet_done	Done
 
 loscalc_type1	Simple Sum
 loscalc_type2	2-5 (Old)
