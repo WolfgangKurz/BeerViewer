@@ -1,0 +1,20 @@
+fleet_level	Lv
+fleet_speed_immovable	Immovable
+fleet_speed_slow	Slow speed
+fleet_speed_fast	Fast speed
+fleet_speed_faster	Fast+ speed
+fleet_speed_fastest	Fastest speed
+fleet_los	LoS
+fleet_aa	AA
+fleet_repairing	Repairing
+
+fleet_locked	Locked
+fleet_repair_empty	Empty Repair
+fleet_dock_empty	Empty Dock
+
+loscalc_type1	Simple Sum
+loscalc_type2	2-5 (Old)
+loscalc_type3	2-5 (Autumn)
+loscalc_type4	Formula 33 (Cn=1, for 2-5)
+loscalc_type5	Formula 33 (Cn=3, for 6-2, 6-3)
+loscalc_type6	Formula 33 (Cn=4, for 3-5, 6-1)
