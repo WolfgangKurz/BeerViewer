@@ -41,7 +41,7 @@ namespace BeerViewer.Forms.Controls
 			this.Paint += this.OnPaint;
 		}
 
-		private int DrawBitmapNumber(Graphics g, string Text, Point pos, bool OnCenter, bool UseWhite)
+		private int DrawBitmapNumber(Graphics g, string Text, Point pos, bool OnCenter, int ColorIndex = 0)
 		{
 			int p = 4, h = 7;
 			int p2 = p + 2, hh = h / 2;
@@ -59,7 +59,7 @@ namespace BeerViewer.Forms.Controls
 				g.DrawImage(
 					Constants.BitmapNumber,
 					new Rectangle(x, y, p, h),
-					new Rectangle(offset * p, UseWhite ? h : 0, p, h),
+					new Rectangle(offset * p, h * ColorIndex, p, h),
 					GraphicsUnit.Pixel
 				);
 			}
@@ -67,6 +67,7 @@ namespace BeerViewer.Forms.Controls
 		}
 		private void OnPaint(object sender, PaintEventArgs e)
 		{
+			var admiral = Homeport.Instance.Admiral;
 			var materials = Homeport.Instance.Materials;
 			var g = e.Graphics;
 
@@ -78,21 +79,21 @@ namespace BeerViewer.Forms.Controls
 				BeerViewer.Properties.Resources.icon_bauxite,
 				BeerViewer.Properties.Resources.icon_bucket
 			};
-			var txts = new string[]
+			var values = new int[]
 			{
-				materials.Fuel.ToString(),
-				materials.Ammo.ToString(),
-				materials.Steel.ToString(),
-				materials.Bauxite.ToString(),
-				materials.RepairBuckets.ToString()
+				materials.Fuel,
+				materials.Ammo,
+				materials.Steel,
+				materials.Bauxite,
+				materials.RepairBuckets
 			};
-			var len = Math.Min(txts.Length, imgs.Length);
+			var len = Math.Min(values.Length, imgs.Length);
 
 			var x = 0;
 			for (var i = 0; i < len; i++)
 			{
 				var img = imgs[i];
-				var txt = txts[i];
+				var value = values[i];
 
 				g.DrawImage(
 					img,
@@ -104,9 +105,10 @@ namespace BeerViewer.Forms.Controls
 
 				x += this.DrawBitmapNumber(
 					g,
-					txt,
+					value.ToString(),
 					new Point(x, this.ClientBound.Height / 2 - 3),
-					false, true
+					false,
+					((i < 4) && (value < admiral?.ResourceLimit)) ? 2 : 1
 				) + 12;
 			}
 			this.Width = Math.Max(1, x);

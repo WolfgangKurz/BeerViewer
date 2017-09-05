@@ -13,6 +13,18 @@ namespace BeerViewer.Forms.Controls.Fleets
 {
 	internal class FleetView : FrameworkContainer
 	{
+		private struct ColorText
+		{
+			public ColorText(string Text, Color Color)
+			{
+				this.Text = Text;
+				this.Color = Color;
+			}
+
+			public string Text;
+			public Color Color;
+		}
+
 		public Fleet Fleet { get; protected set; }
 
 		#region Initializers
@@ -44,7 +56,6 @@ namespace BeerViewer.Forms.Controls.Fleets
 		private void OnPaint(object sender, PaintEventArgs e)
 		{
 			var g = e.Graphics;
-			var textColor = (this.Fleet == null ? Brushes.Gray : Brushes.White);
 
 			var pY = 18;
 			var bY = 0;
@@ -52,18 +63,16 @@ namespace BeerViewer.Forms.Controls.Fleets
 			g.Clear(Constants.colorNormalFace);
 			#region Fleet Top Info
 			{
-				string[] texts;
+				ColorText[] texts;
 
 				if ((this.Fleet?.Ships?.Length ?? 0) == 0)
 				{
-					texts = new string[]
+					texts = new ColorText[]
 					{
-						$"{i18n.Current.fleet_level}: -",
-						"-",
-						$"{i18n.Current.fleet_los}: -",
-						$"{i18n.Current.fleet_aa}: -",
-						"-",
-						"" // Empty for condition timer
+						new ColorText($"{i18n.Current.fleet_level}: -", Color.Gray),
+						new ColorText("-", Color.Gray),
+						new ColorText($"{i18n.Current.fleet_los}: -", Color.Gray),
+						new ColorText($"{i18n.Current.fleet_aa}: -", Color.Gray)
 					};
 				}
 				else
@@ -81,14 +90,12 @@ namespace BeerViewer.Forms.Controls.Fleets
 						this.Fleet.Ships.Sum(x => x.GetAirSuperiorityPotential(AirSuperiorityCalculationOptions.Maximum))
 					);
 
-					texts = new string[]
+					texts = new ColorText[]
 					{
-						$"{i18n.Current.fleet_level}: {levels}",
-						$"{i18n.Current["fleet_speed_"+speed]}",
-						$"{i18n.Current.fleet_los}: {los}",
-						$"{i18n.Current.fleet_aa}: {aa}",
-						"-", // Remaining time (condition or expedition)
-						""
+						new ColorText($"{i18n.Current.fleet_level}: {levels}", Color.White),
+						new ColorText($"{i18n.Current["fleet_speed_"+speed]}", Color.White),
+						new ColorText($"{i18n.Current.fleet_los}: {los}", Color.White),
+						new ColorText($"{i18n.Current.fleet_aa}: {aa}", Color.White)
 					};
 				}
 
@@ -108,20 +115,86 @@ namespace BeerViewer.Forms.Controls.Fleets
 						2 + pY * (i / perLine),
 						itemWidth, pY
 					));
-					g.DrawString(
-						texts[i],
-						Constants.fontDefault,
-						textColor,
-						new Point(
-							6 + itemWidth * (i % perLine),
-							2 + pY * (i / perLine)
-						)
-					);
+
+					using (var brush = new SolidBrush(texts[i].Color))
+						g.DrawString(
+							texts[i].Text,
+							Constants.fontDefault,
+							brush,
+							new Point(
+								6 + itemWidth * (i % perLine),
+								2 + pY * (i / perLine)
+							)
+						);
 
 					g.Restore(s);
 				}
-
 				bY += lines * 20;
+
+				if ((this.Fleet?.Ships?.Length ?? 0) > 0)
+				{
+					bY += 2;
+
+					var dock = Homeport.Instance.Repairyard.Docks;
+					string text = "";
+					Color bcolor = Color.DarkGray;
+
+					if (dock.Any(x => this.Fleet.Ships.Contains(x.Value?.Ship))) // Repairing ship exists
+					{
+						text = i18n.Current.fleet_status_repair;
+						bcolor = Constants.colorBrownAccent;
+					}
+					else if (this.Fleet.Expedition.IsInExecution) // in Expedition
+					{
+						text = i18n.Current.fleet_status_expedition;
+						bcolor = Constants.colorBlueAccent;
+					}
+					else if (this.Fleet.IsInSortie) // in Sortie
+					{
+						text = i18n.Current.fleet_status_sortie;
+						bcolor = Constants.colorRedAccent;
+					}
+					else if (this.Fleet.Ships.Any(x => x.HP.Percentage <= 0.25)) // Critical ship exists
+					{
+						text = i18n.Current.fleet_status_critical;
+						bcolor = Constants.colorRedAccent;
+					}
+					else if (this.Fleet.Ships.Any(x => x.Fuel.Percentage < 1 || x.Bull.Percentage < 1)) // Not supplied ship exists
+					{
+						text = i18n.Current.fleet_status_supply;
+						bcolor = Constants.colorBrownAccent;
+					}
+					else if (this.Fleet.Ships.Any(x => x.Condition < 49)) // Need to rejuvenate condition
+					{
+						text = this.Fleet.RejuvenateText;
+						bcolor = Constants.colorBrownAccent;
+					}
+					else if (this.Fleet.Ships.FirstOrDefault().Info.ShipType.Id == 19) // Flagship is Repair Ship
+					{
+						text = i18n.Current.fleet_status_repairship;
+						bcolor = Constants.colorBrownAccent;
+					}
+					else
+					{
+						text = i18n.Current.fleet_status_ready;
+						bcolor = Constants.colorGreenAccent;
+					}
+
+					using (var brush = new SolidBrush(bcolor))
+						g.FillRectangle(
+							brush,
+							new Rectangle(4, bY, this.Width - 8 + 1, 20 - 1)
+						);
+
+					g.DrawString(
+						text,
+						Constants.fontDefault,
+						Brushes.White,
+						new Point(6, bY + 1)
+					);
+					bY += 20;
+				}
+
 				g.DrawLine(
 					Constants.penActiveFace,
 					new Point(4, bY - 1),
@@ -133,10 +206,14 @@ namespace BeerViewer.Forms.Controls.Fleets
 			#region Fleet Info
 			if (this.Fleet != null)
 			{
+				var textColor = Brushes.White;
 				var ships = this.Fleet.Ships;
 
 				var nameWidth = ships
-					.Max(x => (int)g.MeasureString(x.Info.Name, Constants.fontBig).Width);
+					.Max(x => (int)g.MeasureString(
+						i18n.Current[x.Info.Name],
+						Constants.fontBig
+					).Width);
 
 				var itemWidth = this.Width - 12;
 				if (itemWidth < 240) itemWidth = (itemWidth - 0) / 1;
@@ -145,7 +222,7 @@ namespace BeerViewer.Forms.Controls.Fleets
 				itemWidth = Math.Max(itemWidth, 1);
 
 				var rightWidth = (itemWidth - nameWidth - 8);
-				var miniMode = (rightWidth < 156);
+				var miniMode = (rightWidth < 128);
 				var miniMode2 = (rightWidth < 84);
 
 				var perLine = Math.Max(1, (this.Width-12) / itemWidth);
@@ -158,7 +235,7 @@ namespace BeerViewer.Forms.Controls.Fleets
 				{
 					#region Name & Level
 					g.DrawString(
-						ship.Info.Name,
+						i18n.Current[ship.Info.Name],
 						Constants.fontBig,
 						textColor,
 						new Point(
@@ -182,7 +259,7 @@ namespace BeerViewer.Forms.Controls.Fleets
 					DrawColorIndicator(
 						g,
 						6 + (itemWidth + 4) * (i % perLine) + nameWidth + 8,
-						bY + 4 + (i / perLine) * 36 + 4,
+						bY + 4 + (i / perLine) * 36 + 6,
 						rightWidth,
 						6,
 						ship.HP
@@ -196,7 +273,7 @@ namespace BeerViewer.Forms.Controls.Fleets
 							textColor,
 							new Point(
 								6 + (itemWidth + 4) * (i % perLine) + nameWidth + 6,
-								bY + 4 + (i / perLine) * 36 + 12
+								bY + 4 + (i / perLine) * 36 + 14
 							)
 						);
 					}
@@ -208,7 +285,7 @@ namespace BeerViewer.Forms.Controls.Fleets
 							textColor,
 							new Point(
 								6 + (itemWidth + 4) * (i % perLine) + nameWidth + 6,
-								bY + 4 + (i / perLine) * 36 + 12
+								bY + 4 + (i / perLine) * 36 + 14
 							)
 						);
 					}
@@ -220,14 +297,14 @@ namespace BeerViewer.Forms.Controls.Fleets
 						DrawColorIndicator(
 							g,
 							6 + (itemWidth + 4) * (i % perLine) + nameWidth + 8 + rightWidth - (rightWidth / 4),
-							bY + 4 + (i / perLine) * 36 + 4 + 11,
+							bY + 4 + (i / perLine) * 36 + 4 + 12,
 							rightWidth / 4, 5,
 							ship.Fuel, 5
 						);
 						DrawColorIndicator(
 							g,
 							6 + (itemWidth + 4) * (i % perLine) + nameWidth + 8 + rightWidth - (rightWidth / 4),
-							bY + 4 + (i / perLine) * 36 + 4 + 11 + 7,
+							bY + 4 + (i / perLine) * 36 + 4 + 12 + 8,
 							rightWidth / 4, 5,
 							ship.Bull, 5
 						);
@@ -240,7 +317,7 @@ namespace BeerViewer.Forms.Controls.Fleets
 						g.FillRectangle(
 							new SolidBrush(GetConditionColor(ship.ConditionType)),
 							6 + (itemWidth + 4) * (i % perLine) + nameWidth + 8 + rightWidth - (miniMode ? 0 : rightWidth / 4) - 15,
-							bY + 4 + (i / perLine) * 36 + 4 + 8 + 3,
+							bY + 4 + (i / perLine) * 36 + 4 + 10 + 3,
 							11, 11
 						);
 					}
@@ -249,7 +326,7 @@ namespace BeerViewer.Forms.Controls.Fleets
 						g.FillRectangle(
 							new SolidBrush(GetConditionColor(ship.ConditionType)),
 							6 + (itemWidth + 4) * (i % perLine) + nameWidth + 8 + rightWidth - (miniMode ? 0 : rightWidth / 4) - 36,
-							bY + 4 + (i / perLine) * 36 + 4 + 8 + 3,
+							bY + 4 + (i / perLine) * 36 + 4 + 10 + 3,
 							11, 11
 						);
 						g.DrawString(
@@ -258,7 +335,7 @@ namespace BeerViewer.Forms.Controls.Fleets
 							textColor,
 							new Point(
 								6 + (itemWidth + 4) * (i % perLine) + nameWidth + 8 + rightWidth - (miniMode ? 0 : rightWidth / 4) - 24,
-								bY + 4 + (i / perLine) * 36 + 4 + 8 + 3 - 3
+								bY + 4 + (i / perLine) * 36 + 4 + 10 + 3 - 3
 							)
 						);
 					}
@@ -330,21 +407,25 @@ namespace BeerViewer.Forms.Controls.Fleets
 		public void SetFleet(Fleet Fleet)
 		{
 			this.Fleet = Fleet;
-			this.Fleet.PropertyEvent(nameof(this.Fleet.ShipsUpdated), () =>
+			this.Fleet.PropertyEvent(nameof(this.Fleet.ShipsUpdated), () => this.UpdateShips());
+			this.Fleet.PropertyEvent(nameof(this.Fleet.Ships), () => this.UpdateShips());
+			this.Fleet.PropertyEvent(nameof(this.Fleet.IsInSortie), () => this.UpdateShips());
+			this.Fleet.PropertyEvent(nameof(this.Fleet.RejuvenateText), () => this.UpdateShips());
+			this.Fleet.Expedition.PropertyEvent(nameof(this.Fleet.Expedition.IsInExecution), () => this.UpdateShips());
+
+			this.Invalidate();
+		}
+		private void UpdateShips()
+		{
+			var ships = this.Fleet.Ships;
+			ships.ForEach(x =>
 			{
-				var ships = this.Fleet.Ships;
-				ships.ForEach(x =>
-				{
-					if (x == null) return;
-					x.PropertyEvent(nameof(x.Fuel), () => this.Invalidate());
-					x.PropertyEvent(nameof(x.Bull), () => this.Invalidate());
-					x.PropertyEvent(nameof(x.HP), () => this.Invalidate());
-					x.PropertyEvent(nameof(x.Level), () => this.Invalidate());
-				});
-
-				this.Invalidate();
-			}, true);
-
+				if (x == null) return;
+				x.PropertyEvent(nameof(x.Fuel), () => this.Invalidate());
+				x.PropertyEvent(nameof(x.Bull), () => this.Invalidate());
+				x.PropertyEvent(nameof(x.HP), () => this.Invalidate());
+				x.PropertyEvent(nameof(x.Level), () => this.Invalidate());
+			});
 			this.Invalidate();
 		}
 	}

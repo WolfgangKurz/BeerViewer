@@ -329,7 +329,7 @@ namespace BeerViewer.Models
 				var x = e.TryParse();
 				if (x == null) return;
 
-				// this.Sortie(x);
+				this.Sortie(x);
 			});
 			proxy.Register(Proxy.api_port, e =>
 			{
@@ -371,7 +371,6 @@ namespace BeerViewer.Models
 			});
 		}
 
-		/*
 		private void Sortie(SvData data)
 		{
 			try
@@ -384,7 +383,6 @@ namespace BeerViewer.Models
 			}
 			catch { }
 		}
-		*/
 
 		private void Homing()
 		{
@@ -397,10 +395,8 @@ namespace BeerViewer.Models
 				if (ship.Situation.HasFlag(ShipSituation.Tow)) ship.Situation &= ~ShipSituation.Tow;
 			}
 
-			/*
 			foreach (var target in this.Fleets.Values)
 				target.Homing();
-			*/
 		}
 
 		private void Update(kcsapi_ship_deck source)

@@ -3,6 +3,7 @@ using System.Dynamic;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.IO;
 using System.Reflection;
@@ -13,8 +14,9 @@ namespace BeerViewer
 	{
 		public static i18n i { get; } = new i18n();
 
-		public static dynamic/*i18nLang*/ Current
-			=> i18n.i[Settings.LanguageCode.Value];
+		public static dynamic/*i18nLang*/ Current => Settings.UseTranslation.Value
+			? i18n.i[Settings.LanguageCode.Value]
+			: i18nLang.Empty;
 
 		protected Dictionary<string, i18nLang> Languages { get; set; }
 		public dynamic/*i18nLang*/ this[string lang]
@@ -41,14 +43,27 @@ namespace BeerViewer
 				.Select(x => Path.GetFileNameWithoutExtension(x));
 
 			Languages = new Dictionary<string, i18nLang>();
+
+			if (list.Contains("en")) // Default langauge
+			{
+				Languages.Add("en", new i18nLang("en"));
+				list = list.Where(x => x != "en");
+			}
 			foreach (var x in list)
 				Languages.Add(x, new i18nLang(x));
 		}
 	}
 	public class i18nLang : DynamicObject
 	{
+		private static Regex regex { get; } = new Regex(@"^([^\t]+)\t+(.+)$", RegexOptions.Compiled);
+
+		public static i18nLang Empty { get; } = new i18nLang();
 		private Dictionary<string, string> Table { get; set; }
 
+		public i18nLang()
+		{
+			this.Table = new Dictionary<string, string>(); // Just empty table
+		}
 		public i18nLang(string Language)
 		{
 			var path = Path.Combine(
@@ -63,9 +78,10 @@ namespace BeerViewer
 					File.ReadAllLines(path)
 						.Select(x => x.Trim())
 						.Where(x => !string.IsNullOrWhiteSpace(x) && x.Contains('\t'))
+						.Select(x => regex.Match(x).Groups)
 						.ToDictionary(
-							x => x.Substring(0, x.IndexOf('\t')),
-							x => x.Substring(x.IndexOf('\t') + 1)
+							x => x[1].Value,
+							x => x[2].Value
 						);
 			}
 		}
@@ -76,8 +92,8 @@ namespace BeerViewer
 			var bRet = Table.TryGetValue(binder.Name, out sRet);
 			if (!bRet)
 			{
-				result = default(object);
-				return false;
+				result = binder.Name; // default(object);
+				return true;
 			}
 			result = sRet;
 			return true;
@@ -91,8 +107,8 @@ namespace BeerViewer
 			var bRet = Table.TryGetValue(indexes[0] as string, out sRet);
 			if (!bRet)
 			{
-				result = default(object);
-				return false;
+				result = indexes[0] as string; // default(object);
+				return true;
 			}
 			result = sRet;
 			return true;

@@ -10,7 +10,7 @@ using BeerViewer.Models.kcsapi;
 
 namespace BeerViewer.Models
 {
-	public class Fleet : DisposableNotifier, IIdentifiable
+	public class Fleet : TimerNotifier, IIdentifiable
 	{
 		private readonly Homeport homeport;
 		private Ship[] originalShips;
@@ -72,7 +72,36 @@ namespace BeerViewer.Models
 				?? ShipSpeed.Immovable;
 		#endregion
 
+		#region IsInSortie Property
+		private bool _IsInSortie;
+		public bool IsInSortie
+		{
+			get { return this._IsInSortie; }
+			set
+			{
+				if (this._IsInSortie != value)
+				{
+					this._IsInSortie = value;
+					this.RaisePropertyChanged();
+				}
+			}
+		}
+		#endregion
+
 		public Expedition Expedition { get; }
+
+
+		private int MinimumCondition;
+		private DateTimeOffset? RejuvenateTime { get; set; }
+
+		public TimeSpan? RejuvenateRemaining
+			=> !this.RejuvenateTime.HasValue ? (TimeSpan?)null
+			: this.RejuvenateTime.Value < DateTimeOffset.Now ? TimeSpan.Zero
+			: this.RejuvenateTime.Value - DateTimeOffset.Now;
+
+		public string RejuvenateText => this.RejuvenateRemaining.HasValue
+			? $"{(int)this.RejuvenateRemaining.Value.TotalHours:D2}:{this.RejuvenateRemaining.Value.ToString(@"mm\:ss")}"
+			: "--:--:--";
 
 		internal Fleet(Homeport parent, kcsapi_deck Data)
 		{
@@ -89,7 +118,22 @@ namespace BeerViewer.Models
 
 			this.Expedition.Update(Data.api_mission);
 			this.UpdateShips(Data.api_ship.Select(id => this.homeport.Organization.Ships[id]).ToArray());
+
+			this.UpdateCondition();
 		}
+
+		#region Sortie, Homing
+		internal void Sortie()
+		{
+			if (!this.IsInSortie)
+				this.IsInSortie = true;
+		}
+		internal void Homing()
+		{
+			if (this.IsInSortie)
+				this.IsInSortie = false;
+		}
+		#endregion
 
 		#region Change, Unset
 		internal Ship Change(int index, Ship ship)
@@ -143,6 +187,41 @@ namespace BeerViewer.Models
 		{
 			this.originalShips = ships;
 			this.Ships = ships.Where(x => x != null).ToArray();
+		}
+		private void UpdateCondition()
+		{
+			var condition = this.Ships.Min(x => x.Condition);
+			var goal = 49;
+
+			// Require time not changed
+			if (MinimumCondition == condition)
+				return;
+
+			MinimumCondition = condition;
+			if (condition >= goal)
+			{
+				this.RejuvenateTime = (DateTimeOffset?)null;
+			}
+			else
+			{
+				var rejuvenate = DateTimeOffset.Now;
+
+				var value = (goal - condition + 2) / 3 * 3; // Integral dividing
+				rejuvenate = rejuvenate.AddMinutes(value);
+
+				this.RejuvenateTime = rejuvenate;
+			}
+		}
+
+		protected override void Tick()
+		{
+			base.Tick();
+
+			if (this.RejuvenateTime.HasValue)
+			{
+				this.RaisePropertyChanged(nameof(RejuvenateRemaining));
+				this.RaisePropertyChanged(nameof(RejuvenateText));
+			}
 		}
 
 		internal void RaiseShipsUpdated()

@@ -36,6 +36,8 @@ namespace BeerViewer.Models.Wrapper
 		public int SortieWins => this.RawData.api_st_win;
 		public int SortieLoses => this.RawData.api_st_lose;
 
+		public int ResourceLimit => (this.Level + 3) * 250;
+
 		public double SortieWinningRate
 		{
 			get

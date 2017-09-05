@@ -147,6 +147,7 @@ namespace BeerViewer.Forms.Controls
 
 				if (dock?.State == RepairingDockState.Repairing)
 				{
+					var name = i18n.Current[dock.Ship.Info.Name];
 					g.FillRectangle(
 						Constants.brushBrownAccent,
 						6 + (dockWidth + 4) * (i % perLine),
@@ -158,11 +159,11 @@ namespace BeerViewer.Forms.Controls
 					if (dock.Remaining.HasValue)
 						txt = $"{(int)dock.Remaining.Value.TotalHours:D2}:{dock.Remaining.Value.ToString(@"mm\:ss")}";
 
-					var slWidth = (int)g.MeasureString($"{dock.Ship.Info.Name}  {txt}", Constants.fontDefault).Width;
+					var slWidth = (int)g.MeasureString($"{name}  {txt}", Constants.fontDefault).Width;
 					if (slWidth >= dockWidth) // Double Line
 					{
 						g.DrawString(
-							dock.Ship.Info.Name,
+							name,
 							Constants.fontDefault,
 							textColor,
 							new Point(
@@ -185,7 +186,7 @@ namespace BeerViewer.Forms.Controls
 					else // Single Line
 					{
 						g.DrawString(
-							$"{dock.Ship.Info.Name}  {txt}",
+							$"{name}  {txt}",
 							Constants.fontDefault,
 							textColor,
 							new Point(
@@ -250,6 +251,7 @@ namespace BeerViewer.Forms.Controls
 
 				if (dock?.State == BuildingDockState.Building || dock?.State == BuildingDockState.Completed)
 				{
+					var name = i18n.Current[dock.Ship.Name];
 					g.FillRectangle(
 						dock.State == BuildingDockState.Completed
 							? Constants.brushGreenAccent
@@ -263,11 +265,11 @@ namespace BeerViewer.Forms.Controls
 					if (dock.Remaining.HasValue)
 						txt = $"{(int)dock.Remaining.Value.TotalHours:D2}:{dock.Remaining.Value.ToString(@"mm\:ss")}";
 
-					var slWidth = (int)g.MeasureString($"{dock.Ship.Name}  {txt}", Constants.fontDefault).Width;
+					var slWidth = (int)g.MeasureString($"{name}  {txt}", Constants.fontDefault).Width;
 					if (slWidth >= dockWidth) // Double Line
 					{
 						g.DrawString(
-							dock.Ship.Name,
+							name,
 							Constants.fontDefault,
 							textColor,
 							new Point(
@@ -290,7 +292,7 @@ namespace BeerViewer.Forms.Controls
 					else // Single Line
 					{
 						g.DrawString(
-							$"{dock.Ship.Name}  {txt}",
+							$"{name}  {txt}",
 							Constants.fontDefault,
 							textColor,
 							new Point(

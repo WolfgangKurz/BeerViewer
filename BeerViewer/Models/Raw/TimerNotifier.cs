@@ -5,7 +5,7 @@ using ElapsedEventHandler = System.Timers.ElapsedEventHandler;
 
 namespace BeerViewer.Models.Raw
 {
-	public class TimerNotifier : Notifier, IDisposable
+	public class TimerNotifier : DisposableNotifier, IDisposable
 	{
 		#region Static Members
 		private static readonly Timer timer;
@@ -28,9 +28,10 @@ namespace BeerViewer.Models.Raw
 		}
 		protected virtual void Tick() { }
 
-		public virtual void Dispose()
+		public new virtual void Dispose()
 		{
 			timer.Elapsed -= EventHandler;
+			base.Dispose();
 		}
 	}
 }

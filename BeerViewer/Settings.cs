@@ -193,9 +193,14 @@ namespace BeerViewer
 
 
 		/// <summary>
+		/// Use translation? (use Japanese?)
+		/// </summary>
+		public static SettingValue<bool> UseTranslation { get; } = new SettingValue<bool>(getKey(), "Setting", true);
+
+		/// <summary>
 		/// Current Language Code
 		/// </summary>
-		public static SettingValue<string> LanguageCode { get; } = new SettingValue<string>(getKey(), "Setting", "en");
+		public static SettingValue<string> LanguageCode { get; } = new SettingValue<string>(getKey(), "Setting", "ko");
 
 		/// <summary>
 		/// Includes LOS calculator first fleet's los?

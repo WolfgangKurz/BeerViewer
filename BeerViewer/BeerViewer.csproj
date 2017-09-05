@@ -86,7 +86,6 @@
     <Compile Include="Forms\frmMain.Designer.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="Framework\VersionHelper.cs" />
     <Compile Include="i18n.cs" />
     <Compile Include="Models\AirSuperiorityPotential.cs" />
     <Compile Include="Models\BuildingDock.cs" />

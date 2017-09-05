@@ -2,6 +2,11 @@
 {
 	public struct LimitedValue
 	{
+		public double Percentage
+			=> (Maximum - Minimum) != 0
+				? (double)(Current - Minimum) / (Maximum - Minimum)
+				: 0;
+
 		public int Current { get; }
 		public int Maximum { get; }
 		
