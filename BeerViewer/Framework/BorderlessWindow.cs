@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using System.Reflection;
 using System.Drawing;
 
 namespace BeerViewer.Framework
@@ -17,6 +18,7 @@ namespace BeerViewer.Framework
 		private const int WS_EX_LAYERED = 0x00040000;
 		private const int WS_EX_APPWINDOW = 0x00080000;
 
+		private const uint WM_WINDOWPOSCHANGED = 0x47;
 		private const uint WM_NCPAINT = 0x85;
 		private const uint WM_NCCALCSIZE = 0x83;
 		private const uint WM_NCHITTEST = 0x84;
@@ -113,10 +115,6 @@ namespace BeerViewer.Framework
 		[DllImport("uxtheme", CharSet = CharSet.Unicode)]
 		private static extern Int32 SetWindowTheme(IntPtr hWnd, String subAppName, String subIdList);
 
-		[DllImport("uxtheme")]
-		[return: MarshalAs(UnmanagedType.Bool)]
-		private static extern bool IsThemeActive();
-
 		[DllImport("user32.dll", ExactSpelling = true)]
 		[return: MarshalAs(UnmanagedType.Bool)]
 		private static extern bool GetWindowRect(IntPtr hwnd, out RECT lpRect);
@@ -137,22 +135,46 @@ namespace BeerViewer.Framework
 		protected override void WndProc(ref Message m)
 		{
 			if (DesignMode)
+			{
 				base.WndProc(ref m);
+				return;
+			}
 
 			switch ((uint)m.Msg)
 			{
 				case WM_NCHITTEST:
 					m.Result = (IntPtr)NCHitTest(m);
 					break;
+
 				case WM_NCCALCSIZE:
 					NCCalcSize(ref m);
 					break;
+
 				case WM_DWMCOMPOSITIONCHANGED:
 					handleCompositionChanged();
 					break;
+
 				case WM_NCPAINT:
 					base.WndProc(ref m);
 					break;
+
+				case WM_WINDOWPOSCHANGED:
+					// Need to call this method (Resize event fired from here){
+					typeof(Form)
+						.GetMethod("UpdateWindowState", BindingFlags.NonPublic | BindingFlags.Instance)
+						?.Invoke(this, new object[] { });
+
+					// base.DefWndProc(ref m);
+					// Call Control.WmWindowPosChanged
+					{
+						var args = new object[] { m };
+						var method = typeof(Control).GetMethod("WmWindowPosChanged", BindingFlags.NonPublic | BindingFlags.Instance);
+						method?.Invoke(this, args);
+					}
+
+					// And RestoreWindowBoundsIfNecessary method must never called
+					break;
+
 				default:
 					base.WndProc(ref m);
 					break;
@@ -160,7 +182,6 @@ namespace BeerViewer.Framework
 		}
 
 		private bool CompositionEnabled = false;
-		private bool IsThemeEnabled => IsThemeActive();
 		private void handleCompositionChanged()
 		{
 			try
@@ -178,7 +199,7 @@ namespace BeerViewer.Framework
 						this.Handle,
 						DWMWINDOWATTRIBUTE.DWMWA_NCRENDERING_POLICY,
 						ref v,
-						4 // sizeof(DWORD)
+						sizeof(uint) // sizeof(DWORD)
 					);
 
 					MARGINS margins = new MARGINS()
@@ -262,7 +283,7 @@ namespace BeerViewer.Framework
 		public BorderlessWindow() : this(false) { }
 		public BorderlessWindow(bool IsDialog = false)
 		{
-			SetLayeredWindowAttributes(this.Handle, 0xFF00FF, 0, 0x01); // LWA_COLORKEY
+			SetLayeredWindowAttributes(this.Handle, 0x000000, 255, 0x02); // LWA_ALPHAKEY
 			handleCompositionChanged();
 
 			Renderer = new Framework.FrameworkRenderer(this);
