@@ -141,6 +141,7 @@ namespace BeerViewer.Models
 				{
 					this.Completed(this, new BuildingCompletedEventArgs(this.Id, this.Ship));
 					this.notificated = true;
+					this.Finish();
 				}
 			}
 			else
