@@ -103,8 +103,8 @@ namespace BeerViewer.Forms.Controls.Overview
 			Brush textColor;
 
 			var dockWidth = this.Width - 12;
-			if (dockWidth < 200) dockWidth = (dockWidth - 0) / 1;
-			else if (dockWidth < 400) dockWidth = (dockWidth - 4) / 2;
+			if (dockWidth < 188) dockWidth = (dockWidth - 0) / 1;
+			else if (dockWidth < 396) dockWidth = (dockWidth - 4) / 2;
 			else dockWidth = (dockWidth - 12) / 4;
 			dockWidth = Math.Max(dockWidth, 1);
 

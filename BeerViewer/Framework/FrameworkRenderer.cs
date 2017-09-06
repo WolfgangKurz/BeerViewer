@@ -28,6 +28,7 @@ namespace BeerViewer.Framework
 		private MouseEventHandler OwnerMouseMoveEvent = null;
 		private MouseEventHandler OwnerMouseDownEvent = null;
 		private MouseEventHandler OwnerMouseUpEvent = null;
+		private MouseEventHandler OwnerMouseWheelEvent = null;
 		private EventHandler OwnerMouseLeaveEvent = null;
 		private PaintEventHandler OwnerPaintEvent = null;
 
@@ -78,6 +79,15 @@ namespace BeerViewer.Framework
 					if (control.OnMouseUp(cpt)) break;
 				}
 			};
+			this.OwnerMouseWheelEvent = (s, e) =>
+			{
+				var pt = new Point(e.X, e.Y);
+				foreach (var control in this.Controls)
+				{
+					var cpt = new Point(pt.X - control.X, pt.Y - control.Y);
+					if (control.OnMouseWheel(cpt, e.Delta)) break;
+				}
+			};
 			this.OwnerPaintEvent = (s, e) =>
 			{
 				var g = e.Graphics;
@@ -103,6 +113,7 @@ namespace BeerViewer.Framework
 			this.Owner.MouseDown += this.OwnerMouseDownEvent;
 			this.Owner.MouseUp += this.OwnerMouseUpEvent;
 			this.Owner.MouseLeave += this.OwnerMouseLeaveEvent;
+			this.Owner.MouseWheel += this.OwnerMouseWheelEvent;
 			this.Owner.Paint += this.OwnerPaintEvent;
 			#endregion
 		}

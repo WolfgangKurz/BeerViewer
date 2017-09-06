@@ -280,6 +280,8 @@ namespace BeerViewer.Framework
 
 		protected FrameworkRenderer Renderer { get; private set; }
 
+		private Brush BackColorBrush;
+
 		public BorderlessWindow() : this(false) { }
 		public BorderlessWindow(bool IsDialog = false)
 		{
@@ -288,8 +290,14 @@ namespace BeerViewer.Framework
 
 			Renderer = new Framework.FrameworkRenderer(this);
 
-			this.BackColor = Constants.colorNormalFace;
 			this.DoubleBuffered = true;
+
+			this.BackColorChanged += (s, e) =>
+			{
+				this.BackColorBrush?.Dispose();
+				this.BackColorBrush = new SolidBrush(this.BackColor);
+			};
+			this.BackColor = Constants.colorNormalFace;
 
 			if (!IsDialog)
 			{
@@ -358,9 +366,21 @@ namespace BeerViewer.Framework
 				};
 			}
 		}
+
+		protected override void OnResize(EventArgs e)
+		{
+			base.OnResize(e);
+			this.Invalidate();
+		}
 		protected override void OnPaint(PaintEventArgs e)
 		{
 			var g = e.Graphics;
+
+			g.FillRectangle(
+				this.BackColorBrush,
+				new Rectangle(new Point(1, 1), this.ClientSize)
+			);
+
 			g.TranslateTransform(1, 1);
 			g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
 

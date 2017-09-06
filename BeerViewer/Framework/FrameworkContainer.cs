@@ -38,9 +38,12 @@ namespace BeerViewer.Framework
 			get { return this._ScrollX; }
 			set
 			{
-				if (this._ScrollX != value)
+				var v = value.InRange(0, this.ScrollMaximumX);
+				if (!Scrollable || !IsScrollVisibleX) v = 0; // Scroll not available
+
+				if (this._ScrollX != v)
 				{
-					this._ScrollX = value;
+					this._ScrollX = v;
 					this.Invalidate();
 				}
 			}
@@ -53,10 +56,42 @@ namespace BeerViewer.Framework
 			get { return this._ScrollY; }
 			set
 			{
-				if (this._ScrollY != value)
+				var v = value.InRange(0, this._ScrollMaximumY);
+				if (!Scrollable || !IsScrollVisibleY) v = 0; // Scroll not available
+
+				if (this._ScrollY != v)
 				{
-					this._ScrollY = value;
+					this._ScrollY = v;
 					this.Invalidate();
+				}
+			}
+		}
+		#endregion
+
+		#region ScrollMaximumX Property
+		private int _ScrollMaximumX;
+		private int ScrollMaximumX {
+			get { return this._ScrollMaximumX; }
+			set
+			{
+				if (this._ScrollMaximumX != value)
+				{
+					this._ScrollMaximumX = value;
+					if (this.ScrollX > value) this.ScrollX = value;
+				}
+			}
+		}
+		#endregion
+		#region ScrollMaximumY Property
+		private int _ScrollMaximumY;
+		private int ScrollMaximumY {
+			get { return this._ScrollMaximumY; }
+			set
+			{
+				if (this._ScrollMaximumY != value)
+				{
+					this._ScrollMaximumY = value;
+					if (this.ScrollX > value) this.ScrollX = value;
 				}
 			}
 		}
@@ -82,7 +117,8 @@ namespace BeerViewer.Framework
 				if (!this.Scrollable) return false;
 
 				var sz = this.GetClientSize();
-				return sz.Width > this.Width;
+				this.ScrollMaximumX = Math.Max(0, sz.Width - this.Width);
+				return this.ScrollMaximumX > 0;
 			}
 		}
 
@@ -96,7 +132,8 @@ namespace BeerViewer.Framework
 				if (!this.Scrollable) return false;
 
 				var sz = this.GetClientSize();
-				return sz.Height > this.Height;
+				this.ScrollMaximumY = Math.Max(0, sz.Height - this.Height);
+				return this.ScrollMaximumY > 0;
 			}
 		}
 
@@ -190,6 +227,12 @@ namespace BeerViewer.Framework
 					control.OnMouseLeave();
 			};
 
+			this.Resize += (s, e) =>
+			{
+				this.ScrollX = this.ScrollX; // Recalculate scrolls
+				this.ScrollY = this.ScrollY;
+			};
+
 			this.Paint += (s, e) =>
 			{
 				var g = e.Graphics;
@@ -198,22 +241,20 @@ namespace BeerViewer.Framework
 				{
 					if (!control.Visible) continue;
 
+					var before = g.Save();
+					g.TranslateTransform(-this.ScrollX, -this.ScrollY);
+
 					if (g.Clip.IsVisible(control.Bound))
 					{
-						var state = g.Save();
-
 						g.TranslateTransform(control.X, control.Y);
 
 						g.IntersectClip(control.ClientBound);
-						g.IntersectClip(new Rectangle(-control.X, -control.Y, this.ClientWidth, this.ClientHeight));
-
-						if (this.Scrollable)
-							g.TranslateTransform(-this.ScrollX, -this.ScrollY);
+						g.IntersectClip(new Rectangle(-control.X + this.ScrollX, -control.Y + this.ScrollY, this.ClientWidth, this.ClientHeight));
 
 						control.Update(g);
-
-						g.Restore(state);
 					}
+
+					g.Restore(before);
 				}
 
 				if (this.Scrollable) this.DrawScroll(g);
@@ -229,7 +270,7 @@ namespace BeerViewer.Framework
 			Func<int, int, int> CalcThumbSize = (viewportSize, contentSize) =>
 			{
 				var viewableRatio = (double)viewportSize / contentSize;
-				var thumbHeight = (viewportSize - MarginSize) * viewableRatio;
+				var thumbHeight = (viewportSize - MarginSize * 2) * viewableRatio;
 				return (int)thumbHeight;
 			};
 
@@ -243,7 +284,7 @@ namespace BeerViewer.Framework
 			{
 				var thumb = CalcThumbSize(cy, cSz.Height);
 				var bound = new Rectangle(
-					MarginSize + (int)(this.ScrollX * (cSz.Width - cx) / (cx - thumb)),
+					MarginSize + (int)(this.ScrollX * (cx - thumb - (MarginSize * 2)) / (cSz.Width - cx)),
 					cy + MarginSize,
 					thumb, 16 - (MarginSize * 2)
 				);
@@ -254,7 +295,7 @@ namespace BeerViewer.Framework
 				var thumb = CalcThumbSize(cy, cSz.Height);
 				var bound = new Rectangle(
 					cx + MarginSize,
-					MarginSize + (int)(this.ScrollY * (cSz.Height - cy) / (cy - thumb)),
+					MarginSize + (int)(this.ScrollY * (cy - thumb - (MarginSize * 2)) / (cSz.Height - cy)),
 					16 - (MarginSize * 2), thumb
 				);
 				g.FillRoundedRectangle(bound, 3, Constants.brushActiveFace);
@@ -262,8 +303,25 @@ namespace BeerViewer.Framework
 			g.Restore(state);
 		}
 
+		public override bool OnMouseDown(Point pt)
+		{
+			pt.X += this.ScrollX;
+			pt.Y += this.ScrollY;
+
+			return base.OnMouseDown(pt);
+		}
+		public override bool OnMouseMove(Point pt)
+		{
+			pt.X += this.ScrollX;
+			pt.Y += this.ScrollY;
+
+			return base.OnMouseMove(pt);
+		}
 		public override bool OnMouseUp(Point pt)
 		{
+			pt.X += this.ScrollX;
+			pt.Y += this.ScrollY;
+
 			if (base.OnMouseUp(pt))
 			{
 				foreach (var control in this.Controls)
@@ -275,6 +333,14 @@ namespace BeerViewer.Framework
 				return true;
 			}
 			return false;
+		}
+		public override bool OnMouseWheel(Point pt, int delta)
+		{
+			pt.X += this.ScrollX;
+			pt.Y += this.ScrollY;
+
+			this.ScrollY -= delta;
+			return base.OnMouseWheel(pt, delta);
 		}
 
 		/// <summary>
@@ -288,7 +354,8 @@ namespace BeerViewer.Framework
 				this.Width, this.Height
 			);
 			foreach (var control in this.Controls)
-				sz = Rectangle.Union(sz, control.Bound);
+				if(control.Visible)
+					sz = Rectangle.Union(sz, control.Bound);
 
 			return new Size(sz.Width, sz.Height);
 		}

@@ -13,10 +13,15 @@ using BeerViewer.Forms.Controls;
 using BeerViewer.Forms.Controls.Overview;
 using BeerViewer.Models;
 
+using System.Runtime.InteropServices;
+
 namespace BeerViewer.Forms
 {
 	public partial class frmMain : BorderlessWindow
 	{
+		[DllImport("kernel32.dll", EntryPoint = "SetProcessWorkingSetSize", SetLastError = true, CallingConvention = CallingConvention.StdCall)]
+		private static extern bool SetProcessWorkingSetSize(IntPtr proc, int min, int max);
+
 		public static frmMain Instance { get; }
 
 		public WebBrowser Browser { get; private set; }
@@ -36,6 +41,21 @@ namespace BeerViewer.Forms
 				800 + 2,
 				480 + 28 + 2
 			);
+
+			#region GC timer
+			{
+				var timer = new System.Timers.Timer(5000);
+				timer.Elapsed += (s, e) =>
+				{
+					GC.Collect(GC.MaxGeneration, GCCollectionMode.Forced);
+					GC.WaitForPendingFinalizers();
+
+					if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+						SetProcessWorkingSetSize(System.Diagnostics.Process.GetCurrentProcess().Handle, -1, -1);
+				};
+				timer.Start();
+			}
+			#endregion
 
 			#region Menu Button rendering
 			var MenuButton = new FrameworkControl(1, 1, 120, 28);
@@ -154,7 +174,7 @@ namespace BeerViewer.Forms
 			this.Resize += (s, e) =>
 			{
 				Overview.Width = this.ClientSize.Width - 800;
-				Overview.MaximumHeight = this.ClientSize.Height - (29 + 28);
+				Overview.MaximumHeight = this.ClientSize.Height - (29 + 28) + 1;
 				// Overview.Height = this.ClientSize.Height - (29 + 28);
 			};
 			#endregion

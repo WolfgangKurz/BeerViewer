@@ -214,6 +214,8 @@ namespace BeerViewer.Framework
 		public event EventHandler MouseLeave;
 		public event EventHandler Click;
 
+		public event MouseEventHandler MouseWheel;
+
 		public event EventHandler Resize;
 		public event PaintEventHandler Paint;
 		#endregion
@@ -291,6 +293,17 @@ namespace BeerViewer.Framework
 
 			this.IsHover = false;
 			this.MouseLeave?.Invoke(this, EventArgs.Empty);
+		}
+
+		public virtual bool OnMouseWheel(Point pt, int delta)
+		{
+			if (this.Visible && (this.IsActive || this.ClientBound.Contains(pt)))
+			{
+				this.MouseWheel?.Invoke(this, new MouseEventArgs(IsActive ? MouseButtons.Left : MouseButtons.None, 0, pt.X, pt.Y, delta));
+				return true;
+			}
+
+			return false;
 		}
 
 		public virtual void OnPaint(Graphics g)
