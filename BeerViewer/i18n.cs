@@ -68,21 +68,29 @@ namespace BeerViewer
 		{
 			var path = Path.Combine(
 				Path.GetDirectoryName(Assembly.GetEntryAssembly().Location),
-				"i18n",
-				$"{Language}.txt"
+				"i18n"
 			);
+			var filename = $"{Language}.txt";
+			var fullPath = Path.Combine(path, filename);
 
-			if (File.Exists(path))
+			if (File.Exists(fullPath))
 			{
 				this.Table =
-					File.ReadAllLines(path)
-						.Select(x => x.Trim())
-						.Where(x => !string.IsNullOrWhiteSpace(x) && x.Contains('\t'))
-						.Select(x => regex.Match(x).Groups)
-						.ToDictionary(
-							x => x[1].Value,
-							x => x[2].Value
-						);
+					Directory.GetFiles(path, "*.txt")
+						.Select(x => Path.GetFileName(x))
+						.Where(x => x == filename || x.StartsWith(Language + "_"))
+						.Select(x => Path.Combine(path, x))
+						.SelectMany(y =>
+							File.ReadAllLines(y)
+								.Select(x => x.Trim())
+								.Where(x => !string.IsNullOrWhiteSpace(x) && x.Contains('\t'))
+								.Select(x => regex.Match(x).Groups)
+								.ToDictionary(
+									x => x[1].Value,
+									x => x[2].Value
+								)
+						)
+						.ToDictionary(x => x.Key, x => x.Value);
 			}
 		}
 
