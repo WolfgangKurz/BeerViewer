@@ -1,17 +1,25 @@
 fleet_level	Lv
-fleet_speed_immovable	Immovable
-fleet_speed_slow	Slow speed
-fleet_speed_fast	Fast speed
-fleet_speed_faster	Fast+ speed
-fleet_speed_fastest	Fastest speed
-fleet_los	LoS
-fleet_aa	AA
+fleet_speed_immovable	Landbased
+fleet_speed_slow			Slow speed
+fleet_speed_fast			Fast speed
+fleet_speed_faster			Fast+ speed
+fleet_speed_fastest		Fastest speed
+fleet_los		LoS
+fleet_aa		AA
 fleet_repairing	Repairing
 
-fleet_locked	Locked
+fleet_locked				Locked
 fleet_repair_empty	Empty Repair
-fleet_dock_empty	Empty Dock
-fleet_done	Done
+fleet_dock_empty		Empty Dock
+fleet_done				Done
+
+fleet_status_repair			Repairing
+fleet_status_expedition	In Expedition
+fleet_status_sortie			In Sortie
+fleet_status_critical		Critical Damaged
+fleet_status_supply		Need to Supply
+fleet_status_repairship	RepairShip is Flagship
+fleet_status_ready			Ready to Sortie
 
 loscalc_type1	Simple Sum
 loscalc_type2	2-5 (Old)
@@ -19,10 +27,6 @@ loscalc_type3	2-5 (Autumn)
 loscalc_type4	Formula 33 (Cn=1, for 2-5)
 loscalc_type5	Formula 33 (Cn=3, for 6-2, 6-3)
 loscalc_type6	Formula 33 (Cn=4, for 3-5, 6-1)
-
-
-
-
 
 
 睦月	Mutsuki
@@ -182,7 +186,7 @@ loscalc_type6	Formula 33 (Cn=4, for 3-5, 6-1)
 神通改二	Jintsuu Kai Ni
 那珂改二	Naka Kai Ni
 あきつ丸	Akitsumaru
-神威	Kamoi
+神威		Kamoi
 まるゆ	Maruyu
 弥生	Yayoi
 卯月	Uzuki
@@ -456,56 +460,56 @@ Pola	Pola
 由良改二	Yura Kai Ni
 山風改	Yamakaze Kai
 朝風改	Asakaze Kai
-山風	Yamakaze
-朝風	Asakaze
+山風		Yamakaze
+朝風		Asakaze
 Commandant Teste	Commandant Teste
 Commandant Teste改	Commandant Teste Kai
 Saratoga	Saratoga
 Saratoga改	Saratoga Kai
-松風	Matsukaze
+松風		Matsukaze
 松風改	Matsukaze Kai
-藤波	Fujinami
+藤波		Fujinami
 藤波改	Fujinami Kai
-伊13	I-13
+伊13		I-13
 伊13改	I-13 Kai
-伊14	I-14
+伊14		I-14
 伊14改	I-14 Kai
 鈴谷改二	Suzuya Kai Ni
 熊野改二	Kumano Kai Ni
 鈴谷航改二	Suzuya Carrier Kai Ni
 熊野航改二	Kumano Carrier Kai Ni
-Гангут	Гангут
-Гангут два	Гангут два
+Гангут				Гангут
+Гангут два				Гангут два
 Октябрьская революция	Октябрьская революция
-占守	Shimushu
+占守		Shimushu
 占守改	Shimushu Kai
-国後	Kushinari
+国後		Kushinari
 国後改	Kushinari Kai
-択捉	Etorofu
+択捉		Etorofu
 択捉改	Etorofu Kai
 春日丸	Kasugamaru
-大鷹	Taiyou
+大鷹		Taiyou
 大鷹改	Taiyou Kai
 大鷹改二	Taiyou Kai Ni
 神威改	Kamoi Kai
 神威改母	Kamoi Carrier Kai
 長門改二	Nagato Kai Ni
 文月改二	Fumizuki Kai Ni
-伊504	I-504
-Luigi Torelli	Luigi Torelli
+伊504			I-504
+Luigi Torelli		Luigi Torelli
 Luigi Torelli改	Luigi Torelli Kai
-UIT-25	UIT-25
-松輪	Matsuwa
+UIT-25			UIT-25
+松輪		Matsuwa
 松輪改	Matsuwa Kai
-Ark Royal	Ark Royal
-Ark Royal改	Ark Royal Kai
-Richelieu	Richelieu
-Richelieu改	Richelieu Kai
-旗風	Hatakaze
+Ark Royal		Ark Royal
+Ark Royal改		Ark Royal Kai
+Richelieu		Richelieu
+Richelieu改		Richelieu Kai
+旗風		Hatakaze
 旗風改	Hatakaze Kai
-天霧	Amagiri
+天霧		Amagiri
 天霧改	Amagiri Kai
-狭霧	Sagiri
+狭霧		Sagiri
 狭霧改	Sagiri Kai
 
 12cm単装砲	12cm Single Gun Mount
@@ -697,10 +701,10 @@ Re.2001 OR改	Re.2001 OR Kai
 銀河	Ginga
 Re.2001 G改	Re.2001 G Kai
 Re.2005 改	Re.2005 Kai
-38.1cm Mk.I連装砲	38.1cm Mk.I Twin Gun Mount
+38.1cm Mk.I連装砲		38.1cm Mk.I Twin Gun Mount
 QF 2ポンド8連装ポンポン砲	QF 2-pounder Octuple Pom-pom Gun Mount
 38.1cm Mk.I/N連装砲改	38.1cm Mk.I/N Twin Gun Mount Kai
-特大発動艇	Toku Daihatsu Landing Craft
+特大発動艇		Toku Daihatsu Landing Craft
 Laté 298B	Laté 298B
 SBD	SBD
 TBD	TBD
@@ -717,67 +721,67 @@ F6F-5	F6F-5
 晴嵐(六三一空)	Seiran (631 Air Group)
 彩雲(輸送用分解済)	Saiun (Disassembled for Transport)
 潜水艦搭載電探&水防式望遠鏡	Submarine Rader & Waterproof Periscope
-潜水艦搭載電探&逆探(E27)	Submarine Rader & Passive Radiolocator (E27)
+潜水艦搭載電探&逆探(E27)		Submarine Rader & Passive Radiolocator (E27)
 彩雲(東カロリン空)	Saiun (Eastern Caroline Air Group)
-後期型艦首魚雷(6門)	Late Model Bow Torpedo Mount (6 tubes)
+後期型艦首魚雷(6門)			Late Model Bow Torpedo Mount (6 tubes)
 熟練聴音員+後期型艦首魚雷(6門)	Skilled Sonar Personnel + Late Model Bow Torpedo Mount (6 tubes)
 Ro.44水上戦闘機bis	Ro.44 Seaplane Fighter bis
-二式水戦改(熟練)	Type 2 Seaplane Fighter Kai (Skilled)
+二式水戦改(熟練)		Type 2 Seaplane Fighter Kai (Skilled)
 強風改	Kyoufuu Kai
 零式艦戦63型(爆戦)	Type 0 Fighter Model 63 (Fighter-bomber)
 8cm高角砲改+増設機銃	8cm High-angle Gun Kai + Extra Machine Guns
-一式戦 隼II型	Type 1 Fighter Hayabusa Model II
-一式戦 隼III型甲	Type 1 Fighter Hayabusa Model III A
+一式戦 隼II型			Type 1 Fighter Hayabusa Model II
+一式戦 隼III型甲			Type 1 Fighter Hayabusa Model III A
 一式戦 隼III型甲(54戦隊)	Type 1 Fighter Hayabusa Model III A (54th Squadron)
 爆装一式戦 隼III型改(55戦隊)	Bomb-carrying Type 1 Fighter Hayabusa Model III Kai (55th Squadron)
-一式戦 隼II型(64戦隊)	Type 1 Fighter Hayabusa Model II (64th Squadron)
-九五式爆雷	Type 95 Depth Charge Projector
-二式爆雷	Type 2 Depth Charge Projector
+一式戦 隼II型(64戦隊)		Type 1 Fighter Hayabusa Model II (64th Squadron)
+九五式爆雷		Type 95 Depth Charge Projector
+二式爆雷		Type 2 Depth Charge Projector
 九六式艦戦改	Type 96 Fighter Kai
 12.7cm単装高角砲(後期型)	12.7cm Single High-angle Gun Mount (Late Model)
 特大発動艇+戦車第11連隊	Toku Daihatsu Landing Craft + 11th Tank Regiment
-30.5cm三連装砲	30.5cm Triple Gun Mount
+30.5cm三連装砲		30.5cm Triple Gun Mount
 30.5cm三連装砲改	30.5cm Triple Gun Mount Kai
 F4U-1D	F4U-1D
 15.5cm三連装副砲改	15.5cm Triple Secondary Gun Mount Kai
 15.5cm三連装副改	15.5cm Triple Gun Mount Kai
-41cm三連装砲改	41cm Triple Gun Mount Kai
+41cm三連装砲改		41cm Triple Gun Mount Kai
 瑞雲(六三四空/熟練)	Zuiun (634 Air Group/Skilled)
 零式水上偵察機11型乙	Type 0 Reconnaissance Seaplane Model 11B
 戦闘糧食(特別なおにぎり)	Combat Ration (Special Onigiri)
-Swordfish	Swordfish
+Swordfish					Swordfish
 Swordfish Mk.II(熟練)	Swordfish Mk.II(Skilled)
 Swordfish Mk.III(熟練)	Swordfish Mk.III(Skilled)
-38cm四連装砲	38cm Quad Gun Mount
+38cm四連装砲		38cm Quad Gun Mount
 38cm四連装砲改	38cm Quad Gun Mount Kai
 15.2cm三連装砲	15.2cm Triple Gun Mount
-Skua	Skua
+Skua		Skua
 Fulmar	Fulmar
-Spitfire Mk.I	Spitfire Mk.I
-Spitfire Mk.V	Spitfire Mk.V
-Seafire LF.Mk.III	Seafire LF.Mk.III
+Spitfire Mk.I		Spitfire Mk.I
+Spitfire Mk.V		Spitfire Mk.V
+Seafire LF.Mk.III		Seafire LF.Mk.III
 Spitfire Mk.IX(熟練)	Spitfire Mk.IX(Skilled)
 F6F-3N	F6F-3N
 F6F-5N	F6F-5N
 
-海防艦	Escort Ship
-駆逐艦	Destroyer
-軽巡洋艦	Light Cruiser
-重雷装巡洋艦	Torpedo Cruiser
-重巡洋艦	Heavy Cruiser
-航空巡洋艦	Aircraft Cruiser
-軽空母	Light Aircraft Carrier
-戦艦	Battleship
-高速戦艦	Fast Battleship
-航空戦艦	Aviation Battleship
-正規空母	Aircraft Carrier
-超弩級戦艦	Super Dreadnought
-潜水艦	Submarine
-潜水空母	Aircraft Carrier Submarine
-補給艦	Fleet Oiler
-水上機母艦	Seaplane Carrier
-上陸艦	Amphibious Assault Ship
-装甲空母	Armored Aircraft Carrier
-工作艦	Repair Ship
-潜水母艦	Submarine Tender
-練習巡洋艦	Training Cruiser
+海防艦		DE
+駆逐艦		DD
+軽巡洋艦		CL
+重雷装巡洋艦	CLT
+重巡洋艦		CA
+航空巡洋艦		CAV
+軽空母		CVL
+戦艦			BB
+高速戦艦		FBB
+航空戦艦		BBV
+正規空母		CV
+超弩級戦艦		BB*
+潜水艦		SS
+潜水空母		SSV
+補給艦		AO
+水上機母艦		AV
+上陸艦		LHA
+装甲空母		CVB
+工作艦		AR
+潜水母艦		AS
+練習巡洋艦		CT
