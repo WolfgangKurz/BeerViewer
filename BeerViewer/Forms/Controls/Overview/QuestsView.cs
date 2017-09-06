@@ -56,7 +56,7 @@ namespace BeerViewer.Forms.Controls.Overview
 			var g = e.Graphics;
 			g.Clear(Constants.colorNormalFace);
 
-			var bY = 0;
+			var bY = 2;
 
 			var quests = Homeport.Instance.Quests.Current;
 
@@ -160,7 +160,7 @@ namespace BeerViewer.Forms.Controls.Overview
 				);
 
 				g.Restore(s);
-				bY += 14 + 4;
+				bY += 14 + 4 + 4;
 			}
 			bY += 2;
 

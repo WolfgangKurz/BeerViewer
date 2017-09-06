@@ -11,7 +11,7 @@ using BeerViewer.Models.Enums;
 
 namespace BeerViewer.Forms.Controls.Overview
 {
-	internal class SimpleFleetView : FrameworkContainer
+	internal class SimpleFleetView : FrameworkControl
 	{
 		private struct ColorText
 		{
@@ -47,9 +47,8 @@ namespace BeerViewer.Forms.Controls.Overview
 			=> this.Initialize();
 		#endregion
 
-		public new void Initialize()
+		public void Initialize()
 		{
-			base.Initialize();
 			this.Paint += this.OnPaint;
 		}
 
@@ -99,12 +98,12 @@ namespace BeerViewer.Forms.Controls.Overview
 					};
 				}
 
-				var itemWidth = this.ClientWidth - 12;
+				var itemWidth = this.Width - 12;
 				if (itemWidth < 180) itemWidth = (itemWidth - 0) / 1;
 				else itemWidth = (itemWidth - 4) / 2;
 				itemWidth = Math.Max(itemWidth, 1);
 
-				var perLine = Math.Max(1, (this.ClientWidth - 12) / itemWidth);
+				var perLine = Math.Max(1, (this.Width - 12) / itemWidth);
 				var lines = (int)Math.Ceiling((double)texts.Length / perLine);
 
 				for (var i = 0; i < texts.Length; i++) { 
@@ -183,7 +182,7 @@ namespace BeerViewer.Forms.Controls.Overview
 					using (var brush = new SolidBrush(bcolor))
 						g.FillRectangle(
 							brush,
-							new Rectangle(4, bY, this.ClientWidth - 8 + 1, 20 - 1)
+							new Rectangle(4, bY, this.Width - 8 + 1, 20 - 1)
 						);
 
 					g.DrawString(
@@ -198,7 +197,7 @@ namespace BeerViewer.Forms.Controls.Overview
 				g.DrawLine(
 					Constants.penActiveFace,
 					new Point(4, bY - 1),
-					new Point(this.ClientWidth - 4, bY - 1)
+					new Point(this.Width - 4, bY - 1)
 				);
 			}
 			#endregion
@@ -209,13 +208,13 @@ namespace BeerViewer.Forms.Controls.Overview
 				var textColor = Brushes.White;
 				var ships = this.Fleet.Ships;
 
-				var itemWidth = this.ClientWidth - 12;
+				var itemWidth = this.Width - 12;
 				if (itemWidth < 240) itemWidth = (itemWidth - 0) / 1;
 				else if (itemWidth < 480) itemWidth = (itemWidth - 4) / 2;
 				else itemWidth = (itemWidth - 8) / 3;
 				itemWidth = Math.Max(itemWidth, 1);
 
-				var perLine = Math.Max(1, (this.ClientWidth - 12) / itemWidth);
+				var perLine = Math.Max(1, (this.Width - 12) / itemWidth);
 				var lines = (int)Math.Ceiling((double)ships.Length / perLine);
 
 				var nameWidths = ships
@@ -358,7 +357,7 @@ namespace BeerViewer.Forms.Controls.Overview
 			g.DrawLine(
 				Constants.penActiveFace,
 				new Point(4, bY + 2 - 1),
-				new Point(this.ClientWidth - 4, bY + 2 - 1)
+				new Point(this.Width - 4, bY + 2 - 1)
 			);
 			bY += 4;
 			#endregion

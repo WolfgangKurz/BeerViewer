@@ -152,7 +152,7 @@ namespace BeerViewer.Forms
 					"Overview",
 					Constants.fontBig,
 					Brushes.White,
-					new Point(800 + 12, 28 + 2)
+					new Point(800 + 8, 28 + 2)
 				);
 				g.DrawLine(
 					Constants.penActiveFace,

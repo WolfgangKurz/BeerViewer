@@ -320,8 +320,16 @@ namespace BeerViewer.Forms.Controls.Overview
 				g.Restore(_s);
 			}
 			bY += 6 + 6 + lines * 32 - 4;
-			this.Height = bY; // Dock info height
 			#endregion
+
+			g.DrawLine(
+				Constants.penActiveFace,
+				new Point(4, bY + 2 - 1),
+				new Point(this.Width - 4, bY + 2 - 1)
+			);
+			bY += 6;
+
+			this.Height = bY; // Dock info height
 		}
 	}
 }
