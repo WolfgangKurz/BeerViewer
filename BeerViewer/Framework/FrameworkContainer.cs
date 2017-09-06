@@ -295,7 +295,7 @@ namespace BeerViewer.Framework
 				var thumb = CalcThumbSize(cy, cSz.Height);
 				var bound = new Rectangle(
 					cx + MarginSize,
-					MarginSize + (int)(this.ScrollY * (cy - thumb - (MarginSize * 2)) / (cSz.Height - cy)),
+					MarginSize + (int)(this.ScrollY * (cy - thumb - (MarginSize * 2 + 1)) / (cSz.Height - cy)),
 					16 - (MarginSize * 2), thumb
 				);
 				g.FillRoundedRectangle(bound, 3, Constants.brushActiveFace);

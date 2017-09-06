@@ -91,6 +91,8 @@ namespace BeerViewer.Framework
 			this.OwnerPaintEvent = (s, e) =>
 			{
 				var g = e.Graphics;
+				g.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighSpeed;
+				g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighSpeed;
 				foreach (var control in this.Controls)
 				{
 					var _s = g.Save();
