@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 
 namespace BeerViewer.Framework
 {
@@ -52,5 +53,46 @@ namespace BeerViewer.Framework
 			=> Index < 0 || Index >= Array.Length
 				? null
 				: (int?)Array[Index];
+
+		/// <summary>
+		/// Draw rounded rectangle
+		/// </summary>
+		/// <param name="bound">Bound to draw</param>
+		/// <param name="radius">Corner radius size</param>
+		/// <param name="pen">Pen to draw</param>
+		internal static void DrawRoundedRectangle(this Graphics g, Rectangle bound, int radius, Pen pen)
+		{
+			int strokeOffset = Convert.ToInt32(Math.Ceiling(pen.Width));
+			bound = Rectangle.Inflate(bound, -strokeOffset, -strokeOffset);
+
+			pen.EndCap = pen.StartCap = LineCap.Round;
+
+			GraphicsPath path = new GraphicsPath();
+			path.AddArc(bound.X, bound.Y, radius, radius, 180, 90);
+			path.AddArc(bound.X + bound.Width - radius, bound.Y, radius, radius, 270, 90);
+			path.AddArc(bound.X + bound.Width - radius, bound.Y + bound.Height - radius, radius, radius, 0, 90);
+			path.AddArc(bound.X, bound.Y + bound.Height - radius, radius, radius, 90, 90);
+			path.CloseAllFigures();
+
+			g.DrawPath(pen, path);
+		}
+
+		/// <summary>
+		/// Fill rounded rectangle
+		/// </summary>
+		/// <param name="bound">Bound to draw</param>
+		/// <param name="radius">Corner radius size</param>
+		/// <param name="brush">Brush to fill</param>
+		internal static void FillRoundedRectangle(this Graphics g, Rectangle bound, int radius, Brush brush)
+		{
+			GraphicsPath path = new GraphicsPath();
+			path.AddArc(bound.X, bound.Y, radius, radius, 180, 90);
+			path.AddArc(bound.X + bound.Width - radius, bound.Y, radius, radius, 270, 90);
+			path.AddArc(bound.X + bound.Width - radius, bound.Y + bound.Height - radius, radius, radius, 0, 90);
+			path.AddArc(bound.X, bound.Y + bound.Height - radius, radius, radius, 90, 90);
+			path.CloseAllFigures();
+
+			g.FillPath(brush, path);
+		}
 	}
 }

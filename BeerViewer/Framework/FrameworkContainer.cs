@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 
 namespace BeerViewer.Framework
 {
@@ -214,7 +215,51 @@ namespace BeerViewer.Framework
 						g.Restore(state);
 					}
 				}
+
+				if (this.Scrollable) this.DrawScroll(g);
 			};
+		}
+		private void DrawScroll(Graphics g)
+		{
+			var scX = this.IsScrollVisibleX;
+			var scY = this.IsScrollVisibleY;
+			if (!scX && !scY) return;
+
+			const int MarginSize = 5;
+			Func<int, int, int> CalcThumbSize = (viewportSize, contentSize) =>
+			{
+				var viewableRatio = (double)viewportSize / contentSize;
+				var thumbHeight = (viewportSize - MarginSize) * viewableRatio;
+				return (int)thumbHeight;
+			};
+
+			var cSz = this.GetClientSize();
+			var cx = this.ClientWidth;
+			var cy = this.ClientHeight;
+
+			var state = g.Save();
+			g.SmoothingMode = SmoothingMode.AntiAlias;
+			if (scX)
+			{
+				var thumb = CalcThumbSize(cy, cSz.Height);
+				var bound = new Rectangle(
+					MarginSize + (int)(this.ScrollX * (cSz.Width - cx) / (cx - thumb)),
+					cy + MarginSize,
+					thumb, 16 - (MarginSize * 2)
+				);
+				g.FillRoundedRectangle(bound, 3, Constants.brushActiveFace);
+			}
+			if (scY)
+			{
+				var thumb = CalcThumbSize(cy, cSz.Height);
+				var bound = new Rectangle(
+					cx + MarginSize,
+					MarginSize + (int)(this.ScrollY * (cSz.Height - cy) / (cy - thumb)),
+					16 - (MarginSize * 2), thumb
+				);
+				g.FillRoundedRectangle(bound, 3, Constants.brushActiveFace);
+			}
+			g.Restore(state);
 		}
 
 		public override bool OnMouseUp(Point pt)

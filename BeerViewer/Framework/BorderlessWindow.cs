@@ -376,7 +376,7 @@ namespace BeerViewer.Framework
 			{
 				var sz = base.ClientSize;
 				sz.Width -= 2;
-				sz.Height -= 4;
+				sz.Height -= 3;
 
 				if (this.WindowState == FormWindowState.Maximized)
 				{

@@ -80,8 +80,16 @@ namespace BeerViewer.Framework
 			};
 			this.OwnerPaintEvent = (s, e) =>
 			{
+				var g = e.Graphics;
 				foreach (var control in this.Controls)
-					control.OnPaint(e.Graphics);
+				{
+					var _s = g.Save();
+					g.IntersectClip(control.Bound);
+
+					control.OnPaint(g);
+
+					g.Restore(_s);
+				}
 			};
 			this.OwnerMouseLeaveEvent = (s, e) =>
 			{
