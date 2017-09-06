@@ -41,8 +41,9 @@ namespace BeerViewer
 		public static Color colorGreenAccent { get; } = FrameworkExtension.FromRgb(0x388e3c);
 		public static Color colorYellowAccent { get; } = FrameworkExtension.FromRgb(0xfdd835);
 		public static Color colorOrangeAccent { get; } = FrameworkExtension.FromRgb(0xf57c00);
-		public static Color colorBrownAccent { get; } = FrameworkExtension.FromRgb(0x5a4020);
+		public static Color colorBrownAccent { get; } = FrameworkExtension.FromRgb(0x6d4c41);
 		public static Color colorDeepGreenAccent { get; } = FrameworkExtension.FromRgb(0x289010);
+		public static Color colorPurpleAccent { get; } = FrameworkExtension.FromRgb(0xA987BA);
 
 		public static Brush brushRedAccent { get; } = new SolidBrush(colorRedAccent);
 		public static Brush brushBlueAccent { get; } = new SolidBrush(colorBlueAccent);
@@ -51,6 +52,7 @@ namespace BeerViewer
 		public static Brush brushOrangeAccent { get; } = new SolidBrush(colorOrangeAccent);
 		public static Brush brushBrownAccent { get; } = new SolidBrush(colorBrownAccent);
 		public static Brush brushDeepGreenAccent { get; } = new SolidBrush(colorDeepGreenAccent);
+		public static Brush brushPurpleAccent { get; } = new SolidBrush(colorPurpleAccent);
 
 		public static Pen penNormalFace { get; } = new Pen(FrameworkExtension.FromRgb(0x222225));
 		public static Pen penHoverFace { get; } = new Pen(FrameworkExtension.FromRgb(0x313131));
@@ -58,11 +60,11 @@ namespace BeerViewer
 		public static Pen penDisabled => penActiveFace;
 		public static Pen penHint => penActiveFace;
 
-		public static Pen penRedAccent { get; } = new Pen(FrameworkExtension.FromRgb(0xc62828));
-		public static Pen penBlueAccent { get; } = new Pen(FrameworkExtension.FromRgb(0x1565c0));
-		public static Pen penGreenAccent { get; } = new Pen(FrameworkExtension.FromRgb(0x388e3c));
-		public static Pen penYellowAccent { get; } = new Pen(FrameworkExtension.FromRgb(0xfdd835));
-		public static Pen penOrangeAccent { get; } = new Pen(FrameworkExtension.FromRgb(0xf57c00));
+		public static Pen penRedAccent { get; } = new Pen(colorRedAccent);
+		public static Pen penBlueAccent { get; } = new Pen(colorBlueAccent);
+		public static Pen penGreenAccent { get; } = new Pen(colorGreenAccent);
+		public static Pen penYellowAccent { get; } = new Pen(colorYellowAccent);
+		public static Pen penOrangeAccent { get; } = new Pen(colorOrangeAccent);
 
 
 		public static string FontFamily { get; } = "Malgun Gothic";

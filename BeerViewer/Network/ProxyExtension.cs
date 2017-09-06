@@ -2,6 +2,7 @@
 using Nekoxy;
 
 using BeerViewer.Models.Raw;
+using BeerViewer.Models.Enums;
 
 namespace BeerViewer.Network
 {

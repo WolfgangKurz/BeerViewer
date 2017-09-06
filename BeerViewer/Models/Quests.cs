@@ -8,16 +8,17 @@ using BeerViewer.Models.Raw;
 using BeerViewer.Models.Wrapper;
 using BeerViewer.Models.kcsapi;
 
+using QuestModel = BeerViewer.Models.Wrapper.Quest;
 
 namespace BeerViewer.Models
 {
 	public class Quests : Notifier
 	{
-		private readonly List<ConcurrentDictionary<int, Quest>> questPages;
+		private readonly List<ConcurrentDictionary<int, QuestModel>> questPages;
 
 		#region All Property
-		private IReadOnlyCollection<Quest> _All;
-		public IReadOnlyCollection<Quest> All
+		private IReadOnlyCollection<QuestModel> _All;
+		public IReadOnlyCollection<QuestModel> All
 		{
 			get { return this._All; }
 			set
@@ -32,8 +33,8 @@ namespace BeerViewer.Models
 		#endregion
 
 		#region Current Property
-		private IReadOnlyCollection<Quest> _Current;
-		public IReadOnlyCollection<Quest> Current
+		private IReadOnlyCollection<QuestModel> _Current;
+		public IReadOnlyCollection<QuestModel> Current
 		{
 			get { return this._Current; }
 			set
@@ -51,8 +52,8 @@ namespace BeerViewer.Models
 		{
 			var proxy = Proxy.Instance;
 
-			this.questPages = new List<ConcurrentDictionary<int, Quest>>();
-			this.All = this.Current = new List<Quest>();
+			this.questPages = new List<ConcurrentDictionary<int, QuestModel>>();
+			this.All = this.Current = new List<QuestModel>();
 
 			proxy.Register<kcsapi_questlist>(Proxy.api_get_member_questlist, x => this.Update(x.Data));
 		}
@@ -70,17 +71,17 @@ namespace BeerViewer.Models
 
 			if (questlist.api_list == null)
 			{
-				this.All = this.Current = new List<Quest>();
+				this.All = this.Current = new List<QuestModel>();
 			}
 			else
 			{
 				var page = questlist.api_disp_page - 1;
 				if (page >= this.questPages.Count) page = this.questPages.Count - 1;
 
-				this.questPages[page] = new ConcurrentDictionary<int, Quest>();
+				this.questPages[page] = new ConcurrentDictionary<int, QuestModel>();
 
 				var quests = questlist.api_list
-					.Select(x => new Quest(x));
+					.Select(x => new QuestModel(x));
 
 				foreach (var quest in quests)
 					this.questPages[page].AddOrUpdate(quest.Id, quest, (_, __) => quest);

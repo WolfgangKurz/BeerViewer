@@ -66,10 +66,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
-    <Compile Include="Forms\Controls\DockView.cs" />
+    <Compile Include="Forms\Controls\Overview\DockView.cs" />
     <Compile Include="Forms\Controls\ExpeditionBar.cs" />
-    <Compile Include="Forms\Controls\Fleets\SimpleFleetView.cs" />
-    <Compile Include="Forms\Controls\OverviewView.cs" />
+    <Compile Include="Forms\Controls\Overview\QuestsView.cs" />
+    <Compile Include="Forms\Controls\Overview\SimpleFleetView.cs" />
+    <Compile Include="Forms\Controls\Overview\OverviewView.cs" />
     <Compile Include="Forms\Controls\ResourceBar.cs" />
     <Compile Include="Forms\Controls\TabHost.cs" />
     <Compile Include="Framework\BorderlessWindow.cs">
@@ -88,6 +89,7 @@
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
     <Compile Include="i18n.cs" />
+    <Compile Include="Logger.cs" />
     <Compile Include="Models\AirSuperiorityPotential.cs" />
     <Compile Include="Models\BuildingDock.cs" />
     <Compile Include="Models\Dockyard.cs" />
@@ -109,12 +111,30 @@
     <Compile Include="Models\Enums\SlotItemType.cs" />
     <Compile Include="Models\Itemyard.cs" />
     <Compile Include="Models\kcsapi\kcdapi_slot_deprive_unset_list.cs" />
+    <Compile Include="Models\kcsapi\kcsapi_battleresult.cs" />
+    <Compile Include="Models\kcsapi\kcsapi_battle_midnight_battle.cs" />
+    <Compile Include="Models\kcsapi\kcsapi_battle_midnight_sp_midnight.cs" />
+    <Compile Include="Models\kcsapi\kcsapi_combined_battle.cs" />
+    <Compile Include="Models\kcsapi\kcsapi_combined_battle_airbattle.cs" />
     <Compile Include="Models\kcsapi\kcsapi_combined_battle_battleresult.cs" />
+    <Compile Include="Models\kcsapi\kcsapi_combined_battle_midnight_battle.cs" />
+    <Compile Include="Models\kcsapi\kcsapi_combined_each_battle.cs" />
+    <Compile Include="Models\kcsapi\kcsapi_combined_each_midnight_battle.cs" />
     <Compile Include="Models\kcsapi\kcsapi_createitem.cs" />
+    <Compile Include="Models\kcsapi\kcsapi_createship.cs" />
+    <Compile Include="Models\kcsapi\kcsapi_data_airbaseattack.cs" />
+    <Compile Include="Models\kcsapi\kcsapi_data_enemyinfo.cs" />
+    <Compile Include="Models\kcsapi\kcsapi_data_hougeki.cs" />
+    <Compile Include="Models\kcsapi\kcsapi_data_kouku.cs" />
+    <Compile Include="Models\kcsapi\kcsapi_data_raigeki.cs" />
+    <Compile Include="Models\kcsapi\kcsapi_data_support_info.cs" />
     <Compile Include="Models\kcsapi\kcsapi_hensei_combined.cs" />
     <Compile Include="Models\kcsapi\kcsapi_kdock_getship.cs" />
+    <Compile Include="Models\kcsapi\kcsapi_map_start.cs" />
+    <Compile Include="Models\kcsapi\kcsapi_mission_result.cs" />
     <Compile Include="Models\kcsapi\kcsapi_ndock.cs" />
     <Compile Include="Models\kcsapi\kcsapi_port.cs" />
+    <Compile Include="Models\kcsapi\kcsapi_practice_result.cs" />
     <Compile Include="Models\kcsapi\kcsapi_quest.cs" />
     <Compile Include="Models\kcsapi\kcsapi_questlist.cs" />
     <Compile Include="Models\kcsapi\kcsapi_remodel_after_slot.cs" />
@@ -136,12 +156,79 @@
     <Compile Include="Models\kcsapi\kcsapi_slot_deprive.cs" />
     <Compile Include="Models\kcsapi\kcsapi_slot_exchange_index.cs" />
     <Compile Include="Models\kcsapi\kcsapi_slotitem.cs" />
+    <Compile Include="Models\kcsapi\kcsapi_sortie_airbattle.cs" />
+    <Compile Include="Models\kcsapi\kcsapi_sortie_battle.cs" />
     <Compile Include="Models\kcsapi\kcsapi_useitem.cs" />
     <Compile Include="Models\LimitedValue.cs" />
     <Compile Include="Models\Materials.cs" />
     <Compile Include="Models\ModernizableStatus.cs" />
     <Compile Include="Models\Organization.cs" />
     <Compile Include="Models\Quests.cs" />
+    <Compile Include="Models\Quest\Bd\Bd1.cs" />
+    <Compile Include="Models\Quest\Bd\Bd2.cs" />
+    <Compile Include="Models\Quest\Bd\Bd3.cs" />
+    <Compile Include="Models\Quest\Bd\Bd4.cs" />
+    <Compile Include="Models\Quest\Bd\Bd5.cs" />
+    <Compile Include="Models\Quest\Bd\Bd6.cs" />
+    <Compile Include="Models\Quest\Bd\Bd7.cs" />
+    <Compile Include="Models\Quest\Bd\Bd8.cs" />
+    <Compile Include="Models\Quest\Bm\Bm1.cs" />
+    <Compile Include="Models\Quest\Bm\Bm2.cs" />
+    <Compile Include="Models\Quest\Bm\Bm3.cs" />
+    <Compile Include="Models\Quest\Bm\Bm4.cs" />
+    <Compile Include="Models\Quest\Bm\Bm5.cs" />
+    <Compile Include="Models\Quest\Bm\Bm6.cs" />
+    <Compile Include="Models\Quest\Bm\Bm7.cs" />
+    <Compile Include="Models\Quest\Bq\Bq1.cs" />
+    <Compile Include="Models\Quest\Bq\Bq2.cs" />
+    <Compile Include="Models\Quest\Bq\Bq3.cs" />
+    <Compile Include="Models\Quest\Bq\Bq4.cs" />
+    <Compile Include="Models\Quest\Bw\Bw1.cs" />
+    <Compile Include="Models\Quest\Bw\Bw10.cs" />
+    <Compile Include="Models\Quest\Bw\Bw2.cs" />
+    <Compile Include="Models\Quest\Bw\Bw3.cs" />
+    <Compile Include="Models\Quest\Bw\Bw4.cs" />
+    <Compile Include="Models\Quest\Bw\Bw5.cs" />
+    <Compile Include="Models\Quest\Bw\Bw6.cs" />
+    <Compile Include="Models\Quest\Bw\Bw7.cs" />
+    <Compile Include="Models\Quest\Bw\Bw8.cs" />
+    <Compile Include="Models\Quest\Bw\Bw9.cs" />
+    <Compile Include="Models\Quest\C\C2.cs" />
+    <Compile Include="Models\Quest\C\C3.cs" />
+    <Compile Include="Models\Quest\C\C4.cs" />
+    <Compile Include="Models\Quest\C\C8.cs" />
+    <Compile Include="Models\Quest\D\D11.cs" />
+    <Compile Include="Models\Quest\D\D2.cs" />
+    <Compile Include="Models\Quest\D\D22.cs" />
+    <Compile Include="Models\Quest\D\D24.cs" />
+    <Compile Include="Models\Quest\D\D3.cs" />
+    <Compile Include="Models\Quest\D\D4.cs" />
+    <Compile Include="Models\Quest\D\D9.cs" />
+    <Compile Include="Models\Quest\EventArgs.cs" />
+    <Compile Include="Models\Quest\Extension.cs" />
+    <Compile Include="Models\Quest\E\E3.cs" />
+    <Compile Include="Models\Quest\E\E4.cs" />
+    <Compile Include="Models\Quest\FleetDamages.cs" />
+    <Compile Include="Models\Quest\F\F12.cs" />
+    <Compile Include="Models\Quest\F\F18.cs" />
+    <Compile Include="Models\Quest\F\F22.cs" />
+    <Compile Include="Models\Quest\F\F25.cs" />
+    <Compile Include="Models\Quest\F\F34.cs" />
+    <Compile Include="Models\Quest\F\F35.cs" />
+    <Compile Include="Models\Quest\F\F39.cs" />
+    <Compile Include="Models\Quest\F\F41.cs" />
+    <Compile Include="Models\Quest\F\F5.cs" />
+    <Compile Include="Models\Quest\F\F55.cs" />
+    <Compile Include="Models\Quest\F\F6.cs" />
+    <Compile Include="Models\Quest\F\F7.cs" />
+    <Compile Include="Models\Quest\F\F8.cs" />
+    <Compile Include="Models\Quest\F\F9.cs" />
+    <Compile Include="Models\Quest\G\G2.cs" />
+    <Compile Include="Models\Quest\G\G3.cs" />
+    <Compile Include="Models\Quest\SlotitemTracker.cs" />
+    <Compile Include="Models\Quest\Tracker.cs" />
+    <Compile Include="Models\Quest\TrackerModels.cs" />
+    <Compile Include="Models\Quest\TrackManager.cs" />
     <Compile Include="Models\Raw\DisposableNotifier.cs" />
     <Compile Include="Models\Raw\Extensions.cs" />
     <Compile Include="Models\Raw\IIdentifiable.cs" />
@@ -237,6 +324,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\icon_bucket.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Forms\Controls\Fleets\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

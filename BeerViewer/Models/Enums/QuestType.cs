@@ -7,5 +7,6 @@
 		Monthly = 3,
 		OneTime = 4,
 		Other = 5,
+		Quarterly = Other,
 	}
 }

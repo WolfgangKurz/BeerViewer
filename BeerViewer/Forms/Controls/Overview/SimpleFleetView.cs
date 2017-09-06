@@ -9,7 +9,7 @@ using BeerViewer.Forms.Controls;
 using BeerViewer.Models;
 using BeerViewer.Models.Enums;
 
-namespace BeerViewer.Forms.Controls.Fleets
+namespace BeerViewer.Forms.Controls.Overview
 {
 	internal class SimpleFleetView : FrameworkContainer
 	{

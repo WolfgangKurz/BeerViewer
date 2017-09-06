@@ -3,11 +3,11 @@ using System.Drawing;
 using System.Windows.Forms;
 
 using BeerViewer.Framework;
-using BeerViewer.Forms.Controls.Fleets;
+using BeerViewer.Forms.Controls;
 using BeerViewer.Models;
 using BeerViewer.Models.Enums;
 
-namespace BeerViewer.Forms.Controls
+namespace BeerViewer.Forms.Controls.Overview
 {
 	internal class DockView : FrameworkControl
 	{

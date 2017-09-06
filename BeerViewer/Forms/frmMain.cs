@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 using BeerViewer.Framework;
 using BeerViewer.Forms.Controls;
-using BeerViewer.Forms.Controls.Fleets;
+using BeerViewer.Forms.Controls.Overview;
 using BeerViewer.Models;
 
 namespace BeerViewer.Forms

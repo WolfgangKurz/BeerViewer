@@ -3,7 +3,8 @@
 	public enum QuestProgress
 	{
 		None = 0,
-		Progress50 = 1,
-		Progress80 = 2,
+		Progress50,
+		Progress80,
+		Complete
 	}
 }
