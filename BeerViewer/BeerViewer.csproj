@@ -66,8 +66,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Forms\Controls\DockView.cs" />
     <Compile Include="Forms\Controls\ExpeditionBar.cs" />
-    <Compile Include="Forms\Controls\Fleets\FleetView.cs" />
+    <Compile Include="Forms\Controls\Fleets\SimpleFleetView.cs" />
     <Compile Include="Forms\Controls\OverviewView.cs" />
     <Compile Include="Forms\Controls\ResourceBar.cs" />
     <Compile Include="Forms\Controls\TabHost.cs" />

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -42,10 +43,14 @@ namespace BeerViewer.Forms.Controls
 					});
 					if (TabItems[value].LinkedControl != null)
 						TabItems[value].LinkedControl.Visible = true;
+
+					this.OnTabIndexChanged();
 				}
 			}
 		}
 		private int _TabIndex { get; set; }
+
+		public event EventHandler TabIndexChanged;
 		#endregion
 
 
@@ -146,6 +151,11 @@ namespace BeerViewer.Forms.Controls
 			this.Invalidate();
 
 			return this.TabItems.Count;
+		}
+
+		public void OnTabIndexChanged()
+		{
+			this.TabIndexChanged?.Invoke(this, EventArgs.Empty);
 		}
 	}
 }

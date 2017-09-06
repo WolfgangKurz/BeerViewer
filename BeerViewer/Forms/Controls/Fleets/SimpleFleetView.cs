@@ -11,7 +11,7 @@ using BeerViewer.Models.Enums;
 
 namespace BeerViewer.Forms.Controls.Fleets
 {
-	internal class FleetView : FrameworkContainer
+	internal class SimpleFleetView : FrameworkContainer
 	{
 		private struct ColorText
 		{
@@ -28,22 +28,22 @@ namespace BeerViewer.Forms.Controls.Fleets
 		public Fleet Fleet { get; protected set; }
 
 		#region Initializers
-		public FleetView() : base()
+		public SimpleFleetView() : base()
 			=> this.Initialize();
 
-		public FleetView(FrameworkRenderer Renderer) : base(Renderer)
+		public SimpleFleetView(FrameworkRenderer Renderer) : base(Renderer)
 			=> this.Initialize();
 
-		public FleetView(int X, int Y) : base(X, Y)
+		public SimpleFleetView(int X, int Y) : base(X, Y)
 			=> this.Initialize();
 
-		public FleetView(FrameworkRenderer Renderer, int X, int Y) : base(Renderer, X, Y)
+		public SimpleFleetView(FrameworkRenderer Renderer, int X, int Y) : base(Renderer, X, Y)
 			=> this.Initialize();
 
-		public FleetView(int X, int Y, int Width, int Height) : base(X, Y, Width, Height)
+		public SimpleFleetView(int X, int Y, int Width, int Height) : base(X, Y, Width, Height)
 			=> this.Initialize();
 
-		public FleetView(FrameworkRenderer Renderer, int X, int Y, int Width, int Height) : base(Renderer, X, Y, Width, Height)
+		public SimpleFleetView(FrameworkRenderer Renderer, int X, int Y, int Width, int Height) : base(Renderer, X, Y, Width, Height)
 			=> this.Initialize();
 		#endregion
 

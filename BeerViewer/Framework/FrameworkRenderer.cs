@@ -145,8 +145,8 @@ namespace BeerViewer.Framework
 		{
 			if (control.IsChild)
 				control.Parent.Invalidate();
-			else
-				control.Renderer?.Invalidate(control.Bound);
+			else if (control.Renderer != null)
+				control.Renderer.Invalidate(control.Bound);
 		}
 	}
 }
