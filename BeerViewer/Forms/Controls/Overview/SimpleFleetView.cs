@@ -209,30 +209,37 @@ namespace BeerViewer.Forms.Controls.Overview
 				var textColor = Brushes.White;
 				var ships = this.Fleet.Ships;
 
-				var nameWidth = ships
-					.Max(x => (int)g.MeasureString(
-						i18n.Current[x.Info.Name],
-						Constants.fontBig
-					).Width);
-
 				var itemWidth = this.ClientWidth - 12;
 				if (itemWidth < 240) itemWidth = (itemWidth - 0) / 1;
 				else if (itemWidth < 480) itemWidth = (itemWidth - 4) / 2;
 				else itemWidth = (itemWidth - 8) / 3;
 				itemWidth = Math.Max(itemWidth, 1);
 
-				var rightWidth = (itemWidth - nameWidth - 8);
+				var perLine = Math.Max(1, (this.ClientWidth - 12) / itemWidth);
+				var lines = (int)Math.Ceiling((double)ships.Length / perLine);
+
+				var nameWidths = ships
+					.Select((x, y) => new
+					{
+						Width = (int)g.MeasureString(i18n.Current[x.Info.Name], Constants.fontBig).Width,
+						Index = y
+					})
+					.GroupBy(x => x.Index % perLine)
+					.Select(x => x.Max(y => y.Width))
+					.ToArray();
+
+				var rightWidth = (itemWidth - nameWidths.Max() - 8);
 				var miniMode = (rightWidth < 128);
 				var miniMode2 = (rightWidth < 84);
-
-				var perLine = Math.Max(1, (this.ClientWidth-12) / itemWidth);
-				var lines = (int)Math.Ceiling((double)ships.Length / perLine);
 
 				this.Height = bY + lines * 36 + 6; // Fleet info
 
 				int i = 0;
 				foreach (var ship in ships)
 				{
+					var nameWidth = nameWidths[i % perLine];
+					rightWidth = (itemWidth - nameWidth - 8);
+
 					#region Name & Level
 					g.DrawString(
 						i18n.Current[ship.Info.Name],
