@@ -132,18 +132,18 @@ namespace BeerViewer.Forms
 					"Overview",
 					Constants.fontBig,
 					Brushes.White,
-					new Point(801 + 12, 28 + 2)
+					new Point(800 + 12, 28 + 2)
 				);
 				g.DrawLine(
 					Constants.penActiveFace,
-					new Point(801, 29 + 27),
-					new Point(this.ClientSize.Width - 2, 29 + 27)
+					new Point(800, 29 + 27),
+					new Point(this.ClientSize.Width - 1, 29 + 27)
 				);
 			};
 			#endregion
 
 			#region Overview
-			var Overview = new OverviewView(801, 29 + 28, 400, 24);
+			var Overview = new OverviewView(800, 29 + 28, 1, 24);
 			Homeport.Instance.Organization.PropertyEvent(nameof(Homeport.Instance.Organization.Fleets), () =>
 			{
 				var fleets = Homeport.Instance.Organization.Fleets;
@@ -153,8 +153,9 @@ namespace BeerViewer.Forms
 
 			this.Resize += (s, e) =>
 			{
-				Overview.Width = this.ClientSize.Width - 800 - 1;
-				Overview.Height = this.ClientSize.Height - (29 + 28) - 1;
+				Overview.Width = this.ClientSize.Width - 800;
+				Overview.MaximumHeight = this.ClientSize.Height - (29 + 28);
+				// Overview.Height = this.ClientSize.Height - (29 + 28);
 			};
 			#endregion
 

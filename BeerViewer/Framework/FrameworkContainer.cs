@@ -12,6 +12,93 @@ namespace BeerViewer.Framework
 
 		private EventHandler ControlInvalidate = null;
 
+		#region Scrollable Property
+		private bool _Scrollable = true;
+		public bool Scrollable
+		{
+			get { return this._Scrollable; }
+			set
+			{
+				if (this._Scrollable != value)
+				{
+					this._Scrollable = value;
+					if (!value) // When scroll disabled, reset scroll position
+						this._ScrollX = this._ScrollY = 0;
+
+					this.Invalidate();
+				}
+			}
+		}
+		#endregion
+		#region ScrollX Property
+		private int _ScrollX;
+		public int ScrollX
+		{
+			get { return this._ScrollX; }
+			set
+			{
+				if (this._ScrollX != value)
+				{
+					this._ScrollX = value;
+					this.Invalidate();
+				}
+			}
+		}
+		#endregion
+		#region ScrollY Property
+		private int _ScrollY;
+		public int ScrollY
+		{
+			get { return this._ScrollY; }
+			set
+			{
+				if (this._ScrollY != value)
+				{
+					this._ScrollY = value;
+					this.Invalidate();
+				}
+			}
+		}
+		#endregion
+
+		/// <summary>
+		/// Client width without scroll size
+		/// </summary>
+		public int ClientWidth => this.IsScrollVisibleY ? this.Width - 16 : this.Width;
+
+		/// <summary>
+		/// Client height without scroll size
+		/// </summary>
+		public int ClientHeight => this.IsScrollVisibleX ? this.Height - 16 : this.Height;
+
+		/// <summary>
+		/// Will container displays Horizontal scroll?
+		/// </summary>
+		public bool IsScrollVisibleX
+		{
+			get
+			{
+				if (!this.Scrollable) return false;
+
+				var sz = this.GetClientSize();
+				return sz.Width > this.Width;
+			}
+		}
+
+		/// <summary>
+		/// Will container displays Vertical scroll?
+		/// </summary>
+		public bool IsScrollVisibleY
+		{
+			get
+			{
+				if (!this.Scrollable) return false;
+
+				var sz = this.GetClientSize();
+				return sz.Height > this.Height;
+			}
+		}
+
 		#region Initializers
 		public FrameworkContainer() : base()
 			=> this.Initialize();
@@ -19,13 +106,13 @@ namespace BeerViewer.Framework
 		public FrameworkContainer(FrameworkRenderer Renderer) : base(Renderer)
 			=> this.Initialize();
 
-		public FrameworkContainer(int X, int Y) : base( X, Y)
+		public FrameworkContainer(int X, int Y) : base(X, Y)
 			=> this.Initialize();
 
 		public FrameworkContainer(FrameworkRenderer Renderer, int X, int Y) : base(Renderer, X, Y)
 			=> this.Initialize();
 
-		public FrameworkContainer(int X, int Y, int Width, int Height) : base( X, Y, Width, Height)
+		public FrameworkContainer(int X, int Y, int Width, int Height) : base(X, Y, Width, Height)
 			=> this.Initialize();
 
 		public FrameworkContainer(FrameworkRenderer Renderer, int X, int Y, int Width, int Height) : base(Renderer, X, Y, Width, Height)
@@ -115,8 +202,12 @@ namespace BeerViewer.Framework
 						var state = g.Save();
 
 						g.TranslateTransform(control.X, control.Y);
-						g.Clip = new Region(control.ClientBound);
-						g.IntersectClip(new Rectangle(-control.X, -control.Y, this.ClientBound.Width, this.ClientBound.Height));
+
+						g.IntersectClip(control.ClientBound);
+						g.IntersectClip(new Rectangle(-control.X, -control.Y, this.ClientWidth, this.ClientHeight));
+
+						if (this.Scrollable)
+							g.TranslateTransform(-this.ScrollX, -this.ScrollY);
 
 						control.Update(g);
 
@@ -139,6 +230,22 @@ namespace BeerViewer.Framework
 				return true;
 			}
 			return false;
+		}
+
+		/// <summary>
+		/// Get client size includes child bounds
+		/// </summary>
+		/// <returns></returns>
+		public Size GetClientSize()
+		{
+			var sz = new Rectangle(
+				0, 0,
+				this.Width, this.Height
+			);
+			foreach (var control in this.Controls)
+				sz = Rectangle.Union(sz, control.Bound);
+
+			return new Size(sz.Width, sz.Height);
 		}
 
 		/// <summary>

@@ -99,18 +99,18 @@ namespace BeerViewer.Forms.Controls.Overview
 					};
 				}
 
-				var itemWidth = this.Width - 12;
+				var itemWidth = this.ClientWidth - 12;
 				if (itemWidth < 180) itemWidth = (itemWidth - 0) / 1;
 				else itemWidth = (itemWidth - 4) / 2;
 				itemWidth = Math.Max(itemWidth, 1);
 
-				var perLine = Math.Max(1, (this.Width - 12) / itemWidth);
+				var perLine = Math.Max(1, (this.ClientWidth - 12) / itemWidth);
 				var lines = (int)Math.Ceiling((double)texts.Length / perLine);
 
 				for (var i = 0; i < texts.Length; i++) { 
 					var s = g.Save();
 
-					g.SetClip(new Rectangle(
+					g.IntersectClip(new Rectangle(
 						6 + itemWidth * (i % perLine),
 						2 + pY * (i / perLine),
 						itemWidth, pY
@@ -183,7 +183,7 @@ namespace BeerViewer.Forms.Controls.Overview
 					using (var brush = new SolidBrush(bcolor))
 						g.FillRectangle(
 							brush,
-							new Rectangle(4, bY, this.Width - 8 + 1, 20 - 1)
+							new Rectangle(4, bY, this.ClientWidth - 8 + 1, 20 - 1)
 						);
 
 					g.DrawString(
@@ -198,7 +198,7 @@ namespace BeerViewer.Forms.Controls.Overview
 				g.DrawLine(
 					Constants.penActiveFace,
 					new Point(4, bY - 1),
-					new Point(this.Width - 4, bY - 1)
+					new Point(this.ClientWidth - 4, bY - 1)
 				);
 			}
 			#endregion
@@ -215,7 +215,7 @@ namespace BeerViewer.Forms.Controls.Overview
 						Constants.fontBig
 					).Width);
 
-				var itemWidth = this.Width - 12;
+				var itemWidth = this.ClientWidth - 12;
 				if (itemWidth < 240) itemWidth = (itemWidth - 0) / 1;
 				else if (itemWidth < 480) itemWidth = (itemWidth - 4) / 2;
 				else itemWidth = (itemWidth - 8) / 3;
@@ -225,7 +225,7 @@ namespace BeerViewer.Forms.Controls.Overview
 				var miniMode = (rightWidth < 128);
 				var miniMode2 = (rightWidth < 84);
 
-				var perLine = Math.Max(1, (this.Width-12) / itemWidth);
+				var perLine = Math.Max(1, (this.ClientWidth-12) / itemWidth);
 				var lines = (int)Math.Ceiling((double)ships.Length / perLine);
 
 				this.Height = bY + lines * 36 + 6; // Fleet info
@@ -270,7 +270,7 @@ namespace BeerViewer.Forms.Controls.Overview
 						g.DrawString(
 							i18n.Current.fleet_repairing,
 							Constants.fontDefault,
-							textColor,
+							Constants.brushYellowAccent,
 							new Point(
 								6 + (itemWidth + 4) * (i % perLine) + nameWidth + 6,
 								bY + 4 + (i / perLine) * 36 + 14
@@ -351,7 +351,7 @@ namespace BeerViewer.Forms.Controls.Overview
 			g.DrawLine(
 				Constants.penActiveFace,
 				new Point(4, bY + 2 - 1),
-				new Point(this.Width - 4, bY + 2 - 1)
+				new Point(this.ClientWidth - 4, bY + 2 - 1)
 			);
 			bY += 4;
 			#endregion
@@ -372,7 +372,7 @@ namespace BeerViewer.Forms.Controls.Overview
 			var bound = new Rectangle(X, Y, Width, Height);
 			var s = g.Save();
 
-			g.SetClip(bound);
+			g.IntersectClip(bound);
 			g.FillRectangle(Constants.brushActiveFace, bound);
 			g.FillRectangle(foreground, new Rectangle(X, Y, (int)(Width * p), Height));
 

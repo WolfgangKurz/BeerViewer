@@ -10,7 +10,7 @@ namespace BeerViewer.Framework
 {
 	public class FrameworkControl : IDisposable
 	{
-		#region X
+		#region X Property
 		/// <summary>
 		/// X position of control
 		/// </summary>
@@ -28,8 +28,7 @@ namespace BeerViewer.Framework
 		}
 		private int _X { get; set; }
 		#endregion
-
-		#region Y
+		#region Y Property
 		/// <summary>
 		/// Y position of control
 		/// </summary>
@@ -47,8 +46,7 @@ namespace BeerViewer.Framework
 		}
 		private int _Y { get; set; }
 		#endregion
-
-		#region Width
+		#region Width Property
 		/// <summary>
 		/// Width size of control
 		/// </summary>
@@ -57,9 +55,10 @@ namespace BeerViewer.Framework
 			get { return this._Width; }
 			set
 			{
-				if (this._Width != value)
+				var v = this.MaximumWidth > 0 ? Math.Min(this.MaximumWidth, value) : value;
+				if (this._Width != v)
 				{
-					this._Width = value;
+					this._Width = v;
 					this.Resize?.Invoke(this, EventArgs.Empty);
 					this.Invalidate();
 				}
@@ -67,8 +66,7 @@ namespace BeerViewer.Framework
 		}
 		private int _Width { get; set; }
 		#endregion
-
-		#region Height
+		#region Height Property
 		/// <summary>
 		/// Height size of control
 		/// </summary>
@@ -77,9 +75,10 @@ namespace BeerViewer.Framework
 			get { return this._Height; }
 			set
 			{
-				if (this._Height != value)
+				var v = this.MaximumHeight > 0 ? Math.Min(this.MaximumHeight, value) : value;
+				if (this._Height != v)
 				{
-					this._Height = value;
+					this._Height = v;
 					this.Resize?.Invoke(this, EventArgs.Empty);
 					this.Invalidate();
 				}
@@ -88,7 +87,46 @@ namespace BeerViewer.Framework
 		private int _Height { get; set; }
 		#endregion
 
-		#region Visible
+		#region MaximumWidth Property
+		/// <summary>
+		/// Maximum width size of control
+		/// </summary>
+		public int MaximumWidth
+		{
+			get { return this._MaximumWidth; }
+			set
+			{
+				if (this._MaximumWidth != value)
+				{
+					this._MaximumWidth = Math.Max(0, value);
+					if (this._MaximumWidth > 0)
+						this.Width = this._MaximumWidth;
+				}
+			}
+		}
+		private int _MaximumWidth { get; set; }
+		#endregion
+		#region MaximumHeight Property
+		/// <summary>
+		/// Maximum width size of control
+		/// </summary>
+		public int MaximumHeight
+		{
+			get { return this._MaximumHeight; }
+			set
+			{
+				if (this._MaximumHeight != value)
+				{
+					this._MaximumHeight = Math.Max(0, value);
+					if (this._MaximumHeight > 0)
+						this.Height = this._MaximumHeight;
+				}
+			}
+		}
+		private int _MaximumHeight { get; set; }
+		#endregion
+
+		#region Visible Property
 		/// <summary>
 		/// Visible of control
 		/// </summary>
@@ -107,8 +145,7 @@ namespace BeerViewer.Framework
 		private bool _Visible { get; set; }
 		#endregion
 
-
-		#region IsActive
+		#region IsActive Property
 		/// <summary>
 		/// Returns is mouse active(click) on control
 		/// </summary>
@@ -126,8 +163,7 @@ namespace BeerViewer.Framework
 		}
 		private bool _IsActive { get; set; }
 		#endregion
-
-		#region IsHover
+		#region IsHover Property
 		/// <summary>
 		/// Returns is mouse hover on control
 		/// </summary>
@@ -266,7 +302,7 @@ namespace BeerViewer.Framework
 				var state = g.Save();
 
 				g.TranslateTransform(this.X, this.Y);
-				g.Clip = new Region(this.ClientBound);
+				g.IntersectClip(this.ClientBound);
 				this.Update(g);
 
 				g.Restore(state);

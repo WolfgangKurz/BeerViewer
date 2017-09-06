@@ -107,10 +107,13 @@ namespace BeerViewer.Forms.Controls
 
 				for (var i = 0; i < TabItems.Count; i++)
 				{
+					var left = TabWidth * i;
+					var right = TabWidth * (i + 1);
+
 					var x = TabItems[i];
 					var ItemBound = new Rectangle(
-						(int)(i * TabWidth), 0,
-						(int)TabWidth, this.Height
+						(int)left, 0,
+						(int)(right - left), this.Height
 					);
 
 					if (this.TabIndex == i || (this.IsHover && HoverIndex == i))

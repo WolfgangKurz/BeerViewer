@@ -357,19 +357,27 @@ namespace BeerViewer.Framework
 					this.Invalidate();
 				};
 			}
+		}
+		protected override void OnPaint(PaintEventArgs e)
+		{
+			var g = e.Graphics;
+			g.TranslateTransform(1, 1);
+			g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
 
-			this.Paint += (s, e) =>
-			{
-				e.Graphics.TranslateTransform(1, 1);
-				e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
-			};
+			var sz = this.ClientSize;
+			g.SetClip(new Rectangle(1, 1, sz.Width, sz.Height));
+
+			base.OnPaint(e);
 		}
 
 		public new Size ClientSize
 		{
 			get
 			{
-				var sz = new Size(base.ClientSize.Width - 1, base.ClientSize.Height - 1);
+				var sz = base.ClientSize;
+				sz.Width -= 2;
+				sz.Height -= 4;
+
 				if (this.WindowState == FormWindowState.Maximized)
 				{
 					sz.Width -= 8;

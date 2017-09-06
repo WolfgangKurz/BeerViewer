@@ -14,6 +14,7 @@ namespace BeerViewer.Forms.Controls.Overview
 	{
 		public SimpleFleetView[] Fleets { get; protected set; }
 		public DockView Docks { get; protected set; }
+		public QuestsView Quests { get; protected set; }
 
 		private TabHost FleetTabHost { get; set; }
 
@@ -46,6 +47,12 @@ namespace BeerViewer.Forms.Controls.Overview
 				.Select(_ => new SimpleFleetView(0, 24, 400, 2) { Visible = false })
 				.ToArray();
 
+			Fleets.ForEach(f =>
+			{
+				f.Invalidated += (s, e) => this.AdjustSize();
+				f.Resize += (s, e) => this.AdjustSize();
+				this.AddControl(f);
+			});
 			Fleets.First().Visible = true;
 			#endregion
 
@@ -57,20 +64,6 @@ namespace BeerViewer.Forms.Controls.Overview
 			FleetTabHost.AddTab(new TabHost.TabItem("IV", Fleets[3]));
 			this.AddControl(FleetTabHost);
 
-			Fleets.ForEach(f =>
-			{
-				f.Invalidated += (s, e) => this.AdjustSize();
-				f.Resize += (s, e) => this.AdjustSize();
-				this.AddControl(f);
-			});
-			this.Resize += (s, e) => this.AdjustSize();
-			#endregion
-
-			#region DockView
-			this.Docks = new DockView(0, 0, 1, 1);
-			this.Docks.Invalidated += (s, e) => this.AdjustSize();
-			this.AddControl(this.Docks);
-
 			this.FleetTabHost.TabIndexChanged += (s, e) =>
 			{
 				var fv = this.Fleets.FirstOrDefault(x => x.Visible);
@@ -78,10 +71,24 @@ namespace BeerViewer.Forms.Controls.Overview
 
 				this.AdjustSize();
 			};
-			this.FleetTabHost.OnTabIndexChanged();
 			#endregion
 
+			#region DockView
+			this.Docks = new DockView(0, 0, 1, 1);
+			this.Docks.Invalidated += (s, e) => this.AdjustSize();
+			this.AddControl(this.Docks);
+			#endregion
+
+			#region QuestsView
+			this.Quests = new QuestsView(0, 0, 1, 1);
+			this.Quests.Invalidated += (s, e) => this.AdjustSize();
+			this.AddControl(this.Quests);
+			#endregion
+
+			this.Resize += (s, e) => this.AdjustSize();
 			this.Paint += this.OnPaint;
+
+			this.FleetTabHost.OnTabIndexChanged();
 		}
 
 		private void OnPaint(object sender, PaintEventArgs e)
@@ -104,22 +111,29 @@ namespace BeerViewer.Forms.Controls.Overview
 		private void AdjustSize()
 		{
 			if (this.FleetTabHost != null)
-				this.FleetTabHost.Width = this.Width;
+				this.FleetTabHost.Width = this.ClientWidth;
 
 			if (this.Fleets != null)
-				this.Fleets.ForEach(f => f.Width = this.Width);
+				this.Fleets.ForEach(f => f.Width = this.ClientWidth);
 
 			if (this.Docks != null)
 			{
 				var fv = this.Fleets?.FirstOrDefault(x => x.Visible);
 
-				this.Docks.Width = this.Width;
+				this.Docks.Width = this.ClientWidth;
 				this.Docks.Y = (fv?.Y + fv?.Height) ?? 0;
+			}
+
+			if (this.Quests != null)
+			{
+				this.Quests.Width = this.ClientWidth;
+				this.Quests.Y = (this.Docks?.Y + this.Docks?.Height) ?? 0;
 			}
 
 			this.Height = 24 // Tab height
 				+ (this.Fleets?.FirstOrDefault(x => x.Visible)?.Height ?? 0) // FleetView height
-				+ (this.Docks?.Height ?? 0); // Docks height
+				+ (this.Docks?.Height ?? 0) // Docks height
+				+ (this.Quests?.Height ?? 0); // Quests height
 		}
 	}
 }

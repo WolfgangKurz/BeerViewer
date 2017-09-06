@@ -14,6 +14,8 @@ namespace BeerViewer.Forms.Controls.Overview
 {
 	internal class QuestsView : FrameworkControl
 	{
+		private TrackManager mTrackManager { get; set; }
+
 		#region Initializers
 		public QuestsView() : base()
 			=> this.Initialize();
@@ -40,84 +42,129 @@ namespace BeerViewer.Forms.Controls.Overview
 			{
 				var quest = Homeport.Instance.Quests;
 				quest.PropertyEvent(nameof(quest.Current), () => this.Invalidate(), true);
+
+				mTrackManager = TrackManager.Instance;
+				mTrackManager.QuestsEventChanged += (s, e) => this.Invalidate();
 			}
 			#endregion
 
 			this.Paint += this.OnPaint;
 		}
 
-		private int DrawBitmapNumber(Graphics g, string Text, Point pos, bool OnCenter, int ColorIndex = 0)
-		{
-			int p = 4, h = 7;
-			int p2 = p + 2, hh = h / 2;
-			var table = "0123456789[]:";
-			int x = -p2 + pos.X - (OnCenter ? Text.Length * p2 / 2 : 0);
-			int y = pos.Y - (OnCenter ? hh : 0);
-
-			foreach (var c in Text)
-			{
-				x += (c == ' ' ? 2 : p2);
-
-				int offset = table.IndexOf(c);
-				if (offset < 0) continue;
-
-				g.DrawImage(
-					Constants.BitmapNumber,
-					new Rectangle(x, y, p, h),
-					new Rectangle(offset * p, h * ColorIndex, p, h),
-					GraphicsUnit.Pixel
-				);
-			}
-			return x - pos.X;
-		}
 		private void OnPaint(object sender, PaintEventArgs e)
 		{
 			var g = e.Graphics;
+			g.Clear(Constants.colorNormalFace);
+
 			var bY = 0;
 
 			var quests = Homeport.Instance.Quests.Current;
 
-			foreach(var q in quests)
+			var qProc = quests
+				.Where(x => x != null)
+				.Select(q =>
+				{
+					Brush brushCategory = Brushes.Gray;
+					switch (q.Category)
+					{
+						case QuestCategory.Composition:
+							brushCategory = Constants.brushDeepGreenAccent;
+							break;
+
+						case QuestCategory.Sortie:
+						case QuestCategory.Sortie2:
+							brushCategory = Constants.brushRedAccent;
+							break;
+
+						case QuestCategory.Practice:
+							brushCategory = Constants.brushGreenAccent;
+							break;
+
+						case QuestCategory.Expeditions:
+							brushCategory = Constants.brushLightBlueAccent;
+							break;
+
+						case QuestCategory.Supply:
+							brushCategory = Constants.brushYellowAccent;
+							break;
+
+						case QuestCategory.Building:
+							brushCategory = Constants.brushBrownAccent;
+							break;
+
+						case QuestCategory.Remodelling:
+							brushCategory = Constants.brushPurpleAccent;
+							break;
+					}
+
+					var textProgress = q.Progress.ToProgressString();
+					Brush brushProgress = Constants.brushActiveFace;
+					if (q.IsTrackable())
+					{
+						textProgress = q.TrackableProgress();
+						brushProgress = q.IsCompleted()
+							? Constants.brushLightBlueAccent
+							: Constants.brushYellowAccent;
+					}
+
+					return new
+					{
+						Quest = q,
+						CategoryBrush = brushCategory,
+						ProgressBrush = brushProgress,
+						ProgressText = textProgress,
+						ProgressWidth = (int)g.MeasureString(textProgress, Constants.fontDefault).Width
+					};
+				});
+
+			foreach (var q in qProc)
 			{
-				Brush brushCategory = Brushes.Gray;
-				switch (q.Category)
-				{
-					case QuestCategory.Composition:
-						brushCategory = Constants.brushDeepGreenAccent;
-						break;
+				var rcTitle = new Rectangle(
+					6 + 6, bY,
+					this.Width - 6 - 6 - q.ProgressWidth - 6,
+					14
+				);
 
-					case QuestCategory.Sortie:
-					case QuestCategory.Sortie2:
-						brushCategory = Constants.brushRedAccent;
-						break;
+				g.FillRectangle(q.CategoryBrush, new Rectangle(6, bY, 4, 14));
 
-					case QuestCategory.Practice:
-						brushCategory = Constants.brushGreenAccent;
-						break;
+				var s = g.Save();
 
-					case QuestCategory.Expeditions:
-						brushCategory = Constants.brushBlueAccent;
-						break;
+				var q_name = $"quest_{q.Quest.Id}_name";
+				var title = i18n.Current[q_name];
 
-					case QuestCategory.Supply:
-						brushCategory = Constants.brushYellowAccent;
-						break;
+				g.DrawString(
+					(title == q_name) ? q.Quest.Title : title,
+					Constants.fontDefault,
+					Brushes.White,
+					rcTitle,
+					new StringFormat
+					{
+						Trimming = StringTrimming.EllipsisCharacter,
+						LineAlignment = StringAlignment.Center
+					}
+				);
+				g.DrawString(
+					q.ProgressText,
+					Constants.fontDefault,
+					q.ProgressBrush,
+					new Rectangle(
+						rcTitle.Right, bY,
+						q.ProgressWidth, 14
+					),
+					new StringFormat
+					{
+						FormatFlags = StringFormatFlags.NoWrap,
+						Trimming = StringTrimming.None,
+						LineAlignment = StringAlignment.Center
+					}
+				);
 
-					case QuestCategory.Building:
-						brushCategory = Constants.brushBrownAccent;
-						break;
-
-					case QuestCategory.Remodelling:
-						brushCategory = Constants.brushPurpleAccent;
-						break;
-				}
-
-				var txt = q.Progress.ToProgressString();
-				if (q.IsTrackable())
-				{
-
-				}
+				g.Restore(s);
+				bY += 14 + 4;
 			}
+			bY += 2;
+
+			this.Height = bY;
 		}
 	}
 
@@ -141,6 +188,29 @@ namespace BeerViewer.Forms.Controls.Overview
 		{
 			return TrackManager.Instance.trackingAvailable
 				.Any(x => x.Id == quest.Id);
+		}
+
+		public static bool IsCompleted(this Quest quest)
+		{
+			var tm = TrackManager.Instance;
+			try
+			{
+				var tq = tm.AllQuests?.FirstOrDefault(x => x.Id == quest.Id);
+				return tq.GetCurrent() == tq.GetMaximum();
+			}
+			catch { }
+			return false;
+		}
+		public static string TrackableProgress(this Quest quest)
+		{
+			var tm = TrackManager.Instance;
+			try
+			{
+				var tq = tm.AllQuests?.FirstOrDefault(x => x.Id == quest.Id);
+				return $"{tq.GetCurrent()}/{tq.GetMaximum()}";
+			}
+			catch { }
+			return "?/?";
 		}
 	}
 }

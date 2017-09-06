@@ -118,7 +118,7 @@ namespace BeerViewer.Forms.Controls.Overview
 				textColor = Brushes.White;
 
 				var _s = g.Save();
-				g.SetClip(new Rectangle(
+				g.IntersectClip(new Rectangle(
 					6 + (dockWidth + 4) * (i % perLine),
 					bY + 6 + line * 32,
 					dockWidth, 28
@@ -222,7 +222,7 @@ namespace BeerViewer.Forms.Controls.Overview
 				textColor = Brushes.White;
 
 				var _s = g.Save();
-				g.SetClip(new Rectangle(
+				g.IntersectClip(new Rectangle(
 					6 + (dockWidth + 4) * (i % perLine),
 					bY + 6 + line * 32,
 					dockWidth, 28
