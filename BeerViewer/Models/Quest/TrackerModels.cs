@@ -372,4 +372,18 @@ namespace BeerViewer.Models.Quest
 			}
 		}
 	}
+
+	internal class StorageData
+	{
+		public int Id { get; set; }
+		public DateTime TrackTime { get; set; }
+		public QuestType Type { get; set; }
+		public string Serialized { get; set; }
+	}
+	internal class IdProgressPair
+	{
+		public int Id { get; set; }
+		public QuestProgress Progress { get; set; }
+		public QuestState State { get; set; }
+	}
 }

@@ -89,6 +89,7 @@
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
     <Compile Include="i18n.cs" />
+    <Compile Include="Libraries\DynamicJson.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Models\AirSuperiorityPotential.cs" />
     <Compile Include="Models\BuildingDock.cs" />

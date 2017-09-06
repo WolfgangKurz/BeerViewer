@@ -2,8 +2,16 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.IO;
 using System.Linq;
+using System.Text;
+using System.Reflection;
+using System.Runtime.Serialization.Json;
+using System.Globalization;
 
+using Codeplex.Data;
+
+using BeerViewer.Models.Enums;
 using BeerViewer.Models.kcsapi;
 using BeerViewer.Network;
 
@@ -13,11 +21,14 @@ namespace BeerViewer.Models.Quest
 	{
 		public static TrackManager Instance { get; } = new TrackManager();
 
+		private Dictionary<int, DateTime> trackingTime { get; } = new Dictionary<int, DateTime>();
+		private static DateTime TokyoDateTime
+			=> TimeZoneInfo.ConvertTimeBySystemTimeZoneId(DateTime.UtcNow, "Tokyo Standard Time");
+
 		public ObservableCollection<Tracker> trackingAvailable
 		{
 			get; private set;
 		} = new ObservableCollection<Tracker>();
-
 		public List<Tracker> TrackingQuests => trackingAvailable.Where(x => x.IsTracking).ToList();
 		public List<Tracker> AllQuests => trackingAvailable.ToList();
 
@@ -206,6 +217,24 @@ namespace BeerViewer.Models.Quest
 					});
 				}
 			};
+
+			// Add available quests
+			var trackers = Assembly.GetExecutingAssembly().GetTypes()
+					.Where(x => (x.Namespace?.StartsWith("BeerViewer.Models.Quest") ?? false) && typeof(Tracker).IsAssignableFrom(x));
+
+			foreach (var tracker in trackers)
+			{
+				try { this.trackingAvailable.Add((Tracker)Activator.CreateInstance(tracker)); }
+				catch { }
+			}
+
+			// Write & Read tracking data
+			this.QuestsEventChanged += (s, e) => WriteToStorage();
+			ReadFromStorage();
+			WriteToStorage();
+
+			var quests = Homeport.Instance.Quests;
+			quests.PropertyEvent(nameof(quests.All), () => new System.Threading.Thread(ProcessQuests).Start());
 		}
 
 		public void RefreshTrackers()
@@ -213,6 +242,185 @@ namespace BeerViewer.Models.Quest
 			Preprocess(() => HenseiEvent?.Invoke(this, EmptyEventArg));
 			Preprocess(() => EquipEvent?.Invoke(this, EmptyEventArg));
 			QuestsEventChanged?.Invoke(this, EmptyEventArg);
+		}
+		private void ProcessQuests()
+		{
+			var quests = Homeport.Instance.Quests;
+			if (quests.All == null || quests.All.Count == 0) return;
+
+			foreach (var quest in quests.All)
+			{
+				var tracker = this.trackingAvailable.Where(m => m.Id == quest.Id);
+				if (!tracker.Any()) continue; // Untrackable quest
+
+				var t = tracker.First();
+				try
+				{
+					// Quest has expired (For example, the day has passed)
+					if (trackingTime.ContainsKey(quest.Id) && !IsTrackingAvailable(quest.Type, trackingTime[quest.Id]))
+					{
+						// Reset the quest
+						if (trackingTime.ContainsKey(quest.Id)) trackingTime.Remove(quest.Id);
+						t.ResetQuest();
+					}
+
+					switch (quest.State)
+					{
+						case QuestState.None:
+							t.IsTracking = false;
+							break;
+
+						case QuestState.TakeOn:
+							t.IsTracking = true; // Quest taking
+
+							// Register tracking time
+							if (!trackingTime.ContainsKey(quest.Id))
+								trackingTime.Add(quest.Id, TrackManager.TokyoDateTime);
+							break;
+
+						case QuestState.Accomplished:
+							t.IsTracking = true;
+							break;
+					}
+				}
+				catch { }
+			}
+
+			this.RefreshTrackers();
+			CallCheckOverUnder(
+				quests.All.Select(x => new IdProgressPair
+				{
+					Id = x.Id,
+					Progress = x.Progress,
+					State = x.State
+				}).ToArray()
+			);
+			WriteToStorage();
+		}
+
+		private bool IsTrackingAvailable(QuestType type, DateTime time)
+		{
+			// Quest will reset at UTC+4 00:00
+			// UAE Standard Time without Daylight saving (ar-AE) is UTC+4
+
+			if (time == DateTime.MinValue) return false;
+
+			var no = TrackManager.TokyoDateTime.AddHours(-5);
+			time = time.AddHours(-5);
+
+			switch (type)
+			{
+				case QuestType.OneTime:
+				case QuestType.Other:
+					return true;
+
+				case QuestType.Daily:
+					return time.Date == no.Date;
+
+				case QuestType.Weekly:
+					var cal = CultureInfo.CreateSpecificCulture("ar-AE").Calendar;
+					var w_time = cal.GetWeekOfYear(time, CalendarWeekRule.FirstDay, DayOfWeek.Monday);
+					var w_now = cal.GetWeekOfYear(no, CalendarWeekRule.FirstDay, DayOfWeek.Monday);
+
+					return w_time == w_now && time.Year == no.Year;
+
+				case QuestType.Monthly:
+					return time.Month == no.Month && time.Year == no.Year;
+
+				default:
+					return false;
+			}
+		}
+
+		private void WriteToStorage()
+		{
+			var list = new List<StorageData>();
+
+			foreach (var tracker in this.trackingAvailable)
+			{
+				var item = new StorageData();
+
+				DateTime dateTime = TrackManager.TokyoDateTime;
+				trackingTime.TryGetValue(tracker.Id, out dateTime);
+
+				try
+				{
+					if (tracker.GetCurrent() == 0 || dateTime == DateTime.MinValue) continue;
+
+					item.Id = tracker.Id;
+					item.TrackTime = dateTime;
+					item.Type = tracker.Type;
+					item.Serialized = tracker.SerializeData();
+					list.Add(item);
+				}
+				catch { }
+			}
+
+			var baseDir = Path.Combine(
+				Path.GetDirectoryName(Assembly.GetEntryAssembly().Location),
+				"Record"
+			);
+			var path = Path.Combine(baseDir, "Quests.json");
+			try
+			{
+				if (!Directory.Exists(baseDir))
+					Directory.CreateDirectory(baseDir);
+
+				File.WriteAllText(path, DynamicJson.Serialize(list.ToArray()));
+			}
+			catch { }
+		}
+		private void ReadFromStorage()
+		{
+			var baseDir = Path.Combine(
+				Path.GetDirectoryName(Assembly.GetEntryAssembly().Location),
+				"Record"
+			);
+			var path = Path.Combine(baseDir, "Quests.json");
+			if (!File.Exists(path)) return;
+
+			try
+			{
+				var json = File.ReadAllText(path);
+				var b = Encoding.UTF8.GetBytes(json);
+
+				StorageData[] deserialized;
+				var serializer = new DataContractJsonSerializer(typeof(StorageData[]));
+				using (var ms = new MemoryStream(b))
+					deserialized = serializer.ReadObject(ms) as StorageData[];
+
+				foreach (var entry in deserialized)
+				{
+					if (!this.trackingAvailable.Any(x => x.Id == entry.Id)) continue;
+					if (IsTrackingAvailable(entry.Type, entry.TrackTime))
+					{
+						var tracker = this.trackingAvailable.Where(x => x.Id == entry.Id).First();
+
+						trackingTime.Add(entry.Id, entry.TrackTime);
+						tracker.DeserializeData(entry.Serialized);
+					}
+				}
+			}
+			catch { }
+		}
+
+		private void CallCheckOverUnder(IdProgressPair[] questList)
+		{
+			foreach (var x in questList)
+			{
+				var tracker = this.TrackingQuests.FirstOrDefault(y => y.Id == x.Id);
+				if (tracker == null) continue;
+
+				// Not checkable over/under
+				if (!typeof(CountableTracker).IsAssignableFrom(tracker.GetType())) continue;
+
+				var trackerCountable = tracker as CountableTracker;
+				trackerCountable.CheckUnderOver(
+					x.State == QuestState.Accomplished
+						? QuestProgress.Complete
+						: x.Progress
+				);
+			}
 		}
 	}
 }

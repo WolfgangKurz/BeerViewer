@@ -62,7 +62,7 @@ namespace BeerViewer.Models.Quest
 		protected virtual int CheckCut50 => (int)Math.Ceiling(this.Maximum * 0.5);
 		protected virtual int CheckCut80 => (int)Math.Ceiling(this.Maximum * 0.8);
 
-		protected void CheckUnderOver(QuestProgress progress)
+		public void CheckUnderOver(QuestProgress progress)
 		{
 			if (this.lastProgress == progress) return;
 			this.lastProgress = progress;

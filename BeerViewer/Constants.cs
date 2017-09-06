@@ -38,6 +38,7 @@ namespace BeerViewer
 
 		public static Color colorRedAccent { get; } = FrameworkExtension.FromRgb(0xc62828);
 		public static Color colorBlueAccent { get; } = FrameworkExtension.FromRgb(0x1565c0);
+		public static Color colorLightBlueAccent { get; } = FrameworkExtension.FromRgb(0x3ba09d);
 		public static Color colorGreenAccent { get; } = FrameworkExtension.FromRgb(0x388e3c);
 		public static Color colorYellowAccent { get; } = FrameworkExtension.FromRgb(0xfdd835);
 		public static Color colorOrangeAccent { get; } = FrameworkExtension.FromRgb(0xf57c00);
@@ -47,6 +48,7 @@ namespace BeerViewer
 
 		public static Brush brushRedAccent { get; } = new SolidBrush(colorRedAccent);
 		public static Brush brushBlueAccent { get; } = new SolidBrush(colorBlueAccent);
+		public static Brush brushLightBlueAccent { get; } = new SolidBrush(colorLightBlueAccent);
 		public static Brush brushGreenAccent { get; } = new SolidBrush(colorGreenAccent);
 		public static Brush brushYellowAccent { get; } = new SolidBrush(colorYellowAccent);
 		public static Brush brushOrangeAccent { get; } = new SolidBrush(colorOrangeAccent);

@@ -1,6 +1,11 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+
+using System.IO;
+using System.Text;
+using System.Runtime.Serialization.Json;
 
 using BeerViewer.Network;
 using BeerViewer.Models.Enums;
@@ -8,6 +13,7 @@ using BeerViewer.Models.Raw;
 using BeerViewer.Models.Wrapper;
 using BeerViewer.Models.kcsapi;
 
+using Codeplex.Data;
 using QuestModel = BeerViewer.Models.Wrapper.Quest;
 
 namespace BeerViewer.Models
@@ -55,7 +61,50 @@ namespace BeerViewer.Models
 			this.questPages = new List<ConcurrentDictionary<int, QuestModel>>();
 			this.All = this.Current = new List<QuestModel>();
 
-			proxy.Register<kcsapi_questlist>(Proxy.api_get_member_questlist, x => this.Update(x.Data));
+			proxy.Register(Proxy.api_get_member_questlist, x =>
+			{
+				var origin = x.Response.BodyAsString.StartsWith("svdata=")
+					? x.Response.BodyAsString.Substring(7)
+					: null;
+				if (origin == null) return; // Not api response
+
+				var json = DynamicJson.Parse(origin);
+				json = json.api_data;
+
+				var questlist = new kcsapi_questlist
+				{
+					api_count = Convert.ToInt32(json.api_count),
+					api_disp_page = Convert.ToInt32(json.api_disp_page),
+					api_exec_count = Convert.ToInt32(json.api_exec_count),
+					api_page_count = Convert.ToInt32(json.api_page_count)
+				};
+
+				if (json.api_list != null)
+				{
+					var serializer = new DataContractJsonSerializer(typeof(kcsapi_quest));
+					var list = new List<kcsapi_quest>();
+
+					foreach (var y in (object[])json.api_list)
+					{
+						if (y.GetType() == typeof(double) && (double)y == -1) // Last page bug
+							continue;
+
+						try
+						{
+							var b = Encoding.UTF8.GetBytes(y.ToString());
+							using (var ms = new MemoryStream(b))
+								list.Add(serializer.ReadObject(ms) as kcsapi_quest);
+						}
+						catch (Exception ex)
+						{
+							Logger.Instance.Log(ex.ToString());
+						}
+					}
+
+					questlist.api_list = list.ToArray();
+				}
+				this.Update(questlist);
+			});
 		}
 
 		private void Update(kcsapi_questlist questlist)
