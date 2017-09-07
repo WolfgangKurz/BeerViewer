@@ -12,126 +12,7 @@ namespace BeerViewer.Framework
 {
 	public partial class BorderlessWindow : Form
 	{
-		#region Const Values
-		private const int BorderSizeSize = 6;
-
-		private const int WS_EX_LAYERED = 0x00040000;
-		private const int WS_EX_APPWINDOW = 0x00080000;
-
-		private const uint WM_WINDOWPOSCHANGED = 0x47;
-		private const uint WM_NCPAINT = 0x85;
-		private const uint WM_NCCALCSIZE = 0x83;
-		private const uint WM_NCHITTEST = 0x84;
-		private const uint WM_THEMECHANGED = 0x031A;
-		private const uint WM_DWMCOMPOSITIONCHANGED = 0x031E;
-
-		private const int HTCLIENT = 0x01;
-		private const int HTCAPTION = 0x02;
-		private const int HTSYSMENU = 0x03;
-		private const int HTGROWBOX = 0x04;
-		private const int HTMENU = 0x05;
-		private const int HTHSCROLL = 0x06;
-		private const int HTVSCROLL = 0x07;
-		private const int HTMINBUTTON = 0x08;
-		private const int HTMAXBUTTON = 0x09;
-		private const int HTLEFT = 0x0A;
-		private const int HTRIGHT = 0x0B;
-		private const int HTTOP = 0x0C;
-		private const int HTTOPLEFT = 0x0D;
-		private const int HTTOPRIGHT = 0x0E;
-		private const int HTBOTTOM = 0x0F;
-		private const int HTBOTTOMLEFT = 0x10;
-		private const int HTBOTTOMRIGHT = 0x11;
-		private const int HTBORDER = 0x12;
-		private const int HTOBJECT = 0x13;
-		private const int HTCLOSE = 0x14;
-		private const int HTHELP = 0x15;
-		#endregion
-
-		#region Enums
-		private enum DWMWINDOWATTRIBUTE : uint
-		{
-			DWMWA_NCRENDERING_ENABLED = 1,
-			DWMWA_NCRENDERING_POLICY,
-			DWMWA_TRANSITIONS_FORCEDISABLED,
-			DWMWA_ALLOW_NCPAINT,
-			DWMWA_CAPTION_BUTTON_BOUNDS,
-			DWMWA_NONCLIENT_RTL_LAYOUT,
-			DWMWA_FORCE_ICONIC_REPRESENTATION,
-			DWMWA_FLIP3D_POLICY,
-			DWMWA_EXTENDED_FRAME_BOUNDS,
-			DWMWA_HAS_ICONIC_BITMAP,
-			DWMWA_DISALLOW_PEEK,
-			DWMWA_EXCLUDED_FROM_PEEK,
-			DWMWA_CLOAK,
-			DWMWA_CLOAKED,
-			DWMWA_FREEZE_REPRESENTATION,
-			DWMWA_LAST
-		}
-
-		private enum DWMNCRENDERINGPOLICY : uint
-		{
-			DWMNCRP_USEWINDOWSTYLE,
-			DWMNCRP_DISABLED,
-			DWMNCRP_ENABLED,
-			DWMNCRP_LAST
-		}
-		#endregion
-
-		#region Structures
-		[StructLayout(LayoutKind.Sequential)]
-		private struct RECT
-		{
-			public int left, top, right, bottom;
-		}
-
-		[StructLayout(LayoutKind.Sequential)]
-		private struct WINDOWPOS
-		{
-			public IntPtr hwnd;
-			public IntPtr hwndinsertafter;
-			public int x, y, cx, cy;
-			public int flags;
-		}
-
-		[StructLayout(LayoutKind.Sequential)]
-		private struct NCCALCSIZE_PARAMS
-		{
-			public RECT rgrc0, rgrc1, rgrc2;
-			public WINDOWPOS lppos;
-		}
-
-		[StructLayout(LayoutKind.Sequential)]
-		private struct MARGINS
-		{
-			public int leftWidth;
-			public int rightWidth;
-			public int topHeight;
-			public int bottomHeight;
-		}
-		#endregion
-
-		#region WinAPI
-		[DllImport("uxtheme", CharSet = CharSet.Unicode)]
-		private static extern Int32 SetWindowTheme(IntPtr hWnd, String subAppName, String subIdList);
-
-		[DllImport("user32.dll", ExactSpelling = true)]
-		[return: MarshalAs(UnmanagedType.Bool)]
-		private static extern bool GetWindowRect(IntPtr hwnd, out RECT lpRect);
-
-		[DllImport("dwmapi.dll")]
-		private static extern int DwmSetWindowAttribute(IntPtr hwnd, DWMWINDOWATTRIBUTE attr, ref uint attrValue, uint attrSize);
-
-		[DllImport("dwmapi.dll")]
-		private static extern int DwmExtendFrameIntoClientArea(IntPtr hWnd, ref MARGINS pMarInset);
-
-		[DllImport("dwmapi.dll")]
-		private static extern int DwmIsCompositionEnabled(ref int pfEnabled);
-
-		[DllImport("user32.dll")]
-		private static extern int SetLayeredWindowAttributes(IntPtr hWnd, uint crKey, byte bAlpha, uint dwFlags);
-		#endregion
-
+		#region Window processing
 		protected override void WndProc(ref Message m)
 		{
 			if (DesignMode)
@@ -140,25 +21,26 @@ namespace BeerViewer.Framework
 				return;
 			}
 
-			switch ((uint)m.Msg)
+			switch ((WindowMessages)m.Msg)
 			{
-				case WM_NCHITTEST:
+				case WindowMessages.WM_NCHITTEST:
 					m.Result = (IntPtr)NCHitTest(m);
-					break;
+					return;
 
-				case WM_NCCALCSIZE:
+				case WindowMessages.WM_NCCALCSIZE:
 					NCCalcSize(ref m);
-					break;
+					return;
 
-				case WM_DWMCOMPOSITIONCHANGED:
+				case WindowMessages.WM_DWMCOMPOSITIONCHANGED:
 					handleCompositionChanged();
-					break;
+					return;
 
-				case WM_NCPAINT:
-					base.WndProc(ref m);
+					/*
+				case WindowMessages.WM_NCPAINT:
 					break;
+					*/
 
-				case WM_WINDOWPOSCHANGED:
+				case WindowMessages.WM_WINDOWPOSCHANGED:
 					// Need to call this method (Resize event fired from here){
 					typeof(Form)
 						.GetMethod("UpdateWindowState", BindingFlags.NonPublic | BindingFlags.Instance)
@@ -173,12 +55,38 @@ namespace BeerViewer.Framework
 					}
 
 					// And RestoreWindowBoundsIfNecessary method must never called
+					return;
+
+				case WindowMessages.WM_GESTURENOTIFY:
+					this.SetupGesture(this.MeasureGesturable(ref m));
 					break;
 
-				default:
-					base.WndProc(ref m);
+				case WindowMessages.WM_GESTURE:
+					this.DecodeGesture(ref m);
+					return;
+
+				case WindowMessages.WM_TABLET_QUERYSYSTEMGESTURESTATUS:
+					// Disable "Press & Hold" right click
+					m.Result = new IntPtr((int)TABLET_DISABLE_FLAGS.TABLET_DISABLE_PRESSANDHOLD);
+					return;
+
+				case WindowMessages.WM_WININICHANGE:
+					// Tablet-mode changed
+					{
+						var msg = Marshal.PtrToStringUni(m.LParam);
+						if (
+							(msg == "ConvertibleSlateMode") // Win8.1 or earlier
+							|| (msg == "UserInteractionMode") // Win10 or later
+						)
+						{
+							FrameworkExtension.SetTabletMode(!FrameworkExtension.IsTabletMode(true));
+							this.OnResize(EventArgs.Empty);
+						}
+					}
 					break;
 			}
+
+			base.WndProc(ref m);
 		}
 
 		private bool CompositionEnabled = false;
@@ -187,7 +95,7 @@ namespace BeerViewer.Framework
 			try
 			{
 				int enabled = 0;
-				DwmIsCompositionEnabled(ref enabled);
+				FrameworkHelper.DwmIsCompositionEnabled(ref enabled);
 				CompositionEnabled = (enabled == 1);
 
 				if (CompositionEnabled)
@@ -195,7 +103,7 @@ namespace BeerViewer.Framework
 					// SetWindowTheme(this.Handle, string.Empty, string.Empty);
 
 					uint v = (uint)DWMNCRENDERINGPOLICY.DWMNCRP_ENABLED;
-					DwmSetWindowAttribute(
+					FrameworkHelper.DwmSetWindowAttribute(
 						this.Handle,
 						DWMWINDOWATTRIBUTE.DWMWA_NCRENDERING_POLICY,
 						ref v,
@@ -209,7 +117,7 @@ namespace BeerViewer.Framework
 						topHeight = 1,
 						bottomHeight = 1
 					};
-					DwmExtendFrameIntoClientArea(this.Handle, ref margins);
+					FrameworkHelper.DwmExtendFrameIntoClientArea(this.Handle, ref margins);
 				}
 			}
 			catch { }
@@ -242,50 +150,94 @@ namespace BeerViewer.Framework
 
 			m.Result = IntPtr.Zero;
 		}
-		private int NCHitTest(Message m)
+		private HitTestValue NCHitTest(Message m)
 		{
 			RECT rc;
-			GetWindowRect(m.HWnd, out rc);
+			FrameworkHelper.GetWindowRect(m.HWnd, out rc);
 
 			int w = rc.right - rc.left;
 			int h = rc.bottom - rc.top;
 
 			Point pt = this.PointToClient(new Point(m.LParam.ToInt32()));
 
-			if(this.WindowState != FormWindowState.Maximized)
+			if (this.WindowState != FormWindowState.Maximized)
 			{
-				if (pt.X < BorderSizeSize && pt.Y < BorderSizeSize) return HTTOPLEFT;
-				else if (pt.X >= w - BorderSizeSize && pt.Y < BorderSizeSize) return HTTOPRIGHT;
-				else if (pt.X < BorderSizeSize && pt.Y >= h - BorderSizeSize) return HTBOTTOMLEFT;
-				else if (pt.X >= w - BorderSizeSize && pt.Y >= h - BorderSizeSize) return HTBOTTOMRIGHT;
+				int frame_size = FrameworkHelper.GetSystemMetrics(SystemMetric.SM_CXFRAME)
+					+ FrameworkHelper.GetSystemMetrics(SystemMetric.SM_CXPADDEDBORDER);
 
-				else if (pt.X < BorderSizeSize) return HTLEFT;
-				else if (pt.X >= w - BorderSizeSize) return HTRIGHT;
-				else if (pt.Y < BorderSizeSize) return HTTOP;
-				else if (pt.Y >= h - BorderSizeSize) return HTBOTTOM;
+				int diagonal_width = (frame_size * 2)
+					+ FrameworkHelper.GetSystemMetrics(SystemMetric.SM_CXBORDER);
+
+				if (pt.Y < frame_size)
+				{
+					if (pt.X < diagonal_width) return HitTestValue.HTTOPLEFT;
+					if (pt.X >= w - diagonal_width) return HitTestValue.HTTOPRIGHT;
+					return HitTestValue.HTTOP;
+				}
+
+				if (pt.Y >= h - frame_size)
+				{
+					if (pt.X < diagonal_width) return HitTestValue.HTBOTTOMLEFT;
+					if (pt.X >= w - diagonal_width) return HitTestValue.HTBOTTOMRIGHT;
+					return HitTestValue.HTBOTTOM;
+				}
+
+				if (pt.X < frame_size) return HitTestValue.HTLEFT;
+				if (pt.X >= w - frame_size) return HitTestValue.HTRIGHT;
 			}
 
 			if (pt.Y < 28)
 			{
 				var cSize = this.CaptionSize(w, h);
 
-				if (cSize.Contains(pt)) return HTCAPTION;
-				else return HTCLIENT;
+				if (cSize.Contains(pt)) return HitTestValue.HTCAPTION;
+				else return HitTestValue.HTCLIENT;
 			}
-			return HTCLIENT;
+			return HitTestValue.HTCLIENT;
 		}
 
+		protected override CreateParams CreateParams
+		{
+			get
+			{
+				var b = base.CreateParams;
+				if (!DesignMode)
+					b.ExStyle |= (int)(WindowStyleEx.WS_EX_LAYERED | WindowStyleEx.WS_EX_APPWINDOW);
+				return b;
+			}
+		}
+		#endregion
+
 		protected virtual Rectangle CaptionSize(int Width, int Height)
-			=> new Rectangle(0, 0, Width - 96, 28);
+			=> new Rectangle(0, 0, Width - 32 * (FrameworkExtension.IsTabletMode() ? 2 : 3), 28);
+		public new Size ClientSize
+		{
+			get
+			{
+				var sz = base.ClientSize;
+				sz.Width -= 2;
+				sz.Height -= 3;
+
+				if (this.WindowState == FormWindowState.Maximized)
+				{
+					sz.Width -= 8;
+					sz.Height -= 8;
+				}
+				return sz;
+			}
+			set
+			{
+				base.ClientSize = value;
+			}
+		}
 
 		protected FrameworkRenderer Renderer { get; private set; }
-
 		private Brush BackColorBrush;
 
 		public BorderlessWindow() : this(false) { }
 		public BorderlessWindow(bool IsDialog = false)
 		{
-			SetLayeredWindowAttributes(this.Handle, 0x000000, 255, 0x02); // LWA_ALPHAKEY
+			FrameworkHelper.SetLayeredWindowAttributes(this.Handle, 0x000000, 255, 0x02); // LWA_ALPHAKEY
 			handleCompositionChanged();
 
 			Renderer = new Framework.FrameworkRenderer(this);
@@ -358,9 +310,22 @@ namespace BeerViewer.Framework
 				this.Resize += (s, e) =>
 				{
 					var w = this.ClientSize.Width;
-					CloseButton.X = w - 32;
-					MaximizeButton.X = w - 64;
-					MinimizeButton.X = w - 96;
+
+					if (FrameworkExtension.IsTabletMode())
+					{
+						CloseButton.X = w - 32;
+						MinimizeButton.X = w - 64;
+
+						MaximizeButton.Visible = false;
+					}
+					else
+					{
+						CloseButton.X = w - 32;
+						MaximizeButton.X = w - 64;
+						MinimizeButton.X = w - 96;
+
+						MaximizeButton.Visible = true;
+					}
 
 					this.Invalidate();
 				};
@@ -376,6 +341,10 @@ namespace BeerViewer.Framework
 		{
 			var g = e.Graphics;
 
+			g.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighSpeed;
+			g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighSpeed;
+			g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.Low;
+
 			g.FillRectangle(
 				this.BackColorBrush,
 				new Rectangle(new Point(1, 1), this.ClientSize)
@@ -390,36 +359,110 @@ namespace BeerViewer.Framework
 			base.OnPaint(e);
 		}
 
-		public new Size ClientSize
+		public event ScrollEventHandler TouchPanEvent;
+		public void OnTouchPanEvent(ScrollEventArgs e)
 		{
-			get
-			{
-				var sz = base.ClientSize;
-				sz.Width -= 2;
-				sz.Height -= 3;
+			this.Renderer.OnScroll(this.containerGestureTarget, e);
+			this.TouchPanEvent?.Invoke(this, e);
+		}
 
-				if (this.WindowState == FormWindowState.Maximized)
-				{
-					sz.Width -= 8;
-					sz.Height -= 8;
-				}
-				return sz;
-			}
-			set
+		private FrameworkContainer containerGestureTarget;
+		private Point pointGestureBase = new Point();
+		private void DecodeGesture(ref Message m)
+		{
+			var gi = new GESTUREINFO();
+			gi.cbSize = (uint)Marshal.SizeOf(typeof(GESTUREINFO));
+
+			if (!FrameworkHelper.GetGestureInfo(m.LParam, ref gi))
+				return;
+
+			Point pt;
+
+			switch (gi.dwID)
 			{
-				base.ClientSize = value;
+				case GESTUREID.GID_BEGIN:
+				case GESTUREID.GID_END:
+					break;
+
+				// Use only PAN gesture
+				case GESTUREID.GID_PAN:
+					pt = this.PointToClient(new Point(gi.ptsLocation.x, gi.ptsLocation.y));
+
+					switch (gi.dwFlags)
+					{
+						case GESTUREFLAG.GF_BEGIN:
+							this.pointGestureBase = pt;
+							this.containerGestureTarget = this.Renderer.PeekContainer(pt);
+							break;
+
+						default:
+							if (pt == pointGestureBase) break;
+
+							pointGestureBase = pt;
+							this.OnTouchPanEvent(
+								new ScrollEventArgs(
+									pt.X - this.pointGestureBase.X,
+									pt.Y - this.pointGestureBase.Y
+								)
+							);
+							break;
+					}
+					break;
 			}
 		}
 
-		protected override CreateParams CreateParams
+		private bool[] MeasureGesturable(ref Message m)
 		{
-			get
+			var gns = (GESTURENOTIFYSTRUCT)Marshal.PtrToStructure(m.LParam, typeof(GESTURENOTIFYSTRUCT));
+			var pt = new Point(gns.ptsLocation.x, gns.ptsLocation.y);
+
+			var ctr = this.Renderer.PeekContainer(pt);
+			if (ctr == null) return null;
+
+			return new bool[] {
+				ctr.IsScrollVisibleX,
+				ctr.IsScrollVisibleY
+			};
+		}
+		private void SetupGesture(bool[] bGesturable)
+		{
+			var listGestureConfig = new List<GESTURECONFIG>();
+
+			if (bGesturable != null)
 			{
-				var b = base.CreateParams;
-				if (!DesignMode)
-					b.ExStyle |= WS_EX_LAYERED | WS_EX_APPWINDOW;
-				return b;
+				GESTURECONFIGFLAG f = 0;
+				if (bGesturable[0]) f |= GESTURECONFIGFLAG.GC_PAN_WITH_SINGLE_FINGER_HORIZONTALLY;
+				if (bGesturable[1]) f |= GESTURECONFIGFLAG.GC_PAN_WITH_SINGLE_FINGER_VERTICALLY;
+
+				listGestureConfig.Add(
+					new GESTURECONFIG
+					{
+						dwID = GESTUREID.GID_PAN,
+						dwWant = f,
+						dwBlock = 0
+					}
+				);
 			}
+			else
+			{
+				listGestureConfig.Add(
+					new GESTURECONFIG
+					{
+						dwID = GESTUREID.GID_NONE,
+						dwWant = 0,
+						dwBlock = 0
+					}
+				);
+			}
+
+			var arrayGestureConfig = listGestureConfig.ToArray();
+			FrameworkHelper.SetGestureConfig(
+				this.Handle,
+				0,
+				(uint)arrayGestureConfig.Length,
+				arrayGestureConfig,
+				(uint)Marshal.SizeOf(typeof(GESTURECONFIG))
+			);
 		}
 	}
 }

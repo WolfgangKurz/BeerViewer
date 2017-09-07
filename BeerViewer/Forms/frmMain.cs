@@ -24,7 +24,8 @@ namespace BeerViewer.Forms
 
 		public static frmMain Instance { get; }
 
-		public WebBrowser Browser { get; private set; }
+		public WebBrowser Browser { get; }
+		public TextBox LogView { get; }
 
 		static frmMain()
 		{
@@ -177,6 +178,37 @@ namespace BeerViewer.Forms
 				Overview.MaximumHeight = this.ClientSize.Height - (29 + 28) + 1;
 				// Overview.Height = this.ClientSize.Height - (29 + 28);
 			};
+			#endregion
+
+
+			#region LogView
+			this.LogView = new TextBox()
+			{
+				Location = new Point(1, 480 + 29),
+				Size = new Size(800, 80),
+
+				Multiline = true,
+				ScrollBars = ScrollBars.Vertical,
+				ReadOnly = true
+			};
+			Logger.Logged += x =>
+			{
+				Action<string> f = y =>
+				{
+					this.LogView.Text = y + Environment.NewLine + this.LogView.Text;
+					this.LogView.Update();
+				};
+
+				if (this.LogView.InvokeRequired)
+					this.LogView.Invoke((Action)(() => f(x)));
+				else
+					f(x);
+			};
+			this.Resize += (s, e) =>
+			{
+				this.LogView.Size = new Size(800, this.ClientSize.Height - 480 - 29);
+			};
+			this.Controls.Add(this.LogView);
 			#endregion
 
 			this.OnResize(EventArgs.Empty);

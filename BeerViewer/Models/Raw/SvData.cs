@@ -48,7 +48,7 @@ namespace BeerViewer.Models.Raw
 			}
 			catch (Exception ex)
 			{
-				Logger.Instance.Log(ex.ToString());
+				Logger.Log(ex.ToString());
 				result = null;
 			}
 			return result != null;
@@ -76,7 +76,7 @@ namespace BeerViewer.Models.Raw
 			}
 			catch (Exception ex)
 			{
-				Logger.Instance.Log(ex.ToString());
+				Logger.Log(ex.ToString());
 				result = null;
 			}
 			return result != null;

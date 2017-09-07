@@ -137,6 +137,11 @@ namespace BeerViewer.Framework
 			}
 		}
 
+		/// <summary>
+		/// Raises when scrolled (by Touch, scroll bar)
+		/// </summary>
+		public event ScrollEventHandler Scroll;
+
 		#region Initializers
 		public FrameworkContainer() : base()
 			=> this.Initialize();
@@ -339,8 +344,15 @@ namespace BeerViewer.Framework
 			pt.X += this.ScrollX;
 			pt.Y += this.ScrollY;
 
-			this.ScrollY -= delta;
+			this.OnScroll(0, delta);
 			return base.OnMouseWheel(pt, delta);
+		}
+
+		public void OnScroll(int deltaX, int deltaY)
+		{
+			this.ScrollX += deltaX;
+			this.ScrollY += deltaY;
+			this.Scroll?.Invoke(this, new ScrollEventArgs(deltaX, deltaY));
 		}
 
 		/// <summary>

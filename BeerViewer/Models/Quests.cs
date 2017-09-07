@@ -97,7 +97,7 @@ namespace BeerViewer.Models
 						}
 						catch (Exception ex)
 						{
-							Logger.Instance.Log(ex.ToString());
+							Logger.Log(ex.ToString());
 						}
 					}
 

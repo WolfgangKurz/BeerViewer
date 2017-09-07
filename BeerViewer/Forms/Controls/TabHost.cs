@@ -9,6 +9,9 @@ namespace BeerViewer.Forms.Controls
 {
 	internal class TabHost : FrameworkControl
 	{
+		// Disable scrolling for this control.
+		public override bool Focusable { get; } = true;
+
 		internal class TabItem
 		{
 			public string Name { get; set; }

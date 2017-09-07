@@ -10,6 +10,8 @@ namespace BeerViewer.Framework
 {
 	public class FrameworkControl : IDisposable
 	{
+		public virtual bool Focusable { get; } = false;
+
 		#region X Property
 		/// <summary>
 		/// X position of control

@@ -78,7 +78,7 @@ namespace BeerViewer.Models.Quest
 			}
 			catch (Exception ex)
 			{
-				Logger.Instance.Log("Failed to destroy equipment: {0}", ex);
+				Logger.Log("Failed to destroy equipment: {0}", ex);
 			}
 		}
 		private void RemodelSlotItem(kcsapi_remodel_slot source)

@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Windows.Forms;
+using Microsoft.Win32;
 
 namespace BeerViewer.Framework
 {
@@ -94,5 +96,29 @@ namespace BeerViewer.Framework
 
 			g.FillPath(brush, path);
 		}
+
+		/// <summary>
+		/// Running device is Tablet and in Tablet-mode?
+		/// </summary>
+		internal static bool IsTabletMode(bool NeedFresh = false)
+		{
+			if (NeedFresh)
+			{
+				try
+				{
+					var tabletMode = (int)Registry.GetValue("HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\ImmersiveShell", "TabletMode", 0);
+					return (tabletMode == 1);
+				}
+				catch
+				{
+					var ConvertibleSlateMode = FrameworkHelper.GetSystemMetrics(SystemMetric.SM_CONVERTIBLESLATEMODE);
+					return ConvertibleSlateMode == 0;
+				}
+			}
+			return TabletMode;
+		}
+
+		internal static void SetTabletMode(bool IsTablet) => TabletMode = IsTablet;
+		private static bool TabletMode { get; set; }
 	}
 }

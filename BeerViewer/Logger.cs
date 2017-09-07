@@ -5,16 +5,24 @@ namespace BeerViewer
 	internal class Logger
 	{
 		public delegate void LogEventHandler(string Log);
-		public event LogEventHandler Logged;
+		public static event LogEventHandler Logged;
 
-		public static Logger Instance { get; } = new Logger();
+		private static Logger Instance { get; } = new Logger();
 
-		public void Log(string Log)
+		private Logger() { }
+
+		private void _Log(string Log)
 		{
-			this.Logged?.Invoke(Log);
+			Logger.Logged?.Invoke(Log);
 			Debug.WriteLine(Log);
 		}
-		public void Log(string format, params object[] args)
-			=> this.Log(string.Format(format, args));
+		private void _Log(string format, params object[] args)
+			=> this._Log(string.Format(format, args));
+
+
+		public static void Log(string Log)
+			=> Logger.Instance._Log(Log);
+		public static void Log(string format, params object[] args)
+			=> Logger.Instance._Log(format, args);
 	}
 }

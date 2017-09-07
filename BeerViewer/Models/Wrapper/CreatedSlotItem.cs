@@ -19,11 +19,11 @@ namespace BeerViewer.Models.Wrapper
 					? Master.Instance.SlotItems[this.RawData.api_slot_item.api_slotitem_id]
 					: Master.Instance.SlotItems[int.Parse(this.RawData.api_fdata.Split(',')[1])];
 
-				Logger.Instance.Log("createitem: {0} - {1}", this.Succeed, this.SlotItemInfo.Name);
+				Logger.Log("createitem: {0} - {1}", this.Succeed, this.SlotItemInfo.Name);
 			}
 			catch (Exception ex)
 			{
-				Logger.Instance.Log(ex.ToString());
+				Logger.Log(ex.ToString());
 			}
 		}
 	}

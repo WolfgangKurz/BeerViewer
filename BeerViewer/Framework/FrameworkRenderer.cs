@@ -5,21 +5,12 @@ using System.Text;
 using System.Windows.Forms;
 using System.Threading.Tasks;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 
 namespace BeerViewer.Framework
 {
 	public sealed class FrameworkRenderer : IDisposable
 	{
-		#region WinAPI
-		[DllImport("user32")]
-		private static extern IntPtr SetCapture(IntPtr hWnd);
-
-		[DllImport("user32")]
-		private static extern bool ReleaseCapture();
-		#endregion
-
 		public IReadOnlyCollection<FrameworkControl> Controls => this._Controls;
 		private List<FrameworkControl> _Controls { get; set; } = new List<FrameworkControl>();
 
@@ -150,11 +141,57 @@ namespace BeerViewer.Framework
 			this._Controls = null;
 		}
 
-		internal void _SetCapture() => FrameworkRenderer.SetCapture(this.Owner.Handle);
-		internal void _ReleaseCapture() => FrameworkRenderer.ReleaseCapture();
+		internal void _SetCapture() => FrameworkHelper.SetCapture(this.Owner.Handle);
+		internal void _ReleaseCapture() => FrameworkHelper.ReleaseCapture();
 
 		internal void Invalidate(Rectangle rect)
 			=> this.Owner?.Invalidate(rect);
+
+		internal FrameworkContainer PeekContainer(Point pt)
+		{
+			FrameworkContainer output = null;
+
+			output = this.Controls
+				.Where(x => typeof(FrameworkContainer).IsAssignableFrom(x.GetType()))
+				.Where(x => x.Visible && x.Bound.Contains(pt))
+				.Select(x => x as FrameworkContainer)
+				.LastOrDefault();
+
+			if (output == null) return null;
+
+			var bPt = pt;
+			while (true)
+			{
+				var pPt = new Point(bPt.X, bPt.Y);
+				pPt.Offset(-output.X, -output.Y);
+
+				var childContainer = this.Controls
+					.Where(x => typeof(FrameworkContainer).IsAssignableFrom(x.GetType()))
+					.Where(x => x.Visible && x.Bound.Contains(pPt))
+					.Select(x => x as FrameworkContainer)
+					.LastOrDefault();
+
+				if (childContainer != null) // Child container exists
+				{
+					bPt = pPt;
+					output = childContainer;
+					continue;
+				}
+
+				var childControl = output.Controls
+					.Where(x => x.Visible && x.Bound.Contains(pPt))
+					.LastOrDefault();
+
+				if (childControl?.Focusable ?? false) return null;
+				return output;
+			}
+		}
+
+		internal void OnScroll(FrameworkContainer containerGestureTarget, ScrollEventArgs e)
+		{
+			if (containerGestureTarget == null) return;
+			containerGestureTarget.OnScroll(-e.DeltaX, -e.DeltaY);
+		}
 	}
 
 	internal static class FrameworkControlExtension
