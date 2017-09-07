@@ -344,7 +344,7 @@ namespace BeerViewer.Framework
 			pt.X += this.ScrollX;
 			pt.Y += this.ScrollY;
 
-			this.OnScroll(0, delta);
+			this.OnScroll(0, -delta);
 			return base.OnMouseWheel(pt, delta);
 		}
 
