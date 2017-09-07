@@ -1,3 +1,9 @@
+``` diff
+- BeerViewer 2.0 Project is in development, and BeerViewer 1.0 will not update anymore.
+- 맥주뷰어 2.0 프로젝트가 개발중이며, 맥주뷰어 1.0은 더이상 업데이트되지 않습니다.
+```
+
+
 맥주뷰어 (BeerViewer)
 --
 
