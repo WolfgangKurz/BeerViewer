@@ -1,3 +1,26 @@
+海防艦		해방함
+駆逐艦		구축함
+軽巡洋艦		경순양함
+重雷装巡洋艦	중뇌장순양함
+重巡洋艦		중순양함
+航空巡洋艦		항공순양함
+軽空母		경공모
+戦艦			전함
+高速戦艦		고속전함
+航空戦艦		항공전함
+正規空母		정규공모
+超弩級戦艦		초노급전함
+潜水艦		잠수함
+潜水空母		잠수항모
+補給艦		보급선
+水上機母艦		수상기모함
+上陸艦		상륙함
+装甲空母		장갑항모
+工作艦		공작함
+潜水母艦		잠수모함
+練習巡洋艦		연습순양함
+
+
 睦月		무츠키
 如月		키사라기
 長月		나가츠키
@@ -140,7 +163,7 @@
 夕立改二	유다치改2
 時雨改二	시구레改2
 木曾改二	키소改2
-Верный	Верный
+Верный	베르니
 武蔵改	무사시改
 金剛改二	콩고改2
 比叡改二	히에이改2
@@ -164,16 +187,16 @@
 浦風		우라카제
 谷風		타니카제
 浜風		하마카제
-Bismarck		Bismarck
-Bismarck改		Bismarck改
-Bismarck zwei	Bismarck zwei
-Z1	Z1
-Z3	Z3
-Prinz Eugen	Prinz Eugen
-Prinz Eugen改	Prinz Eugen改
-Bismarck drei	Bismarck drei
-Z1 zwei	Z1 zwei
-Z3 zwei	Z3 zwei
+Bismarck		비스마르크
+Bismarck改		비스마르크改
+Bismarck zwei	비스마르크 zwei
+Z1	레베
+Z3	막스
+Prinz Eugen	프린츠 오이겐
+Prinz Eugen改	프린츠 오이겐改
+Bismarck drei	비스마르크 drei
+Z1 zwei	레베 zwei
+Z3 zwei	막스 zwei
 天津風	아마츠카제
 明石		아카시
 大淀		오요도
@@ -300,8 +323,8 @@ Z3 zwei	Z3 zwei
 矢矧改	야하기改
 弥生改	야요이改
 卯月改	우즈키改
-Z1改		Z1改
-Z3改		Z3改
+Z1改		레베改
+Z3改		막스改
 浜風改	하마카제改
 谷風改	타니카제改
 酒匂改	사카와改
@@ -327,25 +350,25 @@ U-511改	U-511改
 朝霜改	아사시모改
 高波改	타카나미改
 照月改	테루즈키改
-Libeccio改	Libeccio改
+Libeccio改	리베치오改
 瑞穂改	미즈호改
 風雲改	카자구모改
 海風改	우미카제改
 江風改	카와카제改
 速吸改	하야스이改
-Graf Zeppelin改	Graf Zeppelin改
+Graf Zeppelin改	그라프 체펠린改
 嵐改		아라시改
 萩風改	하기카제改
 鹿島改	카시마改
 初月改	하츠즈키改
-Zara改	Zara改
+Zara改	자라改
 沖波改	오키나미改
-Iowa改	Iowa改
-Pola改	Pola改
+Iowa改	아이오와改
+Pola改	폴라改
 親潮改	오야시오改
 春風改	하루카제改
-Warspite改	Warspite改
-Aquila改	Aquila改
+Warspite改	워스파이트改
+Aquila改	아퀼라改
 水無月改	미나즈키改
 伊26改	이-26改
 浦波改	우라나미改
@@ -383,22 +406,22 @@ Aquila改	Aquila改
 天城改	아마기改
 葛城改	카츠라기改
 U-511		U-511
-Graf Zeppelin	Graf Zeppelin
+Graf Zeppelin	그라프 체펠린
 睦月改二	무츠키改2
 如月改二	키사라기改2
 呂500	로-500
 暁改二	아카츠키改2
-Warspite	Warspite
-Iowa		Iowa
-Littorio	Littorio
-Roma		Roma
-Libeccio	Libeccio
-Aquila	Aquila
+Warspite	워스파이트
+Iowa		아이오와
+Littorio	리토리오
+Roma		로마
+Libeccio	리베치오
+Aquila	아퀼라
 秋津洲	아키츠시마
-Italia		Italia
-Roma改	Roma改
-Zara		Zara
-Pola		Pola
+Italia		이탈리아
+Roma改	로마改
+Zara		자라
+Pola		폴라
 秋津洲改	아키츠시마改
 瑞穂		미즈호
 沖波		오키나미
@@ -431,10 +454,10 @@ Pola		Pola
 朝風改	아사카제改
 山風		야마카제
 朝風		아사카제
-Commandant Teste	Commandant Teste
-Commandant Teste改	Commandant Teste改
-Saratoga	Saratoga
-Saratoga改	Saratoga改
+Commandant Teste	코망단 테스트
+Commandant Teste改	코망단 테스트改
+Saratoga	새러토가
+Saratoga改	새러토가改
 松風		마츠카제
 松風改	마츠카제改
 藤波		후지나미
@@ -443,14 +466,14 @@ Saratoga改	Saratoga改
 伊13改	이-13改
 伊14		이-14
 伊14改	이-14改
-Zara due	Zara due
+Zara due	자라 due
 鈴谷改二	스즈야改2
 熊野改二	쿠마노改2
 鈴谷航改二	스즈야航改2
 熊野航改二	쿠마노航改2
 Гангут				강구트
 Гангут два				강구트 два
-Октябрьская революция	옥탸브리스카야 레발류찌야
+Октябрьская революция	시월혁명
 占守		시무슈
 占守改	시무슈改
 国後		쿠나시리
@@ -466,15 +489,15 @@ Zara due	Zara due
 長門改二	나가토改2
 文月改二	후미즈키改2
 伊504			이-504
-Luigi Torelli		Luigi Torelli
-Luigi Torelli改	Luigi Torelli改
+Luigi Torelli		루이지 토렐리
+Luigi Torelli改	루이지 토렐리改
 UIT-25			UIT-25
 松輪		마츠와
 松輪改	마츠와改
-Ark Royal		Ark Royal
-Ark Royal改		Ark Royal改
-Richelieu		Richelieu
-Richelieu改		Richelieu改
+Ark Royal		아크로열
+Ark Royal改		아크로열改
+Richelieu		리슐리외
+Richelieu改		리슐리외改
 旗風		하타카제
 旗風改	하타카제改
 天霧		아마기리
