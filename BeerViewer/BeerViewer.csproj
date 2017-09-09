@@ -290,8 +290,14 @@
     <Compile Include="Models\Wrapper\SlotItemInfo.cs" />
     <Compile Include="Models\Wrapper\UseItem.cs" />
     <Compile Include="Models\Wrapper\UseItemInfo.cs" />
+    <Compile Include="Network\HttpProxy.cs" />
+    <Compile Include="Network\ModifiableProxy.cs" />
+    <Compile Include="Network\NetworkExtensions.cs" />
     <Compile Include="Network\Proxy.cs" />
     <Compile Include="Network\ProxyExtension.cs" />
+    <Compile Include="Network\SafeTcpServer.cs" />
+    <Compile Include="Network\Session.cs" />
+    <Compile Include="Network\WinInetUtil.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />

@@ -5,8 +5,8 @@ using System.Runtime.Serialization.Json;
 using System.IO;
 using System.Text;
 using System.Web;
-using Nekoxy;
 
+using BeerViewer.Network;
 using BeerViewer.Models.kcsapi;
 
 namespace BeerViewer.Models.Raw
