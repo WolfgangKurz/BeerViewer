@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics;
 
-namespace BeerViewer
+namespace BeerViewer.Modules
 {
-	internal class Logger
+	public class Logger
 	{
 		public delegate void LogEventHandler(string Log);
 		public static event LogEventHandler Logged;

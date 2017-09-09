@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Reflection;
 
-namespace BeerViewer
+namespace BeerViewer.Modules
 {
 	public class i18n
 	{

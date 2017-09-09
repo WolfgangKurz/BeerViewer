@@ -12,6 +12,7 @@ using BeerViewer.Models.Enums;
 using BeerViewer.Models.Raw;
 using BeerViewer.Models.Wrapper;
 using BeerViewer.Models.kcsapi;
+using BeerViewer.Modules;
 
 using Codeplex.Data;
 using QuestModel = BeerViewer.Models.Wrapper.Quest;

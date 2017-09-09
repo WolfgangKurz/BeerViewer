@@ -8,6 +8,7 @@ using System.Web;
 
 using BeerViewer.Network;
 using BeerViewer.Models.kcsapi;
+using BeerViewer.Modules;
 
 namespace BeerViewer.Models.Raw
 {

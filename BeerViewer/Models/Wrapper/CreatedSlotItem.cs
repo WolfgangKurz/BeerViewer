@@ -2,6 +2,7 @@
 
 using BeerViewer.Models.Raw;
 using BeerViewer.Models.kcsapi;
+using BeerViewer.Modules;
 
 namespace BeerViewer.Models.Wrapper
 {

@@ -234,6 +234,10 @@ namespace BeerViewer.Framework
 		protected FrameworkRenderer Renderer { get; private set; }
 		private Brush BackColorBrush;
 
+		public FrameworkControl CloseButton { get; } = null;
+		public FrameworkControl MaximizeButton { get; } = null;
+		public FrameworkControl MinimizeButton { get; } = null;
+
 		public BorderlessWindow() : this(false) { }
 		public BorderlessWindow(bool IsDialog = false)
 		{
@@ -254,9 +258,9 @@ namespace BeerViewer.Framework
 			if (!IsDialog)
 			{
 				#region System Buttons
-				var CloseButton = new FrameworkControl(0, 1, 32, 28);
-				var MaximizeButton = new FrameworkControl(0, 1, 32, 28);
-				var MinimizeButton = new FrameworkControl(0, 1, 32, 28);
+				this.CloseButton = new FrameworkControl(0, 1, 32, 28);
+				this.MaximizeButton = new FrameworkControl(0, 1, 32, 28);
+				this.MinimizeButton = new FrameworkControl(0, 1, 32, 28);
 
 				CloseButton.Paint += (s, e) =>
 				{

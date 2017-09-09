@@ -6,6 +6,7 @@ using BeerViewer.Framework;
 using BeerViewer.Forms.Controls;
 using BeerViewer.Models;
 using BeerViewer.Models.Enums;
+using BeerViewer.Modules;
 
 namespace BeerViewer.Forms.Controls.Overview
 {

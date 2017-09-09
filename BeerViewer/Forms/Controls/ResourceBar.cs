@@ -37,6 +37,7 @@ namespace BeerViewer.Forms.Controls
 			materials.PropertyEvent(nameof(materials.Ammo), () => this.Invalidate());
 			materials.PropertyEvent(nameof(materials.Steel), () => this.Invalidate());
 			materials.PropertyEvent(nameof(materials.Bauxite), () => this.Invalidate());
+			materials.PropertyEvent(nameof(materials.ImproveMaterials), () => this.Invalidate());
 
 			this.Paint += this.OnPaint;
 		}
@@ -77,7 +78,8 @@ namespace BeerViewer.Forms.Controls
 				BeerViewer.Properties.Resources.icon_ammo,
 				BeerViewer.Properties.Resources.icon_steel,
 				BeerViewer.Properties.Resources.icon_bauxite,
-				BeerViewer.Properties.Resources.icon_bucket
+				BeerViewer.Properties.Resources.icon_bucket,
+				BeerViewer.Properties.Resources.icon_screw
 			};
 			var values = new int[]
 			{
@@ -85,7 +87,8 @@ namespace BeerViewer.Forms.Controls
 				materials.Ammo,
 				materials.Steel,
 				materials.Bauxite,
-				materials.RepairBuckets
+				materials.RepairBuckets,
+				materials.ImproveMaterials
 			};
 			var len = Math.Min(values.Length, imgs.Length);
 

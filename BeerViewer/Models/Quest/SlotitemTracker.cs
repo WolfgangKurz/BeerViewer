@@ -10,6 +10,7 @@ using BeerViewer.Models.kcsapi;
 using BeerViewer.Models.Raw;
 using BeerViewer.Models.Wrapper;
 using BeerViewer.Network;
+using BeerViewer.Modules;
 using System.Collections;
 
 namespace BeerViewer.Models.Quest

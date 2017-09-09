@@ -16,6 +16,16 @@ namespace BeerViewer.Network
 		private static SafeTcpServer server;
 
 		/// <summary>
+		/// Fire when before fire before tunnel request body
+		/// </summary>
+		public static event Func<HttpRequest, bool> BeforeRequest;
+
+		/// <summary>
+		/// Fire when before fire before tunnel response body
+		/// </summary>
+		public static event Func<Session, byte[], byte[]> BeforeResponse;
+
+		/// <summary>
 		/// Fire when after sent HTTP response to client.
 		/// </summary>
 		public static event Action<Session> AfterSessionComplete;
@@ -60,6 +70,8 @@ namespace BeerViewer.Network
 			ModifiableProxy.AfterSessionComplete += InvokeAfterSessionComplete;
 			ModifiableProxy.AfterReadRequestHeaders += InvokeAfterReadRequestHeaders;
 			ModifiableProxy.AfterReadResponseHeaders += InvokeAfterReadResponseHeaders;
+			ModifiableProxy.BeforeRequest += InvokeBeforeRequest;
+			ModifiableProxy.BeforeResponse += InvokeBeforeResponse;
 			ListeningPort = listeningPort;
 			try
 			{
@@ -86,6 +98,8 @@ namespace BeerViewer.Network
 			ModifiableProxy.AfterSessionComplete -= InvokeAfterSessionComplete;
 			ModifiableProxy.AfterReadRequestHeaders -= InvokeAfterReadRequestHeaders;
 			ModifiableProxy.AfterReadResponseHeaders -= InvokeAfterReadResponseHeaders;
+			ModifiableProxy.BeforeRequest -= InvokeBeforeRequest;
+			ModifiableProxy.BeforeResponse -= InvokeBeforeResponse;
 			server?.Shutdown();
 			server = null;
 		}
@@ -100,5 +114,11 @@ namespace BeerViewer.Network
 
 		private static void InvokeAfterReadResponseHeaders(HttpResponse response)
 			=> AfterReadResponseHeaders?.Invoke(response);
+
+		private static bool InvokeBeforeRequest(HttpRequest request)
+			=> BeforeRequest?.Invoke(request) ?? true;
+
+		private static byte[] InvokeBeforeResponse(Session session, byte[] body)
+			=> BeforeResponse?.Invoke(session, body);
 	}
 }

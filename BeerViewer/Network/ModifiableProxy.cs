@@ -22,12 +22,13 @@ namespace BeerViewer.Network
 		public static event Action<HttpRequest> AfterReadRequestHeaders;
 		public static event Action<HttpResponse> AfterReadResponseHeaders;
 
+		public static event Func<HttpRequest, bool> BeforeRequest;
+		public static event Func<Session, byte[], byte[]> BeforeResponse;
+
 		static new public ModifiableProxy CreateProxy(HttpSocket clientSocket)
 			=> new ModifiableProxy(clientSocket);
 
 		public ModifiableProxy(HttpSocket clientSocket) : base(clientSocket) { }
-
-		public static Func<Session, byte[], byte[]> BeforeResponse = null;
 
 		/// <summary>
 		/// Upstream proxy config
@@ -97,7 +98,18 @@ namespace BeerViewer.Network
 		/// </summary>
 		protected override void SendRequest()
 		{
-			AfterReadRequestHeaders?.Invoke(new HttpRequest(this.RequestLine, this.RequestHeaders, null));
+			var req = new HttpRequest(this.RequestLine, this.RequestHeaders, null);
+
+			if (BeforeRequest != null)
+			{
+				if (!BeforeRequest.Invoke(req))
+				{
+					this.AbortRequest();
+					return;
+				}
+			}
+
+			AfterReadRequestHeaders?.Invoke(req);
 
 			this.currentSession = new Session();
 			this.SocketPS.WriteAsciiLine(this.RequestLine.RequestLine);

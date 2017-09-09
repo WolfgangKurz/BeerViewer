@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using BeerViewer.Framework;
 using BeerViewer.Models.Enums;
 using BeerViewer.Models.Wrapper;
+using BeerViewer.Modules;
 
 namespace BeerViewer.Models
 {

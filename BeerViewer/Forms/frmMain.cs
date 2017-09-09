@@ -12,6 +12,7 @@ using BeerViewer.Framework;
 using BeerViewer.Forms.Controls;
 using BeerViewer.Forms.Controls.Overview;
 using BeerViewer.Models;
+using BeerViewer.Modules;
 
 using System.Runtime.InteropServices;
 
@@ -43,6 +44,37 @@ namespace BeerViewer.Forms
 				480 + 28 + 2
 			);
 
+			#region LogView
+			this.LogView = new TextBox()
+			{
+				Location = new Point(1, 480 + 29),
+				Size = new Size(800, 80),
+
+				Multiline = true,
+				ScrollBars = ScrollBars.Vertical,
+				ReadOnly = true
+			};
+			Logger.Logged += x =>
+			{
+				Action<string> f = y =>
+				{
+					this.LogView.Text = y + Environment.NewLine + this.LogView.Text;
+					this.LogView.Update();
+				};
+
+				if (this.LogView.InvokeRequired)
+					this.LogView.Invoke((Action)(() => f(x)));
+				else
+					f(x);
+			};
+			this.Resize += (s, e) =>
+			{
+				this.LogView.Size = new Size(800, this.ClientSize.Height - 480 - 29);
+			};
+			this.Controls.Add(this.LogView);
+			#endregion
+
+
 			#region GC timer
 			{
 				var timer = new System.Timers.Timer(5000);
@@ -57,6 +89,11 @@ namespace BeerViewer.Forms
 				timer.Start();
 			}
 			#endregion
+
+			#region ComponentService
+			ComponentService.Instance.Initialize();
+			#endregion
+
 
 			#region Menu Button rendering
 			var MenuButton = new FrameworkControl(1, 1, 120, 28);
@@ -140,7 +177,7 @@ namespace BeerViewer.Forms
 			{
 				var bar = new ResourceBar(0, 5, 1, 18);
 				bar.Resize += (s, e) => bar.X = this.ClientSize.Width - 96 - 7 - bar.Width;
-				this.Resize += (s, e) => bar.X = this.ClientSize.Width - 96 - 7 - bar.Width;
+				this.Resize += (s, e) => bar.X = this.MinimizeButton.X - 7 - bar.Width;
 				this.Renderer.AddControl(bar);
 			}
 			#endregion
@@ -180,36 +217,6 @@ namespace BeerViewer.Forms
 			};
 			#endregion
 
-
-			#region LogView
-			this.LogView = new TextBox()
-			{
-				Location = new Point(1, 480 + 29),
-				Size = new Size(800, 80),
-
-				Multiline = true,
-				ScrollBars = ScrollBars.Vertical,
-				ReadOnly = true
-			};
-			Logger.Logged += x =>
-			{
-				Action<string> f = y =>
-				{
-					this.LogView.Text = y + Environment.NewLine + this.LogView.Text;
-					this.LogView.Update();
-				};
-
-				if (this.LogView.InvokeRequired)
-					this.LogView.Invoke((Action)(() => f(x)));
-				else
-					f(x);
-			};
-			this.Resize += (s, e) =>
-			{
-				this.LogView.Size = new Size(800, this.ClientSize.Height - 480 - 29);
-			};
-			this.Controls.Add(this.LogView);
-			#endregion
 
 			this.OnResize(EventArgs.Empty);
 		}

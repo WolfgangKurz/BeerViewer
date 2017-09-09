@@ -70,6 +70,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web" />
@@ -109,9 +110,12 @@
     <Compile Include="Forms\frmMain.Designer.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="i18n.cs" />
+    <Compile Include="Modules\Component\Component.cs" />
+    <Compile Include="Modules\Component\ComponentService.cs" />
+    <Compile Include="Modules\Component\IComponent.cs" />
+    <Compile Include="Modules\i18n.cs" />
     <Compile Include="Libraries\DynamicJson.cs" />
-    <Compile Include="Logger.cs" />
+    <Compile Include="Modules\Logger.cs" />
     <Compile Include="Models\AirSuperiorityPotential.cs" />
     <Compile Include="Models\BuildingDock.cs" />
     <Compile Include="Models\Dockyard.cs" />
@@ -358,6 +362,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon.ico" />
+    <None Include="Resources\icon_screw.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">

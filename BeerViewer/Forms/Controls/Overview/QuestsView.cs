@@ -9,6 +9,7 @@ using BeerViewer.Models;
 using BeerViewer.Models.Enums;
 using BeerViewer.Models.Wrapper;
 using BeerViewer.Models.Quest;
+using BeerViewer.Modules;
 
 namespace BeerViewer.Forms.Controls.Overview
 {
