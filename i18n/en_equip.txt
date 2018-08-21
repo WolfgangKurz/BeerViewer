@@ -15,11 +15,11 @@
 61cm四連装(酸素)魚雷	61cm Quadruple (Oxygen) Torpedo Mount
 九七式艦攻	Type 97 Torpedo Bomber
 天山	Tenzan
-流星	Ryuusei
+流星	Ryūsei
 九六式艦戦	Type 96 Fighter
 零式艦戦21型	Type 0 Fighter Model 21
 零式艦戦52型	Type 0 Fighter Model 52
-烈風	Reppuu
+烈風	Reppū
 九九式艦爆	Type 99 Dive Bomber
 彗星	Suisei
 零式水上偵察機	Type 0 Reconnaissance Seaplane
@@ -29,7 +29,7 @@
 33号対水上電探	Type 33 Surface Radar
 21号対空電探	Type 21 Air Radar
 32号対水上電探	Type 32 Surface Radar
-14号対空電探	Type 14 Air Radar
+42号対空電探	Type 42 Air Radar
 改良型艦本式タービン	Improved Kanhon Type Turbine
 強化型艦本式缶	Enhanced Kanhon Type Boiler
 三式弾	Type 3 Shell
@@ -38,19 +38,19 @@
 12.7mm単装機銃	12.7mm Single Machine Gun Mount
 25mm連装機銃	25mm Twin Autocannon Mount
 25mm三連装機銃	25mm Triple Autocannon Mount
-甲標的	Kouhyouteki
+甲標的 甲型	Kōhyōteki Model A
 応急修理要員	Emergency Repair Personnel
 応急修理女神	Emergency Repair Goddess
 九四式爆雷投射機	Type 94 Depth Charge Projector
 三式爆雷投射機	Type 3 Depth Charge Projector
 九三式水中聴音機	Type 93 Passive Sonar
 三式水中探信儀	Type 3 Active Sonar
-12.7cm単装高角砲	12.7cm Single High-angle Gun Mount
+12cm単装高角砲	12cm Single High-angle Gun Mount
 25mm単装機銃	25mm Single Autocannon Mount
 20.3cm(3号)連装砲	20.3cm (No.3) Twin Gun Mount
 12cm30連装噴進砲	12cm 30-tube Rocket Launcher
-流星改	Ryuusei Kai
-烈風改	Reppuu Kai
+流星改	Ryūsei Kai
+烈風改	Reppū Kai
 彩雲	Saiun
 紫電改二	Shiden Kai 2
 震電改	Shinden Kai
@@ -107,10 +107,10 @@ Ju87C改	Ju 87C Kai
 艦隊司令部施設	Fleet Command Facility
 熟練艦載機整備員	Skilled Carrier-based Aircraft Maintenance Personnel
 零戦52型丙(六〇一空)	Zero Fighter Model 52C (601 Air Group)
-烈風(六〇一空)	Reppuu (601 Air Group)
+烈風(六〇一空)	Reppū (601 Air Group)
 彗星(六〇一空)	Suisei (601 Air Group)
 天山(六〇一空)	Tenzan (601 Air Group)
-流星(六〇一空)	Ryuusei (601 Air Group)
+流星(六〇一空)	Ryūsei (601 Air Group)
 38cm連装砲改	38cm Twin Gun Mount Kai
 Ar196改	Ar196 Kai
 一式徹甲弾	Type 1 AP Shell
@@ -150,10 +150,10 @@ OTO 152mm三連装速射砲	OTO 152mm Triple Rapid Fire Gun Mount
 秋刀魚の缶詰	Canned Mackerel
 試製景雲(艦偵型)	Prototype Keiun (Carrier-based Reconnaissance Model)
 零式艦戦52型(熟練)	Type 0 Fighter Model 52 (Skilled)
-零戦52型丙(付岩井小隊)	Zero Fighter Model 52C (w/ Iwai Flight)
-零戦62型(爆戦/岩井隊)	Zero Fighter Model 62 (Fighter-bomber / Iwai Squadron)
-零戦21型(付岩本小隊)	Zero Fighter Model 21 (w/ Iwamoto Flight)
-零戦52型甲(付岩本小隊)	Zero Fighter Model 52A (w/ Iwamoto Flight)
+零戦52型丙(付岩井小隊)	Zero Fighter Model 52C (Iwai Flight)
+零戦62型(爆戦/岩井隊)	Zero Fighter Model 62 (Fighter-bomber/Iwai Squadron)
+零戦21型(付岩本小隊)	Zero Fighter Model 21 (Iwamoto Flight)
+零戦52型甲(付岩本小隊)	Zero Fighter Model 52A (Iwamoto Flight)
 零式艦戦53型(岩本隊)	Type 0 Fighter Model 53 (Iwamoto Squadron)
 Bf109T改	Bf 109T Kai
 Fw190T改	Fw 190T Kai
@@ -187,18 +187,19 @@ Re.2001 OR改	Re.2001 OR Kai
 銀河	Ginga
 Re.2001 G改	Re.2001 G Kai
 Re.2005 改	Re.2005 Kai
-38.1cm Mk.I連装砲		38.1cm Mk.I Twin Gun Mount
+38.1cm Mk.I連装砲	38.1cm Mk.I Twin Gun Mount
 QF 2ポンド8連装ポンポン砲	QF 2-pounder Octuple Pom-pom Gun Mount
 38.1cm Mk.I/N連装砲改	38.1cm Mk.I/N Twin Gun Mount Kai
-特大発動艇		Toku Daihatsu Landing Craft
+特大発動艇	Toku Daihatsu Landing Craft
 Laté 298B	Laté 298B
 SBD	SBD
 TBD	TBD
 F4F-3	F4F-3
 F4F-4	F4F-4
-SB2U	SB2U
 噴式景雲改	Jet Keiun Kai
 橘花改	Kikka Kai
+紫電一一型	Shiden Model 11
+紫電二一型 紫電改	Shiden Model 21 Shiden Kai
 艦本新設計 増設バルジ(中型艦)	New Kanhon Design Anti-torpedo Bulge (Medium)
 艦本新設計 増設バルジ(大型艦)	New Kanhon Design Anti-torpedo Bulge (Large)
 F6F-3	F6F-3
@@ -207,45 +208,92 @@ F6F-5	F6F-5
 晴嵐(六三一空)	Seiran (631 Air Group)
 彩雲(輸送用分解済)	Saiun (Disassembled for Transport)
 潜水艦搭載電探&水防式望遠鏡	Submarine Rader & Waterproof Periscope
-潜水艦搭載電探&逆探(E27)		Submarine Rader & Passive Radiolocator (E27)
+潜水艦搭載電探&逆探(E27)	Submarine Rader & Passive Radiolocator (E27)
 彩雲(東カロリン空)	Saiun (Eastern Caroline Air Group)
-後期型艦首魚雷(6門)			Late Model Bow Torpedo Mount (6 tubes)
+後期型艦首魚雷(6門)	Late Model Bow Torpedo Mount (6 tubes)
 熟練聴音員+後期型艦首魚雷(6門)	Skilled Sonar Personnel + Late Model Bow Torpedo Mount (6 tubes)
 Ro.44水上戦闘機bis	Ro.44 Seaplane Fighter bis
-二式水戦改(熟練)		Type 2 Seaplane Fighter Kai (Skilled)
-強風改	Kyoufuu Kai
+二式水戦改(熟練)	Type 2 Seaplane Fighter Kai (Skilled)
+強風改	Kyōfū Kai
+四式戦 疾風	Type 4 Fighter Hayate
 零式艦戦63型(爆戦)	Type 0 Fighter Model 63 (Fighter-bomber)
 8cm高角砲改+増設機銃	8cm High-angle Gun Kai + Extra Machine Guns
-一式戦 隼II型			Type 1 Fighter Hayabusa Model II
-一式戦 隼III型甲			Type 1 Fighter Hayabusa Model III A
+一式戦 隼II型	Type 1 Fighter Hayabusa Model II
+一式戦 隼III型甲	Type 1 Fighter Hayabusa Model III A
 一式戦 隼III型甲(54戦隊)	Type 1 Fighter Hayabusa Model III A (54th Squadron)
-爆装一式戦 隼III型改(55戦隊)	Bomb-carrying Type 1 Fighter Hayabusa Model III Kai (55th Squadron)
-一式戦 隼II型(64戦隊)		Type 1 Fighter Hayabusa Model II (64th Squadron)
-九五式爆雷		Type 95 Depth Charge Projector
-二式爆雷		Type 2 Depth Charge Projector
+爆装一式戦 隼III型改(65戦隊)	Bomb-carrying Type 1 Fighter Hayabusa Model III Kai (65th Squadron)
+一式戦 隼II型(64戦隊)	Type 1 Fighter Hayabusa Model II (64th Squadron)
+九五式爆雷	Type 95 Depth Charge Projector
+二式爆雷	Type 2 Depth Charge Projector
 九六式艦戦改	Type 96 Fighter Kai
 12.7cm単装高角砲(後期型)	12.7cm Single High-angle Gun Mount (Late Model)
 特大発動艇+戦車第11連隊	Toku Daihatsu Landing Craft + 11th Tank Regiment
-30.5cm三連装砲		30.5cm Triple Gun Mount
+30.5cm三連装砲	30.5cm Triple Gun Mount
 30.5cm三連装砲改	30.5cm Triple Gun Mount Kai
 F4U-1D	F4U-1D
 15.5cm三連装副砲改	15.5cm Triple Secondary Gun Mount Kai
-15.5cm三連装副改	15.5cm Triple Gun Mount Kai
-41cm三連装砲改		41cm Triple Gun Mount Kai
+15.5cm三連装砲改	15.5cm Triple Gun Mount Kai
+41cm三連装砲改	41cm Triple Gun Mount Kai
 瑞雲(六三四空/熟練)	Zuiun (634 Air Group/Skilled)
 零式水上偵察機11型乙	Type 0 Reconnaissance Seaplane Model 11B
+零式水上偵察機11型乙(熟練)	Type 0 Reconnaissance Seaplane Model 11B (Skilled)
+22号対水上電探改四(後期調整型)	Type 22 Surface Radar Kai 4 (Calibrated Late Model)
 戦闘糧食(特別なおにぎり)	Combat Ration (Special Onigiri)
-Swordfish					Swordfish
+Swordfish	Swordfish
 Swordfish Mk.II(熟練)	Swordfish Mk.II(Skilled)
 Swordfish Mk.III(熟練)	Swordfish Mk.III(Skilled)
-38cm四連装砲		38cm Quad Gun Mount
-38cm四連装砲改	38cm Quad Gun Mount Kai
+38cm四連装砲	38cm Quadruple Gun Mount
+38cm四連装砲改	38cm Quadruple Gun Mount Kai
 15.2cm三連装砲	15.2cm Triple Gun Mount
-Skua		Skua
+Skua	Skua
 Fulmar	Fulmar
-Spitfire Mk.I		Spitfire Mk.I
-Spitfire Mk.V		Spitfire Mk.V
-Seafire LF.Mk.III		Seafire LF.Mk.III
+Spitfire Mk.I	Spitfire Mk.I
+Spitfire Mk.V	Spitfire Mk.V
+Seafire Mk.III改	Seafire Mk.III Kai
 Spitfire Mk.IX(熟練)	Spitfire Mk.IX(Skilled)
 F6F-3N	F6F-3N
 F6F-5N	F6F-5N
+TBF	TBF
+TBM-3D	TBM-3D
+夜間作戦航空要員	Night Operation Aviation Personnel
+夜間作戦航空要員+熟練甲板員	Night Operation Aviation Personnel + Skilled Deckhands
+Type124 ASDIC	Type124 ASDIC
+Type144/147 ASDIC	Type144/147 ASDIC
+HF/DF + Type144/147 ASDIC	HF/DF + Type144/147 ASDIC
+紫電改(三四三空) 戦闘301		Shiden Kai (343 Air Group) 301st Fighter Squadron
+12.7cm連装砲C型改二	12.7cm Twin Gun Mount Model C Kai 2
+12.7cm連装砲D型改二	12.7cm Twin Gun Mount Model D Kai 2
+北方迷彩(+北方装備)	Arctic Camouflage (+ Arctic Equipment)
+試製東海			Prototype Tōkai
+東海(九〇一空)	Tōkai (901 Air Group)
+紫電改四			Shiden Kai 4
+遊撃部隊 艦隊司令部	Striking Force Fleet Command Facility
+彩雲(偵四)		Saiun (Reconnaissance 4)
+12cm30連装噴進砲改二	12cm 30-tube Rocket Launcher Kai 2
+10cm連装高角砲改+増設機銃	10cm Twin High-angle Gun Mount Kai + Additional Machine Guns
+46cm三連装砲改	46cm Triple Gun Mount Kai
+FM-2	FM-2
+SK レーダー	SK Radar
+SK&SG レーダー	SK&SG Radar
+QF 4.7inch砲 Mk.XII改	QF 4.7inch Gun Mk.XII Kai
+51cm連装砲	51cm Twin Gun Mount
+130mm B-13連装砲	130mm B-13 Twin Gun Mount
+533mm 三連装魚雷	533mm Triple Torpedo Mount
+5inch単装砲 Mk.30	5inch Single Gun Mount Mk.30
+61cm三連装(酸素)魚雷後期型		61cm Triple (Oxygen) Torpedo Mount Late Model
+61cm四連装(酸素)魚雷後期型		61cm Quadruple (Oxygen) Torpedo Mount Late Model
+三式爆雷投射機 集中配備	Type 3 Depth Charge Projector (Concentrated Deployment)
+試製15cm9連装対潜噴進砲	Prototype 15cm 9-tube ASW Rocket Launcher
+35.6cm三連装砲改(ダズル迷彩仕様)	35.6cm Triple Gun Mount Kai (Dazzle Camouflage)
+41cm三連装砲改二				41cm Triple Gun Mount Kai Ni
+彗星二二型(六三四空)		Suisei Model 22 (631 Air Group)
+彗星二二型(六三四空/熟練)	Suisei Model 22 (631 Air Group/Skilled)
+12cm単装砲改二		12cm Single Gun Mount Kai
+12.7cm連装砲A型改二	12.7cm Twin Gun Mount Model A Kai Ni
+12.7cm連装砲A型改三(戦時改修)+高射装置	12.7cm Twin Gun Mount Model A Kai 3 (Wartime Modification) + Anti-Aircraft Fire Director
+12.7cm連装砲B型改四(戦時改修)+高射装置	12.7cm Twin Gun Mount Model B Kai 4 (Wartime Modification) + Anti-Aircraft Fire Director
+12.7cm連装砲A型	12.7cm Twin Gun Mount Model A
+16inch Mk.I三連装砲				16inch Mk.I Triple Gun Mount‎
+16inch Mk.I三連装砲+AFCT改		16inch Mk.I Triple Gun Mount + AFCT Kai‎
+16inch Mk.I三連装砲改+FCR type284	16inch Mk.I Triple Gun Mount Kai + FCR Type 284‎
+20連装7inch UP Rocket Launchers		20-tube 7inch UP Rocket Launchers

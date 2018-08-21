@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using BeerViewer.Modules;
 using CefSharp;
 using CefSharp.WinForms;
 
@@ -46,17 +46,30 @@ namespace BeerViewer.Framework
 					"CefSharp.BrowserSubprocess.exe"
 				),
 			};
+			cefSettings.CefCommandLineArgs.Add("disable-extensions", "1");
 			// cefSettings.DisableGpuAcceleration();
 
 			CefSharpSettings.Proxy = new ProxyOptions("localhost", "49217");
 			CefSharpSettings.SubprocessExitIfParentProcessClosed = true;
-			CefSharpSettings.ShutdownOnExit = true;
 			Cef.EnableHighDPISupport();
 			Cef.Initialize(cefSettings, performDependencyCheck: false, browserProcessHandler: null);
 		}
 
 		public FrameworkBrowser(string address, IRequestContext requestContext = null) : base(address, requestContext)
 		{
+		}
+
+		public void Zoom(int zoomFactor)
+		{
+			try
+			{
+				this.SetZoomLevel(0);
+				this.SetZoomLevel(Math.Log(zoomFactor / 100.0) / Math.Log(1.2));
+			}
+			catch (Exception ex)
+			{
+				Logger.Log(ex.ToString());
+			}
 		}
 	}
 }

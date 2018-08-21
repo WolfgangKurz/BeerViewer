@@ -405,9 +405,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>XCOPY "$(SolutionDir)i18n" "$(TargetDir)i18n\" /Y /V
-
-# XCOPY "$(TargetDir)x86" "$(TargetDir)Libs\" /Y /V</PostBuildEvent>
+    <PostBuildEvent>XCOPY "$(SolutionDir)i18n" "$(TargetDir)i18n\" /Y /V</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
