@@ -25,7 +25,8 @@ namespace BeerViewer.Forms
 
 		public static frmMain Instance { get; }
 
-		public FrameworkBrowser Browser { get; }
+		public FrameworkBrowser WindowBrowser { get; }
+		public FrameworkBrowser GameBrowser { get; }
 		public TextBox LogView { get; }
 
 		static frmMain()
@@ -53,6 +54,7 @@ namespace BeerViewer.Forms
 			this.Move += (s, e) => Settings.WindowInformation.Value = this.GetWindowInformation();
 
 			#region LogView
+			/*
 			this.LogView = new TextBox()
 			{
 				Location = new Point(1, 720 + 29),
@@ -80,6 +82,7 @@ namespace BeerViewer.Forms
 				this.LogView.Size = new Size(1200, this.ClientSize.Height - 720 - 29);
 			};
 			this.Controls.Add(this.LogView);
+			*/
 			#endregion
 
 
@@ -104,8 +107,8 @@ namespace BeerViewer.Forms
 			ComponentService.Instance.Initialize();
 			#endregion
 
-
 			#region Menu Button rendering
+			/*
 			var MenuButton = new FrameworkControl(1, 1, 120, 28);
 			MenuButton.Paint += (s, e) =>
 			{
@@ -131,10 +134,23 @@ namespace BeerViewer.Forms
 				// TODO: Open Menu
 			};
 			this.Renderer.AddControl(MenuButton);
+			*/
 			#endregion
 
-			#region Browser
-			this.Browser = new FrameworkBrowser("")
+			#region WindowBrowser
+			this.WindowBrowser = new FrameworkBrowser("")
+			{
+				Dock = DockStyle.Fill,
+				AllowDrop = false,
+
+				// To remove context menu
+				MenuHandler = new NoMenuHandler()
+			};
+			WindowBrowser.Load("");
+			#endregion
+
+			#region GameBrowser
+			this.GameBrowser = new FrameworkBrowser("")
 			{
 				Location = new Point(1, 29),
 				Size = new Size(1200, 720),
@@ -144,14 +160,14 @@ namespace BeerViewer.Forms
 				// To remove context menu
 				MenuHandler = new NoMenuHandler()
 			};
-			this.Browser.FrameLoadEnd += async (s, e) =>
+			this.GameBrowser.FrameLoadEnd += async (s, e) =>
 			{
 				var rootUri = Extensions.UriOrBlank(e.Browser.MainFrame?.Url);
 				var frameUri = Extensions.UriOrBlank(e.Url);
 
 				// Cookie patch
 				if (rootUri.Host == "www.dmm.com")
-					await this.Browser.GetBrowser().MainFrame.EvaluateScriptAsync(Constants.DMMCookie);
+					await this.GameBrowser.GetBrowser().MainFrame.EvaluateScriptAsync(Constants.DMMCookie);
 
 				// CSS patch
 				if (rootUri.AbsoluteUri == Constants.GameURL)
@@ -167,13 +183,14 @@ namespace BeerViewer.Forms
 							document.body.appendChild(x);
 						}"
 					).ToEvaluatableString();
-					await this.Browser.GetBrowser().MainFrame.EvaluateScriptAsync(script);
+					await this.GameBrowser.GetBrowser().MainFrame.EvaluateScriptAsync(script);
 				}
 			};
-			this.Browser.Load(Constants.GameURL);
-			this.Controls.Add(this.Browser);
+			// this.GameBrowser.Load(Constants.GameURL);
+			this.Controls.Add(this.GameBrowser);
 			#endregion
 
+			/*
 			#region Expedition bar
 			var ExpeditionBars = new ExpeditionBar[3]
 			{
@@ -235,7 +252,7 @@ namespace BeerViewer.Forms
 				// Overview.Height = this.ClientSize.Height - (29 + 28);
 			};
 			#endregion
-
+			*/
 
 			this.OnResize(EventArgs.Empty);
 		}
