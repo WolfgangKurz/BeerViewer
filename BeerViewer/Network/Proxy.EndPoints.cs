@@ -5,7 +5,7 @@
 		/// <summary>
 		/// "/kcsapi/api_start2" endpoint
 		/// </summary>
-		public static string api_start2 => "/kcsapi/api_start2";
+		public static string api_start2 => "/kcsapi/api_start2/getData";
 
 		/// <summary>
 		/// "/kcsapi/api_port/port" endpoint

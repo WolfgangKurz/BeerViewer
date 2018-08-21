@@ -7,6 +7,11 @@ using System.Windows.Forms;
 
 using BeerViewer.Framework;
 using BeerViewer.Forms;
+using System.IO;
+using System.Reflection;
+
+using CefSharp;
+using CefSharp.WinForms;
 
 namespace BeerViewer
 {

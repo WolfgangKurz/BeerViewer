@@ -4,6 +4,8 @@ using System.Text;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Drawing;
+using BeerViewer.Framework;
 
 namespace BeerViewer
 {
@@ -175,6 +177,12 @@ namespace BeerViewer
 							}
 
 						default:
+							if (typeof(T) == typeof(WindowInfo))
+							{
+								rValue = (T)Convert.ChangeType(WindowInfo.Parse(sValue), typeof(T));
+								ret = true;
+								break;
+							}
 							rValue = (T)Convert.ChangeType(sValue, typeof(T));
 							break;
 					}
@@ -221,5 +229,10 @@ namespace BeerViewer
 		/// Notification adjust time (for expedition, construction, etc.)
 		/// </summary>
 		public static SettingValue<int> NotificationTime { get; } = new SettingValue<int>(getKey(), "Setting", 60);
+
+		/// <summary>
+		/// Notification adjust time (for expedition, construction, etc.)
+		/// </summary>
+		public static SettingValue<WindowInfo> WindowInformation { get; } = new SettingValue<WindowInfo>(getKey(), "Setting", new WindowInfo(null, null, 1440, 840));
 	}
 }

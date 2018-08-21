@@ -29,7 +29,7 @@ namespace Performancer
 					@"x9\.shinobi\.jp",
 					@"cnt\.fout\.jp",
 					@"tg\.socdm\.com",
-					@".+\.fls.doubleclick\.net",
+					@".+\.+\.doubleclick\.net",
 					@"comcluster\.cxense\.com",
 					@"ad\.maist\.jp",
 					@"i\.socdm\.com",

@@ -41,15 +41,15 @@ namespace Performancer
 				// if (b) Logger.Log($"Performancer Block: {r.Host}");
 				return !b;
 			});
-			proxy.RegisterModifiable("/gadget/js/kcs_flash.js", (s, b) =>
+			proxy.RegisterModifiable((s, b) =>
 			{
-				Logger.Log("Flash quality adjusting");
+				if (!s.Request.PathAndQuery.StartsWith("/kcs2/index.php"))
+					return b;
 
 				var utf8 = Encoding.UTF8;
-
 				var str = utf8.GetString(b);
-				str = new Regex("(\"quality\" +: +\")high\"")
-					.Replace(str, "$1low\"");
+
+				str = str.Replace("KCS.init();", "PIXI.settings.RENDER_OPTIONS.clearBeforeRender=false; KCS.init();");
 
 				return utf8.GetBytes(str);
 			});

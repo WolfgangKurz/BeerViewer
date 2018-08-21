@@ -1,5 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\CefSharp.Wpf.67.0.0-pre01\build\CefSharp.Wpf.props" Condition="Exists('..\packages\CefSharp.Wpf.67.0.0-pre01\build\CefSharp.Wpf.props')" />
+  <Import Project="..\packages\CefSharp.Common.67.0.0-pre01\build\CefSharp.Common.props" Condition="Exists('..\packages\CefSharp.Common.67.0.0-pre01\build\CefSharp.Common.props')" />
+  <Import Project="..\packages\cef.redist.x86.3.3396.1786\build\cef.redist.x86.props" Condition="Exists('..\packages\cef.redist.x86.3.3396.1786\build\cef.redist.x86.props')" />
+  <Import Project="..\packages\cef.redist.x64.3.3396.1786\build\cef.redist.x64.props" Condition="Exists('..\packages\cef.redist.x64.3.3396.1786\build\cef.redist.x64.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -9,7 +13,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>BeerViewer</RootNamespace>
     <AssemblyName>BeerViewer</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
@@ -60,15 +64,27 @@
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Nekoxy, Version=1.5.2.20, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Nekoxy.1.5.2.20\lib\net45\Nekoxy.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
@@ -80,10 +96,6 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="TrotiNet, Version=0.8.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Nekoxy.1.5.2.20\lib\net45\TrotiNet.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
@@ -97,6 +109,7 @@
     <Compile Include="Framework\BorderlessWindow.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Framework\FrameworkBrowser.cs" />
     <Compile Include="Framework\FrameworkConstants.cs" />
     <Compile Include="Framework\FrameworkContainer.cs" />
     <Compile Include="Framework\FrameworkControl.cs" />
@@ -113,6 +126,7 @@
     <Compile Include="Modules\Component\Component.cs" />
     <Compile Include="Modules\Component\ComponentService.cs" />
     <Compile Include="Modules\Component\IComponent.cs" />
+    <Compile Include="Modules\Extensions.cs" />
     <Compile Include="Modules\i18n.cs" />
     <Compile Include="Libraries\DynamicJson.cs" />
     <Compile Include="Modules\Logger.cs" />
@@ -322,7 +336,6 @@
       <SubType>Designer</SubType>
     </None>
     <Compile Include="Network\Proxy.EndPoints.cs" />
-    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -376,9 +389,25 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="cef.redist.x86">
+      <Version>3.3396.1786</Version>
+    </PackageReference>
+    <PackageReference Include="CefSharp.Common">
+      <Version>67.0.0-pre01</Version>
+    </PackageReference>
+    <PackageReference Include="CefSharp.WinForms">
+      <Version>67.0.0-pre01</Version>
+    </PackageReference>
+    <PackageReference Include="Nekoxy">
+      <Version>1.5.3.21</Version>
+    </PackageReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>XCOPY "$(SolutionDir)i18n" "$(TargetDir)i18n\" /Y /V</PostBuildEvent>
+    <PostBuildEvent>XCOPY "$(SolutionDir)i18n" "$(TargetDir)i18n\" /Y /V
+
+# XCOPY "$(TargetDir)x86" "$(TargetDir)Libs\" /Y /V</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -3,6 +3,31 @@ using System.Runtime.InteropServices;
 
 namespace BeerViewer.Framework
 {
+	#region Classes
+	public abstract class SettingValueBase : IConvertible
+	{
+		public TypeCode GetTypeCode() => TypeCode.Object;
+
+		public bool ToBoolean(IFormatProvider provider) => throw new NotImplementedException();
+		public byte ToByte(IFormatProvider provider) => throw new NotImplementedException();
+		public char ToChar(IFormatProvider provider) => throw new NotImplementedException();
+		public DateTime ToDateTime(IFormatProvider provider) => throw new NotImplementedException();
+		public decimal ToDecimal(IFormatProvider provider) => throw new NotImplementedException();
+		public double ToDouble(IFormatProvider provider) => throw new NotImplementedException();
+		public short ToInt16(IFormatProvider provider) => throw new NotImplementedException();
+		public int ToInt32(IFormatProvider provider) => throw new NotImplementedException();
+		public long ToInt64(IFormatProvider provider) => throw new NotImplementedException();
+		public sbyte ToSByte(IFormatProvider provider) => throw new NotImplementedException();
+		public float ToSingle(IFormatProvider provider) => throw new NotImplementedException();
+		public ushort ToUInt16(IFormatProvider provider) => throw new NotImplementedException();
+		public uint ToUInt32(IFormatProvider provider) => throw new NotImplementedException();
+		public ulong ToUInt64(IFormatProvider provider) => throw new NotImplementedException();
+
+		public abstract string ToString(IFormatProvider provider);
+		public abstract object ToType(Type conversionType, IFormatProvider provider);
+	}
+	#endregion
+
 	#region Enums
 	internal enum DWMWINDOWATTRIBUTE : uint
 	{
@@ -310,6 +335,64 @@ namespace BeerViewer.Framework
 		public IntPtr hWndTarget;
 		public POINTS ptsLocation;
 		public uint dwInstanceID;
+	}
+
+	[StructLayout(LayoutKind.Sequential)]
+	public class WindowInfo
+	{
+		public int? Left { get; set; }
+		public int? Top { get; set; }
+		public int Width { get; set; }
+		public int Height { get; set; }
+
+		public WindowInfo() { }
+		public WindowInfo(int? Left, int? Top, int Width, int Height) : this()
+		{
+			this.Left = Left;
+			this.Top = Top;
+			this.Width = Width;
+			this.Height = Height;
+		}
+
+		public override string ToString()
+			=> string.Format(
+				"{0},{1},{2},{3}",
+				this.Left.HasValue ? this.Left.Value.ToString() : "",
+				this.Top.HasValue ? this.Top.Value.ToString() : "",
+				this.Width,
+				this.Height
+			);
+
+		public static WindowInfo Parse(string Value)
+		{
+			if (Value == null) throw new ArgumentNullException(nameof(Value));
+			if (string.IsNullOrEmpty(Value)) throw new ArgumentException(nameof(Value));
+
+			var parts = Value.Split(',');
+			if (parts.Length != 4) throw new ArgumentException(nameof(Value));
+
+			var output = new WindowInfo();
+			int value;
+
+			if (parts[0].Length > 0)
+			{
+				if (!int.TryParse(parts[0], out value)) throw new ArgumentException(nameof(Value));
+				output.Left = value;
+			}
+			if (parts[1].Length > 0)
+			{
+				if (!int.TryParse(parts[1], out value)) throw new ArgumentException(nameof(Value));
+				output.Top = value;
+			}
+
+			if (!int.TryParse(parts[2], out value)) throw new ArgumentException(nameof(Value));
+			output.Width = value;
+
+			if (!int.TryParse(parts[3], out value)) throw new ArgumentException(nameof(Value));
+			output.Height = value;
+
+			return output;
+		}
 	}
 	#endregion
 

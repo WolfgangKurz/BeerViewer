@@ -25,7 +25,7 @@ namespace BeerViewer.Forms
 
 		public static frmMain Instance { get; }
 
-		public WebBrowser Browser { get; }
+		public FrameworkBrowser Browser { get; }
 		public TextBox LogView { get; }
 
 		static frmMain()
@@ -38,17 +38,25 @@ namespace BeerViewer.Forms
 			Master.Instance.Ready();
 			Homeport.Instance.Ready();
 
-			this.Size = new Size(1024, 576);
+			/// Load <see cref="WindowInfo" /> settings
+			{
+				var info = Settings.WindowInformation.Value;
+				this.Size = new Size(info.Width, info.Height);
+				if (info.Left.HasValue) this.Left = info.Left.Value;
+				if (info.Top.HasValue) this.Top = info.Top.Value;
+			}
 			this.MinimumSize = new Size(
-				800 + 2,
-				480 + 28 + 2
+				1200 + 2,
+				720 + 28 + 2
 			);
+			this.ResizeEnd += (s, e) => Settings.WindowInformation.Value = this.GetWindowInformation();
+			this.Move += (s, e) => Settings.WindowInformation.Value = this.GetWindowInformation();
 
 			#region LogView
 			this.LogView = new TextBox()
 			{
-				Location = new Point(1, 480 + 29),
-				Size = new Size(800, 80),
+				Location = new Point(1, 720 + 29),
+				Size = new Size(1200, 80),
 
 				Multiline = true,
 				ScrollBars = ScrollBars.Vertical,
@@ -69,13 +77,14 @@ namespace BeerViewer.Forms
 			};
 			this.Resize += (s, e) =>
 			{
-				this.LogView.Size = new Size(800, this.ClientSize.Height - 480 - 29);
+				this.LogView.Size = new Size(1200, this.ClientSize.Height - 720 - 29);
 			};
 			this.Controls.Add(this.LogView);
 			#endregion
 
 
 			#region GC timer
+			#if USE_GC
 			{
 				var timer = new System.Timers.Timer(5000);
 				timer.Elapsed += (s, e) =>
@@ -88,6 +97,7 @@ namespace BeerViewer.Forms
 				};
 				timer.Start();
 			}
+			#endif
 			#endregion
 
 			#region ComponentService
@@ -124,34 +134,43 @@ namespace BeerViewer.Forms
 			#endregion
 
 			#region Browser
-			this.Browser = new WebBrowser()
+			this.Browser = new FrameworkBrowser("")
 			{
 				Location = new Point(1, 29),
-				Size = new Size(800, 480),
+				Size = new Size(1200, 720),
+				Dock = DockStyle.None,
+				AllowDrop = false,
 
-				ScriptErrorsSuppressed = true,
-				AllowWebBrowserDrop = false,
-				IsWebBrowserContextMenuEnabled = false,
-
-				Url = new Uri(Constants.GameURL)
+				// To remove context menu
+				MenuHandler = new NoMenuHandler()
 			};
-			this.Browser.Navigated += (s, e) =>
+			this.Browser.FrameLoadEnd += async (s, e) =>
 			{
+				var rootUri = Extensions.UriOrBlank(e.Browser.MainFrame?.Url);
+				var frameUri = Extensions.UriOrBlank(e.Url);
+
 				// Cookie patch
-				if (e.Url.Host == "www.dmm.com")
-					this.Browser.Document.InvokeScript("eval", new object[] { Constants.DMMCookie });
+				if (rootUri.Host == "www.dmm.com")
+					await this.Browser.GetBrowser().MainFrame.EvaluateScriptAsync(Constants.DMMCookie);
 
 				// CSS patch
-				if (e.Url.AbsoluteUri == Constants.GameURL)
+				if (rootUri.AbsoluteUri == Constants.GameURL)
 				{
-					var script = string.Format(
-						"document.addEventListener('DOMContentLoaded', function(){{ var x=document.createElement('style');x.type='text/css';x.innerHTML='{0}';document.body.appendChild(x); }});",
-						Constants.UserStyleSheet
-					);
-					this.Browser.Document.InvokeScript("eval", new object[] { script });
+					var script =
+					(
+						@"var x = document.querySelector('#game_style');
+						if(!x) {
+							x = document.createElement('style');
+							x.id='game_style';
+							x.type='text/css';
+							x.innerHTML='" + Constants.UserStyleSheet + @"';
+							document.body.appendChild(x);
+						}"
+					).ToEvaluatableString();
+					await this.Browser.GetBrowser().MainFrame.EvaluateScriptAsync(script);
 				}
 			};
-
+			this.Browser.Load(Constants.GameURL);
 			this.Controls.Add(this.Browser);
 			#endregion
 
@@ -190,18 +209,18 @@ namespace BeerViewer.Forms
 					"Overview",
 					Constants.fontBig,
 					Brushes.White,
-					new Point(800 + 8, 28 + 2)
+					new Point(1200 + 8, 28 + 2)
 				);
 				g.DrawLine(
 					Constants.penActiveFace,
-					new Point(800, 29 + 27),
+					new Point(1200, 29 + 27),
 					new Point(this.ClientSize.Width - 1, 29 + 27)
 				);
 			};
 			#endregion
 
 			#region Overview
-			var Overview = new OverviewView(800, 29 + 28, 1, 24);
+			var Overview = new OverviewView(1200, 29 + 28, 1, 24);
 			Homeport.Instance.Organization.PropertyEvent(nameof(Homeport.Instance.Organization.Fleets), () =>
 			{
 				var fleets = Homeport.Instance.Organization.Fleets;
@@ -211,7 +230,7 @@ namespace BeerViewer.Forms
 
 			this.Resize += (s, e) =>
 			{
-				Overview.Width = this.ClientSize.Width - 800;
+				Overview.Width = this.ClientSize.Width - 1200;
 				Overview.MaximumHeight = this.ClientSize.Height - (29 + 28) + 1;
 				// Overview.Height = this.ClientSize.Height - (29 + 28);
 			};

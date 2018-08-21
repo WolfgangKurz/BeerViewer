@@ -120,5 +120,19 @@ namespace BeerViewer.Framework
 
 		internal static void SetTabletMode(bool IsTablet) => TabletMode = IsTablet;
 		private static bool TabletMode { get; set; }
+
+		/// <summary>
+		/// Get <see cref="WindowInfo"/> from Form window
+		/// </summary>
+		internal static WindowInfo GetWindowInformation(this Form form)
+		{
+			return new WindowInfo
+			{
+				Left = form.Left,
+				Top = form.Top,
+				Width = form.ClientSize.Width,
+				Height = form.ClientSize.Height
+			};
+		}
 	}
 }
