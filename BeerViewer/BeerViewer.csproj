@@ -308,6 +308,7 @@
     <Compile Include="Models\Wrapper\SlotItemInfo.cs" />
     <Compile Include="Models\Wrapper\UseItem.cs" />
     <Compile Include="Models\Wrapper\UseItemInfo.cs" />
+    <Compile Include="Modules\WindowBrowserCommicator.cs" />
     <Compile Include="Network\HttpProxy.cs" />
     <Compile Include="Network\ModifiableProxy.cs" />
     <Compile Include="Network\NetworkExtensions.cs" />
@@ -318,6 +319,11 @@
     <Compile Include="Network\WinInetUtil.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Settings.cs" />
     <EmbeddedResource Include="Forms\frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>
@@ -325,13 +331,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
@@ -347,35 +347,34 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\System Buttons.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Menu Button.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Numbers.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\icon_ammo.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\icon_bauxite.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\icon_fuel.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\icon_steel.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\icon_bucket.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="Forms\Controls\Fleets\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon.ico" />
+    <Content Include="WindowFrame\modules\window\window.js" />
+    <None Include="Resources\icon_ammo.png" />
+    <None Include="Resources\icon_bauxite.png" />
+    <None Include="Resources\icon_bucket.png" />
+    <None Include="Resources\icon_fuel.png" />
     <None Include="Resources\icon_screw.png" />
+    <None Include="Resources\icon_steel.png" />
+    <None Include="Resources\Menu Button.png" />
+    <None Include="Resources\System Buttons.png" />
+    <Content Include="WindowFrame\app.css" />
+    <Content Include="WindowFrame\Application.html" />
+    <Content Include="WindowFrame\assets\icon_ammo.png" />
+    <Content Include="WindowFrame\assets\icon_bauxite.png" />
+    <Content Include="WindowFrame\assets\icon_bucket.png" />
+    <Content Include="WindowFrame\assets\icon_fuel.png" />
+    <Content Include="WindowFrame\assets\icon_screw.png" />
+    <Content Include="WindowFrame\assets\icon_steel.png" />
+    <Content Include="WindowFrame\assets\Menu Button.png" />
+    <Content Include="WindowFrame\assets\Numbers.png" />
+    <Content Include="WindowFrame\assets\System Buttons.png" />
+    <Content Include="WindowFrame\modules\common.js" />
+    <Content Include="WindowFrame\modules\expedition\expedition.css" />
+    <Content Include="WindowFrame\modules\expedition\expedition.js" />
+    <Content Include="WindowFrame\modules\module.js" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
@@ -405,7 +404,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>XCOPY "$(SolutionDir)i18n" "$(TargetDir)i18n\" /Y /V</PostBuildEvent>
+    <PostBuildEvent>XCOPY "$(SolutionDir)i18n" "$(TargetDir)i18n\" /Y /V /E
+XCOPY "$(ProjectDir)WindowFrame" "$(TargetDir)WindowFrame\" /Y /V /E</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -42,29 +42,17 @@ namespace BeerViewer.Forms.Controls
 			this.Paint += this.OnPaint;
 		}
 
-		private int DrawBitmapNumber(Graphics g, string Text, Point pos, bool OnCenter, int ColorIndex = 0)
+		private int DrawText(Graphics g, string Text, Point pos, bool OnCenter = false, Brush ColorBrush = null)
 		{
-			int p = 4, h = 7;
-			int p2 = p + 2, hh = h / 2;
-			var table = "0123456789[]:";
-			int x = -p2 + pos.X - (OnCenter ? Text.Length * p2 / 2 : 0);
-			int y = pos.Y - (OnCenter ? hh : 0);
-
-			foreach (var c in Text)
-			{
-				x += (c == ' ' ? 2 : p2);
-
-				int offset = table.IndexOf(c);
-				if (offset < 0) continue;
-
-				g.DrawImage(
-					Constants.BitmapNumber,
-					new Rectangle(x, y, p, h),
-					new Rectangle(offset * p, h * ColorIndex, p, h),
-					GraphicsUnit.Pixel
-				);
-			}
-			return x - pos.X;
+			var font = Constants.fontDefault;
+			var ms = g.MeasureString(Text, font);
+			g.DrawString(
+				Text,
+				font,
+				ColorBrush ?? Brushes.White,
+				OnCenter ? new Point(pos.X - (int)(ms.Width / 2), pos.Y - (int)(font.Size / 2)) : pos
+			);
+			return (int)ms.Width;
 		}
 		private void OnPaint(object sender, PaintEventArgs e)
 		{
@@ -106,12 +94,14 @@ namespace BeerViewer.Forms.Controls
 				);
 				x += img.Width + 4;
 
-				x += this.DrawBitmapNumber(
+				x += this.DrawText(
 					g,
 					value.ToString(),
-					new Point(x, this.ClientBound.Height / 2 - 3),
+					new Point(x, this.ClientBound.Height / 2 - 8),
 					false,
-					((i < 4) && (value < admiral?.ResourceLimit)) ? 2 : 1
+					((i < 4) && (value < admiral?.ResourceLimit))
+						? Constants.brushYellowAccent
+						: Brushes.White
 				) + 12;
 			}
 			this.Width = Math.Max(1, x);

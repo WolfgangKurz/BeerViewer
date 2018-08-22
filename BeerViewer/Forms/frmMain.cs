@@ -39,6 +39,8 @@ namespace BeerViewer.Forms
 			Master.Instance.Ready();
 			Homeport.Instance.Ready();
 
+			this.FormClosed += (s, e) => Application.Exit();
+
 			/// Load <see cref="WindowInfo" /> settings
 			{
 				var info = Settings.WindowInformation.Value;
@@ -108,7 +110,6 @@ namespace BeerViewer.Forms
 			#endregion
 
 			#region Menu Button rendering
-			/*
 			var MenuButton = new FrameworkControl(1, 1, 120, 28);
 			MenuButton.Paint += (s, e) =>
 			{
@@ -117,7 +118,7 @@ namespace BeerViewer.Forms
 
 				if (c.IsHover) g.FillRectangle(c.IsActive ? Constants.brushActiveFace : Constants.brushHoverFace, c.ClientBound);
 				g.DrawImage(
-					Properties.Resources.Menu_Button,
+					Properties.Resources.button_menu,
 					new Rectangle(0, 0, 28, 28),
 					new Rectangle(0, 0, 28, 28),
 					GraphicsUnit.Pixel
@@ -134,20 +135,34 @@ namespace BeerViewer.Forms
 				// TODO: Open Menu
 			};
 			this.Renderer.AddControl(MenuButton);
-			*/
 			#endregion
 
 			#region WindowBrowser
 			this.WindowBrowser = new FrameworkBrowser("")
 			{
-				Dock = DockStyle.Fill,
+				Dock = DockStyle.None,
 				AllowDrop = false,
+				Location = new Point(1, 1),
 
 				// To remove context menu
 				MenuHandler = new NoMenuHandler()
 			};
-			WindowBrowser.Load("");
+			this.WindowBrowser.JavascriptObjectRepository.Register("API", new WindowBrowserCommicator(this), true);
+
+			this.Resize += (s, e) => this.WindowBrowser.Size = new Size(this.ClientSize.Width - 2, this.ClientSize.Height - 30);
+			this.WindowBrowser.Load("file:///" + Constants.EntryDir.Replace("\\", "/") + "/WindowFrame/Application.html");
+			this.Controls.Add(this.WindowBrowser);
+
+			this.WindowBrowser.IsBrowserInitializedChanged += (s, e) =>
+			{
+				//if (e.IsBrowserInitialized) this.WindowBrowser.GetBrowser().GetHost().ShowDevTools();
+			};
 			#endregion
+
+			this.MouseDown += (s, e) =>
+			{
+				WindowBrowserCommicator.SendMessage(this.Handle, WindowBrowserCommicator.WM_NCLBUTTONDOWN, WindowBrowserCommicator.HTCAPTION, 0);
+			};
 
 			#region GameBrowser
 			this.GameBrowser = new FrameworkBrowser("")
@@ -187,10 +202,9 @@ namespace BeerViewer.Forms
 				}
 			};
 			// this.GameBrowser.Load(Constants.GameURL);
-			this.Controls.Add(this.GameBrowser);
+			// this.Controls.Add(this.GameBrowser);
 			#endregion
 
-			/*
 			#region Expedition bar
 			var ExpeditionBars = new ExpeditionBar[3]
 			{
@@ -217,7 +231,7 @@ namespace BeerViewer.Forms
 				this.Renderer.AddControl(bar);
 			}
 			#endregion
-
+			/*
 			#region Menu Name Rendering
 			this.Paint += (s, e) =>
 			{

@@ -1,0 +1,15 @@
+﻿.top-expeditions {
+	padding: 0 5px;
+}
+.top-expeditions::after {
+	content: "";
+	display: table;
+	clear: both;
+}
+.top-expeditions > .top-expedition {
+	display: inline-block;
+	margin: 8px 5px;
+	width: 80px;
+	height: 14px;
+	overflow: hidden;
+}

@@ -269,7 +269,7 @@ namespace BeerViewer.Framework
 
 					if (c.IsHover) g.FillRectangle(c.IsActive ? Constants.brushActiveFace : Constants.brushHoverFace, c.ClientBound);
 					g.DrawImage(
-						Properties.Resources.System_Buttons,
+						Properties.Resources.button_system,
 						new Rectangle(0, 0, 32, 28),
 						new Rectangle(64, (this.WindowState == FormWindowState.Maximized ? 28 : 0), 32, 28),
 						GraphicsUnit.Pixel
@@ -282,7 +282,7 @@ namespace BeerViewer.Framework
 
 					if (c.IsHover) g.FillRectangle(c.IsActive ? Constants.brushActiveFace : Constants.brushHoverFace, c.ClientBound);
 					g.DrawImage(
-						Properties.Resources.System_Buttons,
+						Properties.Resources.button_system,
 						new Rectangle(0, 0, 32, 28),
 						new Rectangle(32, (this.WindowState == FormWindowState.Maximized ? 28 : 0), 32, 28),
 						GraphicsUnit.Pixel
@@ -295,7 +295,7 @@ namespace BeerViewer.Framework
 
 					if (c.IsHover) g.FillRectangle(c.IsActive ? Constants.brushActiveFace : Constants.brushHoverFace, c.ClientBound);
 					g.DrawImage(
-						Properties.Resources.System_Buttons,
+						Properties.Resources.button_system,
 						new Rectangle(0, 0, 32, 28),
 						new Rectangle(0, (this.WindowState == FormWindowState.Maximized ? 28 : 0), 32, 28),
 						GraphicsUnit.Pixel
@@ -330,7 +330,6 @@ namespace BeerViewer.Framework
 
 						MaximizeButton.Visible = true;
 					}
-
 					this.Invalidate();
 				};
 			}

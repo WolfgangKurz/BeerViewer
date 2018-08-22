@@ -1,0 +1,63 @@
+﻿@font-face {
+	font-family: 'Spoqa Han Sans';
+	font-weight: 700;
+	src: url('assets/fonts/SpoqaHanSansBold.woff2') format('woff2');
+}
+@font-face {
+	font-family: 'Spoqa Han Sans';
+	font-weight: 400;
+	src: url('assets/fonts/SpoqaHanSansRegular.woff2') format('woff2');
+}
+@font-face {
+	font-family: 'Spoqa Han Sans JP';
+	font-weight: 700;
+	src: url('assets/fonts/SpoqaHanSansJPBold.woff2') format('woff2');
+}
+@font-face {
+	font-family: 'Spoqa Han Sans JP';
+	font-weight: 400;
+	src: url('assets/fonts/SpoqaHanSansJPRegular.woff2') format('woff2');
+}
+
+
+* {
+	box-sizing: border-box;
+	user-select: none;
+}
+html, body {
+	margin: 0;
+	padding: 0;
+	outline: 0;
+	border: 0;
+	height: 100%;
+	background-color: #222225;
+	font: 12px "Spoqa Han Sans JP", "Spoqa Han Sans", "Segoe UI", "Malgun Gothic", sans-serif;
+	color: #fff;
+}
+img { vertical-align: bottom }
+
+#top-area {
+	height: 28px;
+	line-height: 28px;
+}
+
+#top-area .top-menubutton {
+	display: inline-block;
+	margin: 1px;
+	padding-right: 8px;
+	cursor: pointer;
+}
+#top-area .top-menubutton::after {
+	content: "";
+	display: table;
+	clear: both;
+}
+#top-area .top-menubutton:hover {
+	background-color: #313131;
+}
+#top-area .top-menubutton:active {
+	background-color: #575757;
+}
+#top-area .top-menubutton > * {
+	float: left;
+}

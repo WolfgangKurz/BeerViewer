@@ -87,7 +87,7 @@ namespace BeerViewer.Forms.Controls.Overview
 				if (offset < 0) continue;
 
 				g.DrawImage(
-					Constants.BitmapNumber,
+					null,//Constants.BitmapNumber,
 					new Rectangle(x, y, p, h),
 					new Rectangle(offset * p, h * ColorIndex, p, h),
 					GraphicsUnit.Pixel

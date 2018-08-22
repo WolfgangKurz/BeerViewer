@@ -24,8 +24,6 @@ namespace BeerViewer
 			+ "#game_frame { position:fixed; left:50%; top:-16px; margin-left:-600px; z-index:1 }"
 			+ ".area-pickupgame, .area-menu { display: none !important }";
 
-		public static Image BitmapNumber => BeerViewer.Properties.Resources.Numbers;
-
 		public static Color colorNormalFace { get; } = FrameworkExtension.FromRgb(0x222225);
 		public static Color colorHoverFace { get; } = FrameworkExtension.FromRgb(0x313131);
 		public static Color colorActiveFace { get; } = FrameworkExtension.FromRgb(0x575757);
@@ -76,5 +74,7 @@ namespace BeerViewer
 		public static Font fontDefault { get; } = new Font(FontFamily, 12 * FontDPI);
 		public static Font fontSmall { get; } = new Font(FontFamily, 11 * FontDPI);
 		public static Font fontBig { get; } = new Font(FontFamily, 14 * FontDPI);
+
+		public static string EntryDir { get; } = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
 	}
 }
