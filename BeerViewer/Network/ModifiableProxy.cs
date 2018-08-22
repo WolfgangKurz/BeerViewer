@@ -112,6 +112,10 @@ namespace BeerViewer.Network
 			AfterReadRequestHeaders?.Invoke(req);
 
 			this.currentSession = new Session();
+			/*
+			this.SocketPS.WriteBinary(Encoding.ASCII.GetBytes(
+				$"{this.RequestLine.RequestLine}\r\n{this.RequestHeaders.HeadersInOrder}\r\n"));
+			*/
 			this.SocketPS.WriteAsciiLine(this.RequestLine.RequestLine);
 			this.SocketPS.WriteAsciiLine(this.RequestHeaders.HeadersInOrder);
 

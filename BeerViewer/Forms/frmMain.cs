@@ -14,6 +14,8 @@ using BeerViewer.Modules;
 
 using System.Runtime.InteropServices;
 
+using IFrameworkBrowserFrame = CefSharp.IFrame;
+
 namespace BeerViewer.Forms
 {
 	public partial class frmMain : BorderlessWindow
@@ -24,7 +26,7 @@ namespace BeerViewer.Forms
 		public static frmMain Instance { get; }
 
 		public FrameworkBrowser WindowBrowser { get; }
-		public IFrameworkBrowser GameBrowser { get; private set; }
+		public IFrameworkBrowserFrame GameBrowser { get; private set; }
 		public WindowBrowserCommicator Communicator { get; }
 
 		static frmMain()
@@ -46,7 +48,6 @@ namespace BeerViewer.Forms
 				this.Controls.Remove(this.WindowBrowser);
 
 				Network.Proxy.Instance.Dispose();
-				Application.Exit();
 			};
 
 			/// Load <see cref="WindowInfo" /> settings
@@ -57,13 +58,14 @@ namespace BeerViewer.Forms
 				if (info.Top.HasValue) this.Top = info.Top.Value;
 			}
 			this.MinimumSize = new Size(
-				1200 + 2,
-				720 + 28 + 2
+				800 + 2,
+				480 + 28 + 2
 			);
 			this.ResizeEnd += (s, e) => Settings.WindowInformation.Value = this.GetWindowInformation();
 			this.Move += (s, e) => Settings.WindowInformation.Value = this.GetWindowInformation();
-			this.ClientSizeChanged += (s, e) => this.Communicator?.CallScript("WindowState", ((int)this.WindowState).ToString());
 
+
+			Logger.Register("MainLogger");
 
 			#region GC timer
 #if USE_GC
@@ -98,11 +100,23 @@ namespace BeerViewer.Forms
 				this.Communicator = new WindowBrowserCommicator(
 					this,
 					this.WindowBrowser,
-					() =>
+					async () => // After communicator initialized
 					{
-						// After communicator initialized
-						this.GameBrowser = this.WindowBrowser.GetBrowser().GetFrame("MAIN_FRAME")?.Browser as IFrameworkBrowser;
-						// this.GameBrowser.Load(Constants.GameURL);
+						// Logger
+						{
+							Logger.Logged += e => this.Communicator.CallbackScript("Logged", e);
+
+							string prevLog;
+							while((prevLog = Logger.Fetch("MainLogger")) != null)
+								await this.Communicator.CallbackScript("Logged", prevLog);
+						}
+						
+						this.ClientSizeChanged += (s, e) => this.Communicator?.CallbackScript("WindowState", ((int)this.WindowState).ToString());
+
+						this.GameBrowser = this.WindowBrowser.GetBrowser().GetFrame("MAIN_FRAME");
+						// this.GameBrowser.ZoomAsPercentage(66.6666);
+						await this.Communicator.CallScript("window.INTERNAL.zoomMainFrame", "66.6666");
+						await this.Communicator.CallScript("window.INTERNAL.loadMainFrame", Constants.GameURL);
 					}
 				),
 				true
@@ -113,26 +127,56 @@ namespace BeerViewer.Forms
 				var frameUri = Extensions.UriOrBlank(e.Url);
 
 				// Cookie patch
-				if (rootUri.Host == "www.dmm.com")
+				if (frameUri.AbsoluteUri.Contains("/foreign/"))
+				{
+					Logger.Log("Foreign page detected, applying DMM cookie");
 					await this.GameBrowser?.EvaluateScriptAsync(Constants.DMMCookie);
 
+					this.GameBrowser?.LoadUrl(Constants.GameURL);
+				}
+
 				// CSS patch
-				if (rootUri.AbsoluteUri == Constants.GameURL)
+				if (this.GameBrowser?.IsValid ?? false)
 				{
-					var script =
-					(
-						@"var x = document.querySelector('#game_style');
+					if (this.GameBrowser?.Url == Constants.GameURL)
+					{
+						var script =
+						(
+							@"var x = document.querySelector('#game_style');
 						if(!x) {
 							x = document.createElement('style');
 							x.id='game_style';
 							x.type='text/css';
 							x.innerHTML='" + Constants.UserStyleSheet + @"';
 							document.body.appendChild(x);
-						}"
-					).ToEvaluatableString();
-					await this.GameBrowser?.EvaluateScriptAsync(script);
+							true;
+						}else false;"
+						).ToEvaluatableString();
+
+						var ret = await this.GameBrowser?.EvaluateScriptAsync(script);
+						if (ret.Success && (bool)ret.Result == true)
+							Logger.Log("Game CSS applied");
+					}
 				}
 			};
+			this.WindowBrowser.LoadError += (s, e) =>
+			{
+				switch (e.ErrorCode) {
+					case CefSharp.CefErrorCode.FileNotFound:
+					case CefSharp.CefErrorCode.ConnectionFailed:
+					case CefSharp.CefErrorCode.ConnectionRefused:
+					case CefSharp.CefErrorCode.ConnectionTimedOut:
+					case CefSharp.CefErrorCode.DisallowedUrlScheme:
+					case CefSharp.CefErrorCode.InvalidResponse:
+					case CefSharp.CefErrorCode.InvalidUrl:
+					case CefSharp.CefErrorCode.NetworkAccessDenied:
+					case CefSharp.CefErrorCode.OutOfMemory:
+					case CefSharp.CefErrorCode.TooManyRedirects:
+						e.Frame.LoadUrl("file:///" + Constants.EntryDir.Replace("\\", "/") + "/WindowFrame/internal/error.html");
+						break;
+				}
+			};
+
 			this.Resize += (s, e) => this.WindowBrowser.Size = this.ClientSize;
 			this.WindowBrowser.Load("file:///" + Constants.EntryDir.Replace("\\", "/") + "/WindowFrame/Application.html");
 			this.Controls.Add(this.WindowBrowser);

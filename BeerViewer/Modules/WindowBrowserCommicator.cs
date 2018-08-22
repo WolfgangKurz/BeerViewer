@@ -63,7 +63,7 @@ namespace BeerViewer.Modules
 
 			var result = await browser.MainFrame?.EvaluateScriptAsync(
 				string.Format(
-					"window.CALLBACK[\"{0}\"]({1})",
+					"{0}({1})",
 					name,
 					string.Join(",", args.Select(x => $"\"{x}\""))
 				)
@@ -72,6 +72,11 @@ namespace BeerViewer.Modules
 				throw new Exception($"CallScript error: {result.Message}");
 
 			return result.Result;
+		}
+		internal Task<object> CallbackScript(string name, params string[] args)
+		{
+			var _args = new string[] { name }.Concat(args).ToArray();
+			return this.CallScript("window.CALLBACK.call", _args);
 		}
 	}
 }

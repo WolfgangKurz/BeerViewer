@@ -1,0 +1,10 @@
+﻿#logger-container {
+	padding: 2px;
+	user-select: text;
+	cursor: text;
+}
+#logger-container > .logger-log {
+	padding: 1px 4px;
+	user-select: text;
+	cursor: text;
+}

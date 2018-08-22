@@ -27,6 +27,8 @@ namespace BeerViewer.Network
 			public Func<Session, byte[], byte[]> Handler_Response { get; set; } = null;
 		}
 
+		public int ListeningPort { get; private set; } = 49217;
+
 		public static Proxy Instance { get; } = new Proxy();
 
 		internal ConcurrentDictionary<int, ProxyHandler> Handlers { get; }
@@ -38,7 +40,7 @@ namespace BeerViewer.Network
 			this.ModifiableHandlers = new ConcurrentDictionary<int, ModifiableProxyHandler>();
 			if (IsInDesignMode) return;
 
-			HttpProxy.Startup(49217, false, true);
+			HttpProxy.Startup(this.ListeningPort, false, true);
 			HttpProxy.AfterSessionComplete += (_ =>
 			{
 				this.Handlers.Values.ToList().ForEach(x =>
@@ -233,9 +235,8 @@ namespace BeerViewer.Network
 			if (this.disposed) return;
 			if (disposing)
 			{
-				// IDisposable 인터페이스를 구현하는 멤버들을 여기서 정리합니다.
 			}
-			// .NET Framework에 의하여 관리되지 않는 외부 리소스들을 여기서 정리합니다.
+
 			HttpProxy.Shutdown();
 			this.disposed = true;
 		}

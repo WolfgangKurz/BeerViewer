@@ -20,8 +20,6 @@ namespace BeerViewer.Framework
 	// This file is not for usercontrol
 	public class FrameBrowserPlaceholder { }
 
-	public interface IFrameworkBrowser : IFrame { }
-
 	public class FrameworkBrowser : ChromiumWebBrowser
 	{
 		private class ChromeWidgetMessageInterceptor : NativeWindow
@@ -156,9 +154,13 @@ namespace BeerViewer.Framework
 				),
 			};
 			cefSettings.CefCommandLineArgs.Add("disable-extensions", "1");
+
+#if !DEBUG
+			cefSettings.LogSeverity = LogSeverity.Disable;
+#endif
 			// cefSettings.DisableGpuAcceleration();
 
-			CefSharpSettings.Proxy = new ProxyOptions("localhost", "49217");
+			CefSharpSettings.Proxy = new ProxyOptions("localhost", Network.Proxy.Instance.ListeningPort.ToString());
 			CefSharpSettings.SubprocessExitIfParentProcessClosed = true;
 			CefSharpSettings.ShutdownOnExit = true;
 			Cef.EnableHighDPISupport();
@@ -247,12 +249,18 @@ namespace BeerViewer.Framework
 	}
 	public static class FrameworkBrowserExtension
 	{
-		public static void ZoomAsPercentage(this IBrowser browser, int zoomFactor)
+		public static void LoadUrl(this IFrame frame, string url)
+			=> frame?.LoadUrl(url);
+
+		public static Task<JavascriptResponse> EvaluateScriptAsync(this IFrame frame, string script, string scriptUrl = "about:blank", int startLine = 1, TimeSpan? timeout = null)
+			=> frame?.EvaluateScriptAsync(script, scriptUrl, startLine, timeout);
+
+		public static void ZoomAsPercentage(this IFrame frame, double zoomFactor)
 		{
 			try
 			{
-				browser.SetZoomLevel(0);
-				browser.SetZoomLevel(Math.Log(zoomFactor / 100.0) / Math.Log(1.2));
+				frame?.Browser.SetZoomLevel(0);
+				frame?.Browser.SetZoomLevel(Math.Log(zoomFactor / 100.0) / Math.Log(1.2));
 			}
 			catch (Exception ex)
 			{
