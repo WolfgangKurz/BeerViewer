@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using BeerViewer.Framework;
 using BeerViewer.Models;
 using BeerViewer.Modules;
+using BeerViewer.Modules.Communication;
 
 using System.Runtime.InteropServices;
 
@@ -102,6 +103,9 @@ namespace BeerViewer.Forms
 					this.WindowBrowser,
 					async () => // After communicator initialized
 					{
+						this.Communicator.RegisterObserveObject(nameof(Master), Master.Instance);
+						this.Communicator.RegisterObserveObject(nameof(Homeport), Homeport.Instance);
+
 						// Logger
 						{
 							Logger.Logged += e => this.Communicator.CallbackScript("Logged", e);
@@ -116,7 +120,7 @@ namespace BeerViewer.Forms
 						this.GameBrowser = this.WindowBrowser.GetBrowser().GetFrame("MAIN_FRAME");
 						// this.GameBrowser.ZoomAsPercentage(66.6666);
 						await this.Communicator.CallScript("window.INTERNAL.zoomMainFrame", "66.6666");
-						await this.Communicator.CallScript("window.INTERNAL.loadMainFrame", Constants.GameURL);
+						// await this.Communicator.CallScript("window.INTERNAL.loadMainFrame", Constants.GameURL);
 					}
 				),
 				true

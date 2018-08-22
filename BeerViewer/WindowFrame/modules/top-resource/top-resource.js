@@ -3,12 +3,14 @@
 	if (!window.modules) throw "Cannot find `module`";
 
 	const newResourceView = function (id) {
-		return $.new("div", "top-resource")
+		const elem = $.new("div", "top-resource")
 			.append(
 				$.new("img", "resource-icon")
 					.prop("src", "modules/top-resource/icon_" + id.toString().toLowerCase() + ".png")
 			)
 			.append($.new("div", "resource-value").html("0"));
+
+		return elem;
 	};
 
 	window.modules.register("top-resource", {

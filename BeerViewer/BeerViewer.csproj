@@ -301,7 +301,7 @@
     <Compile Include="Models\Wrapper\SlotItemInfo.cs" />
     <Compile Include="Models\Wrapper\UseItem.cs" />
     <Compile Include="Models\Wrapper\UseItemInfo.cs" />
-    <Compile Include="Modules\WindowBrowserCommicator.cs" />
+    <Compile Include="Modules\Communication\WindowBrowserCommicator.cs" />
     <Compile Include="Network\HttpProxy.cs" />
     <Compile Include="Network\ModifiableProxy.cs" />
     <Compile Include="Network\NetworkExtensions.cs" />
