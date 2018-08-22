@@ -99,13 +99,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
-    <Compile Include="Forms\Controls\Overview\DockView.cs" />
-    <Compile Include="Forms\Controls\ExpeditionBar.cs" />
-    <Compile Include="Forms\Controls\Overview\QuestsView.cs" />
-    <Compile Include="Forms\Controls\Overview\SimpleFleetView.cs" />
-    <Compile Include="Forms\Controls\Overview\OverviewView.cs" />
-    <Compile Include="Forms\Controls\ResourceBar.cs" />
-    <Compile Include="Forms\Controls\TabHost.cs" />
     <Compile Include="Framework\BorderlessWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -319,18 +312,12 @@
     <Compile Include="Network\WinInetUtil.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="Settings.cs" />
+    <Content Include="WindowFrame\assets\button_menu.png" />
+    <Content Include="WindowFrame\assets\button_system.png" />
+    <Content Include="WindowFrame\MainFramePlaceholder.html" />
     <EmbeddedResource Include="Forms\frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="app.config">
       <SubType>Designer</SubType>
@@ -345,21 +332,15 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="WindowFrame\assets\fonts\SpoqaHanSansBold.woff2" />
+    <None Include="WindowFrame\assets\fonts\SpoqaHanSansJPBold.woff2" />
+    <None Include="WindowFrame\assets\fonts\SpoqaHanSansJPRegular.woff2" />
+    <None Include="WindowFrame\assets\fonts\SpoqaHanSansRegular.woff2" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Forms\Controls\Fleets\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="icon.ico" />
     <Content Include="WindowFrame\modules\window\window.js" />
-    <None Include="Resources\icon_ammo.png" />
-    <None Include="Resources\icon_bauxite.png" />
-    <None Include="Resources\icon_bucket.png" />
-    <None Include="Resources\icon_fuel.png" />
-    <None Include="Resources\icon_screw.png" />
-    <None Include="Resources\icon_steel.png" />
-    <None Include="Resources\Menu Button.png" />
-    <None Include="Resources\System Buttons.png" />
     <Content Include="WindowFrame\app.css" />
     <Content Include="WindowFrame\Application.html" />
     <Content Include="WindowFrame\assets\icon_ammo.png" />
@@ -368,9 +349,6 @@
     <Content Include="WindowFrame\assets\icon_fuel.png" />
     <Content Include="WindowFrame\assets\icon_screw.png" />
     <Content Include="WindowFrame\assets\icon_steel.png" />
-    <Content Include="WindowFrame\assets\Menu Button.png" />
-    <Content Include="WindowFrame\assets\Numbers.png" />
-    <Content Include="WindowFrame\assets\System Buttons.png" />
     <Content Include="WindowFrame\modules\common.js" />
     <Content Include="WindowFrame\modules\expedition\expedition.css" />
     <Content Include="WindowFrame\modules\expedition\expedition.js" />

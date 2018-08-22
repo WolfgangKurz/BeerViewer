@@ -11,7 +11,7 @@ using BeerViewer.Modules;
 
 namespace BeerViewer.Network
 {
-	public partial class Proxy
+	public partial class Proxy : IDisposable
 	{
 		internal static bool IsInDesignMode => (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
 
@@ -70,7 +70,7 @@ namespace BeerViewer.Network
 		}
 		~Proxy()
 		{
-			HttpProxy.Shutdown();
+			this.Dispose(false);
 		}
 
 		private bool PermissionCheck(BeerComponentPermission pm_require)
@@ -216,6 +216,28 @@ namespace BeerViewer.Network
 
 			this.Handlers.TryRemove(k, out h);
 			return this;
+		}
+		#endregion
+
+		#region Dispose
+		private bool disposed;
+
+		public void Dispose()
+		{
+			this.Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		protected virtual void Dispose(bool disposing)
+		{
+			if (this.disposed) return;
+			if (disposing)
+			{
+				// IDisposable 인터페이스를 구현하는 멤버들을 여기서 정리합니다.
+			}
+			// .NET Framework에 의하여 관리되지 않는 외부 리소스들을 여기서 정리합니다.
+			HttpProxy.Shutdown();
+			this.disposed = true;
 		}
 		#endregion
 	}

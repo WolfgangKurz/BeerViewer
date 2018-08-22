@@ -32,32 +32,83 @@ html, body {
 	height: 100%;
 	background-color: #222225;
 	font: 12px "Spoqa Han Sans JP", "Spoqa Han Sans", "Segoe UI", "Malgun Gothic", sans-serif;
+	overflow: hidden;
 	color: #fff;
 }
 img { vertical-align: bottom }
+iframe {
+	/* Default size */
+	width: 1200px;
+	height: 720px;
+
+	border: none;
+}
 
 #top-area {
 	height: 28px;
 	line-height: 28px;
 }
 
-#top-area .top-menubutton {
+#top-area #top-systembutton {
+	float: right;
+}
+#top-area #top-systembutton > .system-button {
+	float: left;
+	width: 32px;
+	height: 28px;
+	border: none;
+	outline: none;
+	background-image: url(assets/button_system.png);
+	background-repeat: no-repeat;
+	background-color: #222225;
+}
+#top-area #top-systembutton > .system-button:hover {
+	background-color: #313131;
+}
+#top-area #top-systembutton > .system-button:active {
+	background-color: #575757;
+}
+
+#top-area #top-systembutton > .system-button:nth-of-type(1) {
+	background-position: 0px 0px;
+}
+#top-area #top-systembutton > .system-button:nth-of-type(2) {
+	background-position: -32px 0px;
+}
+#top-area #top-systembutton > .system-button:nth-of-type(3) {
+	background-position: -64px 0px;
+}
+#top-area #top-systembutton[data-windowstate="2"] > .system-button:nth-of-type(1) {
+	background-position: 0px -32px;
+}
+#top-area #top-systembutton[data-windowstate="2"] > .system-button:nth-of-type(2) {
+	background-position: -32px -32px;
+}
+#top-area #top-systembutton[data-windowstate="2"] > .system-button:nth-of-type(3) {
+	background-position: -64px -32px;
+}
+
+#top-area #top-menubutton {
+	float: left;
 	display: inline-block;
-	margin: 1px;
 	padding-right: 8px;
 	cursor: pointer;
 }
-#top-area .top-menubutton::after {
+#top-area #top-menubutton::after {
 	content: "";
 	display: table;
 	clear: both;
 }
-#top-area .top-menubutton:hover {
+#top-area #top-menubutton:hover {
 	background-color: #313131;
 }
-#top-area .top-menubutton:active {
+#top-area #top-menubutton:active {
 	background-color: #575757;
 }
-#top-area .top-menubutton > * {
+#top-area #top-menubutton > * {
 	float: left;
+}
+
+#top-area > #top-module-area {
+	overflow: hidden;
 }

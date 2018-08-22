@@ -1,16 +1,21 @@
 ﻿"use strict";
 !function () {
-	(async function () {
-		await CefSharp.BindObjectAsync("API", "bound");
-	})();
-
 	window.modules.register("window", {
 		init: function () {
-			$("#top-area").event("mousedown", function (e) {
-				e.preventDefault();
-				window.API.requestWindowMove();
-				return false;
+			window.CALLBACK.WindowState = function (_state) {
+				var state = parseInt(_state);
+				$("#top-systembutton").attr("data-windowstate", state);
+			};
+
+			$.all("#top-systembutton > .system-button").event("click", function () {
+				window.API.systemCall(this.attr("data-role"));
 			});
+
+			$("#top-menubutton").event("click", function (e) {
+				alert("!");
+			});
+
+			window.API.initialized();
 		}
 	});
 }();

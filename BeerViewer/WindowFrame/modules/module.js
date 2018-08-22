@@ -41,7 +41,10 @@
 	modules.load("window", false);
 	modules.load("expedition", true);
 
-	document.event("DOMContentLoaded", function () {
+	document.event("DOMContentLoaded", async function () {
+		window.CALLBACK = {};
+		await CefSharp.BindObjectAsync({ IgnoreCache: true }, "API");
+
 		window.modules.areas = {
 			top: $("#top-module-area")
 		};

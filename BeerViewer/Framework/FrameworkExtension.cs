@@ -134,5 +134,15 @@ namespace BeerViewer.Framework
 				Height = form.ClientSize.Height
 			};
 		}
+
+		internal static void Invoke(this Control control, Action action)
+		{
+			if (control == null || action == null) return;
+
+			if (control.InvokeRequired)
+				control.Invoke(action);
+			else
+				action.Invoke();
+		}
 	}
 }
