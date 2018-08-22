@@ -127,6 +127,20 @@ namespace BeerViewer.Framework
 				=> false;
 		}
 
+		[DllImport("User32.dll")]
+		internal static extern bool ReleaseCapture();
+		[DllImport("User32.dll")]
+		internal static extern bool SetCapture(IntPtr hWnd);
+		[DllImport("User32.dll")]
+		internal static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
+		[DllImport("User32.dll")]
+		internal static extern int PostMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
+		[DllImport("user32.dll")]
+		private static extern long GetWindowLong(IntPtr hWnd, int nIndex);
+
+		private const int GWL_STYLE = -16;
+		private const long WS_MAXIMIZE = 0x01000000L;
+
 		static FrameworkBrowser()
 		{
 			var cefSettings = new CefSettings()
@@ -197,40 +211,53 @@ namespace BeerViewer.Framework
 				this.Invoke((Action)(() => pt = this.PointToScreen(pt)));
 
 				var lParam = (pt.X & 0xffff) | ((pt.Y & 0xffff) << 16);
-				var HitTest = WindowBrowserCommicator.SendMessage(handle, (int)WindowMessages.WM_NCHITTEST, 0, (int)lParam);
+				var HitTest = SendMessage(handle, (int)WindowMessages.WM_NCHITTEST, 0, (int)lParam);
 				if (HitTest == (int)HitTestValue.HTCLIENT) return false; // HTCLIENT
 
-				WindowBrowserCommicator.ReleaseCapture();
-				WindowBrowserCommicator.SendMessage(handle, (int)WindowMessages.WM_NCLBUTTONDOWN, HitTest, (int)lParam);
+				ReleaseCapture();
+				SendMessage(handle, (int)WindowMessages.WM_NCLBUTTONDOWN, HitTest, (int)lParam);
+
+				return true;
+			}
+			else if(message.Msg == (int)WindowMessages.WM_LBUTTONDBLCLK)
+			{
+				IntPtr handle = IntPtr.Zero;
+				this.Parent.Invoke((Action)(() => handle = this.Parent.Handle));
+				if (handle == IntPtr.Zero) return false;
+
+				var pt = new Point(message.LParam.ToInt32());
+				this.Invoke((Action)(() => pt = this.PointToScreen(pt)));
+
+				var lParam = (pt.X & 0xffff) | ((pt.Y & 0xffff) << 16);
+				var HitTest = SendMessage(handle, (int)WindowMessages.WM_NCHITTEST, 0, (int)lParam);
+				if (HitTest == (int)HitTestValue.HTCLIENT) return false; // HTCLIENT
+
+				if (HitTest == (int)HitTestValue.HTCAPTION)
+				{
+					if ((GetWindowLong(handle, GWL_STYLE) & WS_MAXIMIZE) != 0)
+						PostMessage(handle, (int)WindowMessages.WM_SYSCOMMAND, (int)SystemCommand.SC_RESTORE, 0);
+					else
+						PostMessage(handle, (int)WindowMessages.WM_SYSCOMMAND, (int)SystemCommand.SC_MAXIMIZE, 0);
+				}
 				return true;
 			}
 
 			return false;
 		}
-
-		public void Zoom(int zoomFactor)
+	}
+	public static class FrameworkBrowserExtension
+	{
+		public static void ZoomAsPercentage(this IBrowser browser, int zoomFactor)
 		{
 			try
 			{
-				this.SetZoomLevel(0);
-				this.SetZoomLevel(Math.Log(zoomFactor / 100.0) / Math.Log(1.2));
+				browser.SetZoomLevel(0);
+				browser.SetZoomLevel(Math.Log(zoomFactor / 100.0) / Math.Log(1.2));
 			}
 			catch (Exception ex)
 			{
 				Logger.Log(ex.ToString());
 			}
-		}
-	}
-	public class FrameworkBrowserDragHandler : IDragHandler
-	{
-		public bool OnDragEnter(IWebBrowser chromiumWebBrowser, IBrowser browser, IDragData dragData, DragOperationsMask mask)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void OnDraggableRegionsChanged(IWebBrowser chromiumWebBrowser, IBrowser browser, IList<DraggableRegion> regions)
-		{
-			throw new NotImplementedException();
 		}
 	}
 }

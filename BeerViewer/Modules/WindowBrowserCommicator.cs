@@ -12,18 +12,6 @@ namespace BeerViewer.Modules
 {
 	public class WindowBrowserCommicator
 	{
-		internal const int WM_NCLBUTTONDOWN = 0xA1;
-		internal const int HTCAPTION = 0x2;
-
-		[DllImport("User32.dll")]
-		internal static extern bool ReleaseCapture();
-		[DllImport("User32.dll")]
-		internal static extern bool SetCapture(IntPtr hWnd);
-		[DllImport("User32.dll")]
-		internal static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
-		[DllImport("User32.dll")]
-		internal static extern int PostMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
-
 		private Form Owner { get; }
 		private IntPtr OwnerHandle { get; }
 
