@@ -139,7 +139,8 @@ namespace BeerViewer.Forms
 
 			this.WindowBrowser.IsBrowserInitializedChanged += (s, e) =>
 			{
-				// if (e.IsBrowserInitialized) this.WindowBrowser.GetBrowser().GetHost().ShowDevTools();
+				if (e.IsBrowserInitialized)
+					this.WindowBrowser.GetBrowser().GetHost().ShowDevTools();
 			};
 			#endregion
 

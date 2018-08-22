@@ -2,7 +2,7 @@
 !function () {
 	if (!window.modules) throw "Cannot find `module`";
 
-	var newExpedition = function () {
+	const newExpeditionView = function () {
 		return $.new("div", "top-expedition")
 			.append($.new("div", "expedition-progress"))
 			.append(
@@ -18,21 +18,17 @@
 		fleets: [],
 
 		update: function (index, id, time, progress) {
-			var item = this.fleets[index];
+			const item = this.fleets[index];
 			item.find(".expedition-id").html(id);
 			item.find(".expedition-time").html(time);
 			item.find(".expedition-progress").css("width", progress + "%");
 		},
 
 		init: function () {
-			const expeditions = $.new("div", "top-expeditions")
-				.event("mousedown", function (e) {
-					e.preventDefault();
-					return false;
-				});
+			const expeditions = $.new("div").prop("id", "top-expeditions");
 
 			for (let i = 0; i < this.consts.count; i++) {
-				let elem = newExpedition();
+				let elem = newExpeditionView();
 				this.fleets.push(elem);
 				expeditions.append(elem);
 			}

@@ -3,7 +3,7 @@
 	window.modules.register("window", {
 		init: function () {
 			window.CALLBACK.WindowState = function (_state) {
-				var state = parseInt(_state);
+				const state = parseInt(_state);
 				$("#top-systembutton").attr("data-windowstate", state);
 			};
 

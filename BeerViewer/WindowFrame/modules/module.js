@@ -40,6 +40,7 @@
 
 	modules.load("window", false);
 	modules.load("expedition", true);
+	modules.load("top-resource", true);
 
 	document.event("DOMContentLoaded", async function () {
 		window.CALLBACK = {};

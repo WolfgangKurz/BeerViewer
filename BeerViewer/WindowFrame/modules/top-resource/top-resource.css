@@ -1,0 +1,33 @@
+﻿#top-area > #top-module-area > #top-resources {
+	float: right;
+	white-space: nowrap;
+}
+#top-resources::after {
+	content: "";
+	display: table;
+	clear: both;
+}
+
+#top-resources > .top-resource {
+	display: inline-block;
+	margin-right: 1em;
+	height: 28px;
+	line-height: 28px;
+	font-size: 10px;
+	overflow: hidden;
+}
+
+#top-resources > .top-resource > * {
+	display: inline-block;
+}
+#top-resources > .top-resource > *:last-child {
+	margin-right: 0;
+}
+
+#top-resources > .top-resource .resource-icon {
+	margin-right: 4px;
+	vertical-align: middle;
+}
+#top-resources > .top-resource .resource-value {
+	white-space: nowrap;
+}

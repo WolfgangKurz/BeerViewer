@@ -19,7 +19,6 @@
 	src: url('assets/fonts/SpoqaHanSansJPRegular.woff2') format('woff2');
 }
 
-
 * {
 	box-sizing: border-box;
 	user-select: none;
@@ -111,4 +110,12 @@ iframe {
 
 #top-area > #top-module-area {
 	overflow: hidden;
+}
+#top-area > #top-module-area::after {
+	content: "";
+	display: table;
+	clear: both;
+}
+#top-area > #top-module-area > * {
+	float: left;
 }
