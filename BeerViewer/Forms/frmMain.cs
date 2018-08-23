@@ -96,35 +96,32 @@ namespace BeerViewer.Forms
 				AllowDrop = false,
 				Location = new Point(1, 1),
 			};
-			this.WindowBrowser.JavascriptObjectRepository.Register(
-				"API",
-				this.Communicator = new WindowBrowserCommicator(
-					this,
-					this.WindowBrowser,
-					async () => // After communicator initialized
+			this.Communicator = new WindowBrowserCommicator(
+				this,
+				this.WindowBrowser,
+				async () => // After communicator initialized
+				{
+					// Logger
 					{
-						this.Communicator.RegisterObserveObject(nameof(Master), Master.Instance);
-						this.Communicator.RegisterObserveObject(nameof(Homeport), Homeport.Instance);
+						Logger.Logged += e => this.Communicator.CallbackScript("Logged", e);
 
-						// Logger
-						{
-							Logger.Logged += e => this.Communicator.CallbackScript("Logged", e);
-
-							string prevLog;
-							while((prevLog = Logger.Fetch("MainLogger")) != null)
-								await this.Communicator.CallbackScript("Logged", prevLog);
-						}
-						
-						this.ClientSizeChanged += (s, e) => this.Communicator?.CallbackScript("WindowState", ((int)this.WindowState).ToString());
-
-						this.GameBrowser = this.WindowBrowser.GetBrowser().GetFrame("MAIN_FRAME");
-						// this.GameBrowser.ZoomAsPercentage(66.6666);
-						await this.Communicator.CallScript("window.INTERNAL.zoomMainFrame", "66.6666");
-						// await this.Communicator.CallScript("window.INTERNAL.loadMainFrame", Constants.GameURL);
+						string prevLog;
+						while ((prevLog = Logger.Fetch("MainLogger")) != null)
+							await this.Communicator.CallbackScript("Logged", prevLog);
 					}
-				),
-				true
+
+					this.ClientSizeChanged += (s, e) => this.Communicator?.CallbackScript("WindowState", ((int)this.WindowState).ToString());
+
+					this.GameBrowser = this.WindowBrowser.GetBrowser().GetFrame("MAIN_FRAME");
+					// this.GameBrowser.ZoomAsPercentage(66.6666);
+					await this.Communicator.CallScript("window.INTERNAL.zoomMainFrame", "66.6666");
+					await this.Communicator.CallScript("window.INTERNAL.loadMainFrame", Constants.GameURL);
+				}
 			);
+			this.Communicator.RegisterObserveObject(nameof(Master), Master.Instance);
+			this.Communicator.RegisterObserveObject(nameof(Homeport), Homeport.Instance);
+
+			this.WindowBrowser.JavascriptObjectRepository.Register("API", this.Communicator, true);
 			this.WindowBrowser.FrameLoadEnd += async (s, e) =>
 			{
 				var rootUri = Extensions.UriOrBlank(e.Browser.MainFrame?.Url);

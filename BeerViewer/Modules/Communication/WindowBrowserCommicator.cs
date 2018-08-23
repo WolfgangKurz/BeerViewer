@@ -11,6 +11,7 @@ using System.Windows.Forms;
 
 using BeerViewer.Framework;
 using BeerViewer.Models;
+using CefSharp;
 
 namespace BeerViewer.Modules.Communication
 {
@@ -105,31 +106,42 @@ namespace BeerViewer.Modules.Communication
 			this.RegisteredObserveObjects.Add(Namespace, ObjectToRegister);
 		}
 
-		public object observeData(string ns, string path, object callback)
+		public object observeData(string ns, string path, IJavascriptCallback callback)
 		{
 			object result = null;
 			try
 			{
-				result = GetRegisteredData(ns, path);
+				result = GetRegisteredData(ns, path, out object parent, out string propName);
 
-				/// TODO: attach <see cref="INotifyPropertyChanged.PropertyChanged"/> event
+				if (parent != null && typeof(INotifyPropertyChanged).IsAssignableFrom(parent.GetType()))
+				{
+					var p = (INotifyPropertyChanged)parent;
+					p.PropertyChanged += async (s, e) =>
+					{
+						if (e.PropertyName == propName && callback.CanExecute)
+							await callback.ExecuteAsync(
+								GetRegisteredData(ns, path, out _, out _)
+							);
+					};
+				}
 			}
 			catch { }
 
+			Task.Run(() => callback.ExecuteAsync(result));
 			return result;
 		}
 		public object getData(string ns, string path)
 		{
 			try
 			{
-				return GetRegisteredData(ns, path);
+				return GetRegisteredData(ns, path, /* ignore out */ out _, out _);
 			}
 			catch { }
 
 			return null;
 		}
 
-		internal object GetRegisteredData(string ns, string path)
+		internal object GetRegisteredData(string ns, string path, out object parent, out string propertyName)
 		{
 			if (!this.RegisteredObserveObjects.ContainsKey(ns))
 				throw new Exception($"Namespace \"{ns}\" not registered");
@@ -137,6 +149,9 @@ namespace BeerViewer.Modules.Communication
 			var obj = this.RegisteredObserveObjects[ns];
 			var levels = this.ParsePathLevels(path); // A.B[2].C -> [A:literal, B:array[2], C:literal]
 
+			propertyName = levels.Last().Name;
+
+			parent = null;
 			for (var i = 0; i < levels.Length; i++)
 			{
 				var level = levels[i];
@@ -146,6 +161,8 @@ namespace BeerViewer.Modules.Communication
 					.FirstOrDefault();
 				if (member == null)
 					throw new Exception($"Path \"{path}\" not exists");
+
+				parent = obj;
 
 				if (member.MemberType == MemberTypes.Field)
 					obj = ((FieldInfo)member).GetValue(obj);
@@ -164,7 +181,7 @@ namespace BeerViewer.Modules.Communication
 				}
 			}
 
-			return null;
+			return obj;
 		}
 
 		private struct PathLevel
@@ -172,10 +189,57 @@ namespace BeerViewer.Modules.Communication
 			public string Name;
 			public bool IsArray;
 			public int Index;
+
+			public override string ToString()
+				=> $"{{Name: {Name}, IsArray: {IsArray}, Index: {Index}}}";
 		}
 		private PathLevel[] ParsePathLevels(string path)
 		{
-			throw new NotImplementedException();
+			var list = new List<PathLevel>();
+			var nameBuffer = new StringBuilder();
+			var indexBuffer = new StringBuilder();
+
+			var arraying = false;
+			var current = new PathLevel();
+			for (var i = 0; i < path.Length; i++)
+			{
+				var c = path[i];
+
+				if (arraying)
+				{
+					if (c == ']')
+					{
+						if (!int.TryParse(indexBuffer.ToString(), out current.Index))
+							throw new Exception("Path parse error: Cannot parse index");
+
+						indexBuffer.Clear();
+						arraying = false;
+					}
+					else if (c < '0' || c > '9')
+						throw new ArgumentException("Path parse error: Invalid index value");
+					indexBuffer.Append(c);
+				}
+				else if (c == '.')
+				{
+					current.Name = nameBuffer.ToString();
+					nameBuffer.Clear();
+
+					list.Add(current);
+					current = new PathLevel();
+				}
+				else if (c == '[')
+				{
+					current.IsArray = true;
+					arraying = true;
+				}
+				else
+					nameBuffer.Append(c);
+			}
+
+			current.Name = nameBuffer.ToString();
+			list.Add(current);
+
+			return list.ToArray();
 		}
 	}
 }

@@ -1,11 +1,7 @@
 ﻿#top-area > #top-module-area > #top-resources {
-	float: right;
+	margin-left: auto; /* float: right */
 	white-space: nowrap;
-}
-#top-resources::after {
-	content: "";
-	display: table;
-	clear: both;
+	line-height: 0;
 }
 
 #top-resources > .top-resource {
