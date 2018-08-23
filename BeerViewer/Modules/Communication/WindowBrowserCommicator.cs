@@ -95,6 +95,7 @@ namespace BeerViewer.Modules.Communication
 		/// Register object to use in browser with "window.API.observeData(namespace, path, callback)"
 		/// or get data with "window.API.getData(namespace, path)".
 		/// When the <see cref="INotifyPropertyChanged.PropertyChanged"/> fired, given callback will be called.
+		/// Callback will get "newValue, Namespace, Path" as parameters.
 		/// </summary>
 		/// <param name="ObjectName"></param>
 		/// <param name="ObjectToObserve"></param>
@@ -120,7 +121,9 @@ namespace BeerViewer.Modules.Communication
 					{
 						if (e.PropertyName == propName && callback.CanExecute)
 							await callback.ExecuteAsync(
-								GetRegisteredData(ns, path, out _, out _)
+								GetRegisteredData(ns, path, out _, out _),
+								ns,
+								path
 							);
 					};
 				}

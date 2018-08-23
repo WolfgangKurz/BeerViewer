@@ -46,8 +46,10 @@
 			data.remaining = value;
 			update();
 		});
-		window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Expedition.Progress", function (value) {
-			data.progress = value.Current * 100 / value.Maximum;
+		window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Expedition.Progress", function (value, ns, path) {
+			const current = window.API.GetData(ns, path + ".Current");
+			const maximum = window.API.GetData(ns, path + ".Maximum");
+			data.progress = current * 100 / maximum;
 			update();
 		});
 	};
