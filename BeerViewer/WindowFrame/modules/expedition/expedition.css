@@ -44,10 +44,10 @@
 #top-expeditions > .top-expedition .expedition-id:empty {
 	display:none;
 }
-#top-expeditions > .top-expedition[data-status="active"] {
-	background-color: #575757;
+#top-expeditions > .top-expedition[data-status="disabled"] {
+	display: none;
 }
-#top-expeditions > .top-expedition:nth-of-type(2) {
+#top-expeditions > .top-expedition[data-status="active"] {
 	background-color: #575757;
 }
 #top-expeditions > .top-expedition[data-status="fail"] > .expedition-progress {

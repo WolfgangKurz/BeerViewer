@@ -10,7 +10,7 @@
 			)
 			.append($.new("div", "resource-value").html("0"));
 
-		window.API.observeData("Homeport", "Materials."+id, function (value) {
+		window.API.ObserveData("Homeport", "Materials."+id, function (value) {
 			elem.find(".resource-value").html(value);
 		});
 

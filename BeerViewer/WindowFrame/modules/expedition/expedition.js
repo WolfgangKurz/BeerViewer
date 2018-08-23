@@ -2,14 +2,54 @@
 !function () {
 	if (!window.modules) throw "Cannot find `module`";
 
-	const newExpeditionView = function () {
-		return $.new("div", "top-expedition")
+	const newExpeditionView = function (fleetId) {
+		const data = {
+			enabled: false,
+			active: false,
+			id: 0,
+			progress: 0.0,
+			remaining: ""
+		};
+		const el = $.new("div", "top-expedition")
 			.append($.new("div", "expedition-progress"))
 			.append(
 				$.new("div", "expedition-text")
 					.append($.new("div", "expedition-id"))
 					.append($.new("div", "expedition-time"))
-			);
+		);
+		const update = function () {
+			let status = "disabled";
+			if (data.enabled) {
+				if (data.active) status = "active";
+				else status = "deactive";
+			}
+
+			el.attr("data-status", status);
+			el.find(".expedition-id").html(data.id);
+			el.find(".expedition-time").html(data.remaining);
+			el.find(".expedition-progress").css("width", data.progress+"%");
+		};
+
+		window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "]", function (value) {
+			data.enabled = value !== null;
+			update();
+		});
+		window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Expedition.IsInExecution", function (value) {
+			data.active = value;
+			update();
+		});
+		window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Expedition.Mission.DisplayNo", function (value) {
+			data.id = value;
+			update();
+		});
+		window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Expedition.RemainingText", function (value) {
+			data.remaining = value;
+			update();
+		});
+		window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Expedition.Progress", function (value) {
+			data.progress = value.Current * 100 / value.Maximum;
+			update();
+		});
 	};
 	window.modules.register("expedition", {
 		consts: {
@@ -28,19 +68,11 @@
 			const expeditions = $.new("div").prop("id", "top-expeditions");
 
 			for (let i = 0; i < this.consts.count; i++) {
-				let elem = newExpeditionView();
+				let elem = newExpeditionView(i+1);
 				this.fleets.push(elem);
 				expeditions.append(elem);
 			}
 			window.modules.areas.top.append(expeditions);
-
-
-			this.update(1, "37", "01:11:07", 29.9);
-			this.update(2, "38", "00:43:44", 63.1);
-
-			this.fleets[0].attr("data-status", "none");
-			this.fleets[1].attr("data-status", "active");
-			this.fleets[2].attr("data-status", "fail");
 		}
 	});
 } ();

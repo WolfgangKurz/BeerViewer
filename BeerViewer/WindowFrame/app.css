@@ -244,6 +244,7 @@ i.menu-icon[data-icon="plugin"] {
 }
 
 #top-area > #top-module-area {
+	display: flex;
 	white-space: nowrap;
 	overflow: hidden;
 }

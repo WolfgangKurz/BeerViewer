@@ -127,6 +127,7 @@ namespace BeerViewer.Models
 		private void UpdateCore()
 		{
 			this.RaisePropertyChanged(nameof(this.Remaining));
+			this.RaisePropertyChanged(nameof(this.RemainingText));
 			this.RaisePropertyChanged(nameof(this.Progress));
 
 			if (!this.notificated && this.Returned != null && this.Remaining <= TimeSpan.FromSeconds(Settings.NotificationTime.Value))

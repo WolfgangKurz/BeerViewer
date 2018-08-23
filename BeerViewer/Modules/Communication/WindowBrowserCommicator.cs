@@ -39,8 +39,8 @@ namespace BeerViewer.Modules.Communication
 			this.RegisteredObserveObjects = new Dictionary<string, object>();
 		}
 
-		public void initialized() => this.OnInitialized?.Invoke();
-		public void systemCall(string command)
+		public void Initialized() => this.OnInitialized?.Invoke();
+		public void SystemCall(string command)
 		{
 			switch (command.ToLower())
 			{
@@ -106,7 +106,7 @@ namespace BeerViewer.Modules.Communication
 			this.RegisteredObserveObjects.Add(Namespace, ObjectToRegister);
 		}
 
-		public object observeData(string ns, string path, IJavascriptCallback callback)
+		public object ObserveData(string ns, string path, IJavascriptCallback callback)
 		{
 			object result = null;
 			try
@@ -130,7 +130,7 @@ namespace BeerViewer.Modules.Communication
 			Task.Run(() => callback.ExecuteAsync(result));
 			return result;
 		}
-		public object getData(string ns, string path)
+		public object GetData(string ns, string path)
 		{
 			try
 			{
@@ -154,6 +154,16 @@ namespace BeerViewer.Modules.Communication
 			parent = null;
 			for (var i = 0; i < levels.Length; i++)
 			{
+				if (obj == null)
+				{
+					System.Diagnostics.Debug.WriteLine($"Path \"{ns}.{path}\" maybe fine but found null tree");
+
+					if (i == levels.Length - 1)
+						parent = null;
+
+					break;
+				}
+
 				var level = levels[i];
 
 				var type = obj.GetType();
@@ -174,13 +184,15 @@ namespace BeerViewer.Modules.Communication
 				if (level.IsArray)
 				{
 					type = obj.GetType();
-					if (!type.IsArray)
+					var indexer = type.GetMethod("get_Item", BindingFlags.Public | BindingFlags.Instance);
+					if (indexer == null)
 						throw new Exception("Tried to access as Array to not Array object");
 
-					obj = ((Array)obj).GetValue(level.Index);
+					obj = indexer.Invoke(obj, new object[] { level.Index });
 				}
 			}
 
+			/// TODO: Convert class to json object
 			return obj;
 		}
 

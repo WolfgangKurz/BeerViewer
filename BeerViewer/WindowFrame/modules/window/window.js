@@ -8,7 +8,7 @@
 			});
 
 			$.all("#top-systembutton > .system-button").event("click", function () {
-				window.API.systemCall(this.attr("data-role"));
+				window.API.SystemCall(this.attr("data-role"));
 			});
 
 			$("#top-menubutton > button").event("click", function (e) {
@@ -19,7 +19,7 @@
 					this.parent().addClass("menu-open");
 			});
 
-			window.API.initialized();
+			window.API.Initialized();
 		}
 	});
 }();
