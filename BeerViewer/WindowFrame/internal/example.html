@@ -1,0 +1,33 @@
+﻿<!-- HtmlView, console:off -->
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>BeerViewer Application</title>
+	<link rel="stylesheet" type="text/css" href="../app.css" />
+</head>
+<body style="background-color:rgba(0,0,0,0.1)">
+	<style>
+		.overview-container {
+		}
+
+		.overview-container .fleet {
+		}
+
+		.overview-container .fleet[data-status="disabled"] {
+			display: none;
+		}
+
+		.overview-container .fleet > .ship[data-disabled="true"] {
+			display: none;
+		}
+	</style>
+	<div class="overview-container">
+		<div class="fleet">
+			<div class="ship">
+				<div class="ship-name">하마나미改</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

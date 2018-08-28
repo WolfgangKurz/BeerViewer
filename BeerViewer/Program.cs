@@ -1,7 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+
+using BeerViewer.Framework;
+using BeerViewer.Forms;
+using System.IO;
+using System.Reflection;
+
+using CefSharp;
+using CefSharp.WinForms;
 
 namespace BeerViewer
 {
@@ -14,8 +24,12 @@ namespace BeerViewer
 		static void Main()
 		{
 			Application.EnableVisualStyles();
-			Application.SetCompatibleTextRenderingDefault(true);
-			Application.Run(new frmMain());
+			Application.SetCompatibleTextRenderingDefault(false);
+
+			var mainWindow = frmMain.Instance;
+			FrameworkManager.Instance.Initialize();
+
+			Application.Run(mainWindow);
 		}
 	}
 }

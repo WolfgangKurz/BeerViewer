@@ -1,17 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-using BeerViewer.Core;
+using BeerViewer.Network;
+using BeerViewer.Models.Wrapper;
 using BeerViewer.Models.Raw;
+using BeerViewer.Models.kcsapi;
 
 namespace BeerViewer.Models
 {
 	public class Dockyard : Notifier
 	{
-		#region Dock 프로퍼티
+		#region Dock Property
 		private MemberTable<BuildingDock> _Docks;
 		public MemberTable<BuildingDock> Docks
 		{
@@ -27,7 +26,7 @@ namespace BeerViewer.Models
 		}
 		#endregion
 
-		#region CreatedSlotItem 프로퍼티
+		#region CreatedSlotItem Property
 		private CreatedSlotItem _CreatedSlotItem;
 		public CreatedSlotItem CreatedSlotItem
 		{
@@ -49,20 +48,8 @@ namespace BeerViewer.Models
 			var proxy = Proxy.Instance;
 			this.Docks = new MemberTable<BuildingDock>();
 
-			proxy.Register(Proxy.api_get_member_kdock, e =>
-			{
-				var x = e.TryParse<kcsapi_kdock[]>();
-				if (x == null) return;
-
-				this.Update(x.Data);
-			});
-			proxy.Register(Proxy.api_req_kousyou_getship, e =>
-			{
-				var x = e.TryParse<kcsapi_kdock_getship>();
-				if (x == null) return;
-
-				this.GetShip(x.Data);
-			});
+			proxy.Register<kcsapi_kdock[]>(Proxy.api_get_member_kdock, x => this.Update(x.Data));
+			proxy.Register<kcsapi_kdock_getship>(Proxy.api_req_kousyou_getship, x => this.GetShip(x.Data));
 			proxy.Register(Proxy.api_req_kousyou_createship_speedchange, e =>
 			{
 				var x = e.TryParse();
@@ -70,13 +57,7 @@ namespace BeerViewer.Models
 
 				this.ChangeSpeed(x);
 			});
-			proxy.Register(Proxy.api_req_kousyou_createitem, e =>
-			{
-				var x = e.TryParse<kcsapi_createitem>();
-				if (x == null) return;
-
-				this.CreateSlotItem(x);
-			});
+			proxy.Register<kcsapi_createitem>(Proxy.api_req_kousyou_createitem, x => this.CreateSlotItem(x));
 		}
 
 		internal void Update(kcsapi_kdock[] source)
@@ -106,10 +87,7 @@ namespace BeerViewer.Models
 
 				if (highspeed) dock.Finish();
 			}
-			catch (Exception ex)
-			{
-				System.Diagnostics.Debug.WriteLine("고속수복제 사용 해석 실패: {0}", ex);
-			}
+			catch { }
 		}
 
 		private void CreateSlotItem(SvData<kcsapi_createitem> svd)

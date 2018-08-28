@@ -1,14 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BeerViewer.Models
+﻿namespace BeerViewer.Models
 {
-	/// <summary>
-	/// 근대화개수 가능한지 볼 수 있는 형식
-	/// </summary>
 	public struct ModernizableStatus
 	{
 		public int Max { get; internal set; }
@@ -31,17 +22,9 @@ namespace BeerViewer.Models
 		}
 
 		public ModernizableStatus Update(int upgraded)
-		{
-			return new ModernizableStatus(new int[] { this.Default, this.Max }, upgraded);
-		}
+			=> new ModernizableStatus(new int[] { this.Default, this.Max }, upgraded);
 
 		public override string ToString()
-		{
-			return $"Status = {this.Default}->{this.Max}, Current = {this.Current}{(this.IsMax ? "(max)" : "")}";
-		}
-
-		#region Static Members
-		public static ModernizableStatus Dummy { get; } = new ModernizableStatus(new[] { -1, -1 }, 0);
-		#endregion
+			=> $"Status = {this.Default}->{this.Max}, Current = {this.Current}{(this.IsMax ? "(max)" : "")}";
 	}
 }

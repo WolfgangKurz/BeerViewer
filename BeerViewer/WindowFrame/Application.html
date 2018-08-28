@@ -1,0 +1,71 @@
+﻿<!-- HtmlView, console:off -->
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>BeerViewer Application</title>
+	<link rel="stylesheet" type="text/css" href="app.css" />
+	<script type="text/javascript" src="modules/common.js"></script>
+	<script type="text/javascript" src="modules/internal.js"></script>
+	<script type="text/javascript" src="modules/module.js"></script>
+</head>
+<body>
+	<div id="mainbox">
+		<header id="top-area">
+			<div id="top-menubutton" class="">
+				<button type="button" data-role="menu">
+					<img src="assets/button_menu.png" />
+					<span>BeerViewer 2.0</span>
+				</button>
+				<div id="top-menu-overlay"></div>
+				<div id="top-menu">
+					<ul class="menu-host">
+						<li class="menu-group" data-area="main">
+							<i class="menu-icon" data-icon="mainscreen"></i>
+							Main screen
+							<ul>
+								<li class="menu-active">
+									<i class="menu-icon" data-icon="game"></i>
+									Game
+								</li>
+							</ul>
+						</li>
+						<li class="menu-group" data-area="side">
+							<i class="menu-icon" data-icon="sidescreen"></i>
+							Side screen
+							<ul>
+							</ul>
+						</li>
+						<li class="menu-group" data-area="sub">
+							<i class="menu-icon" data-icon="subscreen"></i>
+							Sub screen
+							<ul>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div id="top-systembutton">
+				<button class="system-button" type="button" data-role="minimize"></button>
+				<button class="system-button" type="button" data-role="maximize"></button>
+				<button class="system-button" type="button" data-role="close"></button>
+			</div>
+			<div id="top-module-area"></div>
+		</header>
+
+		<div id="side-area">
+			<div id="side-module-area" class="module-area"></div>
+		</div>
+		
+		<div id="main-area">
+			<div id="main-module-area" class="module-area">
+				<iframe class="active-module" id="MAIN_FRAME" name="MAIN_FRAME" src="MainFramePlaceholder.html"></iframe>
+			</div>
+		</div>
+
+		<div id="sub-area">
+			<div id="sub-module-area" class="module-area"></div>
+		</div>
+	</div>
+</body>
+</html>

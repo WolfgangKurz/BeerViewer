@@ -1,0 +1,270 @@
+﻿@font-face {
+	font-family: 'Spoqa Han Sans';
+	font-weight: 700;
+	src: url('assets/fonts/SpoqaHanSansBold.woff2') format('woff2');
+}
+@font-face {
+	font-family: 'Spoqa Han Sans';
+	font-weight: 400;
+	src: url('assets/fonts/SpoqaHanSansRegular.woff2') format('woff2');
+}
+@font-face {
+	font-family: 'Spoqa Han Sans JP';
+	font-weight: 700;
+	src: url('assets/fonts/SpoqaHanSansJPBold.woff2') format('woff2');
+}
+@font-face {
+	font-family: 'Spoqa Han Sans JP';
+	font-weight: 400;
+	src: url('assets/fonts/SpoqaHanSansJPRegular.woff2') format('woff2');
+}
+
+* {
+	box-sizing: border-box;
+	user-select: none;
+}
+html, body {
+	margin: 0;
+	padding: 0;
+	outline: 0;
+	border: 0;
+	height: 100%;
+	background-color: #222225;
+	font: 12px "Spoqa Han Sans JP", "Spoqa Han Sans", "Segoe UI", "Malgun Gothic", sans-serif;
+	overflow: hidden;
+	color: #fff;
+}
+img { vertical-align: bottom }
+iframe {
+	/* Default size */
+	width: 1200px;
+	height: 720px;
+	border: none;
+}
+button {
+	padding: 0;
+	border: none;
+	outline: none;
+	background-color: #222225;
+	line-height: inherit;
+	color: inherit;
+	font: inherit;
+	cursor: pointer;
+}
+button:hover {
+	background-color: #313131;
+}
+button:active {
+	background-color: #575757;
+}
+
+ul.menu-host {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+ul.menu-host li {
+	margin: 0;
+	padding: 0 0 0 6px;
+	height: 28px;
+	border-right: 3px solid transparent;
+	border-top: 1px solid #393939;
+	line-height: 28px;
+	overflow: hidden;
+}
+ul.menu-host li.menu-active {
+	border-right-color: #fff;
+}
+ul.menu-host > li:first-child {
+	border-top: none !important;
+}
+ul.menu-host > li.menu-group {
+	height: auto;
+	border-top: 1px solid #414141;
+	border-right: none;
+	font-weight: bold;
+}
+ul.menu-host li:not(.menu-group) {
+	cursor: pointer;
+}
+ul.menu-host li:not(.menu-group):hover {
+	background-color: #575757;
+}
+ul.menu-host li:not(.menu-group):active {
+	background-color: #222225;
+}
+ul.menu-host > li.menu-group > ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+i.menu-icon {
+	display: inline-block;
+	margin-right: 4px;
+	width: 28px;
+	height: 28px;
+	background-image: url(assets/icon_menu_area.png);
+	background-repeat: no-repeat;
+	vertical-align: bottom;
+}
+i.menu-icon[data-icon="mainscreen"] {
+	background-position: -28px 0;
+}
+i.menu-icon[data-icon="subscreen"] {
+	background-position: -56px 0;
+}
+i.menu-icon[data-icon="sidescreen"] {
+	background-position: -84px 0;
+}
+
+i.menu-icon[data-icon="plugin"] {
+	background-position: 0 -28px;
+}
+i.menu-icon[data-icon="game"] {
+	background-position: -28px -28px;
+}
+i.menu-icon[data-icon="unknown"] {
+	background-position: -56px -28px;
+}
+
+#mainbox {
+	display: grid;
+	width: 100%;
+	height: 100%;
+	grid-template-columns: auto 1fr;
+	grid-template-rows: 28px auto 1fr;
+	overflow: hidden;
+}
+
+#top-area {
+	line-height: 28px;
+	grid-column: 1 / 3;
+	grid-row: 1;
+}
+#MAIN_FRAME {
+	grid-column: 1;
+	grid-row: 2;
+	transform-origin: 0% 0%;
+}
+#side-area {
+	display: flex; /* to maximize module */
+	grid-column: 2;
+	grid-row: 2 / 4;
+	overflow: hidden;
+}
+#sub-area {
+	display: flex; /* to maximize module */
+	grid-column: 1;
+	grid-row: 3;
+	overflow: hidden;
+}
+#side-area > *,
+#sub-area > * {
+	display: flex; /* to maximize module */
+	flex: 1;
+}
+#side-module-area > *,
+#sub-module-area > * {
+	flex: 1;
+}
+
+#top-area #top-systembutton {
+	float: right;
+}
+#top-area #top-systembutton > .system-button {
+	float: left;
+	width: 32px;
+	height: 28px;
+	background-image: url(assets/button_system.png);
+	background-repeat: no-repeat;
+}
+
+#top-area #top-systembutton > .system-button:nth-of-type(1) {
+	background-position: 0px 0px;
+}
+#top-area #top-systembutton > .system-button:nth-of-type(2) {
+	background-position: -32px 0px;
+}
+#top-area #top-systembutton > .system-button:nth-of-type(3) {
+	background-position: -64px 0px;
+}
+#top-area #top-systembutton[data-windowstate="2"] > .system-button:nth-of-type(1) {
+	background-position: 0px -32px;
+}
+#top-area #top-systembutton[data-windowstate="2"] > .system-button:nth-of-type(2) {
+	background-position: -32px -32px;
+}
+#top-area #top-systembutton[data-windowstate="2"] > .system-button:nth-of-type(3) {
+	background-position: -64px -32px;
+}
+
+#top-area #top-menubutton {
+	float: left;
+	position: relative;
+	display: inline-block;
+}
+#top-area #top-menubutton::after {
+	content: "";
+	display: table;
+	clear: both;
+}
+#top-area #top-menubutton > button {
+	float: left;
+	position: relative;
+	padding-right: 8px;
+	z-index: 999;
+}
+#top-area #top-menubutton:hover {
+	background-color: #313131;
+}
+#top-area #top-menubutton:active {
+	background-color: #575757;
+}
+#top-area #top-menubutton > button > * {
+	float: left;
+}
+#top-area #top-menubutton.menu-open > button:not(:active) {
+	background-color: #313131 !important;
+}
+
+#top-area > #top-menubutton > #top-menu-overlay {
+	position: fixed;
+	left: 0;
+	top: 28px;
+	width: 100%;
+	height: 100%;
+	pointer-events: none;
+	z-index: 997;
+}
+#top-area > #top-menubutton > #top-menu {
+	position: absolute;
+	left: 0;
+	top: 100%;
+	min-width: 140px;
+	background-color: #313131;
+	box-shadow: 0 0 11px rgba(0, 0, 0, 0.76);
+	transition: opacity 0.07s ease-in;
+	pointer-events: none;
+	opacity: 0;
+	z-index: 998;
+}
+#top-area > #top-menubutton.menu-open > #top-menu,
+#top-area > #top-menubutton.menu-open > #top-menu-overlay {
+	pointer-events: initial;
+	opacity: 1;
+}
+
+#top-area > #top-module-area {
+	display: flex;
+	white-space: nowrap;
+	overflow: hidden;
+}
+#top-area > #top-module-area::after {
+	content: "";
+	display: table;
+	clear: both;
+}
+#top-area > #top-module-area > * {
+	float: left;
+}

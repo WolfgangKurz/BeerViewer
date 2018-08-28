@@ -1,0 +1,13 @@
+﻿.overview-container {
+}
+
+.overview-container .overview-fleet {
+	
+}
+.overview-container .overview-fleet[data-status="disabled"] {
+	display: none;
+}
+
+.overview-container .overview-fleet .overview-fleet-ship[data-disabled="true"] {
+	display: none;
+}

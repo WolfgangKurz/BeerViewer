@@ -1,0 +1,990 @@
+quest_101_code	A1
+quest_101_name	The First Attempt at Fleet Organization!
+quest_101_desc	Have 2 ships in your main fleet.
+quest_102_code	A2
+quest_102_name	Form a Destroyer Division!
+quest_102_desc	Have 4 DD in your main fleet.
+quest_103_code	A3
+quest_103_name	Form a Torpedo Squadron!
+quest_103_desc	Have a CL as a flagship and 5 DD in your main fleet.
+quest_104_code	A4
+quest_104_name	Form a Six-Ship Fleet Formation!
+quest_104_desc	Have 6 ships in your fleet.
+quest_105_code	A5
+quest_105_name	Form a Division with Two Light Cruisers!
+quest_105_desc	Have 2 CL in your main fleet.
+quest_106_code	A7
+quest_106_name	Form a Heavy Cruiser Division!
+quest_106_desc	Have 2 CA (not CAV) in your main fleet.
+quest_107_code	A12
+quest_107_name	Form a Carrier Task Force!
+quest_107_desc	Have a CV(B/L) as flagship and 3 DD in your main fleet.
+quest_108_code	A8
+quest_108_name	Arrange Both of the Tenryuu-class Light Cruiser Sisters!
+quest_108_desc	Have Tenryuu and Tatsuta in your main fleet.
+quest_109_code	A14
+quest_109_name	Arrange the Three Sendai-class Light Cruiser Sisters!
+quest_109_desc	Have Sendai, Jintsuu and Naka in your main fleet.
+quest_110_code	A15
+quest_110_name	Arrange the Four Myoukou-class Heavy Cruiser Sisters!
+quest_110_desc	Have Myoukou, Nachi, Ashigara and Haguro in your main fleet.
+quest_111_code	A17
+quest_111_name	Arrange Both of the Fusou-class Battleship Sisters!
+quest_111_desc	Have Fusou and Yamashiro in your main fleet.
+quest_112_code	A18
+quest_112_name	Arrange Both of the Ise-class Battleship Sisters!
+quest_112_desc	Have Ise and Hyuuga in your main fleet.
+quest_113_code	A13
+quest_113_name	Form a Main Fleet with a Battleship and Heavy Cruisers!
+quest_113_desc	Have a BB (not BBV) and 2 CA in your main fleet.
+quest_114_code	A19
+quest_114_name	Form the Nagumo Task Force!
+quest_114_desc	Have ONLY Akagi, Kaga, Hiryuu and Souryuu in your main fleet.
+quest_115_code	A6
+quest_115_name	Form the Second Fleet!
+quest_115_desc	Have a ship in your second fleet.
+quest_116_code	A9
+quest_116_name	Deploy a Seaplane Tender!
+quest_116_desc	Have an AV in your main fleet.
+quest_117_code	A11
+quest_117_name	Form a Carrier Task Force in the Second Fleet!
+quest_117_desc	Have a CV(B/L) and 3 DD in your second fleet.
+quest_118_code	A16
+quest_118_name	Arrange the Kongou-class Fast Battleship Forces!
+quest_118_desc	Have Kongou, Hiei, Haruna and Kirishima in your main fleet.
+quest_119_code	A20
+quest_119_name	Form the Mikawa Fleet!
+quest_119_desc	Have Choukai, Aoba, Kako, Furutaka, Tenryuu and a FAST ship in your main fleet.
+quest_120_code	A10
+quest_120_name	Form the 6th Destroyer Division!
+quest_120_desc	Have ONLY Akatsuki, Hibiki, Inazuma and Ikazuchi in your fleet.
+quest_121_code	A21
+quest_121_name	Form the 4th Cruiser Division!
+quest_121_desc	Have Atago, Takao, Choukai and Maya in your main fleet.
+quest_122_code	A22
+quest_122_name	Form the Nishimura Fleet!
+quest_122_desc	Have Fusou, Yamashiro, Mogami and Shigure in your main fleet.
+quest_123_code	A23
+quest_123_name	Form the 5th Carrier Division!
+quest_123_desc	Have Shoukaku, Zuikaku and 2 DD in your main fleet.
+quest_124_code	A24
+quest_124_name	Form the New Mikawa Fleet!
+quest_124_desc	Have Choukai, Aoba, Kinugasa, Kako, Furutaka and Tenryuu in your main fleet.
+quest_125_code	A25
+quest_125_name	Form a Submarine Fleet!
+quest_125_desc	Have 2 SS(V) in your fleet.
+quest_126_code	A26
+quest_126_name	Form an Aviation Surface Attack Fleet!
+quest_126_desc	Have 2 BBV and 2 CAV in your main fleet.
+quest_127_code	A27
+quest_127_name	Form a Medium-Sized Submarine Fleet!
+quest_127_desc	Have 3 SS(V) in your fleet.
+quest_128_code	A28
+quest_128_name	Form the 6th Cruiser Division!
+quest_128_desc	Have Furutaka, Kako, Aoba and Kinugasa in your main fleet.
+quest_129_code	A29
+quest_129_name	Form the 5th Fleet!
+quest_129_desc	Have Nachi, Ashigara, Tama and Kiso in your fleet.
+quest_130_code	A30
+quest_130_name	Form the 1st Torpedo Squadron!
+quest_130_desc	Have Abukuma, Akebono, Ushio, Kasumi and Shiranui in your fleet.
+quest_131_code	A31
+quest_131_name	Form the 8th Destroyer Division!
+quest_131_desc	Have ONLY Asashio, Michishio, Ooshio and Arashio in your fleet.
+quest_132_code	A32
+quest_132_name	Form the 18th Destroyer Division!
+quest_132_desc	Have ONLY Kasumi, Arare, Kagerou and Shiranui in your fleet.
+quest_133_code	A33
+quest_133_name	Form the 30th Destroyer Division (First Generation)!
+quest_133_desc	Have ONLY Mutsuki, Kisaragi, Yayoi and Mochizuki in your fleet.
+quest_134_code	WA01
+quest_134_name	Preparation for the Ceremony! (Part 3)
+quest_134_desc	Collect your feelings and set Fleet 1 with a Lv.90~99 flagship!
+quest_135_code	WA02
+quest_135_name	A New Voyage!
+quest_135_desc	Form a fleet with your newlywed Lv.100+ ship as flagship and 5 additional ships!
+quest_136_code	A34
+quest_136_name	Form the 30th Destroyer Division (Second Generation)!
+quest_136_desc	Have ONLY Mutsuki, Yayoi, Uzuki and Mochizuki in your fleet.
+quest_137_code	A35
+quest_137_name	Form the 5th Cruiser Division!
+quest_137_desc	Have Myoukou, Nachi and Haguro in your fleet.
+quest_138_code	A36
+quest_138_name	Form the New 2nd Carrier Division!
+quest_138_desc	Have Hiryuu Kai Ni as flagship, Souryuu and 2 DD in your fleet.
+quest_139_code	A37
+quest_139_name	Form the 6th Submarine Fleet!
+quest_139_desc	Have 1 AS and 4 SS(V) in your fleet.
+quest_140_code	A38
+quest_140_name	Deploy the New Type of Radar!
+quest_140_desc	Have Myoukou Kai Ni as Fleet 1 flagship.
+quest_141_code	A39
+quest_141_name	Strengthen the Reformed 2nd Carrier Division!
+quest_141_desc	Have Souryuu Kai Ni as flagship, Hiryuu Kai Ni, and 2 DD in your fleet.
+quest_142_code	A40
+quest_142_name	Amass All Ships of the Elite 3rd Battleship Division!
+quest_142_desc	Have Kongou Kai Ni, Haruna Kai Ni, Kirishima Kai Ni and Hiei Kai Ni in your main fleet.
+quest_143_code	A41
+quest_143_name	Deploy a New Model of Standard Aircraft Carrier!
+quest_143_desc	Have Unryuu as Fleet 1 flagship.
+quest_144_code	A42
+quest_144_name	Form the Main Battleship Force, 2nd Division!
+quest_144_desc	Have ONLY Nagato, Mutsu, Fusou and Yamashiro in your main fleet.
+quest_145_code	A43
+quest_145_name	Arrange the Primary Battleships of the Surface Task Force!
+quest_145_desc	Have 3 BB (Nagato-class, Fusou-class, Ise-cass or Yamato-class ONLY) and 1 CL in your fleet.
+quest_146_code	A45
+quest_146_name	Prepare the Improvement Arsenal!
+quest_146_desc	Have Akashi as flagship of Fleet 1.
+quest_147_code	A44
+quest_147_name	Reform the Nishimura Fleet!
+quest_147_desc	Have Fusou, Yamashiro, Mogami, Shigure and Michishio in your main fleet.
+quest_148_code	A46
+quest_148_name	Form a Light Surface Counterattack Force!
+quest_148_desc	Have Kasumi as flagship, Ashigara, 1 CL and 3 DD in your main fleet.
+quest_149_code	A47
+quest_149_name	Form the 11th Destroyer Division!
+quest_149_desc	Have ONLY Fubuki, Shirayuki, Hatsuyuki and Murakumo in your main fleet.
+quest_150_code	A48
+quest_150_name	Form the 21st Destroyer Division!
+quest_150_desc	Have ONLY Hatsuharu, Nenohi, Wakaba and Hatsushimo in your main fleet.
+quest_151_code	A49
+quest_151_name	Form the 22nd Destroyer Division!
+quest_151_desc	Have ONLY Satsuki, Fumizuki, Nagatsuki and 1 DD in your main fleet.
+quest_152_code	A50
+quest_152_name	Prepare the New Mikawa Fleet to Break Through!
+quest_152_desc	Have Choukai Kai Ni as flagship and any five of Aoba, Kinugasa, Kako, Furutaka, Tenryuu, Yuubari in your main fleet.
+quest_153_code	A51
+quest_153_name	Reform the 18th Cruiser Division!
+quest_153_desc	Have Tenryuu, Tatsuta and at least 2 additional ships in your fleet.
+quest_154_code	A52
+quest_154_name	Form the Surface Breakthrough Force!
+quest_154_desc	Have Hiei, Kirishima, Nagara, Akatsuki, Ikazuchi and Inazuma in your fleet.
+quest_155_code	A53
+quest_155_name	Form the New 6th Destroyer Division!
+quest_155_desc	Have ONLY Akatsuki Kai Ni as flagship, Hibiki/Verniy, Ikazuchi and Inazuma in your fleet.
+quest_156_code	A54
+quest_156_name	Prepare the 1st Torpedo Squadron to Break Through into the North!
+quest_156_desc	Have Abukuma as flagship, Hibiki/Verniy, Hatsushimo, Wakaba, Samidare and Shimakaze in your main fleet.
+quest_157_code	A55
+quest_157_name	Prepare DesRon 1 to Break Through into the North Again!
+quest_157_desc	Have Abukuma Kai Ni as flagship, Hibiki/Verniy, Yuugumo, Naganami, Akigumo and Shimakaze in your main fleet.
+quest_161_code	A56
+quest_161_name	Reform the 5th Carrier Division!
+quest_161_desc	Have Shoukaku, Zuikaku, Oboro and Akigumo in your main fleet.
+quest_162_code	A57
+quest_162_name	Prepare to Sortie the New 21st Cruiser Division!
+quest_162_desc	Have Nachi Kai Ni, Ashigara Kai Ni, Tama and Kiso in your main fleet.
+quest_163_code	A58
+quest_163_name	Form the 16th Cruiser Division (First Generation)!
+quest_163_desc	Have Ashigara as flagship, Kuma and Nagara in your main fleet.
+quest_164_code	A59
+quest_164_name	Form the 3rd Carrier Division!
+quest_164_desc	Have Zuikaku Kai as flagship, Zuihou, Chitose (CVL) and Chiyoda (CVL) in your main fleet.
+quest_165_code	A60
+quest_165_name	Form the 4th Carrier Division!
+quest_165_desc	Have Ise Kai and Hyuuga Kai in your main fleet.
+quest_166_code	A61
+quest_166_name	Form the Ozawa Fleet!
+quest_166_desc	Have Zuikaku Kai as flagship, Zuihou Kai, Chitose (CVL), Chiyoda (CVL), Ise Kai and Hyuuga Kai in your main fleet.
+quest_167_code	A62
+quest_167_name	Form the New Carrier Division!
+quest_167_desc	Have Zuikaku Kai Ni, Shoukaku Kai Ni and 2 DD in your fleet.
+quest_168_code	A63
+quest_168_name	Form the 16th Cruiser Division (Second Generation)
+quest_168_desc	Have Natori as flagship, Isuzu and Kinu in your fleet.
+quest_169_code	A64
+quest_169_name	Form the Newly Organized Carrier Division!
+quest_169_desc	Have 2 CV(L), 2 BBV/CAV and 2 DD in your fleet.
+quest_170_code	A65
+quest_170_name	Reform the Strengthened Surface Counterattack Force!
+quest_170_desc	Have Kasumi as flagship, Ashigara, Ooyodo, Asashimo and Kiyoshimo in your fleet.
+quest_171_code	A66
+quest_171_name	Form the 31st Cruiser Division (First Generation)!
+quest_171_desc	Have Isuzu Kai Ni as flagship, Satsuki Kai Ni and Uzuki Kai in your fleet.
+quest_172_code	A67
+quest_172_name	Form the 27th Destroyer Division!
+quest_172_desc	Have ONLY Shiratsuyu Kai as flagship, Shigure, Harusame and Samidare in your fleet.
+quest_173_code	A68
+quest_173_name	Form a Forced High-Speed Transport Force!
+quest_173_desc	Have Sendai Kai Ni as flagship, Kawakaze Kai Ni, Shigure Kai Ni and 2 DD in your fleet.
+quest_174_code	A69
+quest_174_name	Reform the Fleet Composition Into a New Torpedo Squadron!
+quest_174_desc	Have a CL/CLT/CT as flagship and 4 DD in any fleet.
+quest_175_code	A70
+quest_175_name	Reform the New 8th Destroyer Division!
+quest_175_desc	Have ONLY Asashio Kai Ni (or Kai Ni D) as flagship, Michishio, Ooshio and Arashio in your fleet.
+quest_176_code	A71
+quest_176_name	Elite! DesDiv 8, 1st platoon!
+quest_176_desc	Have Asashio Kai Ni D and Ooshio Kai Ni in your fleet.
+quest_177_code	A72
+quest_177_name	Form the 19th Destroyer Division!
+quest_177_desc	Have Isonami, Uranami, Ayanami and Shikinami in your fleet.
+quest_178_code	A73
+quest_178_name	Form the 16th Cruiser Division (Third Generation)!
+quest_178_desc	Have Kinu, Aoba, Kitakami and Ooi in your fleet.
+quest_179_code	A74
+quest_179_name	Reform the Elite 16th Cruiser Division!
+quest_179_desc	Have Kinu Kai Ni as flagship and any five of Kitakami Kai Ni, Ooi Kai Ni, Kuma Kai, Aoba Kai, Uranami Kai and Shikinami Kai in your fleet.
+quest_180_code	A75
+quest_180_name	Form the New 1st Battleship Division!
+quest_180_desc	Have Nagato Kai Ni as flagship and Mutsu Kai in Fleet 1.
+quest_181_code	A76
+quest_181_name	Form the New 7th Cruiser Division!
+quest_181_desc	Have Kumano Kai Ni (or Kou) as flagship, Suzuya Kai Ni (or Kou) as second ship, Mogami Kai and Mikuma Kai in Fleet 1.
+quest_182_code	A77
+quest_182_name	Reform the Elite 4th Carrier Division!
+quest_182_desc	Have Lv.50+ Ise and Lv. 50+ Hyuuga as flagship and second ship, 1 CL, 2 DD, and 1 additional ship in Fleet 1.
+quest_183_code	A78
+quest_183_name	Form the New 4th Torpedo Squadron!
+quest_183_desc	Have Yura Kai Ni as flagship, Murasame, Yuudachi, Harusame, Samidare, and 1 other DD in Fleet 1.
+quest_184_code	A79
+quest_184_name	Reform the Elite 22nd Destroyer Division!
+quest_184_desc	Have Fumizuki Kai Ni, Satsuki Kai Ni, Minazuki Kai and Nagatsuki Kai in your fleet.
+quest_201_code	Bd1
+quest_201_name	Daily Victory
+quest_201_desc	Defeat an Abyssal fleet by obtaining at least a B-Rank.
+quest_202_code	B1
+quest_202_name	Sortieing for the First Time!
+quest_202_desc	Sortie your main fleet.
+quest_203_code	B2
+quest_203_name	Guard the Sea in Front of the Naval Base!
+quest_203_desc	Sortie to [W1-1]. B-Rank+ the boss node.
+quest_204_code	B4
+quest_204_name	Sortie into the Nansei Islands Region!
+quest_204_desc	Sortie to [W1-2]. Reach the end of the map.
+quest_205_code	B5
+quest_205_name	Intercept the Approaching Enemy Vanguard Fleet!
+quest_205_desc	Sortie to [W1-2]. B-Rank+ the boss node.
+quest_206_code	B6
+quest_206_name	Sortie a Torpedo Squadron!
+quest_206_desc	Sortie a CL as flagship and 3 DD to any map.
+quest_207_code	B7
+quest_207_name	Sortie a Heavy Cruiser!
+quest_207_desc	Sortie a CA as flagship to any map.
+quest_208_code	B8
+quest_208_name	Sortie a Battleship!
+quest_208_desc	Sortie a BB flagship to any map. A BBV will not count.
+quest_209_code	B9
+quest_209_name	Sortie a Carrier Task Force!
+quest_209_desc	Sortie a CV(L) flagship and 5 DD/CL/AV to any map.
+quest_210_code	Bd3
+quest_210_name	Daily Battles
+quest_210_desc	Attack 10 Abyssal fleets.
+quest_211_code	Bd4
+quest_211_name	Daily Carriers
+quest_211_desc	Sink 3 Abyssal CV(L).
+quest_212_code	Bd6
+quest_212_name	Daily Transports 2
+quest_212_desc	Sink 5 Abyssal transport ships.
+quest_213_code	Bw3
+quest_213_name	Weekly Transports
+quest_213_desc	Sink 20 Abyssal transport ships.
+quest_214_code	Bw1
+quest_214_name	Weekly Sorties
+quest_214_desc	Sortie 36 times, reach 24 boss nodes, B-Rank+ 12 boss nodes, and obtain 6 S-Ranks.
+quest_215_code	B3
+quest_215_name	Second Fleet, Sortie!
+quest_215_desc	Sortie your 2nd Fleet to any map. A sortie, not an expedition.
+quest_216_code	Bd2
+quest_216_name	Daily Battle
+quest_216_desc	Attack 1 Abyssal fleet.
+quest_217_code	B10
+quest_217_name	Sink an Enemy Carrier!
+quest_217_desc	Sink an Abyssal CV(L).
+quest_218_code	Bd5
+quest_218_name	Daily Transports
+quest_218_desc	Sink 3 Abyssal transport ships.
+quest_219_code	B11
+quest_219_name	Sortie the Mikawa Fleet!
+quest_219_desc	Sortie Choukai, Aoba, Kako, Furutaka, Tenryuu and 1 additional FAST ship to any map.
+quest_220_code	Bw2
+quest_220_name	Weekly Carriers
+quest_220_desc	Sink 20 Abyssal CV(L).
+quest_221_code	Bw4
+quest_221_name	Weekly Transports 2
+quest_221_desc	Sink 50 Abyssal transport ships.
+quest_222_code	B12
+quest_222_name	Sortie the 6th Destroyer Division!
+quest_222_desc	Sortie ONLY Akatsuki, Hibiki, Inazuma and Ikazuchi to any map.
+quest_223_code	B13
+quest_223_name	Sortie the 4th Cruiser Division!
+quest_223_desc	Sortie Atago, Takao, Choukai, Maya and 2 additional ships to [W2-2]. B-Rank+ the boss node.
+quest_224_code	B14
+quest_224_name	Sortie the Nishimura Fleet!
+quest_224_desc	Sortie Fusou, Yamashiro, Mogami, Shigure and 2 additional ships to [W2-3]. B-Rank+ the boss node.
+quest_225_code	B15
+quest_225_name	Sortie the 5th Carrier Division!
+quest_225_desc	Sortie Shoukaku, Zuikaku and 4 additional ships to [W3-1]. B-Rank+ the boss node.
+quest_226_code	Bd7
+quest_226_name	Daily [W2] Bosses
+quest_226_desc	Sortie to any map in [W2]. B-Rank+ any boss node 5 times.
+quest_227_code	B16
+quest_227_name	Sortie the New Mikawa Fleet!
+quest_227_desc	Sortie Choukai, Aoba, Kinugasa, Kako, Furutaka and Tenryuu to [W2-3]. B-Rank+ the boss node.
+quest_228_code	Bw5
+quest_228_name	Weekly Submarines
+quest_228_desc	Sink 15 Abyssal submarines.
+quest_229_code	Bw6
+quest_229_name	Weekly [W4] Bosses
+quest_229_desc	Sortie to any map in [W4]. B-Rank+ any boss node 12 times.
+quest_230_code	Bd8
+quest_230_name	Daily Submarines
+quest_230_desc	Sink 6 Abyssal submarines.
+quest_231_code	B17
+quest_231_name	Sortie a Submarine Fleet!
+quest_231_desc	Sortie 2 SS and 4 additional ships to [W2-3]. B-Rank+ the boss node.
+quest_232_code	B18
+quest_232_name	Sortie an Aviation Surface Attack Fleet!
+quest_232_desc	Sortie 2 BBV, 2 CAV and 2 additional ships to [W4-2]. B-Rank+ the boss node.
+quest_233_code	B19
+quest_233_name	Sortie the 6th Cruiser Division!
+quest_233_desc	Sortie Furutaka, Kako, Kinugasa, Aoba and 2 additional ships to [W2-3]. S-Rank the boss node.
+quest_239_code	B20
+quest_239_name	Sortie the 8th Destroyer Division!
+quest_239_desc	Sortie Asashio, Michishio, Ooshio, Arashio and 2 additional ships to [W2-3]. B-Rank+ the boss node.
+quest_240_code	B21
+quest_240_name	Sortie the 18th Destroyer Division!
+quest_240_desc	Sortie Kasumi, Arare, Kagerou, Shiranui and 2 additional ships to [W3-1]. B-Rank+ the boss node.
+quest_241_code	Bw7
+quest_241_name	Weekly [W3] Bosses
+quest_241_desc	Sortie to [W3-3], [W3-4] or [W3-5]. B-Rank+ any boss node 5 times.
+quest_242_code	Bw8
+quest_242_name	Weekly [W4-4]
+quest_242_desc	Sortie to [W4-4]. B-Rank+ the boss node.
+quest_243_code	Bw9
+quest_243_name	Weekly [W5-2]
+quest_243_desc	Sortie to [W5-2]. S-Rank the boss node 2 times.
+quest_244_code	B22
+quest_244_name	Sortie the 30th Destroyer Division (First Generation)!
+quest_244_desc	Sortie Mutsuki, Kisaragi, Yayoi, Mochizuki and up to 2 additional ships to [W3-2]. C-Rank+ the boss node.
+quest_245_code	WB01
+quest_245_name	Preparation for the Ceremony! (Finale)
+quest_245_desc	Sortie a Lv.90-99 flagship to [W2-3]. S-Rank the boss node.
+quest_246_code	WB02
+quest_246_name	A Couple's First Mission!
+quest_246_desc	Sortie a Lv.100+ Fleet 1 flagship to [W4-3]. S-Rank the boss node.
+quest_247_code	B23
+quest_247_name	The Aviation Battleships Set Sail!
+quest_247_desc	Sortie 2 BBV and up to 4 additional ships to [W4-4]. B-Rank+ the boss node.
+quest_248_code	B24
+quest_248_name	The 30th Destroyer Fleet's Anti-Submarine Patrol
+quest_248_desc	Sortie Mutsuki, Yayoi, Uzuki and Mochizuki to [W1-5]. C-Rank+ the boss node.
+quest_249_code	Bm1
+quest_249_name	Monthly [W2-5] Myoukou Fleet
+quest_249_desc	Sortie Myoukou, Nachi, Haguro and 3 additional ships to [W2-5]. S-Rank the boss node.
+quest_250_code	B25
+quest_250_name	Sortie the New 2nd Carrier Division
+quest_250_desc	Sortie Hiryuu Kai Ni as flagship, Souryuu, 2 DD and up to 2 additional ships to [W5-2]. S-Rank the boss node.
+quest_251_code	B26
+quest_251_name	The Elite 2nd Carrier Division Sets Sail!
+quest_251_desc	Sortie Souryuu Kai Ni as flagship, Hiryuu Kai Ni, 2 DD and up to 2 additional ships to [W4-3]. S-Rank the boss node.
+quest_252_code	B27
+quest_252_name	Sortie the Battleship Haruna!
+quest_252_desc	Sortie Haruna Kai Ni as flagship and 5 additional ships to [W5-1]. S-Rank the boss node.
+quest_253_code	B28
+quest_253_name	Sortie the 601st Naval Air Group!
+quest_253_desc	Sortie Unryuu Kai as flagship and 5 additional ships to [W5-2]. S-Rank the boss node.
+quest_254_code	B29
+quest_254_name	Sortie a Light Aircraft Carrier Division!
+quest_254_desc	Sortie 1-2 CVL, 1 CL and 3-4 DD to [W2-1]. S-Rank the boss node.
+quest_255_code	B30
+quest_255_name	Emergency Deployment of a Torpedo Squadron!
+quest_255_desc	Sortie a CL as flagship and either (1 CL and 4 DD) or (5 DD) to [W2-2]. S-Rank the boss node.
+quest_256_code	Bm2
+quest_256_name	Monthly [W6-1]
+quest_256_desc	Sortie to [W6-1]. S-Rank the boss node 3 times.
+quest_257_code	Bm3
+quest_257_name	Monthly [W1-4]
+quest_257_desc	Sortie a CL as flagship, up to 2 other CL, and at least 1 DD to [W1-4]. No other ship types are allowed. S-Rank the boss node.
+quest_258_code	B31
+quest_258_name	The 2nd Battleship Division Sets Sail!
+quest_258_desc	Sortie Nagato, Mutsu, Fusou, Yamashiro and 2 additional ships to [W4-2]. S-Rank the boss node 2 times.
+quest_259_code	Bm4
+quest_259_name	Monthly [W5-1]
+quest_259_desc	Sortie 3 BB (Yamato-class, Nagato-class, Ise-class or Fusou-class ONLY), 1 CL and 2 additional ships to [W5-1]. S-Rank the boss node.
+quest_260_code	B32
+quest_260_name	Rush the Battleship Force into the Northern Sea!
+quest_260_desc	Sortie 2 (F)BB (no BBV), 1 CVL and 3 additional ships to [W3-5]. S-Rank the boss node.
+quest_261_code	Bw10
+quest_261_name	Weekly [W1-5]
+quest_261_desc	Sortie to [W1-5]. A-Rank+ the boss node 3 times.
+quest_262_code	B33
+quest_262_name	Advance the Nishimura Fleet into the Southern Sea!
+quest_262_desc	Sortie Fusou, Yamashiro, Mogami, Shigure, Michishio and 1 additional ship to [W5-1]. S-Rank the boss node.
+quest_263_code	B34
+quest_263_name	Sortie the 6th Cruiser Division into the Southwestern Sea!
+quest_263_desc	Sortie Furutaka, Kako, Aoba, Kinugasa and 2 additional ships to [W2-5]. S-Rank the boss node.
+quest_264_code	Bm6
+quest_264_name	Monthly [W4-2]
+quest_264_desc	Sortie 2 CV(B/L), 2 DD and 2 additional ships to [W4-2]. S-Rank the boss node.
+quest_265_code	Bm5
+quest_265_name	Monthly [W1-5]
+quest_265_desc	Sortie to [W1-5]. A-Rank+ the boss node 10 times.
+quest_266_code	Bm7
+quest_266_name	Monthly [W2-5] Light Fleet
+quest_266_desc	Sortie a DD as flagship, 3 additional DD, 1 CA (not CAV) and 1 CL to [W2-5]. S-Rank the boss node.
+quest_267_code	B35
+quest_267_name	Sortie the 11th Destroyer Division!
+quest_267_desc	Sortie Fubuki, Shirayuki, Hatsuyuki, Murakumo and 2 additional ships to [W2-3]. B-Rank+ the boss node.
+quest_268_code	B36
+quest_268_name	The 11th Destroyer Division's Anti-Submarine Patrol!
+quest_268_desc	Sortie Fubuki, Shirayuki, Hatsuyuki and Murakumo to [W1-5]. C-Rank+ the boss node.
+quest_269_code	B37
+quest_269_name	Sortie the 21st Destroyer Division!
+quest_269_desc	Sortie Hatsuharu, Nenohi, Wakaba, Hatsushimo and 2 additional ships to [W3-1]. S-Rank the boss node.
+quest_270_code	B39
+quest_270_name	Sortie the 22nd Destroyer Division!
+quest_270_desc	Sortie Satsuki, Fumizuki, Nagatsuki, 1 DD and up to 2 additional ships to [W1-4]. S-Rank the boss node.
+quest_271_code	B38
+quest_271_name	The Nachi Division Sets Sail!
+quest_271_desc	Sortie Nachi as flagship, Hatsushimo, Kasumi, Ushio, Akebono and 1 additional ship to [W2-2]. S-Rank the boss node.
+quest_272_code	B40
+quest_272_name	Sortie the Remodeled Anti-Air Heavy Cruiser!
+quest_272_desc	Sortie Maya Kai or Kai Ni, 1 CL, 2 DD and up to 2 additional ships to [W2-3]. S-Rank the boss node.
+quest_273_code	B41
+quest_273_name	Sortie the New Mikawa Fleet into the Solomon Islands Region!
+quest_273_desc	Sortie Choukai Kai Ni as flagship and any five of Aoba, Kinugasa, Kako, Furutaka, Tenryuu, Yuubari to [W5-1]. S-Rank the boss node.
+quest_274_code	B42
+quest_274_name	The 6th Destroyer Division's Anti-Submarine Patrol, Nanodesu!
+quest_274_desc	Sortie Akatsuki, Hibiki/Verniy, Inazuma and Ikazuchi to [W1-5]. C-Rank+ the boss node.
+quest_275_code	B43
+quest_275_name	The 18th Division Sets Sail!
+quest_275_desc	Sortie Tenryuu, Tatsuta and at least 2 other ships to [W2-3]. S-Rank the boss node.
+quest_276_code	B44
+quest_276_name	Advance the Surface Breakthrough Force!
+quest_276_desc	Sortie Hiei, Kirishima, Nagara, Akatsuki, Ikazuchi and Inazuma to [W5-1]. S-Rank the boss node.
+quest_277_code	B45
+quest_277_name	DesDiv 6's Thorough Anti-Submarine Patrol, Nanodesu!
+quest_277_desc	Sortie Akatsuki Kai Ni, Hibiki/Verniy, Ikazuchi and Inazuma to [W1-5]. A-Rank+ the boss node.
+quest_278_code	B46
+quest_278_name	Rush the 1st Torpedo Squadron to Operation KE!
+quest_278_desc	Sortie Abukuma as flagship, Hibiki/Verniy, Hatsushimo, Wakaba, Samidare and Shimakaze to [W3-2]. B-Rank+ the boss node.
+quest_279_code	B47
+quest_279_name	Rush the 1st Torpedo Squadron North Again to Operation KE!
+quest_279_desc	Sortie Abukuma Kai Ni as flagship, Hibiki/Verniy, Yuugumo, Naganami, Akigumo and Shimakaze to [W3-2]. S-Rank the boss node.
+quest_285_code	B49
+quest_285_name	Advance the Carrier Task Force into the Northern Sea!
+quest_285_desc	Sortie a CV(B) as flagship to [W3-5]. S-Rank the boss node.
+quest_286_code	B48
+quest_286_name	Intensify the Anti-Sub Patrol in Front of the Naval Base!
+quest_286_desc	Sortie to [W1-5]. A-Rank+ the boss node 4 times.
+quest_287_code	B50
+quest_287_name	Sortie the 5th Carrier Division into the Coral Sea Region!
+quest_287_desc	Sortie Shoukaku, Zuikaku, Oboro, Akigumo and up to 2 additional ships to [W5-2]. S-Rank the boss node.
+quest_288_code	B51
+quest_288_name	Sortie the New 21st Cruiser Division into the North!
+quest_288_desc	Sortie Nachi Kai Ni, Ashigara Kai Ni, Tama, Kiso and up to 2 additional ships to [W3-1]. S-Rank the boss node.
+quest_289_code	B52
+quest_289_name	Sortie the 16th Cruiser Division (First Generation)!
+quest_289_desc	Sortie Ashigara as flagship, Kuma, Nagara and up to 3 additional ships to [W2-2]. S-Rank the boss the node.
+quest_293_code	B53
+quest_293_name	Sortie CarDiv 3 to the Nansei Islands Defense Line!
+quest_293_desc	Sortie Zuikaku Kai as flagship, Zuihou, Chitose (CVL), Chiyoda (CVL) and up to 2 additional ships to [W1-4]. S-Rank the boss node.
+quest_294_code	B54
+quest_294_name	Sortie the Ozawa Fleet!
+quest_294_desc	Sortie Zuikaku Kai+ as flagship, Zuihou Kai, Chitose (CVL), Chiyoda (CVL), Ise Kai and Hyuuga Kai to [W2-4]. S-Rank the boss node.
+quest_295_code	B55
+quest_295_name	Sortie the 16th Cruiser Division (Second Generation)!
+quest_295_desc	Sortie Natori as flagship, Isuzu, Kinu and up to 3 additional ships to [W2-3]. S-Rank the boss node.
+quest_296_code	B56
+quest_296_name	Newly Formed Carrier Division, Advance into the North!
+quest_296_desc	Sortie 2 CV, 2 BBV/CAV and 2 DD to [W3-3]. S-Rank the boss node.
+quest_297_code	B57
+quest_297_name	Carry out the Operation Rei-Go!
+quest_297_desc	Sortie Kasumi as flagship, Ashigara, Ooyodo, Asashimo, Kiyoshimo and 1 additional ship to [W2-5]. S-Rank the boss node.
+quest_301_code	C1
+quest_301_name	The First Exercise!
+quest_301_desc	Challenge another fleet in an Exercise.
+quest_302_code	C4
+quest_302_name	Weekly Exercises
+quest_302_desc	Secure 20 victories in Exercises within the same week.
+quest_303_code	C2
+quest_303_name	Daily Exercises 1
+quest_303_desc	Challenge 3 other fleets in Exercises.
+quest_304_code	C3
+quest_304_name	Daily Exercises 2
+quest_304_desc	Secure 5 victories in Exercises within the same day.
+quest_306_code	WC01
+quest_306_name	Preparation for the Ceremony (Part 2)
+quest_306_desc	Show your love by securing 2 victories in Exercises.
+quest_307_code	C5
+quest_307_name	Endeavor to Improve the Fleet's Level of Training!
+quest_307_desc	Secure 3 victories in Exercises within the same day.
+quest_308_code	C6
+quest_308_name	Intensify the Exercises!
+quest_308_desc	Secure 4 victories in Exercises within the same day.
+quest_309_code	C7
+quest_309_name	Training for the Next Operation!
+quest_309_desc	Secure 4 victories in Exercises within the same day.
+quest_311_code	C8
+quest_311_name	Monthly Exercises
+quest_311_desc	Secure 7 victories in Exercises within the same day.
+quest_312_code	C9
+quest_312_name	Landing Force Exercises
+quest_312_desc	Secure 4 victories in Exercises within the same day.
+quest_313_code	C10
+quest_313_name	Mass Exercises for Fall
+quest_313_desc	Secure 8 victories in Exercises within the same day.
+quest_314_code	C11
+quest_314_name	Mass Exercises for Winter
+quest_314_desc	Secure 8 victories in Exercises within the same day.
+quest_315_code	C12
+quest_315_name	Mass Exercises for Spring
+quest_315_desc	Secure 8 victories in Exercises within the same day.
+quest_401_code	D1
+quest_401_name	The First Expedition!
+quest_401_desc	Attempt an expedition.
+quest_402_code	D2
+quest_402_name	Daily Expeditions 1
+quest_402_desc	Complete 3 successful expeditions within the same day.
+quest_403_code	D3
+quest_403_name	Daily Expeditions 2
+quest_403_desc	Complete 10 successful expeditions within the same day.
+quest_404_code	D4
+quest_404_name	Weekly Expeditions
+quest_404_desc	Complete 30 successful expeditions within the same week.
+quest_405_code	D5
+quest_405_name	The First Submarine Dispatch Operation!
+quest_405_desc	Complete Expedition 30.
+quest_406_code	D6
+quest_406_name	The Second Submarine Dispatch Operation!
+quest_406_desc	Complete Expedition 30 one more time.
+quest_408_code	D7
+quest_408_name	Operation to Acquire Foreign Technology!
+quest_408_desc	Complete Expedition 30 two more times.
+quest_409_code	D8
+quest_409_name	Operation to Contact a Foreign Ship!
+quest_409_desc	Complete Expedition 31.
+quest_410_code	D9
+quest_410_name	Weekly Tokyo Express
+quest_410_desc	Complete Expedition 37 or 38.
+quest_411_code	D11
+quest_411_name	Weekly Tokyo Express 2
+quest_411_desc	Complete Expedition 37 or 38 six more times within the same week.
+quest_412_code	D10
+quest_412_name	Enhance the Effectiveness of Aviation Firepower!
+quest_412_desc	Complete Expedition 23.
+quest_413_code	D12
+quest_413_name	Enhance the Effectiveness of Aviation Firepower! (Cont.)
+quest_413_desc	Complete Expedition 23 three more times.
+quest_414_code	D13
+quest_414_name	Carry Out the Deep Sea Submarine Operation!
+quest_414_desc	Complete Expedition 39.
+quest_415_code	D14
+quest_415_name	Extend the Benefits of the Deep Sea Submarine Operation!
+quest_415_desc	Complete Expedition 39 two more times.
+quest_416_code	D15
+quest_416_name	Carry Out Anti-Air Accuracy Exercises!
+quest_416_desc	Complete Expedition 6 three times.
+quest_417_code	D16
+quest_417_name	Carry Out the Decoy Task Force Support Operation!
+quest_417_desc	Complete Expedition 15.
+quest_418_code	D17
+quest_418_name	Carry Out Naval Review Rehearsals!
+quest_418_desc	Complete Expedition 7 twice.
+quest_419_code	D18
+quest_419_name	Execute the Naval Review!
+quest_419_desc	Complete Expedition 8.
+quest_420_code	D19
+quest_420_name	Enhance the Effectiveness of the Task Force!
+quest_420_desc	Complete Expeditions 35 and 26.
+quest_422_code	D20
+quest_422_name	Submarine Dispatch Operation to Acquire Aircraft Technology
+quest_422_desc	Complete Expeditions 30 and 31.
+quest_423_code	D21
+quest_423_name	Submarine Dispatch Operation to Acquire Jet Engine Technology
+quest_423_desc	Have 5000 steel and 1500 bauxite. Complete Expeditions 30 and 31.
+quest_424_code	D22
+quest_424_name	Monthly Expedition 5
+quest_424_desc	Complete Expedition 5 four times.
+quest_425_code	D23
+quest_425_name	Naval Escort Fleet, Commence With the Expeditions!
+quest_425_desc	Complete Expeditions 4, 5 and 9.
+quest_426_code	D24
+quest_426_name	Quarterly Expeditions
+quest_426_desc	Complete Expeditions 3, 4, 5 and 10.
+quest_501_code	E1
+quest_501_name	Resupply for the First Time!
+quest_501_desc	Resupply a ship.
+quest_502_code	E2
+quest_502_name	Docking for the First Time!
+quest_502_desc	Repair a ship.
+quest_503_code	E3
+quest_503_name	Daily Repairs
+quest_503_desc	Repair 5 ships.
+quest_504_code	E4
+quest_504_name	Daily Resupplies
+quest_504_desc	Resupply your ships 15 times.
+quest_601_code	F1
+quest_601_name	The First Construction!
+quest_601_desc	Construct a ship.
+quest_602_code	F2
+quest_602_name	The First Development!
+quest_602_desc	Construct a piece of equipment.
+quest_603_code	F3
+quest_603_name	The First Dismantlement!
+quest_603_desc	Scrap a ship.
+quest_604_code	F4
+quest_604_name	The First Disposal!
+quest_604_desc	Scrap a piece of equipment.
+quest_605_code	F5
+quest_605_name	Daily Development 1
+quest_605_desc	Attempt to construct a piece of equipment. Failures count toward this.
+quest_606_code	F6
+quest_606_name	Daily Construction 1
+quest_606_desc	Construct a ship.
+quest_607_code	F7
+quest_607_name	Daily Development 2
+quest_607_desc	Attempt to construct 3 pieces of equipment. Failures count toward this.
+quest_608_code	F8
+quest_608_name	Daily Construction 2
+quest_608_desc	Construct 3 ships.
+quest_609_code	F9
+quest_609_name	Daily Dismantlement
+quest_609_desc	Scrap 2 ships.
+quest_610_code	F10
+quest_610_name	Preparation for Large Ship Construction! (Part 2)
+quest_610_desc	Scrap 4 pieces of equipment.
+quest_611_code	WF01
+quest_611_name	Preparation for the Ceremony! (Part 1)
+quest_611_desc	Scrap 2 pieces of equipment to show your love!
+quest_612_code	F11
+quest_612_name	Prepare the Transport Drums!
+quest_612_desc	Scrap 3 pieces of equipment.
+quest_613_code	F12
+quest_613_name	Weekly Dismantlement
+quest_613_desc	Scrap 24 pieces of equipment. Scrap them one at a time.
+quest_614_code	F13
+quest_614_name	Model Conversion: Tomonaga
+quest_614_desc	Set a CV(B/L) as secretary. Equip her with a Type 97 Torpedo Bomber (Tomonaga Squadron). Scrap two Tenzan.
+quest_615_code	F14
+quest_615_name	Model Conversion: Egusa
+quest_615_desc	Set a CV(B/L) as secretary. Equip her with a Type 99 Dive Bomber (Egusa Squadron). Scrap two Suisei.
+quest_616_code	F15
+quest_616_name	Model Conversion: 601 Air Group
+quest_616_desc	Set a CV(B/L) as secretary. Equip her with a Zero Fighter Type 52 Type C (601 Air Group). Scrap two Reppuu.
+quest_617_code	F16
+quest_617_name	Preparation for Irako
+quest_617_desc	Scrap 10 pieces of equipment.
+quest_618_code	F17
+quest_618_name	The First Equipment Modernization!
+quest_618_desc	Upgrade a piece of equipment using Akashi's Improvement Arsenal.
+quest_619_code	F18
+quest_619_name	Daily Upgrade
+quest_619_desc	Attempt to upgrade a piece of equipment using Akashi's Improvement Arsenal. Failures count toward this.
+quest_622_code	F19
+quest_622_name	Model Conversion: Murata
+quest_622_desc	Set Shoukaku as secretary. Equip her with a Type 97 Torpedo Bomber (Murata Squadron). Scrap two Tenzan.
+quest_623_code	F20
+quest_623_name	Form the Elite Type 97 Torpedo Bomber Force: Murata
+quest_623_desc	Set Shoukaku or Akagi as secretary. Scrap three Type 97 Torpedo Bombers.
+quest_624_code	F21
+quest_624_name	Preparation for the Prototype Rigging
+quest_624_desc	Scrap 7 pieces of equipment.
+quest_625_code	F23
+quest_625_name	Additional Prototype Flight Rigging
+quest_625_desc	Scrap 9 pieces of equipment.
+quest_626_code	F22
+quest_626_name	Monthly Type 0 Fighter Model 21 (Skilled)
+quest_626_desc	Have a Skilled Crew Member. Set Houshou as secretary. Equip her with a >> Type 0 Fighter Model 21. Scrap two Type 0 Fighter Model 21s and a Type 96 Fighter.
+quest_627_code	F24
+quest_627_name	Model Conversion: Type 0 Fighter Model 52 (Skilled)
+quest_627_desc	Set a CV as secretary. Equip her with a Type 0 Fighter Model 21 (Skilled). Scrap two Type 0 Fighter Model 52s.
+quest_628_code	F25
+quest_628_name	Monthly Type 0 Fighter Model 52 (Skilled)
+quest_628_desc	Set a CV as secretary. Equip her with a >> Type 0 Fighter Model 21 (Skilled). Scrap two Type 0 Fighter Model 52s.
+quest_629_code	F26
+quest_629_name	Reform the Fighter Squadron: Iwai
+quest_629_desc	Set Zuikaku as secretary. Equip her with a >> Type 0 Fighter Model 52 (Skilled). Scrap a Zero Fighter Model 52C (601 Air Group).
+quest_630_code	F28
+quest_630_name	Reform the Fighter Squadron: Iwamoto
+quest_630_desc	Set Zuikaku as secretary. Equip her with a >> Type 0 Fighter Model 21 (Skilled). Scrap two Type 0 Fighter Model 21s.
+quest_631_code	F27
+quest_631_name	Model Conversion and Unit Restructuring: Iwai
+quest_631_desc	☣CAUTION☣ Set Zuikaku as secretary. Equip her with a >> Zero Fighter Model 52C (w/ Iwai Flight). Scrap two Type 0 Fighter Model 62s (Fighter-bomber).
+quest_632_code	F29
+quest_632_name	Model Conversion: Iwamoto
+quest_632_desc	Set Zuikaku as secretary. Equip her with a >> Zero Fighter Model 21 (w/ Iwamoto Flight). Scrap two Type 0 Fighter Model 52.
+quest_633_code	F30
+quest_633_name	Model Conversion and Unit Restructuring: Iwamoto
+quest_633_desc	Set Zuikaku as secretary. Equip her with a >> Zero Fighter Model 52A (w/ Iwamoto Flight). Scrap two Saiun.
+quest_634_code	F31
+quest_634_name	Preparations for New Furniture
+quest_634_desc	Scrap 9 pieces of equipment.
+quest_635_code	F32
+quest_635_name	Preparations for New Equipment
+quest_635_desc	Scrap 5 pieces of equipment.
+quest_636_code	F33
+quest_636_name	New Equipment Procurement for the Landing Operation
+quest_636_desc	Scrap two 7.7mm Machine Guns and two 12.7mm Single Machine Gun Mounts.
+quest_637_code	F35
+quest_637_name	Quarterly Skilled Crew Member Training
+quest_637_desc	Have 2 Medals. Set Houshou as secretary. Equip her with a >> ★max Type 96 Fighter.
+quest_638_code	F34
+quest_638_name	Weekly AA Gun Dismantlement
+quest_638_desc	Scrap 6 anti-air guns. High-angle guns do not count.
+quest_639_code	F36
+quest_639_name	Development of a New Torpedo Armament
+quest_639_desc	Have 2 Medals. Set Shimakaze as secretary. Equip her with a ★max 61cm Quintuple Oxygen Torpedo Mount and a ★max 61cm Triple Oxygen Torpedo Mount.
+quest_640_code	SF
+quest_640_name	(Limited time) Early Summer Cleanup
+quest_640_desc	Scrap 5 pieces of equipment.
+quest_641_code	F37
+quest_641_name	Advance Preparation for the Airbase Construction
+quest_641_desc	Have two Type 96 Fighters and two 7.7mm Machine Guns in your inventory. Scrap two Drum Canisters.
+quest_642_code	F38
+quest_642_name	Expansion of the Attack Aircraft Squadron
+quest_642_desc	Have two Type 99 Dive Bombers and two 7.7mm Machine Guns in your inventory.
+quest_643_code	F39
+quest_643_name	Quarterly Type 1 Land-based Attack Aircraft
+quest_643_desc	Have one Type 96 Land-based Attack Aircraft and two Type 97 Torpedo Bombers in your inventory. Scrap two Type 0 Fighter Model 21s.
+quest_644_code	F40
+quest_644_name	Procurement for an Improved Type 1 Land-based Attack Aircraft
+quest_644_desc	Have one Type 1 Land-based Attack Aircraft and two Tenzan in your inventory.
+quest_645_code	F41
+quest_645_name	Monthly Underway Replenishment
+quest_645_desc	Have 750 fuel, 750 ammo, two Drum Canisters and one Type 91 AP Shell in your inventory. Scrap one Type 3 Shell.
+quest_646_code	F42
+quest_646_name	Procurement for Custom-Made Furniture
+quest_646_desc	Have 5000 Furniture Coins, two 25mm Twin AC Mounts and two 25mm Triple AC Mounts in your inventory. Scrap one 25mm Single AC Mount.
+quest_647_code	F43
+quest_647_name	Deploy an Air Base Squadron to the Chubu Region!
+quest_647_desc	Have 1200 fuel, 3000 bauxite, and one Construction Battalion in your inventory. Scrap two Drum Canisters.
+quest_648_code	F44
+quest_648_name	Procurement for Custom-Made Furniture
+quest_648_desc	Have 5000 Furniture Coins, two 14cm Single Gun Mounts and two 15.2cm Single Gun Mounts in your inventory. Scrap two 12.7cm Twin High-Angle Gun Mounts.
+quest_649_code	F45
+quest_649_name	Development of a New Axis Reconnaissance Aircraft
+quest_649_desc	Have one Type 1 Land-based Attack Aircraft and two Saiun. Scrap two Type 0 Reconnaissance Seaplanes.
+quest_650_code	F46
+quest_650_name	Development of a Jet Fighter-Bomber
+quest_650_desc	Have two New Model Aircraft Blueprints and one Ne-Type Engine. Scrap three Shiden Kai Ni.
+quest_651_code	F47
+quest_651_name	Increased Production of the Ne-Type Engine
+quest_651_desc	Have 8000 steel, two Ryuusei and two Reppuu. Scrap three Type 0 Fighter Model 52s.
+quest_652_code	F48
+quest_652_name	Procurement for Custom-Made Furniture
+quest_652_desc	Have 5000 Furniture Coins, two 7.7mm Machine Guns and two Type 96 Fighters in your inventory. Scrap two 12.7cm Twin Gun Mounts.
+quest_653_code	SF2
+quest_653_name	Special Setsubun Mission: Preparation for Setsubun!
+quest_653_desc	Have 5000 Furniture Coins, two 12cm Single Gun Mounts and two Type 0 Reconnaissance Seaplanes in your inventory. Scrap two 20.3cm Twin Gun Mounts.
+quest_656_code	F49
+quest_656_name	Form the Seiran 631 Air Group!
+quest_656_desc	Set I-401, I-13 or I-14 as secretary. Equip a Prototype Seiran in her first slot and a Zuiun (631 Air Group) in her second slot.
+quest_657_code	SF3
+quest_657_name	Spring Preparatory Mission: Preparation for Hinamatsuri!
+quest_657_desc	Have 5000 Furniture Coins, two Type 99 Dive Bombers and two 61cm Triple Torpedo Mounts in your inventory. Scrap two 14cm Single Gun Mounts.
+quest_658_code	F50
+quest_658_name	Submarine Armament Enhancement
+quest_658_desc	Have 120 Development Materials, three 61cm Quad (Oxygen) Torpedo Mounts and three Type 93 SONARs in your inventory. Scrap four 61cm Triple Torpedo Mounts.
+quest_659_code	F51
+quest_659_name	The Newly Formed Elite Naval Fighter Squadron
+quest_659_desc	Have a Skilled Crew Member. Equip a secretary with a >> ★max Type 2 Seaplane Fighter Kai in her first slot. Scrap two Type 0 Fighter Model 21s and 2 Zuiun.
+quest_660_code	F52
+quest_660_name	The Increasing Trend of Elite Naval Fighter Squadrons
+quest_660_desc	Have a Skilled Crew Member. Equip a secretary with a >> ★max Type 2 Seaplane Fighter Kai in her first slot. Scrap two Type 0 Fighter Model 21s and 2 Zuiun.
+quest_661_code	F53
+quest_661_name	Begin Military Production of a New Model Artillery Armament!
+quest_661_desc	Have 6000 steel. Scrap 10 Secondary Guns.
+quest_662_code	F54
+quest_662_name	Developmental Study on a New Model of Rigging
+quest_662_desc	Have 12000 steel. Scrap 10 Medium Caliber Main Guns. Press F10 to clear the overlay.
+quest_663_code	F55
+quest_663_name	Quarterly Medal or Materials
+quest_663_desc	Have 18000 steel. Scrap 10 Large Caliber Main Guns. Press F10 to clear the overlay.
+quest_664_code	F56
+quest_664_name	Utilization of Radar Technology for Fire Direction
+quest_664_desc	Have 8000 ammo and steel. Scrap 10 Radars. Press F10 to clear the overlay.
+quest_665_code	F57
+quest_665_name	A Joint Effort With the Consumer Industry
+quest_665_desc	Have 12000 fuel. Scrap 16 Small Caliber Main Guns. Press F10 to clear the overlay.
+quest_666_code	F58
+quest_666_name	Form the Elite Zuiun Squadron!
+quest_666_desc	Have a Skilled Crew Member, 2 Type 99 Dive Bombers and 2 Zuiun. Set Hyuuga Kai as secretary. Equip a ★max Zuiun (634 Air Group) in her 4th slot. Scrap 2 Drum Canisters.
+quest_667_code	F59
+quest_667_name	Continue the Joint Effort With the Consumer Industry!
+quest_667_desc	Have 15000 steel. Scrap 10 anti-air guns. High-angle guns do not count. Press F10 to clear the overlay.
+quest_668_code	F60
+quest_668_name	An Experimental New Kind of Combat Ration
+quest_668_desc	Have 2 Combat Rations, 800 fuel and 150 Bauxite.
+quest_701_code	G1
+quest_701_name	The First Modernization!
+quest_701_desc	Complete a successful modernization.
+quest_702_code	G2
+quest_702_name	Daily Modernization
+quest_702_desc	Complete 2 successful modernizations within the same day.
+quest_703_code	G3
+quest_703_name	Weekly Modernization
+quest_703_desc	Complete 15 successful modernizations within the same week.
+quest_704_code	G4
+quest_704_name	Preparation for Large Ship Construction! (Part 1)
+quest_704_desc	Complete 4 successful modernizations.
+quest_705_code	G5
+quest_705_name	Flight Rigging Modernization
+quest_705_desc	Have 5500 steel and 2500 bauxite. Modernize a CV(B) using 5 CV(L) twice.
+quest_805_code	B58
+quest_805_name	Send Flagship Kasumi to Patrol the Northern Sea!
+quest_805_desc	Sortie Kasumi Kai Ni as flagship, 3 DD and up to 2 additional ships to [W3-1]. B-Rank+ the boss node.
+quest_806_code	B59
+quest_806_name	Flagship Kasumi, Sortie! Annhilate the Enemy Fleet!
+quest_806_desc	Sortie Kasumi Kai Ni as flagship, 2 DD and up to 3 additional ships to [W2-5]. S-Rank the boss node.
+quest_807_code	B60
+quest_807_name	Sortie the 31st Cruiser Division!
+quest_807_desc	Sortie Isuzu Kai Ni as flagship, Satsuki Kai Ni, Uzuki Kai and up to 3 additional ships to [W1-6]. Reach node N.
+quest_808_code	B61
+quest_808_name	Sortie the 27th Destroyer Division!
+quest_808_desc	Sortie Shiratsuyu Kai as flagship, Shigure, Harusame, Samidare and up to 2 additional ships to [W2-3]. S-Rank the boss node.
+quest_809_code	B62
+quest_809_name	Enhance the Strength of Landing Force Operations!
+quest_809_desc	Sortie to [W6-3]. B-Rank+ the boss node.
+quest_810_code	B63
+quest_810_name	Defend the Refinery Area!
+quest_810_desc	Sortie a CL and 5 DD to [W1-3]. S-Rank the boss node 3 times.
+quest_811_code	B64
+quest_811_name	Reinforce the Nansei Islands Defense Line!
+quest_811_desc	Sortie to [W1-4]. S-Rank the boss node 5 times.
+quest_812_code	B65
+quest_812_name	Secure Control of the Orel Sea!
+quest_812_desc	Sortie Ooshio as flagship to [W2-3]. S-Rank the boss node 6 times.
+quest_813_code	B66
+quest_813_name	Sortie the flagship Ooshio!
+quest_813_desc	Sortie Ooshio Kai Ni as flagship to [W3-5]. S-Rank the boss node.
+quest_814_code	B68
+quest_814_name	High-Speed Transport Enforcement Unit, Sortie!
+quest_814_desc	Sortie Sendai Kai Ni, Kawakaze Kai Ni, Shigure Kai Ni, 2 DD and up to 1 additional ship to [W4-1]. A-Rank+ the boss node.
+quest_815_code	B69
+quest_815_name	Send the 1st Carrier Division into the West!
+quest_815_desc	Sortie Akagi as flagship, Kaga and up to 4 additional ships to [W4-5]. S-Rank the boss node.
+quest_816_code	B67
+quest_816_name	The Fleet's Third Anniversary!
+quest_816_desc	Sortie to [W2-2] and [W2-3]. S-Rank the boss nodes of both maps.
+quest_817_code	B70
+quest_817_name	New Fleet, Hurry to the Nansei Islands Defense Line!
+quest_817_desc	Sortie a CL/CLT/CT flagship, 4 DD, and up to 1 additional ship to [W1-4]. A-Rank+ the boss node.
+quest_818_code	B71
+quest_818_name	Solidify and Maintain the Safety of the Base's Local Routes!
+quest_818_desc	Sortie a CL flagship, 4 DD and up to 1 additional ship to [W1-6]. Reach node N.
+quest_819_code	B72
+quest_819_name	The 31st Cruiser Division's Anti-Submarine Suppression!
+quest_819_desc	Sortie Isuzu Kai Ni as flagship, Satsuki Kai Ni, Uzuki Kai and 3 additional ships to [W1-6]. Reach node N twice.
+quest_820_code	B73
+quest_820_name	Sortie the New 8th Destroyer Division!
+quest_820_desc	Sortie Asashio Kai Ni+ as flagship, Michishio, Ooshio, Arashio and 2 additional ships to [W1-6]. Reach node N.
+quest_821_code	B74
+quest_821_name	The Elite 8th Destroyer Division's Anti-Submarine Patrol!
+quest_821_desc	Sortie a fleet that includes Asashio Kai Ni D and Ooshio Kai Ni to [W1-5]. S-Rank the boss node 2 times.
+quest_822_code	Bq1
+quest_822_name	Quarterly [W2-4]
+quest_822_desc	Sortie to [W2-4]. S-Rank the boss node 2 times.
+quest_823_code	B75
+quest_823_name	Torpedo Squadron, Persist on the Southwest Defense Line!
+quest_823_desc	Sortie a CL/CLT/CT as flagship, 4 DD and 1 additional ship to [W1-4]. A-Rank the boss node 2 times.
+quest_824_code	B76
+quest_824_name	Carry Out a Patrol of the Coastal Refinery Area!
+quest_824_desc	Sortie a CVL as flagship, 3 DD and 2 additional ships to [W1-3]. S-Rank the boss node.
+quest_825_code	B77
+quest_825_name	Torpedo Squadron, Patrol the Nansei Islands Region!
+quest_825_desc	Sortie a CL/CLT/CT as flagship, 4 DD and 1 additional ship to [W2-2] and [W2-3]. S-Rank the boss nodes of both maps.
+quest_826_code	B78
+quest_826_name	Sortie the 19th Destroyer Division!
+quest_826_desc	Sortie Isonami, Uranami, Ayanami and Shikinami to [W1-5]. A-Rank+ the boss node.
+quest_827_code	B79
+quest_827_name	Rush DesDiv 19 to Engage the Enemy's Main Forces!
+quest_827_desc	Sortie Isonami, Uranami, Ayanami and Shikinami and up to 2 additional ships to [W2-5]. A-Rank+ the boss node.
+quest_828_code	B80
+quest_828_name	Carry Out Preparations for the Airfield Construction!
+quest_828_desc	Sortie to [W6-3]. S-Rank the boss node.
+quest_829_code	B81
+quest_829_name	Rush into the Night! Strike at the Enemy Landing Force!
+quest_829_desc	Sortie to [W5-3]. A-Rank+ the boss node.
+quest_830_code	B82
+quest_830_name	Acquire the Light that Illuminates the Night Sea!
+quest_830_desc	Sortie to [W2-1]. S-Rank the boss node.
+quest_834_code	B83
+quest_834_name	Reinforce the Nansei Islands Defense Line!
+quest_834_desc	Sortie an AV or CAV as flagship to [W1-4]. S-Rank the boss node.
+quest_835_code	B84
+quest_835_name	Sortie the 16th Cruiser Division (Third Generation)!
+quest_835_desc	Sortie Kinu, Aoba, Kitakami, Ooi and up to 2 additional ships to [W2-4]. A-Rank+ the boss node.
+quest_836_code	B85
+quest_836_name	Break Through With the Elite 16th Cruiser Division!
+quest_836_desc	Sortie Kinu Kai Ni as flagship and any five of Kitakami Kai Ni, Ooi Kai Ni, Kuma Kai, Aoba Kai, Uranami Kai and Shikinami Kai to [W2-5]. S-Rank the boss node.
+quest_837_code	B86
+quest_837_name	Succeed in the Transport Operation and Return!
+quest_837_desc	Sortie Kinu Kai Ni as flagship, Uranami Kai, 3 DD and one additional non-DD to [W2-2]. S-Rank the boss node.
+quest_838_code	B87
+quest_838_name	Heavy Cruiser Division, Set Sail!
+quest_838_desc	Sortie a CA(V) as flagship, 3 other CA(V) and up to 2 additional ships to [W2-3]. S-Rank the boss node.
+quest_839_code	B88
+quest_839_name	Sortie a Battleship Division!
+quest_839_desc	Sortie a (F)BB(V) as flagship, 1 other (F)BB(V) and up to 4 additional ships to [W3-3]. S-Rank the boss node. You will have to select a reward. Press F10 to clear the overlay.
+quest_840_code	SB15
+quest_840_name	Special Winter Mission: Elite Destroyer Division, Sortie!
+quest_840_desc	Sortie 4 DD ONLY to [W1-1] and [W1-2]. S-Rank the boss nodes of both maps. You will be prompted to select one of two rewards, so be careful. Press F10 to clear the overlay.
+quest_841_code	SB16
+quest_841_name	Special Winter Mission: Seaplane Tender, Set Sail!
+quest_841_desc	Sortie an AV as flagship, 3 DD and up to 2 other ships to [W1-3] and [W1-4]. S-Rank the boss nodes of both maps.
+quest_842_code	B89
+quest_842_name	Main Battleship Division, Set Sail!
+quest_842_desc	Sortie 2 BB(V) (not FBB) and up to 4 additional ships to [W2-4]. S-Rank the boss node. You will have to select a reward. Press F10 to clear the overlay.
+quest_843_code	SB21
+quest_843_name	Setsubun Special Sorties: Maintain Control of the Seas!
+quest_843_desc	Sortie 2 DD and 2 additional ships to [W1-1], [W1-2], [W2-3]. S-Rank the boss nodes of each.
+quest_844_code	B90
+quest_844_name	Break Through With the Elite 8th Destroyer Division!
+quest_844_desc	Sortie Arashio Kai Ni as Fleet 1 flagship, one of Asashio, Ooshio, or Michishio, and 4 additional ships to [W5-5]. A-Rank+ the boss node 2 times.
+quest_846_code	B91
+quest_846_name	Submarine Fleet, Execute Patrols in the Central Waters!
+quest_846_desc	Sortie an SS(V) as flagship, 3 other SS(V), and two additional ships to [W6-1]. B-Rank+ the boss node.
+quest_847_code	SB22
+quest_847_name	Spring Preparatory Mission: Carry out Preparations for Hinamatsuri!
+quest_847_desc	Sortie to [W2-3]. S-Rank the boss node 5 times.
+quest_848_code	B92
+quest_848_name	Armored Heavy Cruiser, Rush into the Iron Bottom Sound!
+quest_848_desc	Sortie Zara Due as Fleet 1 flagship to [W5-3]. A-Rank+ the boss node.
+quest_849_code	B93
+quest_849_name	Crush the Enemy Fleet in the Nansei Islands Region!
+quest_849_desc	Sortie a CL as flagship and 5 additional ships to [W1-4], [W2-2] and [W2-3]. S-Rank the boss nodes of each.
+quest_850_code	B94
+quest_850_name	Expand the Offshore Aviation Forces!
+quest_850_desc	Sortie a CV/CVB/CVL/AV as flagship and 5 additional ships [W3-5], [W4-4] and [W6-2]. S-Rank the boss nodes of each.
+quest_851_code	B95
+quest_851_name	Remodeled Aviation Cruiser, Sortie!
+quest_851_desc	Sortie Suzuya Kai Ni (not CVL) as flagship to [W5-1] and [W5-3]. A-Rank+ the boss nodes of each. You will be prompted to select a reward. Press F10 to clear the overlay.
+quest_852_code	B96
+quest_852_name	Remodeled Light Attack Carrier, Deploy to the Front Lines!
+quest_852_desc	Sortie Suzuya-Kou Kai Ni (not CAV) as flagship to [W6-2] and [W6-5]. S-Rank the boss nodes of each.
+quest_853_code	B97
+quest_853_name	Vigilantly Patrol the Waters of the Naval Base!
+quest_853_desc	Sortie a CL/CA(V) as flagship and at least 2 DD in any suitable fleet composition to [W1-2], [W1-3], [W1-4] and [W1-5]. A-Rank+ the boss nodes of each.
+quest_854_code	Bq2
+quest_854_name	Quarterly Ranking Points
+quest_854_desc	Sortie Fleet 1 to [W2-4], [W6-1] and [W6-3] and A-Rank+ the boss nodes of each. Sortie to [W6-4] and S-Rank the boss node.
+quest_855_code	B98
+quest_855_name	Strive to Reinforce the Coast Guard's Logistics!
+quest_855_desc	Sortie at least 3 DD/DE to [W1-3], [W1-4], [W1-5] and [W1-6]. S-Rank the boss nodes of each where applicable. Reach node N of [W1-6] once.
+quest_856_code	B99
+quest_856_name	1st Battleship Division, Set Sail!
+quest_856_desc	Sortie Nagato Kai Ni as Fleet 1 flagship, Mutsu Kai as second ship, and 4 additional ships to [W4-5] and [W5-5]. S-Rank the boss nodes of each.
+quest_857_code	B100
+quest_857_name	Enhanced Naval Escort Fleet, Set Sail!
+quest_857_desc	Sortie Fleet 1 with a CL, 2 DD/DE, 1 CAV/CVL and 2 other ships to [W2-2], [W2-3], [W2-4] and [W2-5]. A-Rank+ the boss nodes of each. Press F10 to clear the overlay.
+quest_858_code	B101
+quest_858_name	New 7th Cruiser Division, Sortie!
+quest_858_desc	Sortie Kumano Kai Ni (or Kou) as Fleet 1 flagship, Suzuya Kai Ni (or Kou) as 2nd ship, Mogami Kai, Mikuma Kai and 2 other ships to [W4-5] and [W6-2]. S-Rank the bosses.
+quest_859_code	B102
+quest_859_name	Elite 4th Carrier Division, Set Sail!
+quest_859_desc	Sortie Lv.50+ Hyuuga and Lv.50+ Ise as flagship and second ship, 1 CL, 2 DD and 1 additional ship to [W2-5] and [W3-5]. A-Rank+ the boss nodes of each. Overlay: F10.
+quest_860_code	B103
+quest_860_name	Flagship Yura, Set Sail!
+quest_860_desc	Sortie Yura Kai Ni as Fleet 1 flagship, at least 2 of Akizuki, Yuudachi, Murasame, Harusame or Samidare, and 3 others to [W2-3] and [W5-1]. S-Rank the boss nodes.
+quest_861_code	Bq3
+quest_861_name	Quarterly [W1-6]
+quest_861_desc	Sortie 2 BBV/AO and up to 4 additional ships to [W1-6]. Reach node N twice.
+quest_862_code	Bq4
+quest_862_name	Quarterly [W6-3]
+quest_862_desc	Sortie 1 AV, 2 CL and up to 3 additional ships to [W6-3]. A-Rank+ the boss node twice.
+quest_863_code	B104
+quest_863_name	Sortie the Elite 22nd Destroyer Division!
+quest_863_desc	Sortie Fumizuki Kai Ni, Satsuki Kai Ni, Minazuki Kai, Nagatsuki Kai and up to 2 additional ships to [W3-2]. S-Rank the boss node. Press F10 to clear the overlay.

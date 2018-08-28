@@ -1,20 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-using BeerViewer.Core;
+using BeerViewer.Models.Enums;
 using BeerViewer.Models.Raw;
+using BeerViewer.Models.kcsapi;
 
 namespace BeerViewer.Models
 {
+	public class RepairingCompletedEventArgs : EventArgs
+	{
+		public int DockId { get; private set; }
+		public Ship Ship { get; private set; }
+
+		public RepairingCompletedEventArgs(int id, Ship ship)
+		{
+			this.DockId = id;
+			this.Ship = ship;
+		}
+	}
+
 	public class RepairingDock : TimerNotifier, IIdentifiable
 	{
 		private readonly Homeport homeport;
 		private bool notificated;
 
-		#region Level 프로퍼티
+		#region Level Property
 		private int _Level;
 		public int Level
 		{
@@ -30,7 +39,7 @@ namespace BeerViewer.Models
 		}
 		#endregion
 
-		#region Id 프로퍼티
+		#region Id Property
 		private int _Id;
 		public int Id
 		{
@@ -46,7 +55,7 @@ namespace BeerViewer.Models
 		}
 		#endregion
 
-		#region State 프로퍼티
+		#region State Property
 		private RepairingDockState _State;
 		public RepairingDockState State
 		{
@@ -62,7 +71,7 @@ namespace BeerViewer.Models
 		}
 		#endregion
 
-		#region ShipId 프로퍼티
+		#region ShipId Property
 		private int _ShipId;
 		public int ShipId
 		{
@@ -78,7 +87,7 @@ namespace BeerViewer.Models
 		}
 		#endregion
 
-		#region Ship 프로퍼티
+		#region Ship Property
 		private Ship target;
 		public Ship Ship
 		{
@@ -99,7 +108,7 @@ namespace BeerViewer.Models
 		}
 		#endregion
 
-		#region CompleteTime 프로퍼티
+		#region CompleteTime Property
 		private DateTimeOffset? _CompleteTime;
 		public DateTimeOffset? CompleteTime
 		{
@@ -116,7 +125,7 @@ namespace BeerViewer.Models
 		}
 		#endregion
 
-		#region Remaining 프로퍼티
+		#region Remaining Property
 		private TimeSpan? _Remaining;
 		public TimeSpan? Remaining
 		{
@@ -134,20 +143,20 @@ namespace BeerViewer.Models
 
 		public event EventHandler<RepairingCompletedEventArgs> Completed;
 
-		internal RepairingDock(Homeport parent, kcsapi_ndock rawData)
+		internal RepairingDock(Homeport parent, kcsapi_ndock Data)
 		{
 			this.homeport = parent;
-			this.Update(rawData);
+			this.Update(Data);
 		}
 
-		internal void Update(kcsapi_ndock rawData)
+		internal void Update(kcsapi_ndock Data)
 		{
-			this.Id = rawData.api_id;
-			this.State = (RepairingDockState)rawData.api_state;
-			this.ShipId = rawData.api_ship_id;
+			this.Id = Data.api_id;
+			this.State = (RepairingDockState)Data.api_state;
+			this.ShipId = Data.api_ship_id;
 			this.Ship = this.State == RepairingDockState.Repairing ? this.homeport.Organization.Ships[this.ShipId] : null;
 			this.CompleteTime = this.State == RepairingDockState.Repairing
-				? (DateTimeOffset?)Const.UnixEpoch.AddMilliseconds(rawData.api_complete_time)
+				? (DateTimeOffset?)Extensions.UnixEpoch.AddMilliseconds(Data.api_complete_time)
 				: null;
 			this.Level = this.State == RepairingDockState.Repairing ? this.Ship.Level : 0;
 		}
@@ -160,7 +169,6 @@ namespace BeerViewer.Models
 			this.CompleteTime = null;
 		}
 
-
 		protected override void Tick()
 		{
 			base.Tick();
@@ -172,7 +180,7 @@ namespace BeerViewer.Models
 
 				this.Remaining = remaining;
 
-				if (!this.notificated && this.Completed != null && remaining <= TimeSpan.FromSeconds(Const.NotificationTime))
+				if (!this.notificated && this.Completed != null && remaining <= TimeSpan.FromSeconds(Settings.NotificationTime.Value))
 				{
 					this.Completed(this, new RepairingCompletedEventArgs(this.Id, this.Ship));
 					this.notificated = true;

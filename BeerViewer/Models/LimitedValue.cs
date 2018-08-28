@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BeerViewer.Models
+﻿namespace BeerViewer.Models
 {
-	/// <summary>
-	/// 상한이 있는 데이터
-	/// </summary>
 	public struct LimitedValue
 	{
+		public double Percentage
+			=> (Maximum - Minimum) != 0
+				? (double)(Current - Minimum) / (Maximum - Minimum)
+				: 0;
+
 		public int Current { get; }
 		public int Maximum { get; }
 		
@@ -24,14 +20,9 @@ namespace BeerViewer.Models
 		}
 
 		public LimitedValue Update(int cur)
-		{
-			return new LimitedValue(cur, this.Maximum, this.Minimum);
-		}
+			=> new LimitedValue(cur, this.Maximum, this.Minimum);
 	}
-
-	/// <summary>
-	/// 상한이 있는 데이터
-	/// </summary>
+	
 	public struct LimitedValue<T> where T : struct
 	{
 		public T Current { get; private set; }

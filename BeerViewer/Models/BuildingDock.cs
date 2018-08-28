@@ -1,19 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-using BeerViewer.Core;
+using BeerViewer.Models.Enums;
+using BeerViewer.Models.Wrapper;
 using BeerViewer.Models.Raw;
+using BeerViewer.Models.kcsapi;
 
 namespace BeerViewer.Models
 {
+	public class BuildingCompletedEventArgs : EventArgs
+	{
+		public int DockId { get; }
+		public ShipInfo Ship { get; }
+
+		public BuildingCompletedEventArgs(int id, ShipInfo ship)
+		{
+			this.DockId = id;
+			this.Ship = ship;
+		}
+	}
+
 	public class BuildingDock : TimerNotifier, IIdentifiable
 	{
 		private bool notificated;
 
-		#region Id 프로퍼티
+		#region Id Property
 		private int _Id;
 		public int Id
 		{
@@ -26,7 +36,7 @@ namespace BeerViewer.Models
 		}
 		#endregion
 
-		#region State 프로퍼티
+		#region State Property
 		private BuildingDockState _State;
 		public BuildingDockState State
 		{
@@ -42,7 +52,7 @@ namespace BeerViewer.Models
 		}
 		#endregion
 
-		#region Ship 프로퍼티
+		#region Ship Property
 		private ShipInfo _Ship;
 		public ShipInfo Ship
 		{
@@ -58,7 +68,7 @@ namespace BeerViewer.Models
 		}
 		#endregion
 
-		#region CompleteTime 프로퍼티
+		#region CompleteTime Property
 		private DateTimeOffset? _CompleteTime;
 		public DateTimeOffset? CompleteTime
 		{
@@ -75,7 +85,7 @@ namespace BeerViewer.Models
 		}
 		#endregion
 
-		#region Remaining 프로퍼티
+		#region Remaining Property
 		private TimeSpan? _Remaining;
 		public TimeSpan? Remaining
 		{
@@ -93,20 +103,20 @@ namespace BeerViewer.Models
 
 		public event EventHandler<BuildingCompletedEventArgs> Completed;
 
-		internal BuildingDock(kcsapi_kdock rawData)
+		internal BuildingDock(kcsapi_kdock Data)
 		{
-			this.Update(rawData);
+			this.Update(Data);
 		}
 
-		internal void Update(kcsapi_kdock rawData)
+		internal void Update(kcsapi_kdock Data)
 		{
-			this.Id = rawData.api_id;
-			this.State = (BuildingDockState)rawData.api_state;
+			this.Id = Data.api_id;
+			this.State = (BuildingDockState)Data.api_state;
 			this.Ship = this.State == BuildingDockState.Building || this.State == BuildingDockState.Completed
-				? DataStorage.Instance.Master.Ships[rawData.api_created_ship_id]
+				? Master.Instance.Ships[Data.api_created_ship_id]
 				: null;
 			this.CompleteTime = this.State == BuildingDockState.Building
-				? (DateTimeOffset?)Const.UnixEpoch.AddMilliseconds(rawData.api_complete_time)
+				? (DateTimeOffset?)Extensions.UnixEpoch.AddMilliseconds(Data.api_complete_time)
 				: null;
 		}
 
@@ -115,7 +125,6 @@ namespace BeerViewer.Models
 			this.State = BuildingDockState.Completed;
 			this.CompleteTime = null;
 		}
-
 
 		protected override void Tick()
 		{
@@ -132,6 +141,7 @@ namespace BeerViewer.Models
 				{
 					this.Completed(this, new BuildingCompletedEventArgs(this.Id, this.Ship));
 					this.notificated = true;
+					this.Finish();
 				}
 			}
 			else

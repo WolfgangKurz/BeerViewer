@@ -4,10 +4,7 @@ using System.Runtime.CompilerServices;
 
 namespace BeerViewer.Models.Raw
 {
-	/// <summary>
-	/// 프로퍼티 변경통지를 도움
-	/// </summary>
-	public class Notifier : INotifyPropertyChanged
+	public partial class Notifier : INotifyPropertyChanged
 	{
 		public event PropertyChangedEventHandler PropertyChanged;
 
