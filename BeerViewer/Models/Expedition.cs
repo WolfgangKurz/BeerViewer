@@ -93,6 +93,7 @@ namespace BeerViewer.Models
 			get
 			{
 				if (!this.ReturnTime.HasValue) return new LimitedValue();
+				if (this.Mission == null) return new LimitedValue();
 
 				var start = this.ReturnTime.Value.Subtract(TimeSpan.FromMinutes(this.Mission.RawData.api_time));
 				var value = (int)DateTimeOffset.Now.Subtract(start).TotalSeconds;

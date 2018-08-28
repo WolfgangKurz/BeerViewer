@@ -1,4 +1,5 @@
 ﻿#top-expeditions {
+	order: 1;
 	white-space: nowrap;
 	line-height: 0;
 }
@@ -47,7 +48,7 @@
 #top-expeditions > .top-expedition[data-status="disabled"] {
 	display: none;
 }
-#top-expeditions > .top-expedition[data-status="active"] {
+#top-expeditions > .top-expedition[data-status="executing"] {
 	background-color: #575757;
 }
 #top-expeditions > .top-expedition[data-status="fail"] > .expedition-progress {

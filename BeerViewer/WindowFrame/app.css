@@ -125,6 +125,7 @@ i.menu-icon[data-icon="plugin"] {
 	height: 100%;
 	grid-template-columns: auto 1fr;
 	grid-template-rows: 28px auto 1fr;
+	overflow: hidden;
 }
 
 #top-area {
@@ -141,11 +142,13 @@ i.menu-icon[data-icon="plugin"] {
 	display: flex; /* to maximize module */
 	grid-column: 2;
 	grid-row: 2 / 4;
+	overflow: hidden;
 }
 #sub-area {
 	display: flex; /* to maximize module */
 	grid-column: 1;
 	grid-row: 3;
+	overflow: hidden;
 }
 #side-area > *,
 #sub-area > * {

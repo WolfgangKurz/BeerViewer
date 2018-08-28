@@ -38,6 +38,11 @@
 						list[i].init();
 				}
 				initialized = true;
+			},
+
+			get: function (name) {
+				if (list[name] === null) return null;
+				return list[name];
 			}
 		};
 	})();

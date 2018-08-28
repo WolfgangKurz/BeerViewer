@@ -2,6 +2,7 @@
 	padding: 2px;
 	user-select: text;
 	cursor: text;
+	overflow: auto;
 }
 #logger-container > .logger-log {
 	padding: 1px 4px;

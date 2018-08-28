@@ -22,7 +22,7 @@ namespace BeerViewer.Modules.Communication
 		private FrameworkBrowser Browser { get; }
 		private Action OnInitialized;
 
-		private Dictionary<string, object> RegisteredObserveObjects;
+		private ObservedTreeManager ObserveObjectManager;
 
 		internal WindowBrowserCommicator(Form Owner, FrameworkBrowser Browser, Action OnInitialized)
 		{
@@ -36,7 +36,7 @@ namespace BeerViewer.Modules.Communication
 
 			this.OnInitialized = OnInitialized;
 
-			this.RegisteredObserveObjects = new Dictionary<string, object>();
+			this.ObserveObjectManager = new ObservedTreeManager();
 		}
 
 		public void Initialized() => this.OnInitialized?.Invoke();
@@ -101,160 +101,39 @@ namespace BeerViewer.Modules.Communication
 		/// <param name="ObjectToObserve"></param>
 		internal void RegisterObserveObject(string Namespace, object ObjectToRegister)
 		{
-			if (string.IsNullOrWhiteSpace(Namespace)) throw new ArgumentException(nameof(Namespace));
-			if (ObjectToRegister == null) throw new ArgumentNullException(nameof(ObjectToRegister));
-
-			this.RegisteredObserveObjects.Add(Namespace, ObjectToRegister);
+			this.ObserveObjectManager.AddNamespaceObject(Namespace, ObjectToRegister);
 		}
 
-		public object ObserveData(string ns, string path, IJavascriptCallback callback)
+		public void ObserveData(string ns, string path, IJavascriptCallback callback)
 		{
-			object result = null;
 			try
 			{
-				result = GetRegisteredData(ns, path, out object parent, out string propName);
-
-				if (parent != null && typeof(INotifyPropertyChanged).IsAssignableFrom(parent.GetType()))
+				this.ObserveObjectManager.RegisterTree(ns, path, x =>
 				{
-					var p = (INotifyPropertyChanged)parent;
-					p.PropertyChanged += async (s, e) =>
+					if (callback != null && callback.CanExecute)
 					{
-						if (e.PropertyName == propName && callback.CanExecute)
-							await callback.ExecuteAsync(
-								GetRegisteredData(ns, path, out _, out _),
-								ns,
-								path
-							);
-					};
-				}
+						try
+						{
+							callback.ExecuteAsync(x, ns, path);
+						}
+						catch (NotSupportedException)
+						{
+							callback.ExecuteAsync(new object(), ns, path);
+						}
+					}
+				});
 			}
 			catch { }
-
-			Task.Run(() => callback.ExecuteAsync(result));
-			return result;
 		}
 		public object GetData(string ns, string path)
 		{
 			try
 			{
-				return GetRegisteredData(ns, path, /* ignore out */ out _, out _);
+				return this.ObserveObjectManager.GetData(ns, path);
 			}
 			catch { }
 
 			return null;
-		}
-
-		internal object GetRegisteredData(string ns, string path, out object parent, out string propertyName)
-		{
-			if (!this.RegisteredObserveObjects.ContainsKey(ns))
-				throw new Exception($"Namespace \"{ns}\" not registered");
-
-			var obj = this.RegisteredObserveObjects[ns];
-			var levels = this.ParsePathLevels(path); // A.B[2].C -> [A:literal, B:array[2], C:literal]
-
-			propertyName = levels.Last().Name;
-
-			parent = null;
-			for (var i = 0; i < levels.Length; i++)
-			{
-				if (obj == null)
-				{
-					System.Diagnostics.Debug.WriteLine($"Path \"{ns}.{path}\" maybe fine but found null tree");
-
-					if (i == levels.Length - 1)
-						parent = null;
-
-					break;
-				}
-
-				var level = levels[i];
-
-				var type = obj.GetType();
-				var member = type.GetMember(level.Name, BindingFlags.Public | BindingFlags.Instance | BindingFlags.GetField | BindingFlags.GetProperty)
-					.FirstOrDefault();
-				if (member == null)
-					throw new Exception($"Path \"{path}\" not exists");
-
-				parent = obj;
-
-				if (member.MemberType == MemberTypes.Field)
-					obj = ((FieldInfo)member).GetValue(obj);
-				else if (member.MemberType == MemberTypes.Property)
-					obj = ((PropertyInfo)member).GetValue(obj);
-				else
-					throw new NotImplementedException("Only Field or Property can be measured");
-
-				if (level.IsArray)
-				{
-					type = obj.GetType();
-					var indexer = type.GetMethod("get_Item", BindingFlags.Public | BindingFlags.Instance);
-					if (indexer == null)
-						throw new Exception("Tried to access as Array to not Array object");
-
-					obj = indexer.Invoke(obj, new object[] { level.Index });
-				}
-			}
-
-			/// TODO: Convert class to json object
-			return obj;
-		}
-
-		private struct PathLevel
-		{
-			public string Name;
-			public bool IsArray;
-			public int Index;
-
-			public override string ToString()
-				=> $"{{Name: {Name}, IsArray: {IsArray}, Index: {Index}}}";
-		}
-		private PathLevel[] ParsePathLevels(string path)
-		{
-			var list = new List<PathLevel>();
-			var nameBuffer = new StringBuilder();
-			var indexBuffer = new StringBuilder();
-
-			var arraying = false;
-			var current = new PathLevel();
-			for (var i = 0; i < path.Length; i++)
-			{
-				var c = path[i];
-
-				if (arraying)
-				{
-					if (c == ']')
-					{
-						if (!int.TryParse(indexBuffer.ToString(), out current.Index))
-							throw new Exception("Path parse error: Cannot parse index");
-
-						indexBuffer.Clear();
-						arraying = false;
-					}
-					else if (c < '0' || c > '9')
-						throw new ArgumentException("Path parse error: Invalid index value");
-					indexBuffer.Append(c);
-				}
-				else if (c == '.')
-				{
-					current.Name = nameBuffer.ToString();
-					nameBuffer.Clear();
-
-					list.Add(current);
-					current = new PathLevel();
-				}
-				else if (c == '[')
-				{
-					current.IsArray = true;
-					arraying = true;
-				}
-				else
-					nameBuffer.Append(c);
-			}
-
-			current.Name = nameBuffer.ToString();
-			list.Add(current);
-
-			return list.ToArray();
 		}
 	}
 }

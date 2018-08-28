@@ -1,4 +1,6 @@
-﻿using System;
+﻿// #define USE_GC
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -113,7 +115,6 @@ namespace BeerViewer.Forms
 					this.ClientSizeChanged += (s, e) => this.Communicator?.CallbackScript("WindowState", ((int)this.WindowState).ToString());
 
 					this.GameBrowser = this.WindowBrowser.GetBrowser().GetFrame("MAIN_FRAME");
-					// this.GameBrowser.ZoomAsPercentage(66.6666);
 					await this.Communicator.CallScript("window.INTERNAL.zoomMainFrame", "66.6666");
 					await this.Communicator.CallScript("window.INTERNAL.loadMainFrame", Constants.GameURL);
 				}
@@ -185,7 +186,11 @@ namespace BeerViewer.Forms
 			this.WindowBrowser.IsBrowserInitializedChanged += (s, e) =>
 			{
 				if (e.IsBrowserInitialized)
+				{
+#if DEBUG
 					this.WindowBrowser.GetBrowser().GetHost().ShowDevTools();
+#endif
+				}
 			};
 			#endregion
 

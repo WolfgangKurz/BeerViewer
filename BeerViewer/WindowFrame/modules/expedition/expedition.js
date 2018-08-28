@@ -20,9 +20,12 @@
 		const update = function () {
 			let status = "disabled";
 			if (data.enabled) {
-				if (data.active) status = "active";
-				else status = "deactive";
+				if (data.active) status = "executing";
+				else status = "waiting";
 			}
+
+			if (status !== "executing")
+				data.progress = 0.0;
 
 			el.attr("data-status", status);
 			el.find(".expedition-id").html(data.id);
@@ -46,12 +49,13 @@
 			data.remaining = value;
 			update();
 		});
-		window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Expedition.Progress", function (value, ns, path) {
-			const current = window.API.GetData(ns, path + ".Current");
-			const maximum = window.API.GetData(ns, path + ".Maximum");
-			data.progress = current * 100 / maximum;
+		window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Expedition.Progress", async function (_, ns, path) {
+			const value = await window.API.GetData(ns, path); // Have to call GetData to get object data
+			data.progress = value.Current * 100 / value.Maximum;
 			update();
 		});
+
+		return el;
 	};
 	window.modules.register("expedition", {
 		consts: {
@@ -70,7 +74,7 @@
 			const expeditions = $.new("div").prop("id", "top-expeditions");
 
 			for (let i = 0; i < this.consts.count; i++) {
-				let elem = newExpeditionView(i+1);
+				let elem = newExpeditionView(i + 2);
 				this.fleets.push(elem);
 				expeditions.append(elem);
 			}
