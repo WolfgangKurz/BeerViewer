@@ -7,6 +7,10 @@
 		return {
 			areas: [],
 
+			initialized: function () {
+				return initialized;
+			},
+
 			load: function (name, css) {
 				if (name in list) throw "Tried to load module already loaded";
 				list[name] = null;
@@ -46,43 +50,40 @@
 			}
 		};
 	})();
+	window.CALLBACK = (function () {
+		const callbacks = {};
+		return {
+			register: function (name, callback) {
+				if (!(name in callbacks))
+					callbacks[name] = [];
 
-	modules.load("expedition", true);
-	modules.load("top-resource", true);
-	modules.load("logger", true);
-	modules.load("window", false); // Must be last (like DOMContentLoaded)
+				callbacks[name].push(callback);
+			},
+			unregister: function (name, callback) {
+				if (!(name in callbacks)) return;
+
+				const index = callbacks[name].indexOf(callback);
+				if (index >= 0)
+					callbacks[name].splice(index, 1);
+			},
+
+			call: function (name) {
+				if (!(name in callbacks)) return false;
+
+				const list = callbacks[name];
+				for (let i = 0; i < list.length; i++) {
+					list[i].apply(
+						null,
+						Array.prototype.slice.call(arguments, 1)
+					);
+				}
+			}
+		};
+	})();
 
 	document.event("DOMContentLoaded", async function () {
-		window.CALLBACK = (function () {
-			const callbacks = {};
-			return {
-				register: function (name, callback) {
-					if (!(name in callbacks))
-						callbacks[name] = [];
+		if (window.modules.initialized()) return; // Call twice
 
-					callbacks[name].push(callback);
-				},
-				unregister: function (name, callback) {
-					if (!(name in callbacks)) return;
-
-					const index = callbacks[name].indexOf(callback);
-					if (index >= 0)
-						callbacks[name].splice(index, 1);
-				},
-
-				call: function (name) {
-					if (!(name in callbacks)) return false;
-
-					const list = callbacks[name];
-					for (let i = 0; i < list.length; i++) {
-						list[i].apply(
-							null,
-							Array.prototype.slice.call(arguments, 1)
-						);
-					}
-				}
-			};
-		})();
 		await CefSharp.BindObjectAsync({ IgnoreCache: true }, "API");
 
 		window.modules.areas = {
@@ -90,6 +91,14 @@
 			side: $("#side-module-area"),
 			sub: $("#sub-module-area")
 		};
-		window.modules.init();
+
+		!function (list) {
+			list.forEach(function (x) {
+				window.modules.load(x.Name, x.Styled);
+			});
+
+			window.modules.init();
+			window.API.Initialized();
+		}(await window.API.GetModuleList());
 	});
 }();

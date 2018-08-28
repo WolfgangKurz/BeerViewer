@@ -96,6 +96,7 @@
     <Compile Include="Forms\frmMain.Designer.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
+    <Compile Include="Modules\Communication\ModuleInfo.cs" />
     <Compile Include="Modules\Communication\ObjectPathLevel.cs" />
     <Compile Include="Modules\Communication\ObservedTreeData.cs" />
     <Compile Include="Modules\Communication\ObservedTreeManager.cs" />
@@ -340,8 +341,8 @@
     <Content Include="WindowFrame\app.css" />
     <Content Include="WindowFrame\Application.html" />
     <Content Include="WindowFrame\modules\common.js" />
-    <Content Include="WindowFrame\modules\expedition\expedition.css" />
-    <Content Include="WindowFrame\modules\expedition\expedition.js" />
+    <Content Include="WindowFrame\modules\top-expedition\top-expedition.css" />
+    <Content Include="WindowFrame\modules\top-expedition\top-expedition.js" />
     <Content Include="WindowFrame\modules\module.js" />
   </ItemGroup>
   <ItemGroup>
@@ -373,6 +374,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>XCOPY "$(SolutionDir)i18n" "$(TargetDir)i18n\" /Y /V /E
+RMDIR "$(TargetDir)WindowFrame" /S /Q
 XCOPY "$(ProjectDir)WindowFrame" "$(TargetDir)WindowFrame\" /Y /V /E</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

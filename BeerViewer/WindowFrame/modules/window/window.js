@@ -18,8 +18,6 @@
 				else
 					this.parent().addClass("menu-open");
 			});
-
-			window.API.Initialized();
 		}
 	});
 }();

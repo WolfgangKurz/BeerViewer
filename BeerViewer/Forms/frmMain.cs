@@ -103,13 +103,16 @@ namespace BeerViewer.Forms
 				this.WindowBrowser,
 				async () => // After communicator initialized
 				{
-					// Logger
 					{
+						// Register to Logger
 						Logger.Logged += e => this.Communicator.CallbackScript("Logged", e);
 
+						// Logged before initialized
 						string prevLog;
 						while ((prevLog = Logger.Fetch("MainLogger")) != null)
 							await this.Communicator.CallbackScript("Logged", prevLog);
+
+						Logger.Unregister("MainLogger");
 					}
 
 					this.ClientSizeChanged += (s, e) => this.Communicator?.CallbackScript("WindowState", ((int)this.WindowState).ToString());

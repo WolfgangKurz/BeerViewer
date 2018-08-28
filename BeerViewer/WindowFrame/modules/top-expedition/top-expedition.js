@@ -51,13 +51,16 @@
 		});
 		window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Expedition.Progress", async function (_, ns, path) {
 			const value = await window.API.GetData(ns, path); // Have to call GetData to get object data
-			data.progress = value.Current * 100 / value.Maximum;
+			if (value === null)
+				data.progress = 0;
+			else
+				data.progress = value.Current * 100 / value.Maximum;
 			update();
 		});
 
 		return el;
 	};
-	window.modules.register("expedition", {
+	window.modules.register("top-expedition", {
 		consts: {
 			count: 3
 		},

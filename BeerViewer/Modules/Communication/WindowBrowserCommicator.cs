@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -39,7 +40,21 @@ namespace BeerViewer.Modules.Communication
 			this.ObserveObjectManager = new ObservedTreeManager();
 		}
 
-		public void Initialized() => this.OnInitialized?.Invoke();
+		/// <summary>
+		/// Notify system initialized.
+		/// </summary>
+		public void Initialized()
+		{
+			if (this.OnInitialized == null) throw new Exception("Initialized twice");
+
+			this.OnInitialized.Invoke();
+			this.OnInitialized = null; // Cannot initialized twice
+		}
+
+		/// <summary>
+		/// Call system command.
+		/// </summary>
+		/// <param name="command">Command to call</param>
 		public void SystemCall(string command)
 		{
 			switch (command.ToLower())
@@ -62,6 +77,11 @@ namespace BeerViewer.Modules.Communication
 			}
 		}
 
+		/// <summary>
+		/// Evaluation raw javascript string.
+		/// </summary>
+		/// <param name="script">Raw javascript string</param>
+		/// <returns>Script result</returns>
 		private async Task<object> CallRawScript(string script)
 		{
 			var browser = this.Browser.GetBrowser();
@@ -75,6 +95,13 @@ namespace BeerViewer.Modules.Communication
 
 			return result.Result;
 		}
+
+		/// <summary>
+		/// Call javascript function with arguments.
+		/// </summary>
+		/// <param name="name">Javascript function name</param>
+		/// <param name="args">Arguments</param>
+		/// <returns>Script result</returns>
 		internal Task<object> CallScript(string name, params string[] args)
 		{
 			return CallRawScript(
@@ -85,6 +112,14 @@ namespace BeerViewer.Modules.Communication
 				)
 			);
 		}
+
+		/// <summary>
+		/// Call window.CALLBACK callbacks.
+		/// Modules need to register callback with window.CALLBACK.register(callbackname, callbackfunc).
+		/// </summary>
+		/// <param name="name">Callback name</param>
+		/// <param name="args">Arguments</param>
+		/// <returns>When the result is false, registered callback function not found</returns>
 		internal Task<object> CallbackScript(string name, params string[] args)
 		{
 			var _args = new string[] { name }.Concat(args).ToArray();
@@ -94,16 +129,23 @@ namespace BeerViewer.Modules.Communication
 		/// <summary>
 		/// Register object to use in browser with "window.API.observeData(namespace, path, callback)"
 		/// or get data with "window.API.getData(namespace, path)".
-		/// When the <see cref="INotifyPropertyChanged.PropertyChanged"/> fired, given callback will be called.
-		/// Callback will get "newValue, Namespace, Path" as parameters.
 		/// </summary>
-		/// <param name="ObjectName"></param>
-		/// <param name="ObjectToObserve"></param>
+		/// <param name="Namespace">Namespace name</param>
+		/// <param name="ObjectToObserve">Namespace object</param>
 		internal void RegisterObserveObject(string Namespace, object ObjectToRegister)
 		{
 			this.ObserveObjectManager.AddNamespaceObject(Namespace, ObjectToRegister);
 		}
 
+		/// <summary>
+		/// Observe data tree on specific namespace.
+		/// When the <see cref="INotifyPropertyChanged.PropertyChanged"/> has fired, given callback will be called.
+		/// Callback will get "newValue, Namespace, Path" as arguments.
+		/// Callback cannot throw newValue as json object, need to call GetData api.
+		/// </summary>
+		/// <param name="ns">Namespace on target value</param>
+		/// <param name="path">Path of target value</param>
+		/// <param name="callback">Callback when <see cref="INotifyPropertyChanged.PropertyChanged"/> fired</param>
 		public void ObserveData(string ns, string path, IJavascriptCallback callback)
 		{
 			try
@@ -125,6 +167,13 @@ namespace BeerViewer.Modules.Communication
 			}
 			catch { }
 		}
+
+		/// <summary>
+		/// Get data on specific namespace.
+		/// </summary>
+		/// <param name="ns">Namespace of target value</param>
+		/// <param name="path">Path of target value</param>
+		/// <returns>Measured data, can be json or null</returns>
 		public object GetData(string ns, string path)
 		{
 			try
@@ -134,6 +183,40 @@ namespace BeerViewer.Modules.Communication
 			catch { }
 
 			return null;
+		}
+
+		/// <summary>
+		/// Get available module list.
+		/// </summary>
+		/// <returns>Module list</returns>
+		public ModuleInfo[] GetModuleList()
+		{
+			var output = new List<ModuleInfo>();
+			var baseDir = Path.Combine(
+				Path.GetDirectoryName(Assembly.GetEntryAssembly().Location),
+				"WindowFrame",
+				"modules"
+			);
+			var dirs = Directory.GetDirectories(baseDir);
+			foreach(var dir in dirs)
+			{
+				var moduleName = Path.GetFileName(dir);
+				var scriptName = Path.Combine(dir, moduleName + ".js");
+				var styleName = Path.Combine(dir, moduleName + ".css");
+
+				if (!File.Exists(scriptName))
+				{
+					Logger.Log("Module directory '{0}' found but '{0}.js' not found", moduleName, scriptName);
+					continue;
+				}
+
+				output.Add(new ModuleInfo
+				{
+					Name = moduleName,
+					Styled = File.Exists(Path.Combine(dir, styleName))
+				});
+			}
+			return output.ToArray();
 		}
 	}
 }
