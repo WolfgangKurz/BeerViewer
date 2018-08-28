@@ -24,7 +24,7 @@
 			});
 			_this.log("Logger module has been loaded");
 
-			window.modules.areas.sub.append(logger);
+			window.modules.areas.register("sub", "Log", "", logger);
 		}
 	});
 }();

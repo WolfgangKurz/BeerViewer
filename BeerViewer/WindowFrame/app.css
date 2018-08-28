@@ -63,34 +63,40 @@ ul.menu-host {
 	padding: 0;
 	list-style: none;
 }
-ul.menu-host > li {
+ul.menu-host li {
 	margin: 0;
-	padding: 0 6px 0 12px;
+	padding: 0 0 0 6px;
 	height: 28px;
 	border-right: 3px solid transparent;
 	border-top: 1px solid #393939;
 	line-height: 28px;
 	overflow: hidden;
 }
-ul.menu-host > li.menu-active {
+ul.menu-host li.menu-active {
 	border-right-color: #fff;
 }
 ul.menu-host > li:first-child {
 	border-top: none !important;
 }
 ul.menu-host > li.menu-group {
-	padding-left: 6px;
+	height: auto;
 	border-top: 1px solid #414141;
+	border-right: none;
 	font-weight: bold;
 }
-ul.menu-host > li:not(.menu-group) {
+ul.menu-host li:not(.menu-group) {
 	cursor: pointer;
 }
-ul.menu-host > li:not(.menu-group):hover {
+ul.menu-host li:not(.menu-group):hover {
 	background-color: #575757;
 }
-ul.menu-host > li:not(.menu-group):active {
+ul.menu-host li:not(.menu-group):active {
 	background-color: #222225;
+}
+ul.menu-host > li.menu-group > ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
 }
 
 i.menu-icon {
@@ -112,11 +118,14 @@ i.menu-icon[data-icon="sidescreen"] {
 	background-position: -84px 0;
 }
 
-i.menu-icon[data-icon="game"] {
+i.menu-icon[data-icon="plugin"] {
 	background-position: 0 -28px;
 }
-i.menu-icon[data-icon="plugin"] {
+i.menu-icon[data-icon="game"] {
 	background-position: -28px -28px;
+}
+i.menu-icon[data-icon="unknown"] {
+	background-position: -56px -28px;
 }
 
 #mainbox {
@@ -235,7 +244,7 @@ i.menu-icon[data-icon="plugin"] {
 	min-width: 140px;
 	background-color: #313131;
 	box-shadow: 0 0 11px rgba(0, 0, 0, 0.76);
-	transition: opacity 0.11s ease-in;
+	transition: opacity 0.07s ease-in;
 	pointer-events: none;
 	opacity: 0;
 	z-index: 998;

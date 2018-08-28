@@ -81,7 +81,7 @@
 				this.fleets.push(elem);
 				expeditions.append(elem);
 			}
-			window.modules.areas.top.append(expeditions);
+			window.modules.areas.register("top", "Expeditions bar", "", expeditions);
 		}
 	});
 } ();

@@ -20,41 +20,27 @@
 				<div id="top-menu-overlay"></div>
 				<div id="top-menu">
 					<ul class="menu-host">
-						<li class="menu-group">
+						<li class="menu-group" data-area="main">
 							<i class="menu-icon" data-icon="mainscreen"></i>
 							Main screen
+							<ul>
+								<li class="menu-active">
+									<i class="menu-icon" data-icon="game"></i>
+									Game
+								</li>
+							</ul>
 						</li>
-						<li class="menu-active">
-							<i class="menu-icon" data-icon="game"></i>
-							Game
-						</li>
-						<li class="menu-group">
+						<li class="menu-group" data-area="side">
 							<i class="menu-icon" data-icon="sidescreen"></i>
 							Side screen
+							<ul>
+							</ul>
 						</li>
-						<li class="menu-active">
-							<i class="menu-icon" data-icon="plugin"></i>
-							Fleets
-						</li>
-						<li>
-							<i class="menu-icon" data-icon="plugin"></i>
-							Expedition
-						</li>
-						<li>
-							<i class="menu-icon" data-icon="plugin"></i>
-							Repairs
-						</li>
-						<li>
-							<i class="menu-icon" data-icon="plugin"></i>
-							Arsenal
-						</li>
-						<li class="menu-group">
+						<li class="menu-group" data-area="sub">
 							<i class="menu-icon" data-icon="subscreen"></i>
 							Sub screen
-						</li>
-						<li class="menu-active">
-							<i class="menu-icon" data-icon="plugin"></i>
-							Log
+							<ul>
+							</ul>
 						</li>
 					</ul>
 				</div>
@@ -68,13 +54,17 @@
 		</header>
 
 		<div id="side-area">
-			<div id="side-module-area"></div>
+			<div id="side-module-area" class="module-area"></div>
+		</div>
+		
+		<div id="main-area">
+			<div id="main-module-area" class="module-area">
+				<iframe class="active-module" id="MAIN_FRAME" name="MAIN_FRAME" src="MainFramePlaceholder.html"></iframe>
+			</div>
 		</div>
 
-		<iframe id="MAIN_FRAME" name="MAIN_FRAME" src="MainFramePlaceholder.html"></iframe>
-
 		<div id="sub-area">
-			<div id="sub-module-area"></div>
+			<div id="sub-module-area" class="module-area"></div>
 		</div>
 	</div>
 </body>

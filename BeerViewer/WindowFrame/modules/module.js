@@ -4,8 +4,49 @@
 		let initialized = false;
 		const list = {};
 
+		const areasObject = (function () {
+			let top = null, side = null, sub = null;
+			const iconlist = ["", "game", "plugin"];
+			const areas = {};
+
+			return {
+				init: function () {
+					areas.top = $("#top-module-area");
+					areas.main = $("#sub-module-area");
+					areas.side = $("#side-module-area");
+					areas.sub = $("#sub-module-area");
+				},
+
+				register: function (area, name, icon, rootElement) {
+					if (!(area in areas)) throw "Unknown module area `" + area + "`";
+
+					const areaElem = areas[area];
+					if (areaElem === null) throw "Application.html corrupted";
+
+					const escaped = name.replace(/"/g, "\\\"");
+					if (areaElem.find("[data-module-name=\"" + escaped + "\"]") !== null)
+						throw "Already registered name";
+
+					areaElem.append(rootElement.attr("data-module-name", escaped));
+
+					const areaMenu = $("ul.menu-host > li.menu-group[data-area=\""+area+"\"]");
+					if (areaMenu === null) return; // Menuless module (for example, top-area modules)
+
+					areaMenu.find("ul").append(
+						$.new("li")
+							.append(
+								$.new("i", "menu-icon").attr("data-icon", iconlist.indexOf(icon) >= 0 ? icon : "unknown")
+							)
+							.append(
+								$.new.text(name)
+							)
+					);
+				}
+			};
+		})();
+
 		return {
-			areas: [],
+			areas: areasObject,
 
 			initialized: function () {
 				return initialized;
@@ -84,13 +125,15 @@
 	document.event("DOMContentLoaded", async function () {
 		if (window.modules.initialized()) return; // Call twice
 
-		await CefSharp.BindObjectAsync({ IgnoreCache: true }, "API");
+		window.modules.areas.init();
 
-		window.modules.areas = {
-			top: $("#top-module-area"),
-			side: $("#side-module-area"),
-			sub: $("#sub-module-area")
-		};
+		await CefSharp.BindObjectAsync({ IgnoreCache: true }, "API");
+		if (typeof window.API === "undefined") {
+			// Design mode
+			window.modules.load("window", false);
+			window.modules.init();
+			return;
+		}
 
 		!function (list) {
 			list.forEach(function (x) {

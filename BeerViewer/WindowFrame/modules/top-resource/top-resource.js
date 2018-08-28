@@ -53,7 +53,7 @@
 				this.resources.push(elem);
 				resources.append(elem);
 			}
-			window.modules.areas.top.append(resources);
+			window.modules.areas.register("top", "Resources bar", "", resources);
 		}
 	});
 }();

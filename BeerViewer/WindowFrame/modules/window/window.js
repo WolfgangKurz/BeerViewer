@@ -18,6 +18,9 @@
 				else
 					this.parent().addClass("menu-open");
 			});
+			$("#top-menu-overlay").event("click", function (e) {
+				$("#top-menubutton > button").trigger("click");
+			});
 		}
 	});
 }();
