@@ -11,7 +11,7 @@ using BeerViewer.Modules;
 
 namespace BeerViewer.Network
 {
-	public partial class Proxy
+	public partial class Proxy : IDisposable
 	{
 		internal static bool IsInDesignMode => (LicenseManager.UsageMode == LicenseUsageMode.Designtime);
 
@@ -27,6 +27,8 @@ namespace BeerViewer.Network
 			public Func<Session, byte[], byte[]> Handler_Response { get; set; } = null;
 		}
 
+		public int ListeningPort { get; private set; } = 49217;
+
 		public static Proxy Instance { get; } = new Proxy();
 
 		internal ConcurrentDictionary<int, ProxyHandler> Handlers { get; }
@@ -38,7 +40,7 @@ namespace BeerViewer.Network
 			this.ModifiableHandlers = new ConcurrentDictionary<int, ModifiableProxyHandler>();
 			if (IsInDesignMode) return;
 
-			HttpProxy.Startup(49217, false, true);
+			HttpProxy.Startup(this.ListeningPort, false, true);
 			HttpProxy.AfterSessionComplete += (_ =>
 			{
 				this.Handlers.Values.ToList().ForEach(x =>
@@ -70,7 +72,7 @@ namespace BeerViewer.Network
 		}
 		~Proxy()
 		{
-			HttpProxy.Shutdown();
+			this.Dispose(false);
 		}
 
 		private bool PermissionCheck(BeerComponentPermission pm_require)
@@ -216,6 +218,27 @@ namespace BeerViewer.Network
 
 			this.Handlers.TryRemove(k, out h);
 			return this;
+		}
+		#endregion
+
+		#region Dispose
+		private bool disposed;
+
+		public void Dispose()
+		{
+			this.Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		protected virtual void Dispose(bool disposing)
+		{
+			if (this.disposed) return;
+			if (disposing)
+			{
+			}
+
+			HttpProxy.Shutdown();
+			this.disposed = true;
 		}
 		#endregion
 	}

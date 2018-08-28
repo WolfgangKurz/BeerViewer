@@ -1,0 +1,81 @@
+﻿<!-- HtmlView, console:off -->
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>BeerViewer Application</title>
+	<link rel="stylesheet" type="text/css" href="app.css" />
+	<script type="text/javascript" src="modules/common.js"></script>
+	<script type="text/javascript" src="modules/internal.js"></script>
+	<script type="text/javascript" src="modules/module.js"></script>
+</head>
+<body>
+	<div id="mainbox">
+		<header id="top-area">
+			<div id="top-menubutton" class="">
+				<button type="button" data-role="menu">
+					<img src="assets/button_menu.png" />
+					<span>BeerViewer 2.0</span>
+				</button>
+				<div id="top-menu-overlay"></div>
+				<div id="top-menu">
+					<ul class="menu-host">
+						<li class="menu-group">
+							<i class="menu-icon" data-icon="mainscreen"></i>
+							Main screen
+						</li>
+						<li class="menu-active">
+							<i class="menu-icon" data-icon="game"></i>
+							Game
+						</li>
+						<li class="menu-group">
+							<i class="menu-icon" data-icon="sidescreen"></i>
+							Side screen
+						</li>
+						<li class="menu-active">
+							<i class="menu-icon" data-icon="plugin"></i>
+							Fleets
+						</li>
+						<li>
+							<i class="menu-icon" data-icon="plugin"></i>
+							Expedition
+						</li>
+						<li>
+							<i class="menu-icon" data-icon="plugin"></i>
+							Repairs
+						</li>
+						<li>
+							<i class="menu-icon" data-icon="plugin"></i>
+							Arsenal
+						</li>
+						<li class="menu-group">
+							<i class="menu-icon" data-icon="subscreen"></i>
+							Sub screen
+						</li>
+						<li class="menu-active">
+							<i class="menu-icon" data-icon="plugin"></i>
+							Log
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div id="top-systembutton">
+				<button class="system-button" type="button" data-role="minimize"></button>
+				<button class="system-button" type="button" data-role="maximize"></button>
+				<button class="system-button" type="button" data-role="close"></button>
+			</div>
+			<div id="top-module-area"></div>
+		</header>
+
+		<div id="side-area">
+			<div id="side-module-area"></div>
+		</div>
+
+		<iframe id="MAIN_FRAME" name="MAIN_FRAME" src="MainFramePlaceholder.html"></iframe>
+
+		<div id="sub-area">
+			<div id="sub-module-area"></div>
+		</div>
+	</div>
+</body>
+</html>

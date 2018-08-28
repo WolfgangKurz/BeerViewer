@@ -6,7 +6,7 @@ using System.Windows;
 [assembly: AssemblyDescription("BeerViewer")]
 [assembly: AssemblyCompany("WolfgangKurz")]
 [assembly: AssemblyProduct("BeerViewer")]
-[assembly: AssemblyCopyright("Copyright © 2017 WolfgangKurz")]
+[assembly: AssemblyCopyright("Copyright © 2017-2018 WolfgangKurz")]
 
 [assembly: ComVisible(false)]
 [assembly: Guid("E750b097-B468-4102-bFA7-985EE1D94C61")]

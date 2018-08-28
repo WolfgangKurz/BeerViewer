@@ -93,6 +93,7 @@ namespace BeerViewer.Models
 			get
 			{
 				if (!this.ReturnTime.HasValue) return new LimitedValue();
+				if (this.Mission == null) return new LimitedValue();
 
 				var start = this.ReturnTime.Value.Subtract(TimeSpan.FromMinutes(this.Mission.RawData.api_time));
 				var value = (int)DateTimeOffset.Now.Subtract(start).TotalSeconds;
@@ -127,6 +128,7 @@ namespace BeerViewer.Models
 		private void UpdateCore()
 		{
 			this.RaisePropertyChanged(nameof(this.Remaining));
+			this.RaisePropertyChanged(nameof(this.RemainingText));
 			this.RaisePropertyChanged(nameof(this.Progress));
 
 			if (!this.notificated && this.Returned != null && this.Remaining <= TimeSpan.FromSeconds(Settings.NotificationTime.Value))

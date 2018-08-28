@@ -35,19 +35,12 @@ namespace BeerViewer.Framework
 					handleCompositionChanged();
 					return;
 
-					/*
-				case WindowMessages.WM_NCPAINT:
-					break;
-					*/
-
 				case WindowMessages.WM_WINDOWPOSCHANGED:
 					// Need to call this method (Resize event fired from here){
 					typeof(Form)
 						.GetMethod("UpdateWindowState", BindingFlags.NonPublic | BindingFlags.Instance)
 						?.Invoke(this, new object[] { });
 
-					// base.DefWndProc(ref m);
-					// Call Control.WmWindowPosChanged
 					{
 						var args = new object[] { m };
 						var method = typeof(Control).GetMethod("WmWindowPosChanged", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -191,6 +184,17 @@ namespace BeerViewer.Framework
 				var cSize = this.CaptionSize(w, h);
 
 				if (cSize.Contains(pt)) return HitTestValue.HTCAPTION;
+				/*
+				else if (pt.X > cSize.Right)
+				{
+					var offset = (pt.X - cSize.Right) / ((w - cSize.Right) / 3);
+					return new HitTestValue[] {
+						HitTestValue.HTMINBUTTON,
+						HitTestValue.HTMAXBUTTON,
+						HitTestValue.HTCLOSE
+					}[offset];
+				}
+				*/
 				else return HitTestValue.HTCLIENT;
 			}
 			return HitTestValue.HTCLIENT;
@@ -234,10 +238,6 @@ namespace BeerViewer.Framework
 		protected FrameworkRenderer Renderer { get; private set; }
 		private Brush BackColorBrush;
 
-		public FrameworkControl CloseButton { get; } = null;
-		public FrameworkControl MaximizeButton { get; } = null;
-		public FrameworkControl MinimizeButton { get; } = null;
-
 		public BorderlessWindow() : this(false) { }
 		public BorderlessWindow(bool IsDialog = false)
 		{
@@ -257,82 +257,7 @@ namespace BeerViewer.Framework
 
 			if (!IsDialog)
 			{
-				#region System Buttons
-				this.CloseButton = new FrameworkControl(0, 1, 32, 28);
-				this.MaximizeButton = new FrameworkControl(0, 1, 32, 28);
-				this.MinimizeButton = new FrameworkControl(0, 1, 32, 28);
-
-				CloseButton.Paint += (s, e) =>
-				{
-					var c = s as FrameworkControl;
-					var g = e.Graphics;
-
-					if (c.IsHover) g.FillRectangle(c.IsActive ? Constants.brushActiveFace : Constants.brushHoverFace, c.ClientBound);
-					g.DrawImage(
-						Properties.Resources.System_Buttons,
-						new Rectangle(0, 0, 32, 28),
-						new Rectangle(64, (this.WindowState == FormWindowState.Maximized ? 28 : 0), 32, 28),
-						GraphicsUnit.Pixel
-					);
-				};
-				MaximizeButton.Paint += (s, e) =>
-				{
-					var c = s as FrameworkControl;
-					var g = e.Graphics;
-
-					if (c.IsHover) g.FillRectangle(c.IsActive ? Constants.brushActiveFace : Constants.brushHoverFace, c.ClientBound);
-					g.DrawImage(
-						Properties.Resources.System_Buttons,
-						new Rectangle(0, 0, 32, 28),
-						new Rectangle(32, (this.WindowState == FormWindowState.Maximized ? 28 : 0), 32, 28),
-						GraphicsUnit.Pixel
-					);
-				};
-				MinimizeButton.Paint += (s, e) =>
-				{
-					var c = s as FrameworkControl;
-					var g = e.Graphics;
-
-					if (c.IsHover) g.FillRectangle(c.IsActive ? Constants.brushActiveFace : Constants.brushHoverFace, c.ClientBound);
-					g.DrawImage(
-						Properties.Resources.System_Buttons,
-						new Rectangle(0, 0, 32, 28),
-						new Rectangle(0, (this.WindowState == FormWindowState.Maximized ? 28 : 0), 32, 28),
-						GraphicsUnit.Pixel
-					);
-				};
-
-				CloseButton.Click += (s, e) => this.Close();
-				MaximizeButton.Click += (s, e) => this.WindowState = this.WindowState == FormWindowState.Maximized ? FormWindowState.Normal : FormWindowState.Maximized;
-				MinimizeButton.Click += (s, e) => this.WindowState = FormWindowState.Minimized;
-
-				this.Renderer.AddControl(CloseButton);
-				this.Renderer.AddControl(MaximizeButton);
-				this.Renderer.AddControl(MinimizeButton);
-				#endregion
-
-				this.Resize += (s, e) =>
-				{
-					var w = this.ClientSize.Width;
-
-					if (FrameworkExtension.IsTabletMode())
-					{
-						CloseButton.X = w - 32;
-						MinimizeButton.X = w - 64;
-
-						MaximizeButton.Visible = false;
-					}
-					else
-					{
-						CloseButton.X = w - 32;
-						MaximizeButton.X = w - 64;
-						MinimizeButton.X = w - 96;
-
-						MaximizeButton.Visible = true;
-					}
-
-					this.Invalidate();
-				};
+				this.Resize += (s, e) => this.Invalidate();
 			}
 		}
 
@@ -467,6 +392,17 @@ namespace BeerViewer.Framework
 				arrayGestureConfig,
 				(uint)Marshal.SizeOf(typeof(GESTURECONFIG))
 			);
+		}
+
+		protected override void Dispose(bool disposing)
+		{
+			if (disposing)
+			{
+				this.Renderer?.Dispose();
+				this.Renderer = null;
+			}
+
+			base.Dispose(disposing);
 		}
 	}
 }

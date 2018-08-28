@@ -1,4 +1,6 @@
-﻿using System;
+﻿// #define USE_GC
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -9,12 +11,13 @@ using System.Threading;
 using System.Windows.Forms;
 
 using BeerViewer.Framework;
-using BeerViewer.Forms.Controls;
-using BeerViewer.Forms.Controls.Overview;
 using BeerViewer.Models;
 using BeerViewer.Modules;
+using BeerViewer.Modules.Communication;
 
 using System.Runtime.InteropServices;
+
+using IFrameworkBrowserFrame = CefSharp.IFrame;
 
 namespace BeerViewer.Forms
 {
@@ -25,8 +28,9 @@ namespace BeerViewer.Forms
 
 		public static frmMain Instance { get; }
 
-		public FrameworkBrowser Browser { get; }
-		public TextBox LogView { get; }
+		public FrameworkBrowser WindowBrowser { get; }
+		public IFrameworkBrowserFrame GameBrowser { get; private set; }
+		public WindowBrowserCommicator Communicator { get; }
 
 		static frmMain()
 		{
@@ -38,6 +42,17 @@ namespace BeerViewer.Forms
 			Master.Instance.Ready();
 			Homeport.Instance.Ready();
 
+			this.FormClosed += (s, e) =>
+			{
+				// Hide application first
+				this.Hide();
+				Application.DoEvents();
+
+				this.Controls.Remove(this.WindowBrowser);
+
+				Network.Proxy.Instance.Dispose();
+			};
+
 			/// Load <see cref="WindowInfo" /> settings
 			{
 				var info = Settings.WindowInformation.Value;
@@ -46,45 +61,17 @@ namespace BeerViewer.Forms
 				if (info.Top.HasValue) this.Top = info.Top.Value;
 			}
 			this.MinimumSize = new Size(
-				1200 + 2,
-				720 + 28 + 2
+				800 + 2,
+				480 + 28 + 2
 			);
 			this.ResizeEnd += (s, e) => Settings.WindowInformation.Value = this.GetWindowInformation();
 			this.Move += (s, e) => Settings.WindowInformation.Value = this.GetWindowInformation();
 
-			#region LogView
-			this.LogView = new TextBox()
-			{
-				Location = new Point(1, 720 + 29),
-				Size = new Size(1200, 80),
 
-				Multiline = true,
-				ScrollBars = ScrollBars.Vertical,
-				ReadOnly = true
-			};
-			Logger.Logged += x =>
-			{
-				Action<string> f = y =>
-				{
-					this.LogView.Text = y + Environment.NewLine + this.LogView.Text;
-					this.LogView.Update();
-				};
-
-				if (this.LogView.InvokeRequired)
-					this.LogView.Invoke((Action)(() => f(x)));
-				else
-					f(x);
-			};
-			this.Resize += (s, e) =>
-			{
-				this.LogView.Size = new Size(1200, this.ClientSize.Height - 720 - 29);
-			};
-			this.Controls.Add(this.LogView);
-			#endregion
-
+			Logger.Register("MainLogger");
 
 			#region GC timer
-			#if USE_GC
+#if USE_GC
 			{
 				var timer = new System.Timers.Timer(5000);
 				timer.Elapsed += (s, e) =>
@@ -97,145 +84,115 @@ namespace BeerViewer.Forms
 				};
 				timer.Start();
 			}
-			#endif
+#endif
 			#endregion
 
 			#region ComponentService
 			ComponentService.Instance.Initialize();
 			#endregion
 
-
-			#region Menu Button rendering
-			var MenuButton = new FrameworkControl(1, 1, 120, 28);
-			MenuButton.Paint += (s, e) =>
+			#region WindowBrowser
+			this.WindowBrowser = new FrameworkBrowser("")
 			{
-				var c = s as FrameworkControl;
-				var g = e.Graphics;
-
-				if (c.IsHover) g.FillRectangle(c.IsActive ? Constants.brushActiveFace : Constants.brushHoverFace, c.ClientBound);
-				g.DrawImage(
-					Properties.Resources.Menu_Button,
-					new Rectangle(0, 0, 28, 28),
-					new Rectangle(0, 0, 28, 28),
-					GraphicsUnit.Pixel
-				);
-				g.DrawString(
-					"BeerViewer 2.0",
-					Constants.fontDefault,
-					Brushes.White,
-					new Point(28, 5)
-				);
-			};
-			MenuButton.Click += (s, e) =>
-			{
-				// TODO: Open Menu
-			};
-			this.Renderer.AddControl(MenuButton);
-			#endregion
-
-			#region Browser
-			this.Browser = new FrameworkBrowser("")
-			{
-				Location = new Point(1, 29),
-				Size = new Size(1200, 720),
 				Dock = DockStyle.None,
 				AllowDrop = false,
-
-				// To remove context menu
-				MenuHandler = new NoMenuHandler()
+				Location = new Point(1, 1),
 			};
-			this.Browser.FrameLoadEnd += async (s, e) =>
+			this.Communicator = new WindowBrowserCommicator(
+				this,
+				this.WindowBrowser,
+				async () => // After communicator initialized
+				{
+					// Logger
+					{
+						Logger.Logged += e => this.Communicator.CallbackScript("Logged", e);
+
+						string prevLog;
+						while ((prevLog = Logger.Fetch("MainLogger")) != null)
+							await this.Communicator.CallbackScript("Logged", prevLog);
+					}
+
+					this.ClientSizeChanged += (s, e) => this.Communicator?.CallbackScript("WindowState", ((int)this.WindowState).ToString());
+
+					this.GameBrowser = this.WindowBrowser.GetBrowser().GetFrame("MAIN_FRAME");
+					await this.Communicator.CallScript("window.INTERNAL.zoomMainFrame", "66.6666");
+					await this.Communicator.CallScript("window.INTERNAL.loadMainFrame", Constants.GameURL);
+				}
+			);
+			this.Communicator.RegisterObserveObject(nameof(Master), Master.Instance);
+			this.Communicator.RegisterObserveObject(nameof(Homeport), Homeport.Instance);
+
+			this.WindowBrowser.JavascriptObjectRepository.Register("API", this.Communicator, true, new CefSharp.BindingOptions { CamelCaseJavascriptNames = false });
+			this.WindowBrowser.FrameLoadEnd += async (s, e) =>
 			{
 				var rootUri = Extensions.UriOrBlank(e.Browser.MainFrame?.Url);
 				var frameUri = Extensions.UriOrBlank(e.Url);
 
 				// Cookie patch
-				if (rootUri.Host == "www.dmm.com")
-					await this.Browser.GetBrowser().MainFrame.EvaluateScriptAsync(Constants.DMMCookie);
+				if (frameUri.AbsoluteUri.Contains("/foreign/"))
+				{
+					Logger.Log("Foreign page detected, applying DMM cookie");
+					await this.GameBrowser?.EvaluateScriptAsync(Constants.DMMCookie);
+
+					this.GameBrowser?.LoadUrl(Constants.GameURL);
+				}
 
 				// CSS patch
-				if (rootUri.AbsoluteUri == Constants.GameURL)
+				if (this.GameBrowser?.IsValid ?? false)
 				{
-					var script =
-					(
-						@"var x = document.querySelector('#game_style');
+					if (this.GameBrowser?.Url == Constants.GameURL)
+					{
+						var script =
+						(
+							@"var x = document.querySelector('#game_style');
 						if(!x) {
 							x = document.createElement('style');
 							x.id='game_style';
 							x.type='text/css';
 							x.innerHTML='" + Constants.UserStyleSheet + @"';
 							document.body.appendChild(x);
-						}"
-					).ToEvaluatableString();
-					await this.Browser.GetBrowser().MainFrame.EvaluateScriptAsync(script);
+							true;
+						}else false;"
+						).ToEvaluatableString();
+
+						var ret = await this.GameBrowser?.EvaluateScriptAsync(script);
+						if (ret.Success && (bool)ret.Result == true)
+							Logger.Log("Game CSS applied");
+					}
 				}
 			};
-			this.Browser.Load(Constants.GameURL);
-			this.Controls.Add(this.Browser);
-			#endregion
-
-			#region Expedition bar
-			var ExpeditionBars = new ExpeditionBar[3]
+			this.WindowBrowser.LoadError += (s, e) =>
 			{
-				new ExpeditionBar(131, 8, 80, 14),
-				new ExpeditionBar(221, 8, 80, 14),
-				new ExpeditionBar(311, 8, 80, 14)
+				switch (e.ErrorCode) {
+					case CefSharp.CefErrorCode.FileNotFound:
+					case CefSharp.CefErrorCode.ConnectionFailed:
+					case CefSharp.CefErrorCode.ConnectionRefused:
+					case CefSharp.CefErrorCode.ConnectionTimedOut:
+					case CefSharp.CefErrorCode.DisallowedUrlScheme:
+					case CefSharp.CefErrorCode.InvalidResponse:
+					case CefSharp.CefErrorCode.InvalidUrl:
+					case CefSharp.CefErrorCode.NetworkAccessDenied:
+					case CefSharp.CefErrorCode.OutOfMemory:
+					case CefSharp.CefErrorCode.TooManyRedirects:
+						e.Frame.LoadUrl("file:///" + Constants.EntryDir.Replace("\\", "/") + "/WindowFrame/internal/error.html");
+						break;
+				}
 			};
-			Homeport.Instance.Organization.PropertyEvent(nameof(Homeport.Instance.Organization.Fleets), () =>
-			{
-				var fleets = Homeport.Instance.Organization.Fleets;
 
-				if (fleets.Count >= 2) ExpeditionBars[0].SetFleet(fleets[2]);
-				if (fleets.Count >= 3) ExpeditionBars[1].SetFleet(fleets[3]);
-				if (fleets.Count >= 4) ExpeditionBars[2].SetFleet(fleets[4]);
-			});
-			ExpeditionBars.ForEach(x => this.Renderer.AddControl(x));
-			#endregion
+			this.Resize += (s, e) => this.WindowBrowser.Size = this.ClientSize;
+			this.WindowBrowser.Load("file:///" + Constants.EntryDir.Replace("\\", "/") + "/WindowFrame/Application.html");
+			this.Controls.Add(this.WindowBrowser);
 
-			#region Resource bar
+			this.WindowBrowser.IsBrowserInitializedChanged += (s, e) =>
 			{
-				var bar = new ResourceBar(0, 5, 1, 18);
-				bar.Resize += (s, e) => bar.X = this.ClientSize.Width - 96 - 7 - bar.Width;
-				this.Resize += (s, e) => bar.X = this.MinimizeButton.X - 7 - bar.Width;
-				this.Renderer.AddControl(bar);
-			}
-			#endregion
-
-			#region Menu Name Rendering
-			this.Paint += (s, e) =>
-			{
-				var g = e.Graphics;
-				g.DrawString(
-					"Overview",
-					Constants.fontBig,
-					Brushes.White,
-					new Point(1200 + 8, 28 + 2)
-				);
-				g.DrawLine(
-					Constants.penActiveFace,
-					new Point(1200, 29 + 27),
-					new Point(this.ClientSize.Width - 1, 29 + 27)
-				);
+				if (e.IsBrowserInitialized)
+				{
+#if DEBUG
+					this.WindowBrowser.GetBrowser().GetHost().ShowDevTools();
+#endif
+				}
 			};
 			#endregion
-
-			#region Overview
-			var Overview = new OverviewView(1200, 29 + 28, 1, 24);
-			Homeport.Instance.Organization.PropertyEvent(nameof(Homeport.Instance.Organization.Fleets), () =>
-			{
-				var fleets = Homeport.Instance.Organization.Fleets;
-				Overview.SetFleet(fleets.Select(_ => _.Value).ToArray());
-			});
-			this.Renderer.AddControl(Overview);
-
-			this.Resize += (s, e) =>
-			{
-				Overview.Width = this.ClientSize.Width - 1200;
-				Overview.MaximumHeight = this.ClientSize.Height - (29 + 28) + 1;
-				// Overview.Height = this.ClientSize.Height - (29 + 28);
-			};
-			#endregion
-
 
 			this.OnResize(EventArgs.Empty);
 		}

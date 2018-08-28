@@ -19,6 +19,7 @@
     </NuGetPackageImportStamp>
     <TargetFrameworkProfile />
     <CefSharpAnyCpuSupport>true</CefSharpAnyCpuSupport>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -31,7 +32,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -64,26 +64,6 @@
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\x86\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>true</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>bin\x86\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>true</Prefer32Bit>
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -99,13 +79,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
-    <Compile Include="Forms\Controls\Overview\DockView.cs" />
-    <Compile Include="Forms\Controls\ExpeditionBar.cs" />
-    <Compile Include="Forms\Controls\Overview\QuestsView.cs" />
-    <Compile Include="Forms\Controls\Overview\SimpleFleetView.cs" />
-    <Compile Include="Forms\Controls\Overview\OverviewView.cs" />
-    <Compile Include="Forms\Controls\ResourceBar.cs" />
-    <Compile Include="Forms\Controls\TabHost.cs" />
     <Compile Include="Framework\BorderlessWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -123,6 +96,9 @@
     <Compile Include="Forms\frmMain.Designer.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
+    <Compile Include="Modules\Communication\ObjectPathLevel.cs" />
+    <Compile Include="Modules\Communication\ObservedTreeData.cs" />
+    <Compile Include="Modules\Communication\ObservedTreeManager.cs" />
     <Compile Include="Modules\Component\Component.cs" />
     <Compile Include="Modules\Component\ComponentService.cs" />
     <Compile Include="Modules\Component\IComponent.cs" />
@@ -308,6 +284,7 @@
     <Compile Include="Models\Wrapper\SlotItemInfo.cs" />
     <Compile Include="Models\Wrapper\UseItem.cs" />
     <Compile Include="Models\Wrapper\UseItemInfo.cs" />
+    <Compile Include="Modules\Communication\WindowBrowserCommicator.cs" />
     <Compile Include="Network\HttpProxy.cs" />
     <Compile Include="Network\ModifiableProxy.cs" />
     <Compile Include="Network\NetworkExtensions.cs" />
@@ -319,19 +296,14 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
+    <Content Include="WindowFrame\assets\button_menu.png" />
+    <Content Include="WindowFrame\assets\button_system.png" />
+    <Content Include="WindowFrame\assets\icon_menu_area.png" />
+    <Content Include="WindowFrame\internal\error.html" />
+    <Content Include="WindowFrame\MainFramePlaceholder.html" />
     <EmbeddedResource Include="Forms\frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
@@ -345,37 +317,32 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="WindowFrame\assets\fonts\SpoqaHanSansBold.woff2" />
+    <None Include="WindowFrame\assets\fonts\SpoqaHanSansJPBold.woff2" />
+    <None Include="WindowFrame\assets\fonts\SpoqaHanSansJPRegular.woff2" />
+    <None Include="WindowFrame\assets\fonts\SpoqaHanSansRegular.woff2" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\System Buttons.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Menu Button.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Numbers.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\icon_ammo.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\icon_bauxite.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\icon_fuel.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\icon_steel.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\icon_bucket.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Forms\Controls\Fleets\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="icon.ico" />
-    <None Include="Resources\icon_screw.png" />
+    <Content Include="WindowFrame\modules\internal.js" />
+    <Content Include="WindowFrame\modules\logger\logger.css" />
+    <Content Include="WindowFrame\modules\logger\logger.js" />
+    <Content Include="WindowFrame\modules\top-resource\icon_ammo.png" />
+    <Content Include="WindowFrame\modules\top-resource\icon_bauxite.png" />
+    <Content Include="WindowFrame\modules\top-resource\icon_fuel.png" />
+    <Content Include="WindowFrame\modules\top-resource\icon_improvementmaterial.png" />
+    <Content Include="WindowFrame\modules\top-resource\icon_repairbucket.png" />
+    <Content Include="WindowFrame\modules\top-resource\icon_steel.png" />
+    <Content Include="WindowFrame\modules\top-resource\top-resource.js" />
+    <Content Include="WindowFrame\modules\top-resource\top-resource.css" />
+    <Content Include="WindowFrame\modules\window\window.js" />
+    <Content Include="WindowFrame\app.css" />
+    <Content Include="WindowFrame\Application.html" />
+    <Content Include="WindowFrame\modules\common.js" />
+    <Content Include="WindowFrame\modules\expedition\expedition.css" />
+    <Content Include="WindowFrame\modules\expedition\expedition.js" />
+    <Content Include="WindowFrame\modules\module.js" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
@@ -405,7 +372,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>XCOPY "$(SolutionDir)i18n" "$(TargetDir)i18n\" /Y /V</PostBuildEvent>
+    <PostBuildEvent>XCOPY "$(SolutionDir)i18n" "$(TargetDir)i18n\" /Y /V /E
+XCOPY "$(ProjectDir)WindowFrame" "$(TargetDir)WindowFrame\" /Y /V /E</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
