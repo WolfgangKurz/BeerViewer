@@ -329,6 +329,7 @@
     <Content Include="WindowFrame\modules\internal.js" />
     <Content Include="WindowFrame\modules\logger\logger.css" />
     <Content Include="WindowFrame\modules\logger\logger.js" />
+    <Content Include="WindowFrame\modules\overview\overview.css" />
     <Content Include="WindowFrame\modules\overview\overview.js" />
     <Content Include="WindowFrame\modules\top-resource\icon_ammo.png" />
     <Content Include="WindowFrame\modules\top-resource\icon_bauxite.png" />
