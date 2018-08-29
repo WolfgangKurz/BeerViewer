@@ -301,6 +301,7 @@
     <Content Include="WindowFrame\assets\button_system.png" />
     <Content Include="WindowFrame\assets\icon_menu_area.png" />
     <Content Include="WindowFrame\internal\error.html" />
+    <Content Include="WindowFrame\internal\example.html" />
     <Content Include="WindowFrame\MainFramePlaceholder.html" />
     <EmbeddedResource Include="Forms\frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>
