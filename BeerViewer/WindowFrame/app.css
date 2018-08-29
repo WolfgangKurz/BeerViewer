@@ -63,6 +63,27 @@ table {
 	border-collapse: collapse;
 }
 
+div.tab-host {
+	display: flex;
+	background-color: #313131;
+	line-height: 24px;
+	text-align: center;
+	flex-direction: row;
+}
+div.tab-host > * {
+	flex: 1 0 auto;
+	text-decoration: none;
+	cursor: pointer;
+	color: #fff;
+}
+div.tab-host > a[data-hide="true"]{
+	display: none;
+}
+div.tab-host > a:hover,
+div.tab-host > a.selected {
+	background-color: #575757;
+}
+
 ul.menu-host {
 	margin: 0;
 	padding: 0;

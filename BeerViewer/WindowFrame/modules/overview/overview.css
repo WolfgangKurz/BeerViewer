@@ -4,8 +4,8 @@
 #overview-container .fleet {
 	margin: 3px 0;
 }
-
-#overview-container .fleet[data-status="disabled"] {
+#overview-container .fleet[data-status="disabled"],
+#overview-container .fleet:not(.display) {
 	display: none;
 }
 
@@ -40,7 +40,7 @@
 	font-size: 14px;
 }
 #overview-container[data-modes~="mininame"] .fleet .ship .ship-name {
-	width: 88px;
+	width: 104px;
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
@@ -98,6 +98,7 @@
 	background-color: #fdd835;
 }
 #overview-container .fleet .ship .ship-morale > .ship-morale-value {
+	padding-left: 2px;
 	padding-right: 6px;
 }
 #overview-container[data-modes~="mini"] .fleet .ship .ship-morale > .ship-morale-value {

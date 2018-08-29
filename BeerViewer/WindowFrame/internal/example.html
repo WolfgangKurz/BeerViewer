@@ -10,137 +10,15 @@
 </head>
 <body style="background-color:rgba(0,0,0,0.1)">
 	<div id="overview-container">
-		<table class="fleet">
-			<tbody>
-				<tr class="ship" data-status="repairing">
-					<td>
-						<div class="ship-name">Октябрьская революция</div>
-						<div class="ship-level">
-							Lv.
-							<span class="ship-level-value">165</span>
-						</div>
-					</td>
-					<td>
-						<div class="ship-hp-bar" data-type="progress" data-progress-strip="4" data-progress="66.666"></div>
-
-						<div class="ship-hp">
-							<span class="ship-hp-current">107</span>/<span class="ship-hp-maximum">107</span>
-						</div>
-						<div class="ship-supply">
-							<div class="ship-fuel" data-type="progress" data-progress-strip="5" data-progress="80"></div>
-							<div class="ship-ammo" data-type="progress" data-progress-strip="5" data-progress="60"></div>
-						</div>
-						<div class="ship-morale">
-							<div class="ship-morale-box" data-morale="-3"></div>
-							<div class="ship-morale-value">9</div>
-						</div>
-
-						<div class="ship-repairing">
-							<span>Repairing...</span>
-						</div>
-					</td>
-				</tr>
-			</tbody>
-		</table>
+		<div class="tab-host">
+			<a href="#" class="selected">#1</a>
+			<a href="#">#2</a>
+			<a href="#">#3</a>
+			<a href="#">#4</a>
+		</div>
 		<script>
 			!function () {
-				const getProgressColor = function (progress) {
-					if (progress >= 75)
-						return "#388e3c";
-					else if (progress >= 50)
-						return "#fdd835";
-					else if (progress >= 25)
-						return "#f57c00";
-					else
-						return "#c62828";
-				};
-				const rebindProgress = function (target) {
-					if (!target.is('[data-type="progress"]')) return;
-					if (target.is("[data-progress-binded]")) return;
-					target.attr("data-progress-binded", "1");
-
-					target.findAll(".progress-strip").each(function () {
-						this.remove();
-					});
-
-					let strips = target.attr("data-progress-strip");
-					if (!strips)
-						strips = 1;
-					else
-						strips = parseInt(strips);
-
-					for (let i = 1; i < strips; i++) {
-						target.prepend(
-							$.new("div", "progress-strip")
-								.css("left", (100 * i / strips) + "%")
-						);
-					}
-
-					target.prepend($.new("div", "progress-bar"));
-
-					updateProgress(target);
-				};
-				const updateProgress = function (target) {
-					if (!target.is('[data-type="progress"]')) return;
-					if (!target.is("[data-progress-binded]")) return;
-
-					const progress = parseFloat(target.attr("data-progress"));
-
-					target.find(".progress-bar")
-						.css("background-color", getProgressColor(progress))
-						.css("width", progress + "%");
-				};
-
-				var observer = new MutationObserver(function (m) {
-					m.forEach(function (x) {
-						if (x.type == "childList") {
-							x.target.findAll('[data-type="progress"]')
-								.each(function () {
-									rebindProgress(this);
-								});
-						} else if (x.type == "attributes") {
-							if (x.target.is('[data-type="progress"][data-progress-binded]')) {
-								switch (x.attributeName) {
-									case "data-progress":
-										updateProgress(x.target);
-										break;
-									case "data-progress-strip":
-										rebindProgress(x.target);
-										break;
-								}
-							}
-						}
-					});
-				});
-				observer.observe(
-					document.body,
-					{ attributes: true, childList: true, subtree: true }
-				);
-
-				$.all('[data-type="progress"]').each(function () {
-					rebindProgress(this);
-				});
-
-				const updateSize = function () {
-					var el = [
-						$(".fleet td:first-of-type"),
-						$(".fleet td:last-of-type")
-					];
-					if (el[0] === null || el[1] === null) return;
-
-					var leftSize = el[0].clientWidth;
-					var rightSize = el[1].clientWidth;
-					var modes = [];
-					if (rightSize < 128) modes.push("mini");
-					if (rightSize < 84) modes.push("tiny");
-					if (rightSize < 76) modes.push("minimal");
-					if (leftSize > 88) modes.push("mininame");
-					$("#overview-container").attr("data-modes", modes.join(" "));
-				};
-				window.addEventListener("resize", function () {
-					updateSize();
-				});
-				updateSize();
+				
 			}();
 		</script>
 	</div>

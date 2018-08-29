@@ -3,7 +3,7 @@
 namespace BeerViewer.Models.Enums
 {
 	[Flags]
-	public enum ShipSituation
+	public enum ShipSituation : int
 	{
 		None = 0,
 		Repair = 1,

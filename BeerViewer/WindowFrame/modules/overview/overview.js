@@ -2,13 +2,22 @@
 !function () {
 	if (!window.modules) throw "Cannot find `module`";
 
-	const initOverviewFleet = function (id, maxShips) {
-		const elem = $.new("table", "fleet");
+	const initOverviewFleet = function (id, maxShips, overview) {
+		const elem = $.new("table", "fleet").attr("data-idx", id);
 		const tbody = $.new("tbody");
 		elem.append(tbody);
 
 		window.API.ObserveData("Homeport", "Organization.Fleets[" + id + "]", function (value) {
-			elem.attr("data-status", (value === null) ? "disabled" : "enabled");
+			const disabled = value === null;
+			elem.attr("data-status", disabled ? "disabled" : "enabled");
+
+			overview.find('.tab-host > a[data-idx="' + id + '"]')
+				.attr("data-hide", disabled ? "true" : "false");
+
+			if (overview.find('.tab-host > a.selected:not([data-hide="true"])') === null) {
+				const first = overview.find('.tab-host > a:not([data-hide="true"])');
+				if(first) first.trigger("click");
+			}
 		});
 
 		for (let i = 0; i < maxShips; i++) {
@@ -19,7 +28,11 @@
 				ship
 					.append(
 						$.new("td")
-							.append($.new("div", "ship-name").html("???"))
+							.append(
+								$.new("div", "ship-name")
+									.prop("title", "???")
+									.html("???")
+							)
 							.append(
 								$.new("div", "ship-level")
 									.append($.new.text("Lv."))
@@ -75,37 +88,42 @@
 					);
 
 				window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Ships[" + i + "]", function (value) {
-					ship.attr("data-disabled", (value === null) ? "true" : "false");
+					ship.attr("data-disabled", value === null ? "true" : "false");
 				});
 				window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Ships[" + i + "].Situation", function (value) {
-					console.log(value);
+					window.API.Log(value);
 				});
 
 				window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Ships[" + i + "].Info.Name", async function (value) {
-					ship.find(".ship-name").html(await window.API.i18n(value));
+					const name = await window.API.i18n(value);
+					ship.find(".ship-name")
+						.prop("title", name)
+						.html(name);
+					updateSize();
 				});
 				window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Ships[" + i + "].Level", function (value) {
 					ship.find(".ship-level-value").html(value);
 				});
-				window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Ships[" + i + "].HP", async function (_, ns, path) {
-					const value = await window.API.GetData(ns, path); // Have to call GetData to get object data
+				window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Ships[" + i + "].HP", function (value) {
 					if (value === null) return;
 
-					ship.find(".ship-level-hp-current").html(value.Current);
-					ship.find(".ship-level-hp-maximum").html(value.Maximum);
-					ship.find(".ship-level-hp-bar").attr("data-progress", 100 * value.Current / value.Maximum);
+					ship.find(".ship-hp-current").html(value.Current);
+					ship.find(".ship-hp-maximum").html(value.Maximum);
+					ship.find(".ship-hp-bar").attr("data-progress", 100 * value.Current / value.Maximum);
 				});
-				window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Ships[" + i + "].Fuel", async function (_, ns, path) {
-					const value = await window.API.GetData(ns, path); // Have to call GetData to get object data
+				window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Ships[" + i + "].Fuel", function (value) {
 					if (value === null) return;
 
-					ship.find(".ship-fuel").attr("data-progress", 100 * value.Current / value.Maximum);
+					ship.find(".ship-fuel")
+						.prop("title", value.Current + " / " + value.Maximum)
+						.attr("data-progress", 100 * value.Current / value.Maximum);
 				});
-				window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Ships[" + i + "].Ammo", async function (_, ns, path) {
-					const value = await window.API.GetData(ns, path); // Have to call GetData to get object data
+				window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Ships[" + i + "].Ammo", function (value) {
 					if (value === null) return;
 
-					ship.find(".ship-ammo").attr("data-progress", 100 * value.Current / value.Maximum);
+					ship.find(".ship-ammo")
+						.prop("title", value.Current + " / " + value.Maximum)
+						.attr("data-progress", 100 * value.Current / value.Maximum);
 				});
 				window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Ships[" + i + "].Condition", function (value) {
 					let morale = "0";
@@ -184,8 +202,8 @@
 	};
 	const updateSize = function () {
 		var el = [
-			$(".fleet td:first-of-type"),
-			$(".fleet td:last-of-type")
+			$('.fleet.display .ship:not([data-disabled="true"]) td:first-of-type'),
+			$('.fleet.display .ship:not([data-disabled="true"]) td:last-of-type')
 		];
 		if (el[0] === null || el[1] === null) return;
 
@@ -195,32 +213,60 @@
 		if (rightSize < 128) modes.push("mini");
 		if (rightSize < 84) modes.push("tiny");
 		if (rightSize < 76) modes.push("minimal");
-		if (leftSize > 88) modes.push("mininame");
+		if (leftSize > 104) modes.push("mininame");
 		$("#overview-container").attr("data-modes", modes.join(" "));
 	};
 
 	window.modules.register("overview", {
 		const: {
 			fleets: 4,
-			ships: 7,
+			ships: 7
 		},
 
 		init: function () {
 			const _this = this;
 			const overview = $.new("div").prop("id", "overview-container");
 
-			for (let i = 0; i < this.const.fleets; i++) {
-				overview.append(initOverviewFleet(i + 1, this.const.ships));
-			}
+			!function () {
+				const host = $.new("div", "tab-host");
+				for (let i = 0; i < 4; i++) {
+					host.append(
+						$.new("a")
+							.prop("href", "#")
+							.attr("data-idx", i + 1)
+							.attr("data-hide", "true")
+							.html("#" + (i + 1))
+							.event("click", function (e) {
+								e.preventDefault();
+
+								this.parent().findAll("a").removeClass("selected");
+								this.addClass("selected");
+
+								overview.findAll(".fleet").removeClass("display");
+
+								const fleet = overview.find('.fleet[data-idx="' + (i + 1) + '"]');
+								if (!fleet) return false;
+
+								fleet.addClass("display");
+								return false;
+							})
+					);
+				}
+
+				overview.append(host);
+			}();
+
+			for (let i = 0; i < this.const.fleets; i++)
+				overview.append(initOverviewFleet(i + 1, this.const.ships, overview));
 
 			var observer = new MutationObserver(function (m) {
 				m.forEach(function (x) {
-					if (x.type == "childList") {
+					if (x.type === "childList") {
 						x.target.findAll('[data-type="progress"]')
 							.each(function () {
 								rebindProgress(this);
 							});
-					} else if (x.type == "attributes") {
+					} else if (x.type === "attributes") {
 						if (x.target.is('[data-type="progress"][data-progress-binded]')) {
 							switch (x.attributeName) {
 								case "data-progress":

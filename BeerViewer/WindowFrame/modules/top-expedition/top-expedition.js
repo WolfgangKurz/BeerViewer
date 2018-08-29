@@ -49,8 +49,7 @@
 			data.remaining = value;
 			update();
 		});
-		window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Expedition.Progress", async function (_, ns, path) {
-			const value = await window.API.GetData(ns, path); // Have to call GetData to get object data
+		window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Expedition.Progress", function (value) {
 			if (value === null)
 				data.progress = 0;
 			else

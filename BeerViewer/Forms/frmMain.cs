@@ -118,8 +118,8 @@ namespace BeerViewer.Forms
 					this.ClientSizeChanged += (s, e) => this.Communicator?.CallbackScript("WindowState", ((int)this.WindowState).ToString());
 
 					this.GameBrowser = this.WindowBrowser.GetBrowser().GetFrame("MAIN_FRAME");
-					// await this.Communicator.CallScript("window.INTERNAL.zoomMainFrame", "66.6666");
-					await this.Communicator.CallScript("window.INTERNAL.loadMainFrame", Constants.GameURL);
+					await this.Communicator.CallScript("window.INTERNAL.zoomMainFrame", "66.6666");
+					// await this.Communicator.CallScript("window.INTERNAL.loadMainFrame", Constants.GameURL);
 				}
 			);
 			this.Communicator.RegisterObserveObject(nameof(Master), Master.Instance);

@@ -230,5 +230,20 @@ namespace BeerViewer.Modules.Communication
 			}
 			return output.ToArray();
 		}
+
+		/// <summary>
+		/// Log to logger
+		/// </summary>
+		/// <param name="Text">Text to log</param>
+		public void Log(string Text)
+		{
+			Logger.Log(Text);
+		}
+
+		public int Test()
+		{
+			Models.Enums.ShipSituation _est = Models.Enums.ShipSituation.HeavilyDamaged | Models.Enums.ShipSituation.Repair;
+			return (int)_est;
+		}
 	}
 }
