@@ -114,7 +114,7 @@ namespace BeerViewer.Models
 
 		#region Bull Property
 		private LimitedValue _Bull;
-		public LimitedValue Bull
+		public LimitedValue Ammo
 		{
 			get { return this._Bull; }
 			private set
@@ -274,7 +274,7 @@ namespace BeerViewer.Models
 
 
 		public int UsedFuel => (int)((this.Level <= 99 ? 1.0 : 0.85) * (this.Fuel.Maximum - this.Fuel.Current));
-		public int UsedBull => (int)((this.Level <= 99 ? 1.0 : 0.85) * (this.Bull.Maximum - this.Bull.Current));
+		public int UsedBull => (int)((this.Level <= 99 ? 1.0 : 0.85) * (this.Ammo.Maximum - this.Ammo.Current));
 
 		public int LOS => this.RawData.api_sakuteki.Get(0) ?? 0;
 		public bool IsMaxModernized => this.Firepower.IsMax && this.Torpedo.IsMax && this.AA.IsMax && this.Armor.IsMax;
@@ -313,7 +313,7 @@ namespace BeerViewer.Models
 			this.Info = Master.Instance.Ships[Data.api_ship_id] ?? ShipInfo.Empty;
 			this.HP = new LimitedValue(this.RawData.api_nowhp, this.RawData.api_maxhp, 0);
 			this.Fuel = new LimitedValue(this.RawData.api_fuel, this.Info.RawData.api_fuel_max, 0);
-			this.Bull = new LimitedValue(this.RawData.api_bull, this.Info.RawData.api_bull_max, 0);
+			this.Ammo = new LimitedValue(this.RawData.api_bull, this.Info.RawData.api_bull_max, 0);
 			this.ASW = new ModernizableStatus(new int[] { 0, this.RawData.api_taisen[1] }, this.RawData.api_taisen[0]);
 
 			if (this.RawData.api_kyouka.Length >= 5)
@@ -356,7 +356,7 @@ namespace BeerViewer.Models
 		internal void Charge(int fuel, int bull, int[] onslot)
 		{
 			this.Fuel = this.Fuel.Update(fuel);
-			this.Bull = this.Bull.Update(bull);
+			this.Ammo = this.Ammo.Update(bull);
 			for (var i = 0; i < this.Slots.Length; i++) this.Slots[i].Current = onslot.Get(i) ?? 0;
 		}
 

@@ -169,7 +169,7 @@ namespace BeerViewer.Modules.Communication
 		}
 
 		/// <summary>
-		/// Get data on specific namespace.
+		/// Returns data on specific namespace.
 		/// </summary>
 		/// <param name="ns">Namespace of target value</param>
 		/// <param name="path">Path of target value</param>
@@ -183,6 +183,18 @@ namespace BeerViewer.Modules.Communication
 			catch { }
 
 			return null;
+		}
+
+		/// <summary>
+		/// Returns localized text.
+		/// If not found, returns inputted <paramref name="Text"/> argument.
+		/// </summary>
+		/// <param name="Text">Text to localize</param>
+		/// <returns>Localized, or inputted text</returns>
+		public string i18n(string Text)
+		{
+			if (string.IsNullOrEmpty(Text)) return "";
+			return Modules.i18n.Current[Text] ?? Text;
 		}
 
 		/// <summary>

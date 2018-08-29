@@ -21,6 +21,13 @@
 			$("#top-menu-overlay").event("click", function (e) {
 				$("#top-menubutton > button").trigger("click");
 			});
+
+			!function () {
+				var observer = new MutationObserver(function (m) {
+					console.log(m);
+				});
+				observer.observe($("body"), { attributes: true, childList: true, characterData: true });
+			}();
 		}
 	});
 }();

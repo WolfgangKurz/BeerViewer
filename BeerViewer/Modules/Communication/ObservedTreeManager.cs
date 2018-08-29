@@ -75,9 +75,26 @@ namespace BeerViewer.Modules.Communication
 						type = result.GetType();
 						var indexer = type.GetMethod("get_Item", BindingFlags.Public | BindingFlags.Instance);
 						if (indexer == null)
-							throw new Exception("Tried to access as Array to not Array object");
-
-						result = indexer.Invoke(result, new object[] { level.Index });
+						{
+							if (!type.IsArray)
+							{
+								throw new Exception("Tried to access as Array to not Array object");
+							}
+							else
+							{
+								var arr = (object[])result;
+								if (level.Index < 0)
+									result = null;
+								else if (level.Index >= arr.Length)
+									result = null;
+								else
+									result = ((object[])result)[level.Index];
+							}
+						}
+						else
+						{
+							result = indexer.Invoke(result, new object[] { level.Index });
+						}
 					}
 				}
 

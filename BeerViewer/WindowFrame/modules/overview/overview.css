@@ -1,13 +1,139 @@
-﻿.overview-container {
+﻿#overview-container {
 }
 
-.overview-container .overview-fleet {
-	
+#overview-container .fleet {
+	margin: 3px 0;
 }
-.overview-container .overview-fleet[data-status="disabled"] {
+
+#overview-container .fleet[data-status="disabled"] {
 	display: none;
 }
 
-.overview-container .overview-fleet .overview-fleet-ship[data-disabled="true"] {
+#overview-container .fleet .ship[data-disabled="true"] {
 	display: none;
+}
+
+#overview-container .fleet .ship {
+	line-height: 13px;
+}
+#overview-container .fleet .ship > td {
+	padding: 3px 6px;
+	vertical-align: top;
+}
+#overview-container .fleet .ship > td:first-of-type {
+	padding-right: 0;
+
+	/* Width="Auto" */
+	width: 1px;
+	white-space: nowrap;
+}
+#overview-container .fleet .ship > td:last-of-type {
+	position: relative;
+	line-height: 15px;
+}
+#overview-container .fleet .ship > td::after {
+	content: "";
+	display: table;
+	clear: both;
+}
+#overview-container .fleet .ship .ship-name {
+	font-size: 14px;
+}
+#overview-container[data-modes~="mininame"] .fleet .ship .ship-name {
+	width: 88px;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	font-size: 14px;
+}
+#overview-container .fleet .ship .ship-level {
+	font-size: 10px;
+	color: rgba(255, 255, 255, 0.77);
+}
+#overview-container .fleet .ship .ship-level > .ship-level-value {
+	color: #fff;
+}
+
+#overview-container .fleet .ship .ship-hp-bar {
+	margin: 2px 0 0;
+	height: 6px;
+}
+#overview-container .fleet .ship .ship-hp {
+	float: left;
+	margin: 2px 0;
+	width: 50%;
+}
+#overview-container .fleet .ship .ship-morale,
+#overview-container .fleet .ship .ship-supply {
+	float: right;
+	width: 25%;
+	white-space: nowrap;
+	word-break: keep-all;
+}
+#overview-container .fleet .ship .ship-morale {
+	text-align: right;
+}
+#overview-container .fleet .ship .ship-morale > * {
+	display: inline-block;
+	vertical-align: middle;
+}
+#overview-container .fleet .ship .ship-morale > .ship-morale-box {
+	width: 11px;
+	height: 11px;
+	background-color: #000;
+}
+#overview-container .fleet .ship .ship-morale > .ship-morale-box[data-morale="0"] {
+	background-color: #fff;
+}
+#overview-container .fleet .ship .ship-morale > .ship-morale-box[data-morale="-1"] {
+	background-color: #ffcc80;
+}
+#overview-container .fleet .ship .ship-morale > .ship-morale-box[data-morale="-2"] {
+	background-color: #f57c00;
+}
+#overview-container .fleet .ship .ship-morale > .ship-morale-box[data-morale="-3"] {
+	background-color: #c62828;
+}
+#overview-container .fleet .ship .ship-morale > .ship-morale-box[data-morale="+1"] {
+	background-color: #fdd835;
+}
+#overview-container .fleet .ship .ship-morale > .ship-morale-value {
+	padding-right: 6px;
+}
+#overview-container[data-modes~="mini"] .fleet .ship .ship-morale > .ship-morale-value {
+	padding-right: 0;
+}
+#overview-container[data-modes~="tiny"] .fleet .ship .ship-morale > .ship-morale-value {
+	display: none;
+}
+#overview-container[data-modes~="minimal"] .fleet .ship .ship-morale {
+	display: none;
+}
+
+#overview-container .fleet .ship .ship-supply > div {
+	margin: 2px 0;
+	height: 5px;
+}
+#overview-container[data-modes~="mini"] .fleet .ship .ship-supply {
+	display: none;
+}
+
+#overview-container .fleet .ship[data-status="repairing"] td:last-of-type > div:not(.ship-repairing) {
+	opacity: 0.33;
+}
+#overview-container .fleet .ship .ship-repairing {
+	display: none;
+	position: absolute;
+	left: 0;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 2;
+	text-align: center;
+}
+#overview-container .fleet .ship .ship-repairing > span {
+	margin: auto;
+}
+#overview-container .fleet .ship[data-status="repairing"] .ship-repairing {
+	display: flex;
 }

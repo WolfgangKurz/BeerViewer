@@ -37,6 +37,7 @@ html, body {
 img { vertical-align: bottom }
 iframe {
 	/* Default size */
+	display: block;
 	width: 1200px;
 	height: 720px;
 	border: none;
@@ -56,6 +57,10 @@ button:hover {
 }
 button:active {
 	background-color: #575757;
+}
+table {
+	width: 100%;
+	border-collapse: collapse;
 }
 
 ul.menu-host {
@@ -126,6 +131,23 @@ i.menu-icon[data-icon="game"] {
 }
 i.menu-icon[data-icon="unknown"] {
 	background-position: -56px -28px;
+}
+
+[data-type="progress"] {
+	position: relative;
+	background-color: rgba(255, 255, 255, 0.17);
+}
+[data-type="progress"] > .progress-strip {
+	position: absolute;
+	top: 0;
+	height: 50%;
+	width: 1px;
+	background-color: #000;
+	z-index: 1;
+}
+[data-type="progress"] > .progress-bar {
+	height: 100%;
+	transition: all 0.22s ease-in-out;
 }
 
 #mainbox {

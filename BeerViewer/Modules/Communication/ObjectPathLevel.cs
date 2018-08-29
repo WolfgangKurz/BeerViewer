@@ -48,6 +48,7 @@ namespace BeerViewer.Modules.Communication
 
 						indexBuffer.Clear();
 						arraying = false;
+						continue;
 					}
 					else if (c < '0' || c > '9')
 						throw new ArgumentException("Path parse error: Invalid index value");
