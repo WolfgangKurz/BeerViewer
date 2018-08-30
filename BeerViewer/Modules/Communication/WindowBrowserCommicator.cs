@@ -239,11 +239,5 @@ namespace BeerViewer.Modules.Communication
 		{
 			Logger.Log(Text);
 		}
-
-		public int Test()
-		{
-			Models.Enums.ShipSituation _est = Models.Enums.ShipSituation.HeavilyDamaged | Models.Enums.ShipSituation.Repair;
-			return (int)_est;
-		}
 	}
 }

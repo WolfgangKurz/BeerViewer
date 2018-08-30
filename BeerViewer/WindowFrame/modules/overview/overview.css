@@ -120,7 +120,7 @@
 }
 
 #overview-container .fleet .ship[data-status="repairing"] td:last-of-type > div:not(.ship-repairing) {
-	opacity: 0.33;
+	opacity: 0.21;
 }
 #overview-container .fleet .ship .ship-repairing {
 	display: none;

@@ -91,7 +91,10 @@
 					ship.attr("data-disabled", value === null ? "true" : "false");
 				});
 				window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Ships[" + i + "].Situation", function (value) {
-					window.API.Log(value);
+					if ((value & 1) == 1) // Repairing
+						ship.attr("data-status", "repairing");
+					else
+						ship.attr("data-status", "");
 				});
 
 				window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Ships[" + i + "].Info.Name", async function (value) {

@@ -48,6 +48,7 @@ namespace BeerViewer.Modules.Communication
 			var cursor = root;
 			var result = cursor.Object;
 			ObservedTreeData output = null;
+			Type type;
 
 			for (var i = 0; i < levels.Length; i++)
 			{
@@ -57,7 +58,7 @@ namespace BeerViewer.Modules.Communication
 
 				if (result != null)
 				{
-					var type = result.GetType();
+					type = result.GetType();
 					var member = type.GetMember(level.Name, BindingFlags.Public | BindingFlags.Instance | BindingFlags.GetField | BindingFlags.GetProperty)
 						.FirstOrDefault();
 					if (member == null)
@@ -129,6 +130,12 @@ namespace BeerViewer.Modules.Communication
 				}
 			}
 
+			if (result != null)
+			{
+				type = result.GetType();
+				if (type.IsEnum)
+					result = Convert.ChangeType(result, typeof(int));
+			}
 			ResultCallback?.Invoke(result);
 			return output;
 		}
@@ -166,6 +173,7 @@ namespace BeerViewer.Modules.Communication
 
 			var levels = ObjectPathLevel.ParsePathLevels(Path ?? ""); // A.B[2].C -> [A:literal, B:array[2], C:literal]
 			object result = this.NamespaceTable[Namespace];
+			Type type;
 
 			for (var levelCursor = 0; levelCursor < levels.Length; levelCursor++)
 			{
@@ -174,7 +182,7 @@ namespace BeerViewer.Modules.Communication
 				// Current object information
 				var pathCursor = levels[levelCursor];
 
-				var type = result.GetType();
+				type = result.GetType();
 				var member = type.GetMember(pathCursor.Name, BindingFlags.Public | BindingFlags.Instance | BindingFlags.GetField | BindingFlags.GetProperty)
 					.FirstOrDefault();
 				if (member == null)
@@ -197,10 +205,15 @@ namespace BeerViewer.Modules.Communication
 					result = indexer.Invoke(result, new object[] { pathCursor.Index });
 				}
 			}
+
+			type = result.GetType();
+			if (type.IsEnum)
+				result = Convert.ChangeType(result, typeof(int));
+
 			return result;
 		}
 
-		public void Test(ObservedTreeData root = null, int level = 0)
+		private void LogTree(ObservedTreeData root = null, int level = 0)
 		{
 			if (root == null)
 			{
@@ -208,7 +221,7 @@ namespace BeerViewer.Modules.Communication
 
 				System.Diagnostics.Debug.WriteLine("Homeport");
 				foreach (var item in this.NamespaceTree)
-					Test(item.Value, 1);
+					LogTree(item.Value, 1);
 				return;
 			}
 
@@ -218,7 +231,7 @@ namespace BeerViewer.Modules.Communication
 				level > 0 ? "- " : "",
 				root.Path
 			);
-			Test(root.Child, level + 1);
+			LogTree(root.Child, level + 1);
 		}
 	}
 }
