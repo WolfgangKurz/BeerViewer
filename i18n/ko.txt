@@ -1,11 +1,18 @@
-fleet_level	Lv
+﻿fleet_level	Lv
 fleet_speed_immovable	육상기지
 fleet_speed_slow			저속
 fleet_speed_fast			고속
 fleet_speed_faster			고속+
 fleet_speed_fastest		초고속
+
+fleet_totallevel	총합 레벨
+fleet_averagelevel	평균 레벨
+fleet_speed	속력
 fleet_los	색적
+fleet_los_type	색적 계산식
 fleet_aa	제공
+fleet_aa_min	제공 최소
+fleet_aa_max	제공 최대
 fleet_repairing	수리중
 
 fleet_locked				잠김

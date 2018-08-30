@@ -7,6 +7,119 @@
 		const tbody = $.new("tbody");
 		elem.append(tbody);
 
+		!function () {
+			const summary_container = $.new("div", "summary-container");
+			const summary_list = ["level", "aa", "speed", "los"];
+
+			summary_list.forEach(function (x) {
+				summary_container.append(
+					$.new("div", "summary-info")
+						.attr("data-summary", x)
+				);
+			});
+
+			const updateSummary = async function () {
+				const speedList = {
+					0: "fleet_speed_immovable",
+					5: "fleet_speed_slow",
+					10: "fleet_speed_fast",
+					15: "fleet_speed_faster",
+					20: "fleet_speed_fastest"
+				};
+				const ship_length = await window.API.GetData("Homeport", "Organization.Fleets[" + id + "].Ships.Length");
+				let level = 0;
+				for (let i = 0; ship_length && i < ship_length; i++) {
+					level += await window.API.GetData("Homeport", "Organization.Fleets[" + id + "].Ships[" + i + "].Level");
+				}
+				const avglevel = (!ship_length ? 0 : (level / ship_length)).toFixed(2);
+
+				const speed = await window.API.GetData("Homeport", "Organization.Fleets[" + id + "].Speed");
+
+				let los = await window.API.GetData("Homeport", "Organization.Fleets[" + id + "].LOS");
+				if (los === null) los = 0;
+				los = los.toFixed(2);
+
+				const aa = [
+					await window.API.GetData("Homeport", "Organization.Fleets[" + id + "].AirSuperiorityPotentialMinimum"),
+					await window.API.GetData("Homeport", "Organization.Fleets[" + id + "].AirSuperiorityPotentialMaximum")
+				];
+
+				const leveltext = String.format(
+					"{0} ({1})",
+					level,
+					avglevel
+				);
+				const speedtext = await window.API.i18n(speedList[speed]);
+
+				const level_tooltip = String.format(
+					"{0}: {1}\n{2}: {3}",
+					await window.API.i18n("fleet_totallevel"),
+					level,
+					await window.API.i18n("fleet_averagelevel"),
+					avglevel
+				);
+				const aa_tooltip = String.format(
+					"{0}: {1}\n{2}: {3}",
+					await window.API.i18n("fleet_aa_min"),
+					aa[0],
+					await window.API.i18n("fleet_aa_max"),
+					aa[1]
+				);
+				const speed_tooltip = String.format(
+					"{0}: {1}",
+					await window.API.i18n("fleet_speed"),
+					speedtext
+				);
+				const los_tooltip = String.format(
+					"{0}: {1}\n{2}: {3}",
+					await window.API.i18n("fleet_los"),
+					los,
+					await window.API.i18n("fleet_los_type"),
+					"???" // lostype
+				);
+
+				elem.find('.summary-info[data-summary="level"]')
+					.prop("title", level_tooltip)
+					.html(leveltext);
+
+				elem.find('.summary-info[data-summary="aa"]')
+					.prop("title", aa_tooltip)
+					.html(String.format("{0}~{1}", aa[0], aa[1]));
+
+				elem.find('.summary-info[data-summary="speed"]')
+					.prop("title", speed_tooltip)
+					.html(speedtext);
+
+				elem.find('.summary-info[data-summary="los"]')
+					.prop("title", los_tooltip)
+					.html(los);
+			};
+
+			window.API.ObserveData("Homeport", "Organization.Fleets[" + id + "].Ships", function (value) {
+				updateSummary();
+			});
+			window.API.ObserveData("Homeport", "Organization.Fleets[" + id + "].Speed", function (value) {
+				updateSummary();
+			});
+			window.API.ObserveData("Homeport", "Organization.Fleets[" + id + "].LOS", function (value) {
+				updateSummary();
+			});
+			window.API.ObserveData("Homeport", "Organization.Fleets[" + id + "].AirSuperiorityPotentialMinimum", function (value) {
+				updateSummary();
+			});
+			window.API.ObserveData("Homeport", "Organization.Fleets[" + id + "].AirSuperiorityPotentialMaximum", function (value) {
+				updateSummary();
+			});
+
+			tbody.append(
+				$.new("tr", "summary")
+					.append(
+						$.new("td").attr("colSpan", "2")
+							.append(summary_container)
+					)
+			);
+		}();
+
 		window.API.ObserveData("Homeport", "Organization.Fleets[" + id + "]", function (value) {
 			const disabled = value === null;
 			elem.attr("data-status", disabled ? "disabled" : "enabled");

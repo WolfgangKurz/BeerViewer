@@ -55,7 +55,7 @@ namespace BeerViewer.Modules.Communication
 		/// Call system command.
 		/// </summary>
 		/// <param name="command">Command to call</param>
-		public void SystemCall(string command)
+		public bool SystemCall(string command)
 		{
 			switch (command.ToLower())
 			{
@@ -75,6 +75,7 @@ namespace BeerViewer.Modules.Communication
 					this.Owner.Invoke(() => this.Owner.Close());
 					break;
 			}
+			return true;
 		}
 
 		/// <summary>
@@ -156,11 +157,15 @@ namespace BeerViewer.Modules.Communication
 					{
 						try
 						{
-							callback.ExecuteAsync(x, ns, path);
+							if (Serialization.Serializable(x))
+								callback.ExecuteAsync(x, ns, path);
+							else
+								callback.ExecuteAsync(x == null ? null : new object(), ns, path);
 						}
-						catch (NotSupportedException)
+						catch (NotSupportedException e)
 						{
-							callback.ExecuteAsync(new object(), ns, path);
+							Logger.Log(e.ToString());
+							callback.ExecuteAsync(x == null ? null : new object(), ns, path);
 						}
 					}
 				});
@@ -178,7 +183,12 @@ namespace BeerViewer.Modules.Communication
 		{
 			try
 			{
-				return this.ObserveObjectManager.GetData(ns, path);
+				var result = this.ObserveObjectManager.GetData(ns, path);
+
+				if (Serialization.Serializable(result))
+					return result;
+				else
+					return result == null ? null : new object();
 			}
 			catch { }
 

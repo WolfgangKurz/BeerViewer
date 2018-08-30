@@ -233,13 +233,13 @@ i.menu-icon[data-icon="unknown"] {
 	background-position: -64px 0px;
 }
 #top-area #top-systembutton[data-windowstate="2"] > .system-button:nth-of-type(1) {
-	background-position: 0px -32px;
+	background-position: 0px -28px;
 }
 #top-area #top-systembutton[data-windowstate="2"] > .system-button:nth-of-type(2) {
-	background-position: -32px -32px;
+	background-position: -32px -28px;
 }
 #top-area #top-systembutton[data-windowstate="2"] > .system-button:nth-of-type(3) {
-	background-position: -64px -32px;
+	background-position: -64px -28px;
 }
 
 #top-area #top-menubutton {

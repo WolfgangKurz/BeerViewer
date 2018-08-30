@@ -101,6 +101,7 @@
     <Compile Include="Modules\Communication\ObjectPathLevel.cs" />
     <Compile Include="Modules\Communication\ObservedTreeData.cs" />
     <Compile Include="Modules\Communication\ObservedTreeManager.cs" />
+    <Compile Include="Modules\Communication\Serialization.cs" />
     <Compile Include="Modules\Component\Component.cs" />
     <Compile Include="Modules\Component\ComponentService.cs" />
     <Compile Include="Modules\Component\IComponent.cs" />
@@ -331,6 +332,7 @@
     <Content Include="WindowFrame\modules\internal.js" />
     <Content Include="WindowFrame\modules\logger\logger.css" />
     <Content Include="WindowFrame\modules\logger\logger.js" />
+    <Content Include="WindowFrame\modules\overview\iconset_fleet.png" />
     <Content Include="WindowFrame\modules\overview\overview.css" />
     <Content Include="WindowFrame\modules\overview\overview.js" />
     <Content Include="WindowFrame\modules\top-resource\icon_ammo.png" />

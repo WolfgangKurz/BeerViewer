@@ -7,6 +7,7 @@ using BeerViewer.Network;
 using BeerViewer.Models.Enums;
 using BeerViewer.Models.Raw;
 using BeerViewer.Models.kcsapi;
+using BeerViewer.Models.Wrapper;
 
 namespace BeerViewer.Models
 {
@@ -106,6 +107,53 @@ namespace BeerViewer.Models
 
 		public Expedition Expedition { get; }
 
+		#region AirSuperiorityPotentialMinimum Property
+		private int _AirSuperiorityPotentialMinimum { get; set; }
+		public int AirSuperiorityPotentialMinimum
+		{
+			get { return this._AirSuperiorityPotentialMinimum; }
+			private set
+			{
+				if(this._AirSuperiorityPotentialMinimum != value)
+				{
+					this._AirSuperiorityPotentialMinimum = value;
+					this.RaisePropertyChanged();
+				}
+			}
+		}
+		#endregion
+
+		#region AirSuperiorityPotentialMaximum Property
+		private int _AirSuperiorityPotentialMaximum { get; set; }
+		public int AirSuperiorityPotentialMaximum
+		{
+			get { return this._AirSuperiorityPotentialMaximum; }
+			private set
+			{
+				if (this._AirSuperiorityPotentialMaximum != value)
+				{
+					this._AirSuperiorityPotentialMaximum = value;
+					this.RaisePropertyChanged();
+				}
+			}
+		}
+		#endregion
+
+		#region LOS Property
+		private double _LOS { get; set; }
+		public double LOS
+		{
+			get { return this._LOS; }
+			private set
+			{
+				if (this._LOS != value)
+				{
+					this._LOS = value;
+					this.RaisePropertyChanged();
+				}
+			}
+		}
+		#endregion
 
 		private int MinimumCondition { get; set; }
 		private DateTimeOffset? RejuvenateTime { get; set; }
@@ -212,6 +260,7 @@ namespace BeerViewer.Models
 			this.originalShips = ships;
 			this.Ships = ships.Where(x => x != null).ToArray();
 
+			this.CalculateValues();
 			this.UpdateState();
 		}
 		private void UpdateCondition()
@@ -287,6 +336,18 @@ namespace BeerViewer.Models
 			}
 
 			this.State = state;
+		}
+
+		private void CalculateValues()
+		{
+			var ships = this.Ships
+				.Where(x => !x.Situation.HasFlag(ShipSituation.Tow) && !x.Situation.HasFlag(ShipSituation.Evacuation))
+				.ToArray();
+
+			this.AirSuperiorityPotentialMinimum = ships.Sum(x => x.GetAirSuperiorityPotential(AirSuperiorityCalculationOptions.Minimum));
+			this.AirSuperiorityPotentialMaximum = ships.Sum(x => x.GetAirSuperiorityPotential(AirSuperiorityCalculationOptions.Maximum));
+
+			this.LOS = LOSCalcLogic.Get(Settings.LOSCalcType.Value).Calc(new Fleet[] { this });
 		}
 
 		protected override void Tick()
