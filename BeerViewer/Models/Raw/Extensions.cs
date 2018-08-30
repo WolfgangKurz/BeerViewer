@@ -16,7 +16,7 @@ namespace BeerViewer.Models.Raw
 				: array[index];
 
 		public static bool IsHeavilyDamage(this LimitedValue value)
-			=> (value.Current - value.Minimum) / (value.Maximum - value.Minimum) <= 0.25;
+			=> (double)(value.Current - value.Minimum) / (value.Maximum - value.Minimum) <= 0.25;
 
 		public static ConditionType ToConditionType(this int condition)
 		{

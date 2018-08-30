@@ -11,10 +11,22 @@
 <body style="background-color:rgba(0,0,0,0.1)">
 	<div id="overview-container">
 		<div class="tab-host">
-			<a href="#" class="selected">#1</a>
-			<a href="#">#2</a>
-			<a href="#">#3</a>
-			<a href="#">#4</a>
+			<a href="#">
+				<div class="overview-fleet-status" data-status="sortie"></div>
+				#1
+			</a>
+			<a href="#" class="selected">
+				<div class="overview-fleet-status" data-status="expedition"></div>
+				#2
+			</a>
+			<a href="#">
+				<div class="overview-fleet-status" data-status="damaged"></div>
+				#3
+			</a>
+			<a href="#">
+				<div class="overview-fleet-status" data-status="not-ready"></div>
+				#4
+			</a>
 		</div>
 		<script>
 			!function () {

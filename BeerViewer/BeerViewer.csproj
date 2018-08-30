@@ -96,6 +96,7 @@
     <Compile Include="Forms\frmMain.Designer.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\Enums\FleetSituation.cs" />
     <Compile Include="Modules\Communication\ModuleInfo.cs" />
     <Compile Include="Modules\Communication\ObjectPathLevel.cs" />
     <Compile Include="Modules\Communication\ObservedTreeData.cs" />

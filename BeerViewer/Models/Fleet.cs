@@ -88,14 +88,32 @@ namespace BeerViewer.Models
 		}
 		#endregion
 
+		#region State Property
+		private FleetSituation _State { get; set; }
+		public FleetSituation State
+		{
+			get { return this._State; }
+			set
+			{
+				if(this._State != value)
+				{
+					this._State = value;
+					this.RaisePropertyChanged();
+				}
+			}
+		}
+		#endregion
+
 		public Expedition Expedition { get; }
 
 
-		private int MinimumCondition;
+		private int MinimumCondition { get; set; }
 		private DateTimeOffset? RejuvenateTime { get; set; }
 
+		public bool IsRejuvenating => this.RejuvenateTime.HasValue;
+
 		public TimeSpan? RejuvenateRemaining
-			=> !this.RejuvenateTime.HasValue ? (TimeSpan?)null
+			=> !this.IsRejuvenating ? (TimeSpan?)null
 			: this.RejuvenateTime.Value < DateTimeOffset.Now ? TimeSpan.Zero
 			: this.RejuvenateTime.Value - DateTimeOffset.Now;
 
@@ -126,12 +144,18 @@ namespace BeerViewer.Models
 		internal void Sortie()
 		{
 			if (!this.IsInSortie)
+			{
 				this.IsInSortie = true;
+				this.UpdateState();
+			}
 		}
 		internal void Homing()
 		{
 			if (this.IsInSortie)
+			{
 				this.IsInSortie = false;
+				this.UpdateState();
+			}
 		}
 		#endregion
 
@@ -187,6 +211,8 @@ namespace BeerViewer.Models
 		{
 			this.originalShips = ships;
 			this.Ships = ships.Where(x => x != null).ToArray();
+
+			this.UpdateState();
 		}
 		private void UpdateCondition()
 		{
@@ -211,6 +237,56 @@ namespace BeerViewer.Models
 
 				this.RejuvenateTime = rejuvenate;
 			}
+
+			this.UpdateState();
+		}
+
+		private void UpdateState()
+		{
+			var state = FleetSituation.Empty;
+
+			var ships = this.Ships.ToArray();
+			if (ships.Length == 0)
+			{
+			}
+			else {
+				if (this.IsInSortie)
+					state |= FleetSituation.Sortie;
+				else if (this.Expedition.IsInExecution)
+					state |= FleetSituation.Expedition;
+				else
+					state |= FleetSituation.Homeport;
+			}
+
+			if (state.HasFlag(FleetSituation.Homeport))
+			{
+				var repairing = ships.Any(x => this.homeport.Repairyard.CheckRepairing(x.Id));
+				if (repairing)
+					state |= FleetSituation.Repairing;
+
+				var inShortSupply = ships.Any(s => s.Fuel.Current < s.Fuel.Maximum || s.Ammo.Current < s.Ammo.Maximum);
+				if (inShortSupply)
+					state |= FleetSituation.InShortSupply;
+
+				if (this.IsRejuvenating)
+					state |= FleetSituation.Rejuvenating;
+			}
+
+			var heavilyDamaged = ships
+				.Where(s => !this.homeport.Repairyard.CheckRepairing(s.Id))
+				.Where(s => !s.Situation.HasFlag(ShipSituation.Evacuation) && !s.Situation.HasFlag(ShipSituation.Tow))
+				.Where(s => !(state.HasFlag(FleetSituation.Sortie) && s.Situation.HasFlag(ShipSituation.DamageControlled)))
+				.Any(s => s.HP.IsHeavilyDamage());
+			if (heavilyDamaged)
+				state |= FleetSituation.HeavilyDamaged;
+
+			if (this.Ships.Length > 0)
+			{
+				if (this.Ships[0].Info.ShipType.Id == 19)
+					state |= FleetSituation.FlagshipIsRepairShip;
+			}
+
+			this.State = state;
 		}
 
 		protected override void Tick()

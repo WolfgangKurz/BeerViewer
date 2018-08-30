@@ -23,10 +23,82 @@
 			});
 
 			!function () {
+				const getProgressColor = function (progress) {
+					if (progress >= 75)
+						return "#388e3c";
+					else if (progress >= 50)
+						return "#fdd835";
+					else if (progress >= 25)
+						return "#f57c00";
+					else
+						return "#c62828";
+				};
+				const rebindProgress = function (target) {
+					if (!target.is('[data-type="progress"]')) return;
+					if (target.is("[data-progress-binded]")) return;
+					target.attr("data-progress-binded", "1");
+
+					target.findAll(".progress-strip").each(function () {
+						this.remove();
+					});
+
+					let strips = target.attr("data-progress-strip");
+					if (!strips)
+						strips = 1;
+					else
+						strips = parseInt(strips);
+
+					for (let i = 1; i < strips; i++) {
+						target.prepend(
+							$.new("div", "progress-strip")
+								.css("left", (100 * i / strips) + "%")
+						);
+					}
+
+					target.prepend($.new("div", "progress-bar"));
+
+					updateProgress(target);
+				};
+				const updateProgress = function (target) {
+					if (!target.is('[data-type="progress"]')) return;
+					if (!target.is("[data-progress-binded]")) return;
+
+					const progress = parseFloat(target.attr("data-progress"));
+
+					target.find(".progress-bar")
+						.css("background-color", getProgressColor(progress))
+						.css("width", progress + "%");
+				};
+
 				var observer = new MutationObserver(function (m) {
-					console.log(m);
+					m.forEach(function (x) {
+						if (x.type === "childList") {
+							x.target.findAll('[data-type="progress"]')
+								.each(function () {
+									rebindProgress(this);
+								});
+						} else if (x.type === "attributes") {
+							if (x.target.is('[data-type="progress"][data-progress-binded]')) {
+								switch (x.attributeName) {
+									case "data-progress":
+										updateProgress(x.target);
+										break;
+									case "data-progress-strip":
+										rebindProgress(x.target);
+										break;
+								}
+							}
+						}
+					});
 				});
-				observer.observe($("body"), { attributes: true, childList: true, characterData: true });
+				observer.observe(
+					document.body,
+					{ attributes: true, childList: true, subtree: true }
+				);
+
+				$.all('[data-type="progress"]').each(function () {
+					rebindProgress(this);
+				});
 			}();
 		}
 	});

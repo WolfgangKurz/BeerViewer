@@ -71,7 +71,7 @@ div.tab-host {
 	flex-direction: row;
 }
 div.tab-host > * {
-	flex: 1 0 auto;
+	flex: 1 0 0;
 	text-decoration: none;
 	cursor: pointer;
 	color: #fff;

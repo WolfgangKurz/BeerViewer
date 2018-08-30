@@ -19,6 +19,31 @@
 				if(first) first.trigger("click");
 			}
 		});
+		window.API.ObserveData("Homeport", "Organization.Fleets[" + id + "].State", function (value) {
+			const target = $('.tab-host .overview-fleet-status[data-idx="' + id + '"]');
+			if (!target) return;
+
+			if ((value & (1 << 2)) !== 0) // In sortie
+				target.attr("data-status", "sortie");
+			else if ((value & (1 << 3)) !== 0) // In expedition
+				target.attr("data-status", "expedition");
+
+			else if ((value & (1 << 4)) !== 0) // Homeport, Heavily damaged
+				target.attr("data-status", "damaged");
+			else if ((value & (1 << 5)) !== 0) // Homeport, Short supply
+				target.attr("data-status", "not-ready");
+			else if ((value & (1 << 6)) !== 0) // Homeport, Repairing
+				target.attr("data-status", "not-ready");
+			else if ((value & (1 << 7)) !== 0) // Homeport, Flagship is repairship
+				target.attr("data-status", "not-ready");
+			else if ((value & (1 << 8)) !== 0) // Homeport, Rejuvenating
+				target.attr("data-status", "not-ready");
+
+			else if ((value & 1) !== 0) // Homeport, ready
+				target.attr("data-status", "ready");
+			else // Empty fleet (no ships)
+				target.attr("data-status", "empty");
+		});
 
 		for (let i = 0; i < maxShips; i++) {
 			const ship = $.new("tr", "ship")
@@ -44,7 +69,7 @@
 							.append(
 								$.new("div", "ship-hp-bar")
 									.attr("data-type", "progress")
-									.attr("data-progress-strip", "5")
+									.attr("data-progress-strip", "4")
 									.attr("data-progress", "0")
 							)
 							.append(
@@ -58,13 +83,13 @@
 									.append(
 										$.new("div", "ship-fuel")
 											.attr("data-type", "progress")
-											.attr("data-progress-strip", "4")
+											.attr("data-progress-strip", "5")
 											.attr("data-progress", "0")
 									)
 									.append(
 										$.new("div", "ship-ammo")
 											.attr("data-type", "progress")
-											.attr("data-progress-strip", "4")
+											.attr("data-progress-strip", "5")
 											.attr("data-progress", "0")
 									)
 							)
@@ -146,10 +171,6 @@
 					ship.find(".ship-morale-box").attr("data-morale", morale);
 				});
 
-				window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Ships[" + i + "].Situation", function (value) {
-					console.log(value);
-				});
-
 				tbody.append(ship);
 			})(ship, i, tbody, id);
 		}
@@ -157,52 +178,6 @@
 		return elem;
 	};
 
-	const getProgressColor = function (progress) {
-		if (progress >= 75)
-			return "#388e3c";
-		else if (progress >= 50)
-			return "#fdd835";
-		else if (progress >= 25)
-			return "#f57c00";
-		else
-			return "#c62828";
-	};
-	const rebindProgress = function (target) {
-		if (!target.is('[data-type="progress"]')) return;
-		if (target.is("[data-progress-binded]")) return;
-		target.attr("data-progress-binded", "1");
-
-		target.findAll(".progress-strip").each(function () {
-			this.remove();
-		});
-
-		let strips = target.attr("data-progress-strip");
-		if (!strips)
-			strips = 1;
-		else
-			strips = parseInt(strips);
-
-		for (let i = 1; i < strips; i++) {
-			target.prepend(
-				$.new("div", "progress-strip")
-					.css("left", (100 * i / strips) + "%")
-			);
-		}
-
-		target.prepend($.new("div", "progress-bar"));
-
-		updateProgress(target);
-	};
-	const updateProgress = function (target) {
-		if (!target.is('[data-type="progress"]')) return;
-		if (!target.is("[data-progress-binded]")) return;
-
-		const progress = parseFloat(target.attr("data-progress"));
-
-		target.find(".progress-bar")
-			.css("background-color", getProgressColor(progress))
-			.css("width", progress + "%");
-	};
 	const updateSize = function () {
 		var el = [
 			$('.fleet.display .ship:not([data-disabled="true"]) td:first-of-type'),
@@ -238,7 +213,13 @@
 							.prop("href", "#")
 							.attr("data-idx", i + 1)
 							.attr("data-hide", "true")
-							.html("#" + (i + 1))
+							.append(
+								$.new("div", "overview-fleet-status")
+									.attr("data-idx", i + 1)
+							)
+							.append(
+								$.new.text("#" + (i + 1))
+							)
 							.event("click", function (e) {
 								e.preventDefault();
 
@@ -261,36 +242,6 @@
 
 			for (let i = 0; i < this.const.fleets; i++)
 				overview.append(initOverviewFleet(i + 1, this.const.ships, overview));
-
-			var observer = new MutationObserver(function (m) {
-				m.forEach(function (x) {
-					if (x.type === "childList") {
-						x.target.findAll('[data-type="progress"]')
-							.each(function () {
-								rebindProgress(this);
-							});
-					} else if (x.type === "attributes") {
-						if (x.target.is('[data-type="progress"][data-progress-binded]')) {
-							switch (x.attributeName) {
-								case "data-progress":
-									updateProgress(x.target);
-									break;
-								case "data-progress-strip":
-									rebindProgress(x.target);
-									break;
-							}
-						}
-					}
-				});
-			});
-			observer.observe(
-				document.body,
-				{ attributes: true, childList: true, subtree: true }
-			);
-
-			$.all('[data-type="progress"]').each(function () {
-				rebindProgress(this);
-			});
 
 			window.addEventListener("resize", function () {
 				updateSize();

@@ -1,4 +1,31 @@
-﻿#overview-container {
+﻿.tab-host .overview-fleet-status {
+	display: inline-block;
+	margin-right: 4px;
+	margin-bottom: 2px;
+	width: 14px;
+	height: 14px;
+	vertical-align: middle;
+}
+.tab-host .overview-fleet-status[data-status="empty"] {
+	background-color: rgba(255, 255, 255, 0.23);
+}
+.tab-host .overview-fleet-status[data-status="sortie"] {
+	background-color: #c62828;
+}
+.tab-host .overview-fleet-status[data-status="expedition"] {
+	background-color: #1565c0;
+}
+.tab-host .overview-fleet-status[data-status="damaged"] {
+	background-color: #e63838;
+}
+.tab-host .overview-fleet-status[data-status="not-ready"] {
+	background-color: #f57c00;
+}
+.tab-host .overview-fleet-status[data-status="ready"] {
+	background-color: #388e3c;
+}
+
+#overview-container {
 }
 
 #overview-container .fleet {
