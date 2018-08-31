@@ -4,7 +4,7 @@
 	margin-bottom: 2px;
 	width: 14px;
 	height: 14px;
-	vertical-align: middle;
+	vertical-align: bottom;
 }
 .tab-host .overview-fleet-status[data-status="empty"] {
 	background-color: rgba(255, 255, 255, 0.23);
@@ -200,4 +200,44 @@
 }
 #overview-container .fleet .ship[data-status="repairing"] .ship-repairing {
 	display: flex;
+}
+
+#overview-container .dock-container {
+	display: grid;
+	margin-top: 10px;
+	padding: 4px;
+	grid-template-columns: 1fr 1fr;
+	grid-auto-rows: 28px;
+	grid-gap: 4px;
+}
+
+#overview-container .dock-container > .dock-item {
+	padding: 2px 0;
+	line-height: 12px;
+	text-align: center;
+	white-space: nowrap;
+	transition: background-color 0.17s ease-in-out;
+	overflow: hidden;
+}
+#overview-container .dock-container > .dock-item[data-status="locked"] {
+	background-color: #313131;
+	line-height: 24px;
+	color: #999;
+}
+#overview-container .dock-container > .dock-item[data-status="empty"] {
+	background-color: #575757;
+	line-height: 24px;
+	color: #c6c6c6;
+}
+#overview-container .dock-container > .dock-item[data-status="repairing"] {
+	background-color: #6d4c41;
+}
+#overview-container .dock-container > .dock-item[data-status="building"] {
+	background-color: #1565c0;
+}
+#overview-container .dock-container > .dock-item[data-status="done"] {
+	background-color: #388e3c;
+}
+#overview-container .dock-container > .dock-item .dock-time {
+	font-size: 11px;
 }

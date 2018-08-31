@@ -136,9 +136,19 @@ namespace BeerViewer.Models
 				{
 					this._Remaining = value;
 					this.RaisePropertyChanged();
+					this.RaisePropertyChanged(nameof(RemainingText));
+					this.RaisePropertyChanged(nameof(IsCompleted));
 				}
 			}
 		}
+
+		public string RemainingText => this.Remaining.HasValue
+			? $"{(int)this.Remaining.Value.TotalHours:D2}:{this.Remaining.Value.ToString(@"mm\:ss")}"
+			: "--:--:--";
+
+		public bool IsCompleted => this.Remaining.HasValue
+			? this.Remaining.Value == TimeSpan.Zero
+			: false;
 		#endregion
 
 		public event EventHandler<RepairingCompletedEventArgs> Completed;

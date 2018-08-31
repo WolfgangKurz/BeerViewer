@@ -318,6 +318,7 @@
 			const _this = this;
 			const overview = $.new("div").prop("id", "overview-container");
 
+			// Setup fleet tab
 			!function () {
 				const host = $.new("div", "tab-host");
 				for (let i = 0; i < 4; i++) {
@@ -353,8 +354,109 @@
 				overview.append(host);
 			}();
 
+			// Setup fleets
 			for (let i = 0; i < this.const.fleets; i++)
 				overview.append(initOverviewFleet(i + 1, this.const.ships, overview));
+
+			// Setup repair/construction dock
+			(async function () {
+				for (let type = 0; type < 2; type++) {
+					const dock = $.new("div", "dock-container");
+
+					for (let i = 0; i < 4; i++) {
+						const item = $.new("div", "dock-item");
+						item.append($.new("div", "dock-text"));
+						item.append($.new("div", "dock-time"));
+
+						!function (item, type) {
+							switch (type) {
+								case 0: // Repair dock
+									window.API.ObserveData("Homeport", "Repairyard.Docks[" + (i + 1) + "].Ship.Info.Name", async function (value) {
+										const state = await window.API.GetData("Homeport", "Repairyard.Docks[" + (i + 1) + "].State");
+										if (state === 1)
+											item.find("div.dock-text").html(await window.API.i18n(value));
+									});
+									window.API.ObserveData("Homeport", "Repairyard.Docks[" + (i + 1) + "].State", async function (value) {
+										if (value === -1 || value === null) {
+											item.attr("data-status", "locked");
+											item.find("div.dock-text").html(await window.API.i18n("fleet_locked"));
+										}
+										else if (value === 0) {
+											item.attr("data-status", "empty");
+											item.find("div.dock-text").html(await window.API.i18n("fleet_repair_empty"));
+										}
+										else if (value === 1) {
+											item.attr("data-status", "repairing");
+											item.find("div.dock-time").html("--:--:--"); // Default value
+
+											const name = await window.API.GetData("Homeport", "Repairyard.Docks[" + (i + 1) + "].Ship.Info.Name");
+											if (name !== null)
+												item.find("div.dock-text").html(await window.API.i18n(name));
+											else
+												item.find("div.dock-text").html("???");
+										}
+									});
+									window.API.ObserveData("Homeport", "Repairyard.Docks[" + (i + 1) + "].RemainingText", async function (value) {
+										const completed = await window.API.GetData("Homeport", "Repairyard.Docks[" + (i + 1) + "].IsCompleted");
+
+										if(completed)
+											item.find("div.dock-time").html(await window.API.i18n("fleet_done"));
+										else
+											item.find("div.dock-time").html(value);
+									});
+									break;
+
+								case 1: // Construction dock
+									window.API.ObserveData("Homeport", "Dockyard.Docks[" + (i + 1) + "].Ship.Name", async function (value) {
+										item.find("div.dock-text").html(await window.API.i18n(value));
+									});
+									window.API.ObserveData("Homeport", "Dockyard.Docks[" + (i + 1) + "].State", async function (value) {
+										if (value === -1 || value === null) {
+											item.attr("data-status", "locked");
+											item.find("div.dock-text").html(await window.API.i18n("fleet_locked"));
+										}
+										else if (value === 0) {
+											item.attr("data-status", "empty");
+											item.find("div.dock-text").html(await window.API.i18n("fleet_repair_empty"));
+										}
+										else if (value === 2) {
+											item.attr("data-status", "building");
+											item.find("div.dock-time").html("--:--:--"); // Default value
+
+											const name = await window.API.GetData("Homeport", "Dockyard.Docks[" + (i + 1) + "].Ship.Name");
+											if (name !== null)
+												item.find("div.dock-text").html(await window.API.i18n(name));
+											else
+												item.find("div.dock-text").html("???");
+										}
+										else if (value === 3) {
+											item.attr("data-status", "done");
+											item.find("div.dock-time").html(await window.API.i18n("fleet_done"));
+
+											const name = await window.API.GetData("Homeport", "Dockyard.Docks[" + (i + 1) + "].Ship.Name");
+											if (name !== null)
+												item.find("div.dock-text").html(await window.API.i18n(name));
+											else
+												item.find("div.dock-text").html("???");
+										}
+									});
+									window.API.ObserveData("Homeport", "Dockyard.Docks[" + (i + 1) + "].RemainingText", async function (value) {
+										const completed = await window.API.GetData("Homeport", "Dockyard.Docks[" + (i + 1) + "].IsCompleted");
+
+										if (completed)
+											item.find("div.dock-time").html(await window.API.i18n("fleet_done"));
+										else
+											item.find("div.dock-time").html(value);
+									});
+									break;
+							}
+						}(item, type);
+
+						dock.append(item);
+					}
+					overview.append(dock);
+				}
+			})();
 
 			window.addEventListener("resize", function () {
 				updateSize();
