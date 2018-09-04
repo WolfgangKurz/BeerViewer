@@ -100,6 +100,18 @@
 					rebindProgress(this);
 				});
 			}();
+
+			$("body").append(
+				$.new("div").prop("id", "cursor-overlay")
+					.append($.new("div", "cursor-nwse ht-topleft"))
+					.append($.new("div", "cursor-nwse ht-bottomright"))
+					.append($.new("div", "cursor-nesw ht-topright"))
+					.append($.new("div", "cursor-nesw ht-bottomleft"))
+					.append($.new("div", "cursor-ns ht-top"))
+					.append($.new("div", "cursor-ns ht-bottom"))
+					.append($.new("div", "cursor-we ht-left"))
+					.append($.new("div", "cursor-we ht-right"))
+			);
 		}
 	});
 }();

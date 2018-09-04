@@ -73,6 +73,16 @@
 		public static string api_get_member_questlist => "/kcsapi/api_get_member/questlist";
 
 		/// <summary>
+		/// "/kcsapi/api_req_quest/clearitemget" endpoint
+		/// </summary>
+		public static string api_req_quest_clearitemget => "/kcsapi/api_req_quest/clearitemget";
+
+		/// <summary>
+		/// "/kcsapi/api_req_quest/stop" endpoint
+		/// </summary>
+		public static string api_req_quest_stop => "/kcsapi/api_req_quest/stop";
+
+		/// <summary>
 		/// "/kcsapi/api_get_member/ship_deck" endpoint
 		/// </summary>
 		public static string api_get_member_ship_deck => "/kcsapi/api_get_member/ship_deck";

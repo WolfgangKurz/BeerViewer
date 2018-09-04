@@ -21,7 +21,7 @@ namespace BeerViewer.Models
 {
 	public class Quests : Notifier
 	{
-		private readonly List<ConcurrentDictionary<int, QuestModel>> questPages;
+		private readonly List<QuestModel> currentQuests;
 
 		#region All Property
 		private IReadOnlyCollection<QuestModel> _All;
@@ -39,28 +39,12 @@ namespace BeerViewer.Models
 		}
 		#endregion
 
-		#region Current Property
-		private IReadOnlyCollection<QuestModel> _Current;
-		public IReadOnlyCollection<QuestModel> Current
-		{
-			get { return this._Current; }
-			set
-			{
-				if (!Equals(this._Current, value))
-				{
-					this._Current = value;
-					this.RaisePropertyChanged();
-				}
-			}
-		}
-		#endregion
-
 		internal Quests()
 		{
 			var proxy = Proxy.Instance;
 
-			this.questPages = new List<ConcurrentDictionary<int, QuestModel>>();
-			this.All = this.Current = new List<QuestModel>();
+			this.currentQuests = new List<QuestModel>();
+			this.All = this.currentQuests.ToArray();
 
 			proxy.Register(Proxy.api_get_member_questlist, x =>
 			{
@@ -106,49 +90,66 @@ namespace BeerViewer.Models
 				}
 				this.Update(questlist);
 			});
+			proxy.Register(Proxy.api_req_quest_clearitemget, e =>
+			{
+				var x = e.TryParse();
+
+				int q_id;
+				if (!int.TryParse(x.Request["api_quest_id"], out q_id)) return;
+
+				ClearQuest(q_id);
+			});
+			proxy.Register(Proxy.api_req_quest_stop, e =>
+			{
+				var x = e.TryParse();
+
+				int q_id;
+				if (!int.TryParse(x.Request["api_quest_id"], out q_id)) return;
+
+				StopQuest(q_id);
+			});
 		}
 
-		private void Update(kcsapi_questlist questlist)
+		private void Update(kcsapi_questlist questList)
 		{
-			if (this.questPages.Count > questlist.api_page_count)
-				while (this.questPages.Count > questlist.api_page_count)
-					this.questPages.RemoveAt(this.questPages.Count - 1);
+			if (questList.api_list == null) return;
 
-			else if (this.questPages.Count < questlist.api_page_count)
-				while (this.questPages.Count < questlist.api_page_count)
-					this.questPages.Add(null);
-
-
-			if (questlist.api_list == null)
+			foreach (var quest in questList.api_list)
 			{
-				this.All = this.Current = new List<QuestModel>();
+				this.currentQuests.RemoveAll(x => x.Id == quest.api_no);
+
+				switch ((QuestState)quest.api_state)
+				{
+					/*
+					case QuestState.None:
+						break;
+					*/
+					case QuestState.Accomplished:
+					case QuestState.TakeOn:
+						if (!this.currentQuests.Any(x => x.Id == quest.api_no))
+							this.currentQuests.Add(new QuestModel(quest));
+						break;
+				}
 			}
-			else
-			{
-				var page = questlist.api_disp_page - 1;
-				if (page >= this.questPages.Count) page = this.questPages.Count - 1;
+			this.Publish();
+		}
 
-				this.questPages[page] = new ConcurrentDictionary<int, QuestModel>();
+		private void ClearQuest(int q_id)
+		{
+			this.currentQuests.RemoveAll(x => x.Id == q_id);
+			this.Publish();
+		}
+		private void StopQuest(int q_id)
+		{
+			this.currentQuests.RemoveAll(x => x.Id == q_id);
+			this.Publish();
+		}
 
-				var quests = questlist.api_list
-					.Select(x => new QuestModel(x));
-
-				foreach (var quest in quests)
-					this.questPages[page].AddOrUpdate(quest.Id, quest, (_, __) => quest);
-
-				this.All = this.questPages.Where(x => x != null)
-					.SelectMany(x => x.Select(kvp => kvp.Value))
-					.Distinct(x => x.Id)
-					.OrderBy(x => x.Id)
-					.ToList();
-
-				var current = this.All.Where(x => x.State == QuestState.TakeOn || x.State == QuestState.Accomplished)
-					.OrderBy(x => x.Id)
-					.ToList();
-
-				while (current.Count < questlist.api_exec_count) current.Add(null);
-				this.Current = current;
-			}
+		private void Publish()
+		{
+			this.All = this.currentQuests
+				.OrderBy(x => x.Id)
+				.ToArray();
 		}
 	}
 }

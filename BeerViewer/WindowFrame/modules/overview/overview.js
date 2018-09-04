@@ -49,32 +49,32 @@
 					level,
 					avglevel
 				);
-				const speedtext = await window.API.i18n(speedList[speed]);
+				const speedtext = await i18n(speedList[speed]);
 
 				const level_tooltip = String.format(
 					"{0}: {1}\n{2}: {3}",
-					await window.API.i18n("fleet_totallevel"),
+					await i18n("fleet_totallevel"),
 					level,
-					await window.API.i18n("fleet_averagelevel"),
+					await i18n("fleet_averagelevel"),
 					avglevel
 				);
 				const aa_tooltip = String.format(
 					"{0}: {1}\n{2}: {3}",
-					await window.API.i18n("fleet_aa_min"),
+					await i18n("fleet_aa_min"),
 					aa[0],
-					await window.API.i18n("fleet_aa_max"),
+					await i18n("fleet_aa_max"),
 					aa[1]
 				);
 				const speed_tooltip = String.format(
 					"{0}: {1}",
-					await window.API.i18n("fleet_speed"),
+					await i18n("fleet_speed"),
 					speedtext
 				);
 				const los_tooltip = String.format(
 					"{0}: {1}\n{2}: {3}",
-					await window.API.i18n("fleet_los"),
+					await i18n("fleet_los"),
 					los,
-					await window.API.i18n("fleet_los_type"),
+					await i18n("fleet_los_type"),
 					"???" // lostype
 				);
 
@@ -220,7 +220,7 @@
 							.append(
 								$.new("div", "ship-repairing")
 									.append(
-										$.new("span").html(await window.API.i18n("fleet_repairing"))
+										$.new("span").html(await i18n("fleet_repairing"))
 									)
 							)
 					);
@@ -236,7 +236,7 @@
 				});
 
 				window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Ships[" + i + "].Info.Name", async function (value) {
-					const name = await window.API.i18n(value);
+					const name = await i18n(value);
 					ship.find(".ship-name")
 						.prop("title", name)
 						.html(name);
@@ -374,16 +374,16 @@
 									window.API.ObserveData("Homeport", "Repairyard.Docks[" + (i + 1) + "].Ship.Info.Name", async function (value) {
 										const state = await window.API.GetData("Homeport", "Repairyard.Docks[" + (i + 1) + "].State");
 										if (state === 1)
-											item.find("div.dock-text").html(await window.API.i18n(value));
+											item.find("div.dock-text").html(await i18n(value));
 									});
 									window.API.ObserveData("Homeport", "Repairyard.Docks[" + (i + 1) + "].State", async function (value) {
 										if (value === -1 || value === null) {
 											item.attr("data-status", "locked");
-											item.find("div.dock-text").html(await window.API.i18n("fleet_locked"));
+											item.find("div.dock-text").html(await i18n("fleet_locked"));
 										}
 										else if (value === 0) {
 											item.attr("data-status", "empty");
-											item.find("div.dock-text").html(await window.API.i18n("fleet_repair_empty"));
+											item.find("div.dock-text").html(await i18n("fleet_repair_empty"));
 										}
 										else if (value === 1) {
 											item.attr("data-status", "repairing");
@@ -391,7 +391,7 @@
 
 											const name = await window.API.GetData("Homeport", "Repairyard.Docks[" + (i + 1) + "].Ship.Info.Name");
 											if (name !== null)
-												item.find("div.dock-text").html(await window.API.i18n(name));
+												item.find("div.dock-text").html(await i18n(name));
 											else
 												item.find("div.dock-text").html("???");
 										}
@@ -400,7 +400,7 @@
 										const completed = await window.API.GetData("Homeport", "Repairyard.Docks[" + (i + 1) + "].IsCompleted");
 
 										if(completed)
-											item.find("div.dock-time").html(await window.API.i18n("fleet_done"));
+											item.find("div.dock-time").html(await i18n("fleet_done"));
 										else
 											item.find("div.dock-time").html(value);
 									});
@@ -408,16 +408,16 @@
 
 								case 1: // Construction dock
 									window.API.ObserveData("Homeport", "Dockyard.Docks[" + (i + 1) + "].Ship.Name", async function (value) {
-										item.find("div.dock-text").html(await window.API.i18n(value));
+										item.find("div.dock-text").html(await i18n(value));
 									});
 									window.API.ObserveData("Homeport", "Dockyard.Docks[" + (i + 1) + "].State", async function (value) {
 										if (value === -1 || value === null) {
 											item.attr("data-status", "locked");
-											item.find("div.dock-text").html(await window.API.i18n("fleet_locked"));
+											item.find("div.dock-text").html(await i18n("fleet_locked"));
 										}
 										else if (value === 0) {
 											item.attr("data-status", "empty");
-											item.find("div.dock-text").html(await window.API.i18n("fleet_repair_empty"));
+											item.find("div.dock-text").html(await i18n("fleet_repair_empty"));
 										}
 										else if (value === 2) {
 											item.attr("data-status", "building");
@@ -425,17 +425,17 @@
 
 											const name = await window.API.GetData("Homeport", "Dockyard.Docks[" + (i + 1) + "].Ship.Name");
 											if (name !== null)
-												item.find("div.dock-text").html(await window.API.i18n(name));
+												item.find("div.dock-text").html(await i18n(name));
 											else
 												item.find("div.dock-text").html("???");
 										}
 										else if (value === 3) {
 											item.attr("data-status", "done");
-											item.find("div.dock-time").html(await window.API.i18n("fleet_done"));
+											item.find("div.dock-time").html(await i18n("fleet_done"));
 
 											const name = await window.API.GetData("Homeport", "Dockyard.Docks[" + (i + 1) + "].Ship.Name");
 											if (name !== null)
-												item.find("div.dock-text").html(await window.API.i18n(name));
+												item.find("div.dock-text").html(await i18n(name));
 											else
 												item.find("div.dock-text").html("???");
 										}
@@ -444,7 +444,7 @@
 										const completed = await window.API.GetData("Homeport", "Dockyard.Docks[" + (i + 1) + "].IsCompleted");
 
 										if (completed)
-											item.find("div.dock-time").html(await window.API.i18n("fleet_done"));
+											item.find("div.dock-time").html(await i18n("fleet_done"));
 										else
 											item.find("div.dock-time").html(value);
 									});
@@ -458,6 +458,36 @@
 				}
 			})();
 
+
+			// Setup quests
+			(async function () {
+				const quests = $.new("div", "quest-container");
+
+				window.API.ObserveData("Homeport", "Quests.All", async function (value) {
+					const progress = ["", "50%", "80%", "100%"];
+
+					quests.findAll("div").each(function () {
+						this.remove();
+					});
+					if (value === null) return;
+
+					const length = await window.API.GetData("Homeport", "Quests.All.Length");
+					for (let i = 0; i < length; i++) {
+						const type = await window.API.GetData("Homeport", "Quests.All[" + i + "].Category");
+						const title = await window.API.GetData("Homeport", "Quests.All[" + i + "].Title");
+						const progress = await window.API.GetData("Homeport", "Quests.All[" + i + "].Progress");
+
+						const item = $.new("div", "quest-item")
+							.append($.new("div", "quest-category").attr("data-quest-category", type))
+							.append($.new("div", "quest-title").html(await i18n(title)))
+							.append($.new("div", "quest-progress").html(progress[progress]));
+
+						quests.append(item);
+					}
+				});
+
+				overview.append(quests);
+			})();
 			window.addEventListener("resize", function () {
 				updateSize();
 			});

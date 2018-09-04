@@ -241,3 +241,46 @@
 #overview-container .dock-container > .dock-item .dock-time {
 	font-size: 11px;
 }
+
+#overview-container .quest-container {
+	margin-top: 10px;
+	padding: 0 4px 4px;
+	line-height: 14px;
+}
+#overview-container .quest-container > .quest-item {
+	display: grid;
+	margin-top: 4px;
+	grid-template-columns: 14px 1fr 28px;
+	grid-gap: 4px;
+}
+#overview-container .quest-container > .quest-item .quest-title {
+	white-space: nowrap;
+	overflow: hidden;
+}
+#overview-container .quest-container > .quest-item .quest-type {
+	width: 14px;
+	height: 14px;
+	background-color: #a3a3a3;
+}
+#overview-container .quest-container > .quest-item .quest-category[data-quest-category="1"] { /* Composition */
+	background-color: #388e3c;
+}
+#overview-container .quest-container > .quest-item .quest-category[data-quest-category="2"], /* Sortie, Sortie2 */
+#overview-container .quest-container > .quest-item .quest-category[data-quest-category="8"] {
+	background-color: #c62828;
+}
+#overview-container .quest-container > .quest-item .quest-category[data-quest-category="3"] { /* Practice */
+	background-color: #8dc660;
+}
+#overview-container .quest-container > .quest-item .quest-category[data-quest-category="4"] { /* Expedition */
+	background-color: #1565c0;
+}
+#overview-container .quest-container > .quest-item .quest-category[data-quest-category="5"] { /* Supply */
+	background-color: #fdd835;
+}
+#overview-container .quest-container > .quest-item .quest-category[data-quest-category="6"] { /* Construction */
+	background-color: #6d4c41;
+}
+#overview-container .quest-container > .quest-item .quest-category[data-quest-category="7"] { /* Remodel */
+	background-color: #a987ba;
+}

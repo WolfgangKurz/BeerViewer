@@ -125,6 +125,8 @@ namespace BeerViewer.Forms
 			this.Communicator.RegisterObserveObject(nameof(Master), Master.Instance);
 			this.Communicator.RegisterObserveObject(nameof(Homeport), Homeport.Instance);
 
+			this.WindowBrowser.Cursor = Cursors.Cross;
+
 			this.WindowBrowser.JavascriptObjectRepository.Register("API", this.Communicator, true, new CefSharp.BindingOptions { CamelCaseJavascriptNames = false });
 			this.WindowBrowser.FrameLoadEnd += async (s, e) =>
 			{

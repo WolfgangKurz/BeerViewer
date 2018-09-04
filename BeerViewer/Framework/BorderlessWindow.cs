@@ -1,4 +1,6 @@
-﻿using System;
+﻿// #define USE_GESTURE
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -50,6 +52,7 @@ namespace BeerViewer.Framework
 					// And RestoreWindowBoundsIfNecessary method must never called
 					return;
 
+#if USE_GESTURE
 				case WindowMessages.WM_GESTURENOTIFY:
 					this.SetupGesture(this.MeasureGesturable(ref m));
 					break;
@@ -57,6 +60,7 @@ namespace BeerViewer.Framework
 				case WindowMessages.WM_GESTURE:
 					this.DecodeGesture(ref m);
 					return;
+#endif
 
 				case WindowMessages.WM_TABLET_QUERYSYSTEMGESTURESTATUS:
 					// Disable "Press & Hold" right click
@@ -210,7 +214,7 @@ namespace BeerViewer.Framework
 				return b;
 			}
 		}
-		#endregion
+#endregion
 
 		protected virtual Rectangle CaptionSize(int Width, int Height)
 			=> new Rectangle(0, 0, Width - 32 * (FrameworkExtension.IsTabletMode() ? 2 : 3), 28);
@@ -288,6 +292,7 @@ namespace BeerViewer.Framework
 			base.OnPaint(e);
 		}
 
+#if USE_GESTURE
 		public event ScrollEventHandler TouchPanEvent;
 		public void OnTouchPanEvent(ScrollEventArgs e)
 		{
@@ -393,6 +398,7 @@ namespace BeerViewer.Framework
 				(uint)Marshal.SizeOf(typeof(GESTURECONFIG))
 			);
 		}
+#endif
 
 		protected override void Dispose(bool disposing)
 		{

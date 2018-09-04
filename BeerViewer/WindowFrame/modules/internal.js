@@ -19,4 +19,8 @@
 			}
 		};
 	})();
+
+	window.i18n = async function (text) {
+		return await window.API.i18n(text);
+	};
 }();

@@ -216,12 +216,11 @@ namespace BeerViewer.Framework
 				var HitTest = SendMessage(handle, (int)WindowMessages.WM_NCHITTEST, 0, (int)lParam);
 				if (HitTest == (int)HitTestValue.HTCLIENT) return false; // HTCLIENT
 
-				ReleaseCapture();
-				SendMessage(handle, (int)WindowMessages.WM_NCLBUTTONDOWN, HitTest, (int)lParam);
+				PostMessage(handle, (int)WindowMessages.WM_NCLBUTTONDOWN, HitTest, (int)lParam);
 
 				return true;
 			}
-			else if(message.Msg == (int)WindowMessages.WM_LBUTTONDBLCLK)
+			else if (message.Msg == (int)WindowMessages.WM_LBUTTONDBLCLK)
 			{
 				IntPtr handle = IntPtr.Zero;
 				this.Parent.Invoke((Action)(() => handle = this.Parent.Handle));
