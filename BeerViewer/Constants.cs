@@ -20,6 +20,8 @@ namespace BeerViewer
 			+ "document.cookie='ckcy=1;expires=Sun, 09 Feb 2055 09:00:09 GMT;domain=203.104.209.7;path=/';"
 			+ "document.cookie='ckcy=1;expires=Sun, 09 Feb 2055 09:00:09 GMT;domain=www.dmm.com;path=/netgame/';";
 
+		public static string WelcomePatch => "!function(){var x=document.querySelector('#welcome'); if(x) x.parentNode.removeChild(x); }();";
+
 		public static string UserStyleSheet => "body { margin:0; overflow:hidden }"
 			+ "#game_frame { position:fixed; left:50%; top:-16px; margin-left:-600px; z-index:1 }"
 			+ ".area-pickupgame, .area-menu { display: none !important }";

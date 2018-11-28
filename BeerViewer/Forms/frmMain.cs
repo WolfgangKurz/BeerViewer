@@ -142,6 +142,13 @@ namespace BeerViewer.Forms
 					this.GameBrowser?.LoadUrl(Constants.GameURL);
 				}
 
+				// Login welcome patch
+				if (frameUri.AbsoluteUri.Contains("/login/"))
+				{
+					Logger.Log("Login page detected, applying Welcome patch");
+					await this.GameBrowser?.EvaluateScriptAsync(Constants.WelcomePatch);
+				}
+
 				// CSS patch
 				if (this.GameBrowser?.IsValid ?? false)
 				{
