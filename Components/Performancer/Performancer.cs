@@ -53,6 +53,25 @@ namespace Performancer
 
 				return utf8.GetBytes(str);
 			});
+			proxy.RegisterModifiable((s, b) =>
+			{
+				if (!s.Request.PathAndQuery.Contains("/app_id=854854/"))
+					return b;
+
+				var utf8 = Encoding.UTF8;
+				var str = utf8.GetString(b);
+
+				var script = @"<script type=""text/javascript"">
+setInterval(function(){
+	var x = document.querySelectorAll(""[style=\""display: none; visibility: hidden;\""],[name=\""gdm_advFrame\""]"");
+	for(var i=0; i<x.length; i++) x[i].parentNode.removeChild(x[i]);
+}, 1000);
+</script>";
+
+				str = str.Replace("</body>", script + "</body>");
+
+				return utf8.GetBytes(str);
+			});
 		}
 
 		public void ReadyFailed()

@@ -6,9 +6,9 @@ using System.Windows;
 [assembly: AssemblyDescription("Performancer")]
 [assembly: AssemblyCompany("WolfgangKurz")]
 [assembly: AssemblyProduct("Performancer")]
-[assembly: AssemblyCopyright("Copyright © 2017 WolfgangKurz")]
+[assembly: AssemblyCopyright("Copyright © 2018 WolfgangKurz")]
 
 [assembly: ComVisible(false)]
 [assembly: Guid("2DBCCD14-5E1b-44D9-B576-FCFCFF62CAB4")]
 
-[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyVersion("1.0.0.7")]
