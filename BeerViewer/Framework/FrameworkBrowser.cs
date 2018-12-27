@@ -164,6 +164,7 @@ namespace BeerViewer.Framework
 			CefSharpSettings.Proxy = new ProxyOptions("localhost", Network.Proxy.Instance.ListeningPort.ToString());
 			CefSharpSettings.SubprocessExitIfParentProcessClosed = true;
 			CefSharpSettings.ShutdownOnExit = true;
+			CefSharpSettings.WcfEnabled = false;
 			Cef.EnableHighDPISupport();
 			Cef.Initialize(
 				cefSettings,
