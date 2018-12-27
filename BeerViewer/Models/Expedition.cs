@@ -131,7 +131,7 @@ namespace BeerViewer.Models
 			this.RaisePropertyChanged(nameof(this.RemainingText));
 			this.RaisePropertyChanged(nameof(this.Progress));
 
-			if (!this.notificated && this.Returned != null && this.Remaining <= TimeSpan.FromSeconds(Settings.NotificationTime.Value))
+			if (!this.notificated && this.Returned != null && this.Remaining <= TimeSpan.FromSeconds(Settings.NotificationTime))
 			{
 				this.Returned(this, new ExpeditionReturnedEventArgs(this.fleet.Name));
 				this.notificated = true;

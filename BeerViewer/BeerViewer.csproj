@@ -302,6 +302,9 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="Settings.SettingValue.cs">
+      <DependentUpon>Settings.cs</DependentUpon>
+    </Compile>
     <Content Include="WindowFrame\assets\button_menu.png" />
     <Content Include="WindowFrame\assets\button_system.png" />
     <Content Include="WindowFrame\assets\icon_menu_area.png" />

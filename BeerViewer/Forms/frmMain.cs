@@ -55,7 +55,7 @@ namespace BeerViewer.Forms
 
 			/// Load <see cref="WindowInfo" /> settings
 			{
-				var info = Settings.WindowInformation.Value;
+				var info = (WindowInfo)Settings.WindowInformation;
 				this.Size = new Size(info.Width, info.Height);
 				if (info.Left.HasValue) this.Left = info.Left.Value;
 				if (info.Top.HasValue) this.Top = info.Top.Value;

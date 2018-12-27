@@ -136,20 +136,20 @@
 			const target = $('.tab-host .overview-fleet-status[data-idx="' + id + '"]');
 			if (!target) return;
 
-			if ((value & (1 << 2)) !== 0) // In sortie
+			if ((value & 1 << 2) !== 0) // In sortie
 				target.attr("data-status", "sortie");
-			else if ((value & (1 << 3)) !== 0) // In expedition
+			else if ((value & 1 << 3) !== 0) // In expedition
 				target.attr("data-status", "expedition");
 
-			else if ((value & (1 << 4)) !== 0) // Homeport, Heavily damaged
+			else if ((value & 1 << 4) !== 0) // Homeport, Heavily damaged
 				target.attr("data-status", "damaged");
-			else if ((value & (1 << 5)) !== 0) // Homeport, Short supply
+			else if ((value & 1 << 5) !== 0) // Homeport, Short supply
 				target.attr("data-status", "not-ready");
-			else if ((value & (1 << 6)) !== 0) // Homeport, Repairing
+			else if ((value & 1 << 6) !== 0) // Homeport, Repairing
 				target.attr("data-status", "not-ready");
-			else if ((value & (1 << 7)) !== 0) // Homeport, Flagship is repairship
+			else if ((value & 1 << 7) !== 0) // Homeport, Flagship is repairship
 				target.attr("data-status", "not-ready");
-			else if ((value & (1 << 8)) !== 0) // Homeport, Rejuvenating
+			else if ((value & 1 << 8) !== 0) // Homeport, Rejuvenating
 				target.attr("data-status", "not-ready");
 
 			else if ((value & 1) !== 0) // Homeport, ready
@@ -229,7 +229,7 @@
 					ship.attr("data-disabled", value === null ? "true" : "false");
 				});
 				window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Ships[" + i + "].Situation", function (value) {
-					if ((value & 1) == 1) // Repairing
+					if ((value & 1) === 1) // Repairing
 						ship.attr("data-status", "repairing");
 					else
 						ship.attr("data-status", "");

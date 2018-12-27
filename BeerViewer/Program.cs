@@ -30,6 +30,8 @@ namespace BeerViewer
 			FrameworkManager.Instance.Initialize();
 
 			Application.Run(mainWindow);
+
+			Cef.Shutdown();
 		}
 	}
 }

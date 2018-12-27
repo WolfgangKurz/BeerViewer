@@ -14,11 +14,13 @@ namespace BeerViewer.Modules
 	{
 		public static i18n i { get; } = new i18n();
 
-		public static dynamic/*i18nLang*/ Current => Settings.UseTranslation.Value
-			? i18n.i[Settings.LanguageCode.Value]
+		public static dynamic/*i18nLang*/ Current => Settings.UseTranslation
+			? i18n.i[Settings.LanguageCode]
 			: i18nLang.Empty;
 
 		protected Dictionary<string, i18nLang> Languages { get; set; }
+		public string[] LanguageList => this.Languages.Keys.ToArray();
+
 		public dynamic/*i18nLang*/ this[string lang]
 		{
 			get
@@ -40,7 +42,8 @@ namespace BeerViewer.Modules
 			);
 
 			var list = Directory.GetFiles(path, "*.txt")
-				.Select(x => Path.GetFileNameWithoutExtension(x));
+				.Select(x => Path.GetFileNameWithoutExtension(x))
+				.Where(x => !x.Contains("_"));
 
 			Languages = new Dictionary<string, i18nLang>();
 

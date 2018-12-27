@@ -158,7 +158,8 @@ namespace BeerViewer.Framework
 #if !DEBUG
 			cefSettings.LogSeverity = LogSeverity.Disable;
 #endif
-			// cefSettings.DisableGpuAcceleration();
+			if (!Settings.HardwareAccelerationEnabled)
+				cefSettings.DisableGpuAcceleration();
 
 			CefSharpSettings.Proxy = new ProxyOptions("localhost", Network.Proxy.Instance.ListeningPort.ToString());
 			CefSharpSettings.SubprocessExitIfParentProcessClosed = true;
