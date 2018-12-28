@@ -63,6 +63,10 @@ table {
 	border-collapse: collapse;
 }
 
+#modules {
+	display: none !important;
+}
+
 div.tab-host {
 	display: flex;
 	background-color: #313131;

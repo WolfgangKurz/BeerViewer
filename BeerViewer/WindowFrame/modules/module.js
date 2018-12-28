@@ -23,13 +23,16 @@
 					const areaElem = areas[area];
 					if (areaElem === null) throw "Application.html corrupted";
 
+					if (rootElement instanceof Vue)
+						rootElement = rootElement.$el;
+
 					const escaped = name.replace(/"/g, "\\\"");
 					if (areaElem.find("[data-module-name=\"" + escaped + "\"]") !== null)
 						throw "Already registered name";
 
 					areaElem.append(rootElement.attr("data-module-name", escaped));
 
-					const areaMenu = $("ul.menu-host > li.menu-group[data-area=\""+area+"\"]");
+					const areaMenu = $("ul.menu-host > li.menu-group[data-area=\"" + area + "\"]");
 					if (areaMenu === null) return; // Menuless module (for example, top-area modules)
 
 					areaMenu.find("ul").append(
@@ -44,7 +47,6 @@
 				}
 			};
 		})();
-
 		return {
 			areas: areasObject,
 
@@ -52,42 +54,57 @@
 				return initialized;
 			},
 
-			load: function (name, css) {
+			load: function (name, template, script, css) {
 				if (name in list) throw "Tried to load module already loaded";
-				list[name] = null;
 
-				document.head.append(
-					$.new("script")
-						.prop("type", "text/javascript")
-						.prop("src", "modules/" + name + "/" + name + ".js")
-				);
+				list[name] = {
+					module: null,
 
-				if (css)
-					document.head.append(
+					Name: name,
+					Template: template,
+					Script: script ? "modules/" + name + "/" + name + ".js" : null,
+					Style: css ? "modules/" + name + "/" + name + ".css" : null
+				};
+				const module = list[name];
+
+				const el_module = $.new("div").attr("data-module", module.Name);
+				if (module.Script)
+					el_module.append(
+						$.new("script")
+							.prop("type", "text/javascript")
+							.prop("src", module.Script)
+					);
+				if (module.Style)
+					el_module.append(
 						$.new("link")
 							.prop("rel", "stylesheet")
 							.prop("type", "text/css")
-							.prop("href", "modules/" + name + "/" + name + ".css")
+							.prop("href", module.Style)
 					);
+				const el_template = $.new("div");
+				el_module.append(el_template);
+				el_template.outerhtml(module.Template);
+				$("#modules").append(el_module);
 			},
 			register: function (name, module) {
 				if (!(name in list)) throw "Tried to register module not loaded";
-				list[name] = module;
+				list[name].module = module;
 
-				if (initialized) module.init();
+				if (initialized) list[name].module.init();
 				return module;
 			},
 			init: function () {
 				for (let i in list) {
-					if (list[i] !== null)
-						list[i].init();
+					if (list[i].module !== null)
+						list[i].module.init();
 				}
 				initialized = true;
 			},
 
 			get: function (name) {
-				if (list[name] === null) return null;
-				return list[name];
+				if (!(name in list)) return null;
+				if (list[name].module === null) return null;
+				return list[name].module;
 			}
 		};
 	})();
@@ -134,11 +151,10 @@
 			window.modules.init();
 			return;
 		}
+		window.INTERNAL.Initialized();
 
 		!function (list) {
-			list.forEach(function (x) {
-				window.modules.load(x.Name, x.Styled);
-			});
+			list.forEach(x => window.modules.load(x.Name, x.Template, x.Scripted, x.Styled));
 
 			window.modules.init();
 			window.API.Initialized();

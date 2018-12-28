@@ -14,14 +14,14 @@ namespace BeerViewer.Modules
 	{
 		public static i18n i { get; } = new i18n();
 
-		public static dynamic/*i18nLang*/ Current => Settings.UseTranslation
+		public static i18nLang Current => Settings.UseTranslation
 			? i18n.i[Settings.LanguageCode]
 			: i18nLang.Empty;
 
 		protected Dictionary<string, i18nLang> Languages { get; set; }
 		public string[] LanguageList => this.Languages.Keys.ToArray();
 
-		public dynamic/*i18nLang*/ this[string lang]
+		public i18nLang this[string lang]
 		{
 			get
 			{
@@ -56,12 +56,12 @@ namespace BeerViewer.Modules
 				Languages.Add(x, new i18nLang(x));
 		}
 	}
-	public class i18nLang : DynamicObject
+	public class i18nLang
 	{
 		private static Regex regex { get; } = new Regex(@"^([^\t]+)\t+(.+)$", RegexOptions.Compiled);
 
 		public static i18nLang Empty { get; } = new i18nLang();
-		private Dictionary<string, string> Table { get; set; }
+		public IReadOnlyDictionary<string, string> Table { get; private set; }
 
 		public i18nLang()
 		{
@@ -97,44 +97,16 @@ namespace BeerViewer.Modules
 			}
 		}
 
-		public override bool TryGetMember(GetMemberBinder binder, out object result)
+		public string this[string text]
 		{
-			string sRet;
-			var bRet = Table.TryGetValue(binder.Name, out sRet);
-			if (!bRet)
+			get
 			{
-				result = binder.Name; // default(object);
-				return true;
+				string value;
+				if (Table.TryGetValue(text, out value))
+					return value;
+				else
+					return text;
 			}
-			result = sRet;
-			return true;
 		}
-
-		public override bool TryGetIndex(GetIndexBinder binder, object[] indexes, out object result)
-		{
-			if (indexes.Length != 1) throw new NotImplementedException();
-
-			string sRet;
-			var bRet = Table.TryGetValue(indexes[0] as string, out sRet);
-			if (!bRet)
-			{
-				result = indexes[0] as string; // default(object);
-				return true;
-			}
-			result = sRet;
-			return true;
-		}
-
-		public override bool TrySetIndex(SetIndexBinder binder, object[] indexes, object value)
-			=> throw new NotImplementedException();
-
-		public override bool TrySetMember(SetMemberBinder binder, object value)
-			=> throw new NotImplementedException();
-
-		public override bool TryDeleteMember(DeleteMemberBinder binder)
-			=> throw new NotImplementedException();
-
-		public override bool TryDeleteIndex(DeleteIndexBinder binder, object[] indexes)
-			=> throw new NotImplementedException();
 	}
 }

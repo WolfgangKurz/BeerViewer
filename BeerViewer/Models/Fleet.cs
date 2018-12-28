@@ -276,6 +276,7 @@ namespace BeerViewer.Models
 			if (condition >= goal)
 			{
 				this.RejuvenateTime = (DateTimeOffset?)null;
+				this.RaisePropertyChanged(nameof(this.IsRejuvenating));
 			}
 			else
 			{
@@ -285,6 +286,7 @@ namespace BeerViewer.Models
 				rejuvenate = rejuvenate.AddMinutes(value);
 
 				this.RejuvenateTime = rejuvenate;
+				this.RaisePropertyChanged(nameof(this.IsRejuvenating));
 			}
 
 			this.UpdateState();

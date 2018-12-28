@@ -352,6 +352,7 @@
     <Content Include="WindowFrame\modules\top-resource\top-resource.js" />
     <Content Include="WindowFrame\modules\top-resource\top-resource.css" />
     <Content Include="WindowFrame\modules\vue.js" />
+    <Content Include="WindowFrame\modules\vue.min.js" />
     <Content Include="WindowFrame\modules\window\window.css" />
     <Content Include="WindowFrame\modules\window\window.js" />
     <Content Include="WindowFrame\app.css" />

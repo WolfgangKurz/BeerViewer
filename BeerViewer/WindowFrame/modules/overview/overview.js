@@ -3,50 +3,48 @@
 	if (!window.modules) throw "Cannot find `module`";
 
 	const MAX_SHIPS = 7; // Maximum ships per fleet
-	const overview = new Vue({
+	window.overview = new Vue({
 		data: {
-			SelectedTab: 0,
+			i18n: window.i18n,
+
+			SelectedTab: 1,
 			Fleets: [],
 			RepairDock: [],
 			ConstructionDock: [],
 
 			LoSType: ""
 		},
-		el: "#overview-container",
+		el: $("#overview-container"),
 		methods: {
 			SelectFleet: function (id) {
 				this.SelectedTab = id;
-			}
-		},
-		computed: {
-			i18n: async text => await i18n(text),
+			},
 
 			LevelTooltip: function (fleet) {
-				const level = fleet.Ships.reduce((a, c) => a + c.Level);
 				return String.format(
 					"{0}: {1}\n{2}: {3}",
-					i18n("fleet_totallevel"),
-					level,
-					i18n("fleet_averagelevel"),
-					(level / fleet.Ships.Length).toFixed(2)
+					i18n.fleet_totallevel,
+					fleet.TotalLevel,
+					i18n.fleet_averagelevel,
+					fleet.AvgLevel.toFixed(2)
 				);
 			},
 			AATooltip: function (fleet) {
 				return String.format(
 					"{0}: {1}\n{2}: {3}",
-					i18n("fleet_aa_min"),
+					i18n.fleet_aa_min,
 					fleet.AA.Min,
-					i18n("fleet_aa_max"),
+					i18n.fleet_aa_max,
 					fleet.AA.Max
 				);
 			},
 			SpeedTooltip: function (fleet) {
-				return String.format("{0}: {1}", i18n("fleet_speed"), fleet.Speed);
+				return String.format("{0}: {1}", i18n.fleet_speed, fleet.Speed);
 			},
-			LosTooltip: function (fleet) {
+			LoSTooltip: function (fleet) {
 				return String.format(
 					"{0}: {1}\n{2}",
-					i18n("fleet_los"),
+					i18n.fleet_los,
 					fleet.LoS,
 					this.LoSType
 				);
@@ -56,8 +54,8 @@
 
 	const updateSize = function () {
 		const el = [
-			$('.fleet.display .ship:not([data-disabled="true"]) td:first-of-type'),
-			$('.fleet.display .ship:not([data-disabled="true"]) td:last-of-type')
+			$('.fleet[data-display="1"] .ship td:first-of-type'),
+			$('.fleet[data-display="1"] .ship td:last-of-type')
 		];
 		if (el[0] === null || el[1] === null) return;
 
@@ -75,20 +73,36 @@
 		init: function () {
 			const _this = this;
 
+			const DefaultLimitedValue = {
+				Current: 0,
+				Maximum: 0
+			};
+
 			// Setup Fleets & Ships
 			!function () {
-				for (let i = 0; i < 4; i++) {
+				for (let i = 1; i <= 4; i++) {
 					!async function (fleetId) {
 						const fleet = {
+							Id: i,
 							Available: false,
 							State: "empty",
 							Ships: [],
+
+							TotalLevel: 0,
+							AvgLevel: 0,
 							Speed: "",
 							LoS: "0.00",
 							AA: {
 								Min: 0,
 								Max: 0
-							}
+							},
+
+							IsRejuvenating: false,
+							RejuvenateText: "--:--:--"
+						};
+						const updateFleetLevel = function () {
+							fleet.TotalLevel = fleet.Ships.filter(x => x.Available).reduce((a, c) => a + c.Level, 0);
+							fleet.AvgLevel = fleet.Ships.length > 0 ? fleet.TotalLevel / fleet.Ships.length : 0;
 						};
 
 						window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "]", function (value) {
@@ -125,19 +139,7 @@
 
 							fleet.State = state;
 						});
-
-						window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Ships", async function (value) {
-							const shipsize = await window.API.GetData("Homeport", "Organization.Fleets[" + fleetId + "].Ships.Length");
-							const ships = [];
-							for (let i = 0; i < shipsize; i++) {
-								ships.push({
-									Name: await window.API.GetData("Homeport", "Organization.Fleets[" + fleetId + "].Ships[" + i + "].Name"),
-									Level: await window.API.GetData("Homeport", "Organization.Fleets[" + fleetId + "].Ships[" + i + "].Level")
-								});
-							}
-							fleet.Ships = ships;
-						});
-						window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Speed", async function (value) {
+						window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Speed", function (value) {
 							const speedList = {
 								0: "fleet_speed_immovable",
 								5: "fleet_speed_slow",
@@ -145,33 +147,26 @@
 								15: "fleet_speed_faster",
 								20: "fleet_speed_fastest"
 							};
-							fleet.Speed = await i18n(speedList[value]);
+							fleet.Speed = i18n[speedList[value]];
 						});
-						window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].LOS", value => fleet.LoS = value.toFixed(2));
+						window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].LOS", value => fleet.LoS = parseFloat(value).toFixed(2));
 						window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].AirSuperiorityPotentialMinimum", value => fleet.AA.Min = value);
 						window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].AirSuperiorityPotentialMaximum", value => fleet.AA.Max = value);
+						window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].IsRejuvenating", value => fleet.IsRejuvenating = value);
+						window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].RejuvenateText", value => fleet.RejuvenateText = value);
 
-						fleet.Ships = [];
 						for (let j = 0; j < MAX_SHIPS; j++)
 							!function (shipId) {
 								const ship = {
+									Id: j,
 									Available: false,
 									Situation: 0,
 
 									Name: null,
 									Level: null,
-									HP: {
-										Current: 0,
-										Maximum: 0
-									},
-									Fuel: {
-										Current: 0,
-										Maximum: 0
-									},
-									Ammo: {
-										Current: 0,
-										Maximum: 0
-									},
+									HP: DefaultLimitedValue,
+									Fuel: DefaultLimitedValue,
+									Ammo: DefaultLimitedValue,
 									Morale: {
 										Value: 0,
 										Level: "0"
@@ -181,14 +176,17 @@
 								window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Ships[" + shipId + "]", value => ship.Available = value !== null);
 								window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Ships[" + shipId + "].Situation", value => ship.Situation = value);
 
-								window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Ships[" + shipId + "].Info.Name", async function (value) {
-									ship.Name = await i18n(value);
+								window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Ships[" + shipId + "].Info.Name", function (value) {
+									ship.Name = i18n[value];
 									updateSize();
 								});
-								window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Ships[" + shipId + "].Level", value => ship.Level = value);
-								window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Ships[" + shipId + "].HP", value => ship.HP = value);
-								window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Ships[" + shipId + "].Fuel", value => ship.Fuel = value);
-								window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Ships[" + shipId + "].Ammo", value => ship.Ammo = value);
+								window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Ships[" + shipId + "].Level", value => {
+									ship.Level = value || 0;
+									updateFleetLevel();
+								});
+								window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Ships[" + shipId + "].HP", value => ship.HP = value || DefaultLimitedValue);
+								window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Ships[" + shipId + "].Fuel", value => ship.Fuel = value || DefaultLimitedValue);
+								window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Ships[" + shipId + "].Ammo", value => ship.Ammo = value || DefaultLimitedValue);
 								window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Ships[" + shipId + "].Condition", function (value) {
 									let morale = "0";
 
@@ -214,14 +212,24 @@
 			!function () {
 				// Repair docks
 				for (let i = 0; i < 4; i++) {
+					const dockState = {
+						"-1": "locked",
+						0: "empty",
+						1: "repairing",
+						2: "done"
+					};
 					const dock = {
 						Ship: "???",
 						RemainingTime: "--:--:--",
 						IsCompleted: false,
-						State: 0
+						State: 0,
+						StateText: "locked"
 					};
 					window.API.ObserveData("Homeport", "Repairyard.Docks[" + (i + 1) + "].Ship.Info.Name", value => dock.Ship = value);
-					window.API.ObserveData("Homeport", "Repairyard.Docks[" + (i + 1) + "].State", value => dock.State = value);
+					window.API.ObserveData("Homeport", "Repairyard.Docks[" + (i + 1) + "].State", value => {
+						dock.State = value || -1;
+						dock.StateText = dockState[value || -1];
+					});
 					window.API.ObserveData("Homeport", "Repairyard.Docks[" + (i + 1) + "].IsCompleted", value => dock.IsCompleted = value);
 					window.API.ObserveData("Homeport", "Repairyard.Docks[" + (i + 1) + "].RemainingText", value => dock.RemainingTime = value);
 
@@ -230,14 +238,24 @@
 
 				// Construction docks
 				for (let i = 0; i < 4; i++) {
+					const dockState = {
+						"-1": "locked",
+						0: "empty",
+						2: "building",
+						3: "done"
+					};
 					const dock = {
 						Ship: "???",
 						RemainingTime: "--:--:--",
 						IsCompleted: false,
-						State: 0
+						State: 0,
+						StateText: "locked"
 					};
 					window.API.ObserveData("Homeport", "Repairyard.Docks[" + (i + 1) + "].Ship.Name", value => dock.Ship = value);
-					window.API.ObserveData("Homeport", "Repairyard.Docks[" + (i + 1) + "].State", value => dock.State = value);
+					window.API.ObserveData("Homeport", "Repairyard.Docks[" + (i + 1) + "].State", value => {
+						dock.State = value || -1;
+						dock.StateText = dockState[value || -1];
+					});
 					window.API.ObserveData("Homeport", "Repairyard.Docks[" + (i + 1) + "].IsCompleted", value => dock.IsCompleted = value);
 					window.API.ObserveData("Homeport", "Repairyard.Docks[" + (i + 1) + "].RemainingText", value => dock.RemainingTime = value);
 
@@ -246,7 +264,8 @@
 			}();
 
 			// Setup quests
-			if(true === false) (async function () {
+			/*
+			(async function () {
 				const quests = $.new("div", "quest-container");
 
 				window.API.ObserveData("Homeport", "Quests.All", async function (value) {
@@ -274,6 +293,7 @@
 
 				overview.append(quests);
 			})();
+			*/
 			window.addEventListener("resize", function () {
 				updateSize();
 			});

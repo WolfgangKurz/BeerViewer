@@ -1,7 +1,10 @@
 ﻿"use strict";
-!function () {
+!async function () {
 	window.INTERNAL = (function () {
 		return {
+			Initialized: async function () {
+				window.i18n = await window.API.i18nSet();
+			},
 			zoomMainFrame: function (_zoomFactor) {
 				const zoomFactor = parseFloat(_zoomFactor) / 100;
 				const frame = $("#MAIN_FRAME");
@@ -20,7 +23,8 @@
 		};
 	})();
 
-	window.i18n = async function (text) {
+	window.i18n = {};
+	window._i18n = async function (text) {
 		return await window.API.i18n(text);
 	};
 }();

@@ -1,29 +1,31 @@
 ﻿<div id="overview-container">
 	<div class="tab-host">
-		<a href="#" data-hide="true"
+		<a href="#"
 		   v-for="fleet in Fleets"
-		   v-show="fleet.Available"
+		   v-if="fleet.Available"
 		   :class="{selected: SelectedTab === fleet.Id}"
-		   :data-idx="fleet.Id+1"
+		   :data-idx="fleet.Id"
 		   @click.prevent="SelectFleet(fleet.Id)">
 			<div class="overview-fleet-state"
 				 :data-state="fleet.State"
-				 :data-idx="fleet.Id+1"></div>
-			#{{fleet.Id+1}}
+				 :data-idx="fleet.Id"></div>
+			#{{fleet.Id}}
 		</a>
 	</div>
 
 	<table class="fleet"
 		   v-for="fleet in Fleets"
-		   v-show="fleet.Available"
-		   :data-idx="id"
-		   :class="{display: SelectedTab === fleet.id}">
+		   v-if="fleet.Available"
+		   v-show="SelectedTab === fleet.Id"
+		   :data-idx="fleet.Id"
+		   :data-display="SelectedTab === fleet.Id ? 1 : 0">
 		<tbody>
 			<tr>
 				<td colspan="2">
 					<div class="summary-container">
-						<div class="summary-info" data-summary="level" :title="LevelTooltip(fleet)">{{fleet.TotalLevel}} ({{fleet.AvgLevel}})</div>
-						<div class="summary-info" data-summary="aa" :title="AATooltip(fleet)">{{fleet.AA_Min}}~{{fleet.AA_Max}}</div>
+						<div class="summary-info" data-summary="morale" v-if="fleet.IsRejuvenating">{{String.format(i18n.fleet_revejunate, fleet.RejuvenateText)}}</div>
+						<div class="summary-info" data-summary="level" :title="LevelTooltip(fleet)">{{fleet.TotalLevel}} ({{fleet.AvgLevel.toFixed(2)}})</div>
+						<div class="summary-info" data-summary="aa" :title="AATooltip(fleet)">{{fleet.AA.Min}}~{{fleet.AA.Max}}</div>
 						<div class="summary-info" data-summary="speed" :title="SpeedTooltip(fleet)">{{fleet.Speed}}</div>
 						<div class="summary-info" data-summary="los" :title="LoSTooltip(fleet)">{{fleet.LoS}}</div>
 					</div>
@@ -31,9 +33,9 @@
 			</tr>
 			<tr class="ship"
 				v-for="ship in fleet.Ships"
-				v-show="ship.Available"
+				v-if="ship.Available"
 				:data-idx="ship.Id"
-				:data-state="(ship.Situation &1) ? 'repairing' : ''">
+				:data-state="(ship.Situation & 1) ? 'repairing' : ''">
 				<td>
 					<div class="ship-name" :prop="ship.Name">{{ship.Name || "???"}}</div>
 					<div class="ship-level">Lv.{{ship.Level || "???"}}</div>
@@ -53,44 +55,49 @@
 					</div>
 					<div class="ship-morale">
 						<div class="ship-morale-box" :data-morale="ship.Morale.Level"></div>
-						<div class="ship-morale-value" :data-morale="ship.Morale.Value"></div>
+						<div class="ship-morale-value">{{ship.Morale.Value}}</div>
 					</div>
 					<div class="ship-repairing">
-						<span>{{i18n("fleet_repairing")}}</span>
-					</div>
+						<span>{{i18n.fleet_repairing
+							}}</span>
+						</div>
 				</td>
 			</tr>
 		</tbody>
 	</table>
 
-	<div class="dock-item"
-		 v-for="dock in RepairDock"
-		 :data-state="dock.State">
-		<div class="dock-text">
-			<span v-if="dock.State === 0">{{i18n("fleet_repair_empty")}}</span>
-			<span v-else-if="dock.State === 1">{{dock.Ship || "???"}}</span>
-			<span v-else>{{i18n("fleet_locked")}}</span>
-		</div>
-		<div class="dock-time">
-			<span v-if="dock.State === 0"></span>
-			<span v-else-if="dock.State === 1">{{dock.IsCompleted ? i18n("fleet_done") : dock.RemainingTime}}</span>
-			<span v-else></span>
+	<div class="dock-container">
+		<div class="dock-item"
+			 v-for="dock in RepairDock"
+			 :data-state="dock.StateText">
+			<div class="dock-text">
+				<span v-if="dock.State === 0">{{i18n.fleet_repair_empty}}</span>
+				<span v-else-if="dock.State === 1">{{dock.Ship || "???"}}</span>
+				<span v-else>{{i18n.fleet_locked}}</span>
+			</div>
+			<div class="dock-time">
+				<span v-if="dock.State === 0"></span>
+				<span v-else-if="dock.State === 1">{{dock.IsCompleted ? i18n.fleet_done : dock.RemainingTime}}</span>
+				<span v-else></span>
+			</div>
 		</div>
 	</div>
 
-	<div class="dock-item"
-		 v-for="dock in ConstructionDock"
-		 :data-state="dock.State">
-		<div class="dock-text">
-			<span v-if="dock.State === 0">{{i18n("fleet_repair_empty")}}</span>
-			<span v-else-if="dock.State === 2 || dock.State === 3">{{dock.Ship || "???"}}</span>
-			<span v-else>{{i18n("fleet_locked")}}</span>
-		</div>
-		<div class="dock-time">
-			<span v-if="dock.State === 0"></span>
-			<span v-else-if="dock.State === 2">{{dock.IsCompleted ? i18n("fleet_done") : dock.RemainingTime}}</span>
-			<span v-else-if="dock.State === 3">{{i18n("fleet_done")}}</span>
-			<span v-else></span>
+	<div class="dock-container">
+		<div class="dock-item"
+			 v-for="dock in ConstructionDock"
+			 :data-state="dock.StateText">
+			<div class="dock-text">
+				<span v-if="dock.State === 0">{{i18n.fleet_repair_empty}}</span>
+				<span v-else-if="dock.State === 2 || dock.State === 3">{{dock.Ship || "???"}}</span>
+				<span v-else>{{i18n.fleet_locked}}</span>
+			</div>
+			<div class="dock-time">
+				<span v-if="dock.State === 0"></span>
+				<span v-else-if="dock.State === 2">{{dock.IsCompleted ? i18n.fleet_done : dock.RemainingTime}}</span>
+				<span v-else-if="dock.State === 3">{{i18n.fleet_done}}</span>
+				<span v-else></span>
+			</div>
 		</div>
 	</div>
 </div>

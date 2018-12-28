@@ -208,6 +208,15 @@ namespace BeerViewer.Modules.Communication
 		}
 
 		/// <summary>
+		/// Returns localized text set.
+		/// </summary>
+		/// <returns>Registered i18n text dictionary</returns>
+		public Dictionary<string, string> i18nSet()
+		{
+			return Modules.i18n.Current.Table as Dictionary<string, string>;
+		}
+
+		/// <summary>
 		/// Get available module list.
 		/// </summary>
 		/// <returns>Module list</returns>
@@ -223,19 +232,22 @@ namespace BeerViewer.Modules.Communication
 			foreach(var dir in dirs)
 			{
 				var moduleName = Path.GetFileName(dir);
-				var scriptName = Path.Combine(dir, moduleName + ".js");
-				var styleName = Path.Combine(dir, moduleName + ".css");
+				var scriptFile = Path.Combine(dir, moduleName + ".js");
+				var templateFile = Path.Combine(dir, moduleName + ".html");
+				var styleFile = Path.Combine(dir, moduleName + ".css");
 
-				if (!File.Exists(scriptName))
+				if (!File.Exists(scriptFile))
 				{
-					Logger.Log("Module directory '{0}' found but '{0}.js' not found", moduleName, scriptName);
+					Logger.Log("Module directory '{0}' found but '{0}.js' not found", moduleName, scriptFile);
 					continue;
 				}
 
 				output.Add(new ModuleInfo
 				{
 					Name = moduleName,
-					Styled = File.Exists(Path.Combine(dir, styleName))
+					Template = File.Exists(templateFile) ? File.ReadAllText(templateFile) : "",
+					Scripted = File.Exists(scriptFile),
+					Styled = File.Exists(styleFile),
 				});
 			}
 			return output.ToArray();

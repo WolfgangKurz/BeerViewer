@@ -4,9 +4,17 @@ fleet_speed_slow			Slow speed
 fleet_speed_fast			Fast speed
 fleet_speed_faster			Fast+ speed
 fleet_speed_fastest		Fastest speed
+
+fleet_totallevel	Total Level
+fleet_averagelevel	Avg. Level
+fleet_speed	Speed
 fleet_los		LoS
+fleet_los_type	LoS formula
 fleet_aa		AA
+fleet_aa_min	Min AA
+fleet_aa_max	Max AA
 fleet_repairing	Repairing
+fleet_revejunate	Morale remain {0}
 
 fleet_locked				Locked
 fleet_repair_empty	Empty Repair

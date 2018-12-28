@@ -180,7 +180,7 @@ namespace BeerViewer.Models
 	public class LOSType1 : LOSCalcLogic
 	{
 		public override sealed string Id => "LOSCalc.Type1";
-		public override string Name => i18n.Current.loscalc_type1;
+		public override string Name => i18n.Current["loscalc_type1"];
 
 		public override double Calc(Fleet[] fleets)
 		{
@@ -196,7 +196,7 @@ namespace BeerViewer.Models
 	public class LOSType2 : LOSCalcLogic
 	{
 		public override sealed string Id => "LOSCalc.Type2";
-		public override string Name => i18n.Current.loscalc_type2;
+		public override string Name => i18n.Current["loscalc_type2"];
 
 		public override double Calc(Fleet[] fleets)
 		{
@@ -226,7 +226,7 @@ namespace BeerViewer.Models
 	public class LOSType3 : LOSCalcLogic
 	{
 		public override sealed string Id => "LOSCalc.Type3";
-		public override string Name => i18n.Current.loscalc_type3;
+		public override string Name => i18n.Current["loscalc_type3"];
 
 		public override double Calc(Fleet[] fleets)
 		{
@@ -289,7 +289,7 @@ namespace BeerViewer.Models
 	public class LOSType4 : LOSTypeCn
 	{
 		public override sealed string Id => "LOSCalc.Type4";
-		public override string Name => i18n.Current.loscalc_type4;
+		public override string Name => i18n.Current["loscalc_type4"];
 		public override double Cn => 1;
 	}
 
@@ -299,7 +299,7 @@ namespace BeerViewer.Models
 	public class LOSType5 : LOSTypeCn
 	{
 		public override sealed string Id => "LOSCalc.Type5";
-		public override string Name => i18n.Current.loscalc_type5;
+		public override string Name => i18n.Current["loscalc_type5"];
 		public override double Cn => 3;
 	}
 
@@ -309,7 +309,7 @@ namespace BeerViewer.Models
 	public class LOSType6 : LOSTypeCn
 	{
 		public override sealed string Id => "LOSCalc.Type6";
-		public override string Name => i18n.Current.loscalc_type6;
+		public override string Name => i18n.Current["loscalc_type6"];
 		public override double Cn => 4;
 	}
 }

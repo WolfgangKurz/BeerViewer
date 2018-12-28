@@ -567,7 +567,12 @@ namespace BeerViewer
 			public object Enums { get; }
 
 			public SettableSettingValue(string Name, string Provider, T DefaultValue, string DisplayName, string Description = "", string Caution = "", object Enums = null)
-				: base(Name, Provider, DefaultValue) { }
+				: base(Name, Provider, DefaultValue) {
+				this.DisplayName = DisplayName;
+				this.Description = Description;
+				this.Caution = Caution;
+				this.Enums = Enums;
+			}
 		}
 		#endregion
 	}

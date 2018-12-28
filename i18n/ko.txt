@@ -14,6 +14,7 @@ fleet_aa	제공
 fleet_aa_min	제공 최소
 fleet_aa_max	제공 최대
 fleet_repairing	수리중
+fleet_revejunate	피로도 회복 {0}
 
 fleet_locked				잠김
 fleet_repair_empty	비어있음
