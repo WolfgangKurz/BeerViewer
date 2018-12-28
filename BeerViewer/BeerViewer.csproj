@@ -291,7 +291,6 @@
     <Compile Include="Models\Wrapper\UseItem.cs" />
     <Compile Include="Models\Wrapper\UseItemInfo.cs" />
     <Compile Include="Modules\Communication\WindowBrowserCommicator.cs" />
-    <Compile Include="Modules\Vue.cs" />
     <Compile Include="Network\HttpProxy.cs" />
     <Compile Include="Network\ModifiableProxy.cs" />
     <Compile Include="Network\NetworkExtensions.cs" />
@@ -342,6 +341,7 @@
     <Content Include="WindowFrame\modules\logger\logger.js" />
     <Content Include="WindowFrame\modules\overview\iconset_fleet.png" />
     <Content Include="WindowFrame\modules\overview\overview.css" />
+    <Content Include="WindowFrame\modules\overview\overview.html" />
     <Content Include="WindowFrame\modules\overview\overview.js" />
     <Content Include="WindowFrame\modules\top-resource\icon_ammo.png" />
     <Content Include="WindowFrame\modules\top-resource\icon_bauxite.png" />
@@ -351,6 +351,7 @@
     <Content Include="WindowFrame\modules\top-resource\icon_steel.png" />
     <Content Include="WindowFrame\modules\top-resource\top-resource.js" />
     <Content Include="WindowFrame\modules\top-resource\top-resource.css" />
+    <Content Include="WindowFrame\modules\vue.js" />
     <Content Include="WindowFrame\modules\window\window.css" />
     <Content Include="WindowFrame\modules\window\window.js" />
     <Content Include="WindowFrame\app.css" />
@@ -384,9 +385,6 @@
     </PackageReference>
     <PackageReference Include="Nekoxy">
       <Version>1.5.3.21</Version>
-    </PackageReference>
-    <PackageReference Include="vue">
-      <Version>2.5.17</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
