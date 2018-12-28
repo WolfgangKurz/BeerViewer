@@ -291,6 +291,7 @@
     <Compile Include="Models\Wrapper\UseItem.cs" />
     <Compile Include="Models\Wrapper\UseItemInfo.cs" />
     <Compile Include="Modules\Communication\WindowBrowserCommicator.cs" />
+    <Compile Include="Modules\Vue.cs" />
     <Compile Include="Network\HttpProxy.cs" />
     <Compile Include="Network\ModifiableProxy.cs" />
     <Compile Include="Network\NetworkExtensions.cs" />
@@ -383,6 +384,9 @@
     </PackageReference>
     <PackageReference Include="Nekoxy">
       <Version>1.5.3.21</Version>
+    </PackageReference>
+    <PackageReference Include="vue">
+      <Version>2.5.17</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

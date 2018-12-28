@@ -1,0 +1,96 @@
+﻿<div id="overview-container">
+	<div class="tab-host">
+		<a href="#" data-hide="true"
+		   v-for="fleet in Fleets"
+		   v-show="fleet.Available"
+		   :class="{selected: SelectedTab === fleet.Id}"
+		   :data-idx="fleet.Id+1"
+		   @click.prevent="SelectFleet(fleet.Id)">
+			<div class="overview-fleet-state"
+				 :data-state="fleet.State"
+				 :data-idx="fleet.Id+1"></div>
+			#{{fleet.Id+1}}
+		</a>
+	</div>
+
+	<table class="fleet"
+		   v-for="fleet in Fleets"
+		   v-show="fleet.Available"
+		   :data-idx="id"
+		   :class="{display: SelectedTab === fleet.id}">
+		<tbody>
+			<tr>
+				<td colspan="2">
+					<div class="summary-container">
+						<div class="summary-info" data-summary="level" :title="LevelTooltip(fleet)">{{fleet.TotalLevel}} ({{fleet.AvgLevel}})</div>
+						<div class="summary-info" data-summary="aa" :title="AATooltip(fleet)">{{fleet.AA_Min}}~{{fleet.AA_Max}}</div>
+						<div class="summary-info" data-summary="speed" :title="SpeedTooltip(fleet)">{{fleet.Speed}}</div>
+						<div class="summary-info" data-summary="los" :title="LoSTooltip(fleet)">{{fleet.LoS}}</div>
+					</div>
+				</td>
+			</tr>
+			<tr class="ship"
+				v-for="ship in fleet.Ships"
+				v-show="ship.Available"
+				:data-idx="ship.Id"
+				:data-state="(ship.Situation &1) ? 'repairing' : ''">
+				<td>
+					<div class="ship-name" :prop="ship.Name">{{ship.Name || "???"}}</div>
+					<div class="ship-level">Lv.{{ship.Level || "???"}}</div>
+				</td>
+				<td>
+					<div class="ship-hp-bar" data-type="progress" data-progress-strip="4"
+						 :data-progress="100*ship.HP.Current/ship.HP.Maximum"
+						 :title="ship.HP.Current+' / '+ship.HP.Maximum"></div>
+					<div class="ship-hp">{{ship.HP.Current}}/{{ship.HP.Maximum}}</div>
+					<div class="ship-supply">
+						<div class="ship-fuel" data-type="progress" data-progress-strip="4"
+							 :data-progress="100*ship.Fuel.Current/ship.Fuel.Maximum"
+							 :title="ship.Fuel.Current+' / '+ship.Fuel.Maximum"></div>
+						<div class="ship-ammo" data-type="progress" data-progress-strip="4"
+							 :data-progress="100*ship.Ammo.Current/ship.Ammo.Maximum"
+							 :title="ship.Ammo.Current+' / '+ship.Ammo.Maximum"></div>
+					</div>
+					<div class="ship-morale">
+						<div class="ship-morale-box" :data-morale="ship.Morale.Level"></div>
+						<div class="ship-morale-value" :data-morale="ship.Morale.Value"></div>
+					</div>
+					<div class="ship-repairing">
+						<span>{{i18n("fleet_repairing")}}</span>
+					</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<div class="dock-item"
+		 v-for="dock in RepairDock"
+		 :data-state="dock.State">
+		<div class="dock-text">
+			<span v-if="dock.State === 0">{{i18n("fleet_repair_empty")}}</span>
+			<span v-else-if="dock.State === 1">{{dock.Ship || "???"}}</span>
+			<span v-else>{{i18n("fleet_locked")}}</span>
+		</div>
+		<div class="dock-time">
+			<span v-if="dock.State === 0"></span>
+			<span v-else-if="dock.State === 1">{{dock.IsCompleted ? i18n("fleet_done") : dock.RemainingTime}}</span>
+			<span v-else></span>
+		</div>
+	</div>
+
+	<div class="dock-item"
+		 v-for="dock in ConstructionDock"
+		 :data-state="dock.State">
+		<div class="dock-text">
+			<span v-if="dock.State === 0">{{i18n("fleet_repair_empty")}}</span>
+			<span v-else-if="dock.State === 2 || dock.State === 3">{{dock.Ship || "???"}}</span>
+			<span v-else>{{i18n("fleet_locked")}}</span>
+		</div>
+		<div class="dock-time">
+			<span v-if="dock.State === 0"></span>
+			<span v-else-if="dock.State === 2">{{dock.IsCompleted ? i18n("fleet_done") : dock.RemainingTime}}</span>
+			<span v-else-if="dock.State === 3">{{i18n("fleet_done")}}</span>
+			<span v-else></span>
+		</div>
+	</div>
+</div>
