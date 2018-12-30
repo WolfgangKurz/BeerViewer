@@ -1,9 +1,14 @@
 ﻿"use strict";
 !async function () {
+	let _origin_i18n = {};
+
 	window.INTERNAL = (function () {
 		return {
 			Initialized: async function () {
-				window.i18n = await window.API.i18nSet();
+				const set = await window.API.i18nSet();
+				const props = Object.getOwnPropertyNames(_origin_i18n);
+				for (let i = 0; i < props.length; i++) delete _origin_i18n[props[i]];
+				for (let i in set) _origin_i18n[i] = set[i];
 			},
 			zoomMainFrame: function (_zoomFactor) {
 				const zoomFactor = parseFloat(_zoomFactor) / 100;
@@ -23,7 +28,12 @@
 		};
 	})();
 
-	window.i18n = {};
+	window.i18n = new Proxy(_origin_i18n, {
+		get: function (target, name) {
+			if (name in target) return target[name];
+			return name;
+		}
+	});
 	window._i18n = async function (text) {
 		return await window.API.i18n(text);
 	};

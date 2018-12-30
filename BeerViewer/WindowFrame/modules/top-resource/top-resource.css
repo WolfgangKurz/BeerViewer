@@ -23,6 +23,7 @@
 
 #top-resources > .top-resource .resource-icon {
 	margin-right: 4px;
+	margin-bottom: 2px;
 	vertical-align: middle;
 }
 #top-resources > .top-resource .resource-value {

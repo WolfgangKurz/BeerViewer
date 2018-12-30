@@ -48,6 +48,16 @@
 					fleet.LoS,
 					this.LoSType
 				);
+			},
+
+			ParseShipSituation: function (ship) {
+				const status = [];
+				if (ship.Situation & 1) status.push("repairing");
+				else if (ship.Situation & 1 << 1) status.push("evacuation");
+				else if (ship.Situation & 1 << 2) status.push("tow");
+				else if (ship.Situation & 1 << 3) status.push("damaged");
+				else if (ship.Situation & 1 << 4) status.push("damagecontrolled");
+				return status.join(" ");
 			}
 		}
 	});
@@ -97,12 +107,21 @@
 								Max: 0
 							},
 
+							SupplyFuel: 0,
+							SupplyAmmo: 0,
+							SupplyBauxite: 0,
+
 							IsRejuvenating: false,
 							RejuvenateText: "--:--:--"
 						};
 						const updateFleetLevel = function () {
 							fleet.TotalLevel = fleet.Ships.filter(x => x.Available).reduce((a, c) => a + c.Level, 0);
 							fleet.AvgLevel = fleet.Ships.length > 0 ? fleet.TotalLevel / fleet.Ships.length : 0;
+						};
+						const updateFleetSupply = function () {
+							fleet.SupplyFuel = fleet.Ships.filter(x => x.Available).reduce((a, c) => a + (c.Fuel.Maximum - c.Fuel.Current), 0);
+							fleet.SupplyAmmo = fleet.Ships.filter(x => x.Available).reduce((a, c) => a + (c.Ammo.Maximum - c.Ammo.Current), 0);
+							fleet.SupplyBauxite = fleet.Ships.filter(x => x.Available).reduce((a, c) => a + c.UsedBauxite, 0);
 						};
 
 						window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "]", function (value) {
@@ -167,6 +186,7 @@
 									HP: DefaultLimitedValue,
 									Fuel: DefaultLimitedValue,
 									Ammo: DefaultLimitedValue,
+									UsedBauxite: 0,
 									Morale: {
 										Value: 0,
 										Level: "0"
@@ -185,8 +205,18 @@
 									updateFleetLevel();
 								});
 								window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Ships[" + shipId + "].HP", value => ship.HP = value || DefaultLimitedValue);
-								window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Ships[" + shipId + "].Fuel", value => ship.Fuel = value || DefaultLimitedValue);
-								window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Ships[" + shipId + "].Ammo", value => ship.Ammo = value || DefaultLimitedValue);
+								window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Ships[" + shipId + "].Fuel", value => {
+									ship.Fuel = value || DefaultLimitedValue;
+									updateFleetSupply();
+								});
+								window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Ships[" + shipId + "].Ammo", value => {
+									ship.Ammo = value || DefaultLimitedValue;
+									updateFleetSupply();
+								});
+								window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Ships[" + shipId + "].UsedBauxite", value => {
+									ship.UsedBauxite = parseInt(value || 0) || 0;
+									updateFleetSupply();
+								});
 								window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Ships[" + shipId + "].Condition", function (value) {
 									let morale = "0";
 
@@ -251,13 +281,13 @@
 						State: 0,
 						StateText: "locked"
 					};
-					window.API.ObserveData("Homeport", "Repairyard.Docks[" + (i + 1) + "].Ship.Name", value => dock.Ship = value);
-					window.API.ObserveData("Homeport", "Repairyard.Docks[" + (i + 1) + "].State", value => {
+					window.API.ObserveData("Homeport", "Dockyard.Docks[" + (i + 1) + "].Ship.Name", value => dock.Ship = value);
+					window.API.ObserveData("Homeport", "Dockyard.Docks[" + (i + 1) + "].State", value => {
 						dock.State = value || -1;
 						dock.StateText = dockState[value || -1];
 					});
-					window.API.ObserveData("Homeport", "Repairyard.Docks[" + (i + 1) + "].IsCompleted", value => dock.IsCompleted = value);
-					window.API.ObserveData("Homeport", "Repairyard.Docks[" + (i + 1) + "].RemainingText", value => dock.RemainingTime = value);
+					window.API.ObserveData("Homeport", "Dockyard.Docks[" + (i + 1) + "].IsCompleted", value => dock.IsCompleted = value);
+					window.API.ObserveData("Homeport", "Dockyard.Docks[" + (i + 1) + "].RemainingText", value => dock.RemainingTime = value);
 
 					overview.ConstructionDock.push(dock);
 				}

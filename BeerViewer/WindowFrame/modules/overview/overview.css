@@ -35,27 +35,28 @@
 	grid-gap: 3px;
 }
 #overview-container .summary-container > .summary-info {
-	padding: 3px 6px;
+	padding: 0 6px 6px;
 	border-radius: 3px;
 	background-color: rgba(255, 255, 255, 0.1);
-	line-height: 12px;
+	line-height: 18px;
 	text-align: right;
+	overflow: hidden;
 }
 #overview-container .summary-container > .summary-info::before {
 	content: "";
 	float: left;
 	display: inline-block;
-	margin: -3px 6px 0 -3px;
+	margin: 0 6px 0 -3px;
 	width: 18px;
 	height: 18px;
 	background-image: url(iconset_fleet.png);
 	background-position: 0 0;
 	background-repeat: no-repeat;
-	background-size: 90px 18px;
+	background-size: 144px 18px;
 	vertical-align: bottom;
-	line-height: 12px;
 }
-#overview-container .summary-container > .summary-info[data-summary="morale"] {
+#overview-container .summary-container > .summary-info[data-summary="morale"],
+#overview-container .summary-container > .summary-info[data-summary="supply"] {
 	grid-column: span 2;
 }
 #overview-container .summary-container > .summary-info[data-summary="morale"]::before {
@@ -74,6 +75,38 @@
 	background-position: -54px 0;
 }
 
+#overview-container .summary-container > .summary-info[data-summary="supply"]::before {
+	display: none;
+}
+#overview-container .summary-container > .summary-info[data-summary="supply"] > * {
+	float: left;
+	width: 33.3%;
+	text-align: center;
+}
+#overview-container .summary-container > .summary-info[data-summary="supply"] > *:before {
+	content: "";
+	display: inline-block;
+	margin: 0 6px 0 -3px;
+	width: 18px;
+	height: 18px;
+	background-image: url(iconset_fleet.png);
+	background-position: -90px 0;
+	background-repeat: no-repeat;
+	background-size: 144px 18px;
+	vertical-align: bottom;
+}
+#overview-container .summary-container > .summary-info[data-summary="supply"] > *:nth-child(2):before {
+	background-position: -108px 0;
+}
+#overview-container .summary-container > .summary-info[data-summary="supply"] > *:nth-child(3):before {
+	background-position: -126px 0;
+}
+#overview-container .summary-container > .summary-info[data-summary="supply"]::after {
+	content: "";
+	display: table;
+	clear: both;
+}
+
 #overview-container .fleet {
 	margin: 3px 0;
 }
@@ -87,7 +120,6 @@
 }
 #overview-container .fleet .ship > td:first-of-type {
 	padding-right: 0;
-
 	/* Width="Auto" */
 	width: 1px;
 	white-space: nowrap;
@@ -137,6 +169,7 @@
 }
 #overview-container .fleet .ship .ship-morale {
 	text-align: right;
+	overflow: hidden;
 }
 #overview-container .fleet .ship .ship-morale > * {
 	display: inline-block;
@@ -176,6 +209,9 @@
 	display: none;
 }
 
+#overview-container .fleet .ship .ship-supply {
+	opacity: 0.5;
+}
 #overview-container .fleet .ship .ship-supply > div {
 	margin: 2px 0;
 	height: 5px;
@@ -183,8 +219,14 @@
 #overview-container[data-modes~="mini"] .fleet .ship .ship-supply {
 	display: none;
 }
+#overview-container[data-modes~="mini"] .fleet .ship .ship-morale {
+	width: 50%;
+}
 
-#overview-container .fleet .ship[data-state="repairing"] td:last-of-type > div:not(.ship-repairing) {
+#overview-container .fleet .ship[data-state~="damaged"] > td {
+	background-color: rgba(198, 40, 40, 0.3);
+}
+#overview-container .fleet .ship[data-state~="repairing"] td:last-of-type > div:not(.ship-repairing) {
 	opacity: 0.21;
 }
 #overview-container .fleet .ship .ship-repairing {

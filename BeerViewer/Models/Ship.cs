@@ -275,6 +275,7 @@ namespace BeerViewer.Models
 
 		public int UsedFuel => (int)((this.Level <= 99 ? 1.0 : 0.85) * (this.Fuel.Maximum - this.Fuel.Current));
 		public int UsedBull => (int)((this.Level <= 99 ? 1.0 : 0.85) * (this.Ammo.Maximum - this.Ammo.Current));
+		public int UsedBauxite => this.Slots.Sum(x => x.Lost) * 5;
 
 		public int LOS => this.RawData.api_sakuteki.Get(0) ?? 0;
 		public bool IsMaxModernized => this.Firepower.IsMax && this.Torpedo.IsMax && this.AA.IsMax && this.Armor.IsMax;
@@ -351,6 +352,8 @@ namespace BeerViewer.Models
 				this.Situation &= ~ShipSituation.DamageControlled;
 
 			this.ASW = this.ASW.Update(this.ASW.Upgraded - this.Slots.Sum(slot => slot.Item.Info.ASW));
+
+			this.RaisePropertyChanged(nameof(this.UsedBauxite));
 		}
 
 		internal void Charge(int fuel, int bull, int[] onslot)

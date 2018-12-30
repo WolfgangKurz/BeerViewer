@@ -14,7 +14,8 @@ fleet_aa		AA
 fleet_aa_min	Min AA
 fleet_aa_max	Max AA
 fleet_repairing	Repairing
-fleet_revejunate	Morale remain {0}
+fleet_revejunate	Morale remain
+fleet_supply	Supply costs
 
 fleet_locked				Locked
 fleet_repair_empty	Empty Repair

@@ -349,6 +349,7 @@
     <Content Include="WindowFrame\modules\top-resource\icon_improvementmaterial.png" />
     <Content Include="WindowFrame\modules\top-resource\icon_repairbucket.png" />
     <Content Include="WindowFrame\modules\top-resource\icon_steel.png" />
+    <Content Include="WindowFrame\modules\top-resource\top-resource.html" />
     <Content Include="WindowFrame\modules\top-resource\top-resource.js" />
     <Content Include="WindowFrame\modules\top-resource\top-resource.css" />
     <Content Include="WindowFrame\modules\vue.js" />
