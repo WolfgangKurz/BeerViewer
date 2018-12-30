@@ -45,12 +45,12 @@
 #top-expeditions > .top-expedition .expedition-id:empty {
 	display:none;
 }
-#top-expeditions > .top-expedition[data-status="disabled"] {
+#top-expeditions > .top-expedition[data-state="disabled"] {
 	display: none;
 }
-#top-expeditions > .top-expedition[data-status="executing"] {
+#top-expeditions > .top-expedition[data-state="executing"] {
 	background-color: #575757;
 }
-#top-expeditions > .top-expedition[data-status="fail"] > .expedition-progress {
+#top-expeditions > .top-expedition[data-state="fail"] > .expedition-progress {
 	background-color: #c62828;
 }

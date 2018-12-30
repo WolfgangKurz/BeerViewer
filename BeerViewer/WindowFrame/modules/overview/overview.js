@@ -2,6 +2,7 @@
 !function () {
 	if (!window.modules) throw "Cannot find `module`";
 
+	const MAX_FLEETS = 4; // Maximum fleets
 	const MAX_SHIPS = 7; // Maximum ships per fleet
 	window.overview = new Vue({
 		data: {
@@ -90,7 +91,7 @@
 
 			// Setup Fleets & Ships
 			!function () {
-				for (let i = 1; i <= 4; i++) {
+				for (let i = 1; i <= MAX_FLEETS; i++) {
 					!async function (fleetId) {
 						const fleet = {
 							Id: i,

@@ -343,6 +343,7 @@
     <Content Include="WindowFrame\modules\overview\overview.css" />
     <Content Include="WindowFrame\modules\overview\overview.html" />
     <Content Include="WindowFrame\modules\overview\overview.js" />
+    <Content Include="WindowFrame\modules\top-expedition\top-expedition.html" />
     <Content Include="WindowFrame\modules\top-resource\icon_ammo.png" />
     <Content Include="WindowFrame\modules\top-resource\icon_bauxite.png" />
     <Content Include="WindowFrame\modules\top-resource\icon_fuel.png" />

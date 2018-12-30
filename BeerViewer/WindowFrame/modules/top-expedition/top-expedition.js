@@ -2,85 +2,46 @@
 !function () {
 	if (!window.modules) throw "Cannot find `module`";
 
-	const newExpeditionView = function (fleetId) {
-		const data = {
-			enabled: false,
-			active: false,
-			id: 0,
-			progress: 0.0,
-			remaining: ""
-		};
-		const el = $.new("div", "top-expedition")
-			.append($.new("div", "expedition-progress"))
-			.append(
-				$.new("div", "expedition-text")
-					.append($.new("div", "expedition-id"))
-					.append($.new("div", "expedition-time"))
-		);
-		const update = function () {
-			let status = "disabled";
-			if (data.enabled) {
-				if (data.active) status = "executing";
-				else status = "waiting";
-			}
-
-			if (status !== "executing")
-				data.progress = 0.0;
-
-			el.attr("data-status", status);
-			el.find(".expedition-id").html(data.id);
-			el.find(".expedition-time").html(data.remaining);
-			el.find(".expedition-progress").css("width", data.progress+"%");
-		};
-
-		window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "]", function (value) {
-			data.enabled = value !== null;
-			update();
-		});
-		window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Expedition.IsInExecution", function (value) {
-			data.active = value;
-			update();
-		});
-		window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Expedition.Mission.DisplayNo", function (value) {
-			data.id = value;
-			update();
-		});
-		window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Expedition.RemainingText", function (value) {
-			data.remaining = value;
-			update();
-		});
-		window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Expedition.Progress", function (value) {
-			if (value === null)
-				data.progress = 0;
-			else
-				data.progress = value.Current * 100 / value.Maximum;
-			update();
-		});
-
-		return el;
+	const MAX_FLEETS = 4; // Maximum fleets
+	const GetExpeditionState = function (exp) {
+		return exp.Enabled
+			? exp.Activated ? "executing" : "waiting"
+			: "disabled";
 	};
+	const topexp = new Vue({
+		data: {
+			Expeditions: []
+		},
+		el: $("#top-expeditions"),
+		methods: {
+			ExpeditionState: GetExpeditionState
+		}
+	});
 	window.modules.register("top-expedition", {
-		consts: {
-			count: 3
-		},
-		fleets: [],
-
-		update: function (index, id, time, progress) {
-			const item = this.fleets[index];
-			item.find(".expedition-id").html(id);
-			item.find(".expedition-time").html(time);
-			item.find(".expedition-progress").css("width", progress + "%");
-		},
-
 		init: function () {
-			const expeditions = $.new("div").prop("id", "top-expeditions");
+			// First fleet cannot go expedition
+			for (let i = 1; i < MAX_FLEETS; i++) {
+				!function (i) {
+					const data = {
+						Enabled: false,
+						Activated: false,
 
-			for (let i = 0; i < this.consts.count; i++) {
-				let elem = newExpeditionView(i + 2);
-				this.fleets.push(elem);
-				expeditions.append(elem);
+						Id: 0,
+						RemainingText: "--:--:--",
+						Progress: 0
+					};
+
+					window.API.ObserveData("Homeport", "Organization.Fleets[" + (i + 1) + "]", value => data.Enabled = value !== null);
+					window.API.ObserveData("Homeport", "Organization.Fleets[" + (i + 1) + "].Expedition.IsInExecution", value => data.Activated = value);
+					window.API.ObserveData("Homeport", "Organization.Fleets[" + (i + 1) + "].Expedition.Mission.DisplayNo", value => data.Id = value);
+					window.API.ObserveData("Homeport", "Organization.Fleets[" + (i + 1) + "].Expedition.RemainingText", value => data.RemainingText = value);
+					window.API.ObserveData("Homeport", "Organization.Fleets[" + (i + 1) + "].Expedition.Progress", value => data.Progress = value ? value.Current * 100 / value.Maximum : 0);
+
+					topexp.Expeditions.push(data);
+				}(i);
 			}
-			window.modules.areas.register("top", "Expeditions bar", "", expeditions);
+
+			window.modules.areas.register("top", "Expeditions bar", "", topexp);
 		}
 	});
 } ();

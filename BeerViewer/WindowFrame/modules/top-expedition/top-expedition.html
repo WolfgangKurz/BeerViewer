@@ -1,0 +1,12 @@
+﻿<div id="top-expeditions">
+	<div class="top-expedition"
+		 v-for="expedition in Expeditions"
+		 :data-state="ExpeditionState(expedition)">
+		<div class="expedition-progress"
+			 :style="{width:expedition.Progress+'%'}"></div>
+		<div class="expedition-text">
+			<div class="expedition-id">{{expedition.Id}}</div>
+			<div class="expedition-time">{{expedition.RemainingText}}</div>
+		</div>
+	</div>
+</div>
