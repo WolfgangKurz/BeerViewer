@@ -103,13 +103,19 @@ namespace BeerViewer.Modules.Communication
 		/// <param name="name">Javascript function name</param>
 		/// <param name="args">Arguments</param>
 		/// <returns>Script result</returns>
-		internal Task<object> CallScript(string name, params string[] args)
+		internal Task<object> CallScript(string name, params object[] args)
 		{
 			return CallRawScript(
 				string.Format(
 					"{0}({1})",
 					name,
-					string.Join(",", args.Select(x => $"\"{x}\""))
+					string.Join(",", args.Select(x =>
+					{
+						var type = x.GetType();
+						if (type == typeof(string)) return $"\"{(x as string)}\"";
+						else if (type == typeof(bool)) return (bool)x ? "true" : "false";
+						else return x.ToString();
+					}))
 				)
 			);
 		}

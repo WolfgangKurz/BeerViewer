@@ -183,7 +183,7 @@ namespace BeerViewer.Framework
 				if (pt.X >= w - frame_size) return HitTestValue.HTRIGHT;
 			}
 
-			if (pt.Y < 28)
+			if (pt.Y <= 28)
 			{
 				var cSize = this.CaptionSize(w, h);
 
@@ -223,9 +223,6 @@ namespace BeerViewer.Framework
 			get
 			{
 				var sz = base.ClientSize;
-				sz.Width -= 2;
-				sz.Height -= 3;
-
 				if (this.WindowState == FormWindowState.Maximized)
 				{
 					sz.Width -= 8;
@@ -280,15 +277,10 @@ namespace BeerViewer.Framework
 
 			g.FillRectangle(
 				this.BackColorBrush,
-				new Rectangle(new Point(1, 1), this.ClientSize)
+				new Rectangle(Point.Empty, this.ClientSize)
 			);
 
-			g.TranslateTransform(1, 1);
 			g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.ClearTypeGridFit;
-
-			var sz = this.ClientSize;
-			g.SetClip(new Rectangle(1, 1, sz.Width, sz.Height));
-
 			base.OnPaint(e);
 		}
 

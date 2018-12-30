@@ -96,7 +96,7 @@ namespace BeerViewer.Forms
 			{
 				Dock = DockStyle.None,
 				AllowDrop = false,
-				Location = new Point(1, 1),
+				Location = Point.Empty,
 			};
 			this.Communicator = new WindowBrowserCommicator(
 				this,
@@ -118,7 +118,7 @@ namespace BeerViewer.Forms
 					this.ClientSizeChanged += (s, e) => this.Communicator?.CallbackScript("WindowState", ((int)this.WindowState).ToString());
 
 					this.GameBrowser = this.WindowBrowser.GetBrowser().GetFrame("MAIN_FRAME");
-					await this.Communicator.CallScript("window.INTERNAL.zoomMainFrame", "66.6666");
+					await this.Communicator.CallScript("window.INTERNAL.zoomMainFrame", 66.6666);
 					await this.Communicator.CallScript("window.INTERNAL.loadMainFrame", Constants.GameURL);
 				}
 			);
@@ -191,6 +191,8 @@ namespace BeerViewer.Forms
 				}
 			};
 
+			this.Activated += (s, e) => this.Communicator.CallScript("window.INTERNAL.focusWindow", true);
+			this.Deactivate += (s, e) => this.Communicator.CallScript("window.INTERNAL.focusWindow", false);
 			this.Resize += (s, e) => this.WindowBrowser.Size = this.ClientSize;
 			this.WindowBrowser.Load("file:///" + Constants.EntryDir.Replace("\\", "/") + "/WindowFrame/Application.html");
 			this.Controls.Add(this.WindowBrowser);

@@ -24,6 +24,13 @@
 				if (frame === null) return;
 
 				frame.prop("src", url);
+			},
+			focusWindow: function (focused) {
+				const mainWindow = $("html");
+				if (focused)
+					mainWindow.addClass("focused");
+				else
+					mainWindow.removeClass("focused");
 			}
 		};
 	})();
