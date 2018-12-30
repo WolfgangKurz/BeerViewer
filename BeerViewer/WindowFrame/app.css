@@ -180,7 +180,7 @@ i.menu-icon[data-icon="unknown"] {
 	display: grid;
 	width: 100%;
 	height: 100%;
-	border: 1px solid #808080;
+	border: 1px solid #575757;
 	grid-template-columns: auto 1fr;
 	grid-template-rows: 28px auto 1fr;
 	overflow: hidden;
