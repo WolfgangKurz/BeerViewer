@@ -121,8 +121,8 @@ namespace BeerViewer.Models
 				this.Id = (int)Data[1];
 				this.Mission = Master.Instance.Missions[this.Id];
 				this.ReturnTime = Extensions.UnixEpoch.AddMilliseconds(Data[2]);
-				this.UpdateCore();
 			}
+			this.UpdateCore();
 		}
 
 		private void UpdateCore()
