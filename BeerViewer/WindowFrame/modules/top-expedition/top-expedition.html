@@ -3,7 +3,8 @@
 		 v-for="expedition in Expeditions"
 		 :data-state="ExpeditionState(expedition)">
 		<div class="expedition-progress"
-			 :style="{width:expedition.Progress+'%'}"></div>
+			 v-show="expedition.Activated"
+			 :style="{width:Math.Min(100,expedition.Progress)+'%'}"></div>
 		<div class="expedition-text">
 			<div class="expedition-id">{{expedition.Id}}</div>
 			<div class="expedition-time">{{expedition.RemainingText}}</div>
