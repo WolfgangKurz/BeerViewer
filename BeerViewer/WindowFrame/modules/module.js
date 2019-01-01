@@ -1,6 +1,6 @@
 ﻿"use strict";
 !function () {
-	window.mainBox = {};
+	let mainBox = {};
 
 	Vue.directive("dom", function (el, binding) {
 		if (binding.oldValue && binding.oldValue instanceof Element && binding.oldValue.parentNode === el)
