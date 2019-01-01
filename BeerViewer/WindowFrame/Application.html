@@ -11,38 +11,50 @@
 	<script type="text/javascript" src="modules/module.js"></script>
 </head>
 <body>
-	<div id="modules"></div>
+	<div id="modules">
+		<iframe src="MainFramePlaceholder.html" id="MAIN_FRAME" name="MAIN_FRAME"></iframe>
+	</div>
 
 	<div id="mainbox">
 		<header id="top-area">
 			<div id="top-menubutton" class="">
 				<button type="button" data-role="menu">
 					<img src="assets/button_menu.png" />
-					<span>BeerViewer 2.0</span>
+					<span>BeerViewer 2.0 dev</span>
 				</button>
 				<div id="top-menu-overlay"></div>
 				<div id="top-menu">
 					<ul class="menu-host">
-						<li class="menu-group" data-area="main">
-							<i class="menu-icon" data-icon="mainscreen"></i>
-							Main screen
+						<li class="menu-group"
+							v-for="area in Areas"
+							v-if="area.Type != 'top'"
+							:data-area="area.Type">
+							<span class="menu-group-name">
+								<i class="menu-icon"
+								   :data-icon="area.Type+'screen'"></i>
+								{{area.Name}} screen
+							</span>
 							<ul>
-								<li class="menu-active">
-									<i class="menu-icon" data-icon="game"></i>
-									Game
+								<li v-for="module in area.Modules"
+									:class="{'menu-active': module.Displaying}"
+									@click="SelectModule(module.Area, module.Name)">
+									<i class="menu-icon" :data-icon="module.Icon"></i>
+									{{module.Name}}
 								</li>
 							</ul>
 						</li>
-						<li class="menu-group" data-area="side">
-							<i class="menu-icon" data-icon="sidescreen"></i>
-							Side screen
+						<li class="menu-group">
+							<span class="menu-group-name">
+								<i class="menu-icon" data-icon="tools"></i>
+								Tools
+							</span>
 							<ul>
-							</ul>
-						</li>
-						<li class="menu-group" data-area="sub">
-							<i class="menu-icon" data-icon="subscreen"></i>
-							Sub screen
-							<ul>
+								<li v-for="tool in Tools"
+									@click="tool.Action"
+									:data-tool-id="tool.Id">
+									<i class="menu-icon" data-icon=""></i>
+									{{tool.Name}}
+								</li>
 							</ul>
 						</li>
 					</ul>
@@ -53,21 +65,43 @@
 				<button class="system-button" type="button" data-role="maximize"></button>
 				<button class="system-button" type="button" data-role="close"></button>
 			</div>
-			<div id="top-module-area"></div>
+			<div id="top-module-area">
+				<i data-type="module-content"
+				   v-for="module in Areas.top.Modules"
+				   :data-module-id="module.Id"
+				   v-show="module.Displaying"
+				   v-dom="module.Element"></i>
+			</div>
 		</header>
 
-		<div id="side-area">
-			<div id="side-module-area" class="module-area"></div>
-		</div>
-		
 		<div id="main-area">
 			<div id="main-module-area" class="module-area">
-				<iframe class="active-module" id="MAIN_FRAME" name="MAIN_FRAME" src="MainFramePlaceholder.html"></iframe>
+				<i data-type="module-content"
+				   v-for="module in Areas.main.Modules"
+				   :data-module-id="module.Id"
+				   v-show="module.Displaying"
+				   v-dom="module.Element"></i>
+			</div>
+		</div>
+
+		<div id="side-area">
+			<div id="side-module-area" class="module-area">
+				<i data-type="module-content"
+				   v-for="module in Areas.side.Modules"
+				   :data-module-id="module.Id"
+				   v-show="module.Displaying"
+				   v-dom="module.Element"></i>
 			</div>
 		</div>
 
 		<div id="sub-area">
-			<div id="sub-module-area" class="module-area"></div>
+			<div id="sub-module-area" class="module-area">
+				<i data-type="module-content"
+				   v-for="module in Areas.sub.Modules"
+				   :data-module-id="module.Id"
+				   v-show="module.Displaying"
+				   v-dom="module.Element"></i>
+			</div>
 		</div>
 	</div>
 </body>

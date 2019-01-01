@@ -41,7 +41,7 @@
 				}(i);
 			}
 
-			window.modules.areas.register("top", "Expeditions bar", "", topexp);
+			window.modules.areas.register("top", "top-expedition", "Expeditions bar", "", topexp);
 		}
 	});
 } ();

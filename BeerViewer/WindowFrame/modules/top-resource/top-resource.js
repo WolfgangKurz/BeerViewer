@@ -23,7 +23,7 @@
 			});
 			window.API.ObserveData("Homeport", "Admiral.ResourceLimit", value => topres.Overlimit = parseInt(value || 0) || 0);
 
-			window.modules.areas.register("top", "Resources bar", "", topres);
+			window.modules.areas.register("top", "top-resource", "Resources bar", "", topres);
 		}
 	});
 }();

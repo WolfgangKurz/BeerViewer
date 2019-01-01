@@ -6,6 +6,13 @@
 				const state = parseInt(_state);
 				$("#top-systembutton").attr("data-windowstate", state);
 			});
+			window.CALLBACK.register("FocusState", function (focused) {
+				const mainWindow = $("html");
+				if (focused)
+					mainWindow.addClass("focused");
+				else
+					mainWindow.removeClass("focused");
+			});
 
 			$.all("#top-systembutton > .system-button").event("click", function () {
 				window.API.SystemCall(this.attr("data-role"));

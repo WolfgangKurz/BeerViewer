@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Diagnostics;
 
 using BeerViewer.Modules;
+using System.Net.Sockets;
 
 namespace BeerViewer.Network
 {
@@ -40,7 +41,6 @@ namespace BeerViewer.Network
 			this.ModifiableHandlers = new ConcurrentDictionary<int, ModifiableProxyHandler>();
 			if (IsInDesignMode) return;
 
-			HttpProxy.Startup(this.ListeningPort, false, true);
 			HttpProxy.AfterSessionComplete += (_ =>
 			{
 				this.Handlers.Values.ToList().ForEach(x =>
@@ -49,6 +49,25 @@ namespace BeerViewer.Network
 						x.Handler.Invoke(_);
 				});
 			});
+
+			bool AlterPort = false;
+			do
+			{
+				try
+				{
+					HttpProxy.Startup(this.ListeningPort, false, true);
+					break;
+				}
+				catch (SocketException)
+				{
+					// Port already using, try next port
+					this.ListeningPort++;
+					AlterPort = true;
+				}
+			} while (true);
+
+			if (AlterPort)
+				Logger.Log($"Default port already in using, use {this.ListeningPort} instead.");
 
 			HttpProxy.BeforeRequest += _ =>
 				this.ModifiableHandlers

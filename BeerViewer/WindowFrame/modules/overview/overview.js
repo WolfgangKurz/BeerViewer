@@ -4,7 +4,7 @@
 
 	const MAX_FLEETS = 4; // Maximum fleets
 	const MAX_SHIPS = 7; // Maximum ships per fleet
-	window.overview = new Vue({
+	const overview = new Vue({
 		data: {
 			i18n: window.i18n,
 
@@ -330,7 +330,7 @@
 			});
 			updateSize();
 
-			window.modules.areas.register("side", "Overview", "", overview);
+			window.modules.areas.register("side", "overview", "Overview", "", overview);
 		}
 	});
 }();

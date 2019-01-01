@@ -39,6 +39,9 @@ namespace BeerViewer.Forms
 		private frmMain() : base()
 		{
 			InitializeComponent();
+
+			Logger.Register("MainLogger");
+
 			Master.Instance.Ready();
 			Homeport.Instance.Ready();
 
@@ -66,9 +69,6 @@ namespace BeerViewer.Forms
 			);
 			this.ResizeEnd += (s, e) => Settings.WindowInformation.Value = this.GetWindowInformation();
 			this.Move += (s, e) => Settings.WindowInformation.Value = this.GetWindowInformation();
-
-
-			Logger.Register("MainLogger");
 
 			#region GC timer
 #if USE_GC
@@ -115,7 +115,9 @@ namespace BeerViewer.Forms
 						Logger.Unregister("MainLogger");
 					}
 
-					this.ClientSizeChanged += (s, e) => this.Communicator?.CallbackScript("WindowState", ((int)this.WindowState).ToString());
+					this.ClientSizeChanged += (s, e) => this.Communicator?.CallbackScript("WindowState", (int)this.WindowState);
+					this.Activated += (s, e) => this.Communicator?.CallbackScript("FocusState", true);
+					this.Deactivate += (s, e) => this.Communicator?.CallbackScript("FocusState", false);
 
 					this.GameBrowser = this.WindowBrowser.GetBrowser().GetFrame("MAIN_FRAME");
 					await this.Communicator.CallScript("window.INTERNAL.zoomMainFrame", 66.6666);
@@ -132,6 +134,16 @@ namespace BeerViewer.Forms
 			{
 				var rootUri = Extensions.UriOrBlank(e.Browser.MainFrame?.Url);
 				var frameUri = Extensions.UriOrBlank(e.Url);
+
+				if (this.GameBrowser != null && !this.GameBrowser.IsValid)
+				{
+					this.GameBrowser = this.WindowBrowser.GetBrowser().GetFrame("MAIN_FRAME");
+					if (!this.GameBrowser.IsValid)
+					{
+						Logger.Log("Failed to control game frame...");
+						return;
+					}
+				}
 
 				// Cookie patch
 				if (frameUri.AbsoluteUri.Contains("/foreign/"))
@@ -191,21 +203,9 @@ namespace BeerViewer.Forms
 				}
 			};
 
-			this.Activated += (s, e) => this.Communicator.CallScript("window.INTERNAL.focusWindow", true);
-			this.Deactivate += (s, e) => this.Communicator.CallScript("window.INTERNAL.focusWindow", false);
 			this.Resize += (s, e) => this.WindowBrowser.Size = this.ClientSize;
 			this.WindowBrowser.Load("file:///" + Constants.EntryDir.Replace("\\", "/") + "/WindowFrame/Application.html");
 			this.Controls.Add(this.WindowBrowser);
-
-			this.WindowBrowser.IsBrowserInitializedChanged += (s, e) =>
-			{
-				if (e.IsBrowserInitialized)
-				{
-#if DEBUG
-					this.WindowBrowser.GetBrowser().GetHost().ShowDevTools();
-#endif
-				}
-			};
 			#endregion
 
 			this.OnResize(EventArgs.Empty);

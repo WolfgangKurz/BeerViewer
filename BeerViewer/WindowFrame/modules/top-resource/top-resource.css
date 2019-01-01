@@ -1,5 +1,7 @@
-﻿#top-resources {
+﻿i[data-module-id="top-resource"] {
 	order: 2;
+}
+#top-resources {
 	margin-left: auto; /* float: right */
 	white-space: nowrap;
 	line-height: 0;

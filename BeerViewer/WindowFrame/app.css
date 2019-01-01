@@ -35,7 +35,7 @@ html, body {
 	color: #fff;
 }
 img { vertical-align: bottom }
-iframe {
+iframe#MAIN_FRAME {
 	/* Default size */
 	display: block;
 	width: 1200px;
@@ -100,6 +100,7 @@ ul.menu-host li {
 	height: 28px;
 	border-right: 3px solid transparent;
 	border-top: 1px solid #393939;
+	white-space: nowrap;
 	line-height: 28px;
 	overflow: hidden;
 }
@@ -124,6 +125,9 @@ ul.menu-host li:not(.menu-group):hover {
 ul.menu-host li:not(.menu-group):active {
 	background-color: #222225;
 }
+ul.menu-host > li.menu-group > span.menu-group-name {
+	padding-right: 6px;
+}
 ul.menu-host > li.menu-group > ul {
 	margin: 0;
 	padding: 0;
@@ -147,6 +151,9 @@ i.menu-icon[data-icon="subscreen"] {
 }
 i.menu-icon[data-icon="sidescreen"] {
 	background-position: -84px 0;
+}
+i.menu-icon[data-icon="tools"] {
+	background-position: -84px -28px;
 }
 
 i.menu-icon[data-icon="plugin"] {
@@ -194,10 +201,9 @@ html.focused #mainbox {
 	grid-column: 1 / 3;
 	grid-row: 1;
 }
-#MAIN_FRAME {
+#main-area {
 	grid-column: 1;
 	grid-row: 2;
-	transform-origin: 0% 0%;
 }
 #side-area {
 	display: flex; /* to maximize module */
@@ -319,4 +325,15 @@ html.focused #mainbox {
 }
 #top-area > #top-module-area > * {
 	float: left;
+}
+
+i[data-type="module-content"] {
+	font: inherit;
+}
+i[data-type="module-content"] > * {
+	width: 100%;
+	height: 100%;
+}
+#MAIN_FRAME {
+	transform-origin: 0% 0%;
 }

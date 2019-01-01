@@ -27,13 +27,10 @@ namespace BeerViewer.Modules.Communication
 
 		internal WindowBrowserCommicator(Form Owner, FrameworkBrowser Browser, Action OnInitialized)
 		{
-			if (Owner == null) throw new ArgumentNullException(nameof(Owner));
-			if (Browser == null) throw new ArgumentNullException(nameof(Browser));
-
-			this.Owner = Owner;
+			this.Owner = Owner ?? throw new ArgumentNullException(nameof(Owner));
 			this.OwnerHandle = Owner?.Handle ?? IntPtr.Zero;
 
-			this.Browser = Browser;
+			this.Browser = Browser ?? throw new ArgumentNullException(nameof(Browser));
 
 			this.OnInitialized = OnInitialized;
 
@@ -127,9 +124,9 @@ namespace BeerViewer.Modules.Communication
 		/// <param name="name">Callback name</param>
 		/// <param name="args">Arguments</param>
 		/// <returns>When the result is false, registered callback function not found</returns>
-		internal Task<object> CallbackScript(string name, params string[] args)
+		internal Task<object> CallbackScript(string name, params object[] args)
 		{
-			var _args = new string[] { name }.Concat(args).ToArray();
+			var _args = new object[] { name }.Concat(args).ToArray();
 			return this.CallScript("window.CALLBACK.call", _args);
 		}
 
@@ -257,6 +254,14 @@ namespace BeerViewer.Modules.Communication
 				});
 			}
 			return output.ToArray();
+		}
+
+		/// <summary>
+		/// Open DevTools for BeerViewer
+		/// </summary>
+		public void DevTools()
+		{
+			Browser.ShowDevTools();
 		}
 
 		/// <summary>
