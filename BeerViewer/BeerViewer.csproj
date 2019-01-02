@@ -308,9 +308,15 @@
     <Content Include="WindowFrame\assets\button_menu.png" />
     <Content Include="WindowFrame\assets\button_system.png" />
     <Content Include="WindowFrame\assets\icon_menu_area.png" />
+    <Content Include="WindowFrame\base.js" />
     <Content Include="WindowFrame\internal\error.html" />
     <Content Include="WindowFrame\internal\example.html" />
     <Content Include="WindowFrame\MainFramePlaceholder.html" />
+    <Content Include="WindowFrame\vendor\common.js" />
+    <Content Include="WindowFrame\vendor\tipppy.theme.css" />
+    <Content Include="WindowFrame\vendor\tippy.all.min.js" />
+    <Content Include="WindowFrame\vendor\vue.js" />
+    <Content Include="WindowFrame\vendor\vue.min.js" />
     <EmbeddedResource Include="Forms\frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>
     </EmbeddedResource>
@@ -353,13 +359,10 @@
     <Content Include="WindowFrame\modules\top-resource\top-resource.html" />
     <Content Include="WindowFrame\modules\top-resource\top-resource.js" />
     <Content Include="WindowFrame\modules\top-resource\top-resource.css" />
-    <Content Include="WindowFrame\modules\vue.js" />
-    <Content Include="WindowFrame\modules\vue.min.js" />
     <Content Include="WindowFrame\modules\window\window.css" />
     <Content Include="WindowFrame\modules\window\window.js" />
     <Content Include="WindowFrame\app.css" />
     <Content Include="WindowFrame\Application.html" />
-    <Content Include="WindowFrame\modules\common.js" />
     <Content Include="WindowFrame\modules\top-expedition\top-expedition.css" />
     <Content Include="WindowFrame\modules\top-expedition\top-expedition.js" />
     <Content Include="WindowFrame\modules\module.js" />
