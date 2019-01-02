@@ -1,0 +1,355 @@
+﻿@import "../../_theme.scss";
+
+.tab-host .overview-fleet-state {
+	display: inline-block;
+	margin-right: 4px;
+	width: 14px;
+	height: 14px;
+	vertical-align: bottom;
+
+	@mixin States($type) {
+		[data-state="#{$type}"] {
+			background-color: map-get($state-colors, $type);
+		}
+	}
+
+	@include States("empty");
+	@include States("sortie");
+	@include States("expedition");
+	@include States("damaged");
+	@include States("not-ready");
+	@include States("ready");
+}
+
+#overview-container {
+	.summary-container {
+		display: grid;
+		margin: 0 3px 10px;
+		grid-template-columns: 1fr 1fr;
+		grid-auto-rows: 18px;
+		grid-gap: 3px;
+	}
+
+	& > .summary-info {
+		padding: 0 6px 6px;
+		border-radius: 3px;
+		background-color: rgba(255, 255, 255, 0.1);
+		line-height: 18px;
+		text-align: right;
+		overflow: hidden;
+
+		&::before {
+			content: "";
+			float: left;
+			display: inline-block;
+			margin: 0 6px 0 -3px;
+			width: 18px;
+			height: 18px;
+			background-image: url(iconset_fleet.png);
+			background-position: 0 0;
+			background-repeat: no-repeat;
+			background-size: 144px 18px;
+			vertical-align: bottom;
+		}
+	}
+
+	& > .summary-info[data-summary="morale"],
+	& > .summary-info[data-summary="supply"] {
+		grid-column: span 2;
+	}
+
+	@mixin SummaryIcon($type, $x) {
+		& > .summary-info[data-summary="#{$type}"]::before {
+			background-position: (-$x*1px) 0;
+		}
+	}
+
+	@include SummaryIcon("morale", 72);
+	@include SummaryIcon("level", 0);
+	@include SummaryIcon("aa", 18);
+	@include SummaryIcon("speed", 36);
+	@include SummaryIcon("los", 54);
+
+	& > .summary-info[data-summary="supply"] {
+		&::before {
+			display: none;
+		}
+
+		&::after {
+			content: "";
+			display: table;
+			clear: both;
+		}
+
+		& > * {
+			float: left;
+			width: 33.3%;
+			text-align: center;
+
+			&::before {
+				content: "";
+				display: inline-block;
+				margin: 0 6px 0 -3px;
+				width: 18px;
+				height: 18px;
+				background-image: url(iconset_fleet.png);
+				background-position: -90px 0;
+				background-repeat: no-repeat;
+				background-size: 144px 18px;
+				vertical-align: bottom;
+			}
+
+			&:nth-child(2):before {
+				background-position: -108px 0;
+			}
+
+			&:nth-child(3):before {
+				background-position: -126px 0;
+			}
+		}
+	}
+}
+
+#overview-container {
+	.fleet {
+		margin: 3px 0;
+
+		.ship {
+			display: grid;
+			grid-template-columns: auto auto auto 20%;
+			grid-template-rows: min-content minmax(min-content, 1fr);
+			grid-gap: 1px;
+			position: relative;
+			padding: 3px 6px;
+			line-height: 13px;
+			vertical-align: top;
+
+			& > div:nth-child(1) {
+				padding-right: 6px;
+				white-space: nowrap;
+				grid-column: 1 / 2;
+				grid-row: 1 / 3;
+			}
+
+			.ship-name {
+				font-size: 14px;
+			}
+
+			.ship-level {
+				font-size: 10px;
+				color: rgba(255, 255, 255, 0.77);
+
+				& > .ship-level-value {
+					color: #fff;
+				}
+			}
+
+			.ship-hp-bar {
+				margin: 2px 0 0;
+				height: 6px;
+				grid-column: 2 / 5;
+			}
+
+			.ship-hp {
+				float: left;
+				margin: 2px 0;
+				width: 50%;
+				grid-column: 2 / 3;
+				grid-row: 2 / 3;
+			}
+
+			.ship-morale,
+			.ship-supply {
+				white-space: nowrap;
+				word-break: keep-all;
+			}
+
+			.ship-morale {
+				@extend %NoWrap;
+				text-align: right;
+				overflow: hidden;
+				grid-column: 3 / 4;
+				grid-row: 2 / 3;
+			}
+
+			.ship-morale > * {
+				display: inline-block;
+				vertical-align: middle;
+			}
+
+			.ship-morale > .ship-morale-box {
+				width: 11px;
+				height: 11px;
+				background-color: #000;
+			}
+
+			.ship-morale > .ship-morale-box[data-morale="0"] {
+				background-color: #fff;
+			}
+
+			.ship-morale > .ship-morale-box[data-morale="-1"] {
+				background-color: #ffcc80;
+			}
+
+			.ship-morale > .ship-morale-box[data-morale="-2"] {
+				background-color: #f57c00;
+			}
+
+			.ship-morale > .ship-morale-box[data-morale="-3"] {
+				background-color: #c62828;
+			}
+
+			.ship-morale > .ship-morale-box[data-morale="+1"] {
+				background-color: #fdd835;
+			}
+
+			.ship-morale > .ship-morale-value {
+				padding-left: 2px;
+				padding-right: 6px;
+			}
+
+
+			.ship-supply {
+				@extend %NoWrap;
+				opacity: 0.5;
+				grid-column: 4 / 5;
+				grid-row: 2 / 3;
+
+				& > div {
+					margin: 2px 0;
+					height: 5px;
+				}
+			}
+		}
+	}
+
+	[data-modes~="mininame"] .fleet .ship .ship-name {
+		width: 104px;
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+		font-size: 14px;
+	}
+}
+#overview-container[data-modes~="mini"] .fleet .ship .ship-morale > .ship-morale-value {
+	padding-right: 0;
+}
+#overview-container[data-modes~="tiny"] .fleet .ship .ship-morale > .ship-morale-value {
+	display: none;
+}
+#overview-container[data-modes~="minimal"] .fleet .ship .ship-morale {
+	display: none;
+}
+
+#overview-container[data-modes~="mini"] .fleet .ship .ship-supply {
+	display: none;
+}
+#overview-container[data-modes~="mini"] .fleet .ship .ship-morale {
+	width: 50%;
+}
+
+#overview-container .fleet .ship[data-state~="damaged"] > td {
+	background-color: rgba(198, 40, 40, 0.3);
+}
+#overview-container .fleet .ship[data-state~="repairing"] td:last-of-type > div:not(.ship-repairing) {
+	opacity: 0.21;
+}
+#overview-container .fleet .ship .ship-repairing {
+	display: none;
+	position: absolute;
+	left: 0;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 2;
+	text-align: center;
+}
+#overview-container .fleet .ship .ship-repairing > span {
+	margin: auto;
+}
+#overview-container .fleet .ship[data-state="repairing"] .ship-repairing {
+	display: flex;
+}
+
+#overview-container .dock-container {
+	display: grid;
+	margin-top: 10px;
+	padding: 4px;
+	grid-template-columns: 1fr 1fr;
+	grid-auto-rows: 28px;
+	grid-gap: 4px;
+}
+
+#overview-container .dock-container > .dock-item {
+	padding: 2px 0;
+	line-height: 12px;
+	text-align: center;
+	white-space: nowrap;
+	transition: background-color 0.17s ease-in-out;
+	overflow: hidden;
+}
+#overview-container .dock-container > .dock-item[data-state="locked"] {
+	background-color: #313131;
+	line-height: 24px;
+	color: #999;
+}
+#overview-container .dock-container > .dock-item[data-state="empty"] {
+	background-color: #575757;
+	line-height: 24px;
+	color: #c6c6c6;
+}
+#overview-container .dock-container > .dock-item[data-state="repairing"] {
+	background-color: #6d4c41;
+}
+#overview-container .dock-container > .dock-item[data-state="building"] {
+	background-color: #1565c0;
+}
+#overview-container .dock-container > .dock-item[data-state="done"] {
+	background-color: #388e3c;
+}
+#overview-container .dock-container > .dock-item .dock-time {
+	font-size: 11px;
+}
+
+#overview-container .quest-container {
+	margin-top: 10px;
+	padding: 0 4px 4px;
+	line-height: 14px;
+}
+#overview-container .quest-container > .quest-item {
+	display: grid;
+	margin-top: 4px;
+	grid-template-columns: 14px 1fr 28px;
+	grid-gap: 4px;
+}
+#overview-container .quest-container > .quest-item .quest-title {
+	white-space: nowrap;
+	overflow: hidden;
+}
+#overview-container .quest-container > .quest-item .quest-type {
+	width: 14px;
+	height: 14px;
+	background-color: #a3a3a3;
+}
+#overview-container .quest-container > .quest-item .quest-category[data-quest-category="1"] { /* Composition */
+	background-color: #388e3c;
+}
+#overview-container .quest-container > .quest-item .quest-category[data-quest-category="2"], /* Sortie, Sortie2 */
+#overview-container .quest-container > .quest-item .quest-category[data-quest-category="8"] {
+	background-color: #c62828;
+}
+#overview-container .quest-container > .quest-item .quest-category[data-quest-category="3"] { /* Practice */
+	background-color: #8dc660;
+}
+#overview-container .quest-container > .quest-item .quest-category[data-quest-category="4"] { /* Expedition */
+	background-color: #1565c0;
+}
+#overview-container .quest-container > .quest-item .quest-category[data-quest-category="5"] { /* Supply */
+	background-color: #fdd835;
+}
+#overview-container .quest-container > .quest-item .quest-category[data-quest-category="6"] { /* Construction */
+	background-color: #6d4c41;
+}
+#overview-container .quest-container > .quest-item .quest-category[data-quest-category="7"] { /* Remodel */
+	background-color: #a987ba;
+}

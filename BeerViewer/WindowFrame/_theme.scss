@@ -1,0 +1,31 @@
+$theme-color: #222225;
+$theme-hover-color: #313131;
+$theme-active-color: #575757;
+$theme-line-color: #393939;
+$theme-highlight-line-color: #414141;
+
+$theme-highlight-color: #1565c0;
+
+$theme-text-color: #ffffff;
+
+$theme-shadow-color: rgba(0, 0, 0, 0.76);
+
+$theme-progress-back: rgba(255, 255, 255, 0.17);
+$theme-progress-strip: #000;
+
+$theme-font-size: 12px;
+$theme-font-face: "Spoqa Han Sans JP", "Spoqa Han Sans";
+
+$state-colors: (
+	"empty": rgba(255,255,255,0.23),
+	"sortie": #c62828,
+	"expedition": #1565c0,
+	"damaged": #e63838,
+	"not-ready": #f57c00,
+	"ready": #388e3c
+);
+
+%NoWrap {
+	white-space: nowrap;
+	word-break: keep-all;
+}
