@@ -24,6 +24,23 @@ $state-colors: (
 	"not-ready": #f57c00,
 	"ready": #388e3c
 );
+$morale-colors: (
+	"-3": #c62828,
+	"-2": #f57c00,
+	"-1": #ffcc80,
+	"0": #fff,
+	"+1": #fdd835
+);
+$quest-colors: (
+	"1": #388e3c, // Composition
+	"2": #c62828, // Sortie
+	"3": #8dc660, // Practice
+	"4": #1565c0, // Expedition
+	"5": #fdd835, // Supply
+	"6": #6d4c41, // Construction
+	"7": #a987ba, // Remodel (Powerup)
+	"8": #c62828  // Sortie
+);
 
 %NoWrap {
 	white-space: nowrap;

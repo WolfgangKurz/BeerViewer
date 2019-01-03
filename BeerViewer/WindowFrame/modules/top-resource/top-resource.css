@@ -1,8 +1,8 @@
 ﻿i[data-module-id="top-resource"] {
+	margin-left: auto;
 	order: 2;
 }
 #top-resources {
-	margin-left: auto; /* float: right */
 	white-space: nowrap;
 	line-height: 0;
 }

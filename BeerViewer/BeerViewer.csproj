@@ -394,8 +394,8 @@
     <PackageReference Include="Nekoxy">
       <Version>1.5.3.21</Version>
     </PackageReference>
-    <PackageReference Include="NSass.Core">
-      <Version>0.0.3</Version>
+    <PackageReference Include="SharpScss">
+      <Version>1.4.0</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

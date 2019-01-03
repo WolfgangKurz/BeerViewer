@@ -1,4 +1,5 @@
 ﻿@import "_theme";
+@import url("fontface.css");
 
 * {
 	box-sizing: border-box;
@@ -59,7 +60,7 @@ div.tab-host {
 	text-align: center;
 	flex-direction: row;
 
-	& > * {
+	> * {
 		flex: 1 0 0;
 		padding: 5px 0;
 		text-decoration: none;
@@ -67,8 +68,8 @@ div.tab-host {
 		color: #fff;
 	}
 
-	& > a {
-		[data-hide="true"] {
+	> a {
+		&[data-hide="true"] {
 			display: none;
 		}
 
@@ -110,23 +111,23 @@ ul.menu-host {
 		}
 	}
 
-	& > li:first-child {
+	> li:first-child {
 		border-top: none !important;
 	}
 
-	& > li.menu-group {
+	> li.menu-group {
 		height: auto;
 		border-top: 1px solid $theme-highlight-line-color;
 		border-right: none;
 		font-weight: bold;
 	}
 
-	& > li.menu-group {
-		& > span.menu-group-name {
+	> li.menu-group {
+		> span.menu-group-name {
 			padding-right: 6px;
 		}
 
-		& > ul {
+		> ul {
 			margin: 0;
 			padding: 0;
 			list-style: none;
@@ -144,7 +145,7 @@ i.menu-icon {
 	vertical-align: bottom;
 
 	@mixin IconSet($name, $x, $y) {
-		[data-icon="#{$name}"] {
+		&[data-icon="#{$name}"] {
 			background-position: (-$x * 1px) (-$y * 1px);
 		}
 	}
@@ -162,7 +163,7 @@ i.menu-icon {
 	position: relative;
 	background-color: $theme-progress-back;
 
-	& > .progress-strip {
+	> .progress-strip {
 		position: absolute;
 		top: 0;
 		height: 50%;
@@ -171,7 +172,7 @@ i.menu-icon {
 		z-index: 1;
 	}
 
-	& > .progress-bar {
+	> .progress-bar {
 		height: 100%;
 		transition: all 0.22s ease-in-out;
 	}
@@ -225,7 +226,7 @@ i.menu-icon {
 #top-area #top-systembutton {
 	float: right;
 
-	& > .system-button {
+	> .system-button {
 		float: left;
 		width: 32px;
 		height: 28px;
@@ -272,18 +273,18 @@ i.menu-icon {
 		background-color: $theme-active-color;
 	}
 
-	& > button {
+	> button {
 		float: left;
 		position: relative;
 		padding-right: 8px;
 		z-index: 999;
 
-		& > * {
+		> * {
 			float: left;
 		}
 	}
 
-	& > #top-menu-overlay {
+	> #top-menu-overlay {
 		position: fixed;
 		left: 0;
 		top: 28px;
@@ -293,7 +294,7 @@ i.menu-icon {
 		z-index: 997;
 	}
 
-	& > #top-menu {
+	> #top-menu {
 		position: absolute;
 		left: 0;
 		top: 100%;
@@ -307,12 +308,12 @@ i.menu-icon {
 	}
 
 	&.menu-open {
-		& > button:not(:active) {
+		> button:not(:active) {
 			background-color: #313131 !important;
 		}
 
-		& > #top-menu,
-		& > #top-menu-overlay {
+		> #top-menu,
+		> #top-menu-overlay {
 			pointer-events: initial;
 			opacity: 1;
 		}
@@ -330,7 +331,7 @@ i.menu-icon {
 		clear: both;
 	}
 
-	& > * {
+	> * {
 		float: left;
 	}
 }
@@ -338,7 +339,7 @@ i.menu-icon {
 i[data-type="module-content"] {
 	font: inherit;
 
-	& > * {
+	> * {
 		width: 100%;
 		height: 100%;
 	}

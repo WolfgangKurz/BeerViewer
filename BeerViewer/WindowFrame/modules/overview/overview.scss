@@ -8,7 +8,7 @@
 	vertical-align: bottom;
 
 	@mixin States($type) {
-		[data-state="#{$type}"] {
+		&[data-state="#{$type}"] {
 			background-color: map-get($state-colors, $type);
 		}
 	}
@@ -30,7 +30,7 @@
 		grid-gap: 3px;
 	}
 
-	& > .summary-info {
+	> .summary-info {
 		padding: 0 6px 6px;
 		border-radius: 3px;
 		background-color: rgba(255, 255, 255, 0.1);
@@ -53,13 +53,13 @@
 		}
 	}
 
-	& > .summary-info[data-summary="morale"],
-	& > .summary-info[data-summary="supply"] {
+	> .summary-info[data-summary="morale"],
+	> .summary-info[data-summary="supply"] {
 		grid-column: span 2;
 	}
 
 	@mixin SummaryIcon($type, $x) {
-		& > .summary-info[data-summary="#{$type}"]::before {
+		> .summary-info[data-summary="#{$type}"]::before {
 			background-position: (-$x*1px) 0;
 		}
 	}
@@ -70,7 +70,7 @@
 	@include SummaryIcon("speed", 36);
 	@include SummaryIcon("los", 54);
 
-	& > .summary-info[data-summary="supply"] {
+	> .summary-info[data-summary="supply"] {
 		&::before {
 			display: none;
 		}
@@ -81,7 +81,7 @@
 			clear: both;
 		}
 
-		& > * {
+		> * {
 			float: left;
 			width: 33.3%;
 			text-align: center;
@@ -99,11 +99,11 @@
 				vertical-align: bottom;
 			}
 
-			&:nth-child(2):before {
+			&:nth-child(2)::before {
 				background-position: -108px 0;
 			}
 
-			&:nth-child(3):before {
+			&:nth-child(3)::before {
 				background-position: -126px 0;
 			}
 		}
@@ -115,6 +115,8 @@
 		margin: 3px 0;
 
 		.ship {
+			$ship: &;
+
 			display: grid;
 			grid-template-columns: auto auto auto 20%;
 			grid-template-rows: min-content minmax(min-content, 1fr);
@@ -124,7 +126,7 @@
 			line-height: 13px;
 			vertical-align: top;
 
-			& > div:nth-child(1) {
+			> div:nth-child(1) {
 				padding-right: 6px;
 				white-space: nowrap;
 				grid-column: 1 / 2;
@@ -139,7 +141,7 @@
 				font-size: 10px;
 				color: rgba(255, 255, 255, 0.77);
 
-				& > .ship-level-value {
+				> .ship-level-value {
 					color: #fff;
 				}
 			}
@@ -158,8 +160,7 @@
 				grid-row: 2 / 3;
 			}
 
-			.ship-morale,
-			.ship-supply {
+			.ship-morale, .ship-supply {
 				white-space: nowrap;
 				word-break: keep-all;
 			}
@@ -183,31 +184,22 @@
 				background-color: #000;
 			}
 
-			.ship-morale > .ship-morale-box[data-morale="0"] {
-				background-color: #fff;
+			@mixin MoraleBox($morale) {
+				.ship-morale > .ship-morale-box[data-morale="#{$morale}"] {
+					background-color: map-get($morale-colors, $morale);
+				}
 			}
 
-			.ship-morale > .ship-morale-box[data-morale="-1"] {
-				background-color: #ffcc80;
-			}
-
-			.ship-morale > .ship-morale-box[data-morale="-2"] {
-				background-color: #f57c00;
-			}
-
-			.ship-morale > .ship-morale-box[data-morale="-3"] {
-				background-color: #c62828;
-			}
-
-			.ship-morale > .ship-morale-box[data-morale="+1"] {
-				background-color: #fdd835;
-			}
+			@include MoraleBox("-3");
+			@include MoraleBox("-2");
+			@include MoraleBox("-1");
+			@include MoraleBox("0");
+			@include MoraleBox("+1");
 
 			.ship-morale > .ship-morale-value {
 				padding-left: 2px;
 				padding-right: 6px;
 			}
-
 
 			.ship-supply {
 				@extend %NoWrap;
@@ -215,141 +207,146 @@
 				grid-column: 4 / 5;
 				grid-row: 2 / 3;
 
-				& > div {
+				> div {
 					margin: 2px 0;
 					height: 5px;
+				}
+			}
+
+			&[data-state~="damaged"] > td {
+				background-color: rgba(198, 40, 40, 0.3);
+			}
+
+			.ship-repairing {
+				display: none;
+				position: absolute;
+				left: 0;
+				top: 0;
+				right: 0;
+				bottom: 0;
+				z-index: 2;
+				text-align: center;
+
+				> span {
+					margin: auto;
+				}
+
+				@at-root #{$ship}[data-state="repairing"] .ship-repairing {
+					display: flex;
 				}
 			}
 		}
 	}
 
-	[data-modes~="mininame"] .fleet .ship .ship-name {
+	&[data-modes~="mininame"] .fleet .ship .ship-name {
 		width: 104px;
 		overflow: hidden;
 		white-space: nowrap;
 		text-overflow: ellipsis;
 		font-size: 14px;
 	}
-}
-#overview-container[data-modes~="mini"] .fleet .ship .ship-morale > .ship-morale-value {
-	padding-right: 0;
-}
-#overview-container[data-modes~="tiny"] .fleet .ship .ship-morale > .ship-morale-value {
-	display: none;
-}
-#overview-container[data-modes~="minimal"] .fleet .ship .ship-morale {
-	display: none;
-}
 
-#overview-container[data-modes~="mini"] .fleet .ship .ship-supply {
-	display: none;
-}
-#overview-container[data-modes~="mini"] .fleet .ship .ship-morale {
-	width: 50%;
-}
+	&[data-modes~="mini"] .fleet .ship .ship-morale > .ship-morale-value {
+		padding-right: 0;
+	}
 
-#overview-container .fleet .ship[data-state~="damaged"] > td {
-	background-color: rgba(198, 40, 40, 0.3);
-}
-#overview-container .fleet .ship[data-state~="repairing"] td:last-of-type > div:not(.ship-repairing) {
-	opacity: 0.21;
-}
-#overview-container .fleet .ship .ship-repairing {
-	display: none;
-	position: absolute;
-	left: 0;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	z-index: 2;
-	text-align: center;
-}
-#overview-container .fleet .ship .ship-repairing > span {
-	margin: auto;
-}
-#overview-container .fleet .ship[data-state="repairing"] .ship-repairing {
-	display: flex;
-}
+	&[data-modes~="tiny"] .fleet .ship .ship-morale > .ship-morale-value,
+	&[data-modes~="minimal"] .fleet .ship .ship-morale {
+		display: none;
+	}
 
-#overview-container .dock-container {
-	display: grid;
-	margin-top: 10px;
-	padding: 4px;
-	grid-template-columns: 1fr 1fr;
-	grid-auto-rows: 28px;
-	grid-gap: 4px;
-}
+	&[data-modes~="mini"] .fleet .ship {
+		.ship-supply {
+			display: none;
+		}
 
-#overview-container .dock-container > .dock-item {
-	padding: 2px 0;
-	line-height: 12px;
-	text-align: center;
-	white-space: nowrap;
-	transition: background-color 0.17s ease-in-out;
-	overflow: hidden;
-}
-#overview-container .dock-container > .dock-item[data-state="locked"] {
-	background-color: #313131;
-	line-height: 24px;
-	color: #999;
-}
-#overview-container .dock-container > .dock-item[data-state="empty"] {
-	background-color: #575757;
-	line-height: 24px;
-	color: #c6c6c6;
-}
-#overview-container .dock-container > .dock-item[data-state="repairing"] {
-	background-color: #6d4c41;
-}
-#overview-container .dock-container > .dock-item[data-state="building"] {
-	background-color: #1565c0;
-}
-#overview-container .dock-container > .dock-item[data-state="done"] {
-	background-color: #388e3c;
-}
-#overview-container .dock-container > .dock-item .dock-time {
-	font-size: 11px;
-}
+		.ship-morale {
+			width: 50%;
+		}
+	}
 
-#overview-container .quest-container {
-	margin-top: 10px;
-	padding: 0 4px 4px;
-	line-height: 14px;
-}
-#overview-container .quest-container > .quest-item {
-	display: grid;
-	margin-top: 4px;
-	grid-template-columns: 14px 1fr 28px;
-	grid-gap: 4px;
-}
-#overview-container .quest-container > .quest-item .quest-title {
-	white-space: nowrap;
-	overflow: hidden;
-}
-#overview-container .quest-container > .quest-item .quest-type {
-	width: 14px;
-	height: 14px;
-	background-color: #a3a3a3;
-}
-#overview-container .quest-container > .quest-item .quest-category[data-quest-category="1"] { /* Composition */
-	background-color: #388e3c;
-}
-#overview-container .quest-container > .quest-item .quest-category[data-quest-category="2"], /* Sortie, Sortie2 */
-#overview-container .quest-container > .quest-item .quest-category[data-quest-category="8"] {
-	background-color: #c62828;
-}
-#overview-container .quest-container > .quest-item .quest-category[data-quest-category="3"] { /* Practice */
-	background-color: #8dc660;
-}
-#overview-container .quest-container > .quest-item .quest-category[data-quest-category="4"] { /* Expedition */
-	background-color: #1565c0;
-}
-#overview-container .quest-container > .quest-item .quest-category[data-quest-category="5"] { /* Supply */
-	background-color: #fdd835;
-}
-#overview-container .quest-container > .quest-item .quest-category[data-quest-category="6"] { /* Construction */
-	background-color: #6d4c41;
-}
-#overview-container .quest-container > .quest-item .quest-category[data-quest-category="7"] { /* Remodel */
-	background-color: #a987ba;
+	.dock-container {
+		display: grid;
+		margin-top: 10px;
+		padding: 4px;
+		grid-template-columns: 1fr 1fr;
+		grid-auto-rows: 28px;
+		grid-gap: 4px;
+
+		> .dock-item {
+			padding: 2px 0;
+			line-height: 12px;
+			text-align: center;
+			white-space: nowrap;
+			transition: background-color 0.17s ease-in-out;
+			overflow: hidden;
+
+			&[data-state="locked"] {
+				background-color: #313131;
+				line-height: 24px;
+				color: #999;
+			}
+
+			&[data-state="empty"] {
+				background-color: #575757;
+				line-height: 24px;
+				color: #c6c6c6;
+			}
+
+			&[data-state="repairing"] {
+				background-color: #6d4c41;
+			}
+
+			&[data-state="building"] {
+				background-color: #1565c0;
+			}
+
+			&[data-state="done"] {
+				background-color: #388e3c;
+			}
+
+			.dock-time {
+				font-size: 11px;
+			}
+		}
+	}
+
+	.quest-container {
+		margin-top: 10px;
+		padding: 0 4px 4px;
+		line-height: 14px;
+
+		> .quest-item {
+			display: grid;
+			margin-top: 4px;
+			grid-template-columns: 14px 1fr 28px;
+			grid-gap: 4px;
+
+			.quest-title {
+				white-space: nowrap;
+				overflow: hidden;
+			}
+
+			.quest-type {
+				width: 14px;
+				height: 14px;
+				background-color: #a3a3a3;
+			}
+
+			@mixin QuestCategory($category) {
+				.quest-category[data-quest-category="#{$category}"] {
+					background-color: map-get($quest-colors, $category);
+				}
+			}
+
+			@include QuestCategory("1"); /* Composition */
+			@include QuestCategory("2"); /* Sortie */
+			@include QuestCategory("3"); /* Practice */
+			@include QuestCategory("4"); /* Expedition */
+			@include QuestCategory("5"); /* Supply */
+			@include QuestCategory("6"); /* Construction */
+			@include QuestCategory("7"); /* Remodel (Powerup) */
+			@include QuestCategory("8"); /* Sortie */
+		}
+	}
 }

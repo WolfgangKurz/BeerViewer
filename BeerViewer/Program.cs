@@ -12,6 +12,7 @@ using System.Reflection;
 
 using CefSharp;
 using CefSharp.WinForms;
+using BeerViewer.Libraries;
 
 namespace BeerViewer
 {
@@ -25,6 +26,17 @@ namespace BeerViewer
 		{
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
+
+			Sass.Instance.CompileRecursive(
+				Path.Combine(
+					Constants.EntryDir,
+					"WindowFrame"
+				)
+			);
+
+			// Compile SCSS to CSS only
+			if (Environment.GetCommandLineArgs().Any(x => x.ToLower() == "-css-only"))
+				return;
 
 			var mainWindow = frmMain.Instance;
 			FrameworkManager.Instance.Initialize();
