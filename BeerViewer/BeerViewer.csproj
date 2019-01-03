@@ -345,7 +345,7 @@
   <ItemGroup>
     <Content Include="icon.ico" />
     <Content Include="WindowFrame\modules\internal.js" />
-    <Content Include="WindowFrame\modules\logger\logger.css" />
+    <None Include="WindowFrame\modules\logger\logger.scss" />
     <Content Include="WindowFrame\modules\logger\logger.js" />
     <Content Include="WindowFrame\modules\overview\iconset_fleet.png" />
     <None Include="WindowFrame\modules\overview\overview.scss" />
@@ -360,12 +360,12 @@
     <Content Include="WindowFrame\modules\top-resource\icon_steel.png" />
     <Content Include="WindowFrame\modules\top-resource\top-resource.html" />
     <Content Include="WindowFrame\modules\top-resource\top-resource.js" />
-    <Content Include="WindowFrame\modules\top-resource\top-resource.css" />
-    <Content Include="WindowFrame\modules\window\window.css" />
+    <None Include="WindowFrame\modules\top-resource\top-resource.scss" />
+    <None Include="WindowFrame\modules\window\window.scss" />
     <Content Include="WindowFrame\modules\window\window.js" />
     <None Include="WindowFrame\app.scss" />
     <Content Include="WindowFrame\Application.html" />
-    <Content Include="WindowFrame\modules\top-expedition\top-expedition.css" />
+    <None Include="WindowFrame\modules\top-expedition\top-expedition.scss" />
     <Content Include="WindowFrame\modules\top-expedition\top-expedition.js" />
     <Content Include="WindowFrame\modules\module.js" />
   </ItemGroup>

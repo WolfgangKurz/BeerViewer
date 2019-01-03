@@ -1,5 +1,21 @@
 ﻿"use strict";
 !function () {
+	window.OpenMenu = function (open) {
+		const target = $("#top-menubutton");
+		const openClass = "menu-open";
+
+		if (typeof open === undefined) {
+			if (target.hasClass(openClass))
+				window.OpenMenu(false);
+			else
+				window.OpenMenu(true);
+		} else if (open) {
+			target.addClass(openClass);
+		} else {
+			target.removeClass(openClass);
+		}
+	};
+
 	window.modules.register("window", {
 		init: function () {
 			window.CALLBACK.register("WindowState", function (_state) {
@@ -14,31 +30,15 @@
 					mainWindow.removeClass("focused");
 			});
 
-			$.all("#top-systembutton > .system-button").event("click", function () {
-				window.API.SystemCall(this.attr("data-role"));
-			});
+			$.all("#top-systembutton > .system-button").event("click", e => window.API.SystemCall(this.attr("data-role")));
 
-			$("#top-menubutton > button").event("click", function (e) {
-				const target = this.parent();
-				if (target.hasClass("menu-open"))
-					this.parent().removeClass("menu-open");
-				else
-					this.parent().addClass("menu-open");
-			});
-			$("#top-menu-overlay").event("click", function (e) {
-				$("#top-menubutton > button").trigger("click");
-			});
+			$("#top-menubutton > button").event("click", e => OpenMenu());
+			$("#top-menu-overlay").event("click", e => $("#top-menubutton > button").trigger("click"));
 
 			!function () {
-				const getProgressColor = function (progress) {
-					if (progress >= 75)
-						return "#388e3c";
-					else if (progress >= 50)
-						return "#fdd835";
-					else if (progress >= 25)
-						return "#f57c00";
-					else
-						return "#c62828";
+				const getProgressColor = function (progress, strips) {
+					const index = Math.ceil(progress / (100 / strips));
+					return `${strips}-${index}`;
 				};
 				const rebindProgress = function (target) {
 					if (!target.is('[data-type="progress"]')) return;
@@ -58,7 +58,7 @@
 					for (let i = 1; i < strips; i++) {
 						target.prepend(
 							$.new("div", "progress-strip")
-								.css("left", (100 * i / strips) + "%")
+								.css("left", `${100 * i / strips}%`)
 						);
 					}
 
@@ -71,9 +71,10 @@
 					if (!target.is("[data-progress-binded]")) return;
 
 					const progress = parseFloat(target.attr("data-progress"));
+					const strip = parseInt(target.attr("data-progress-strip"));
 
 					target.find(".progress-bar")
-						.css("background-color", getProgressColor(progress))
+						.attr("data-color", getProgressColor(progress, strip))
 						.css("width", progress + "%");
 				};
 

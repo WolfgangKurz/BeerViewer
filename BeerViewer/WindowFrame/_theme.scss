@@ -41,6 +41,19 @@ $quest-colors: (
 	"7": #a987ba, // Remodel (Powerup)
 	"8": #c62828  // Sortie
 );
+$progress-colors: (
+	"0%": #388e3c,
+	"100%": #c62828,
+
+	// for not 5 strip progress
+	"33%": #fdd835,
+	"66%": #f57c00,
+
+	// for 5 strip progress
+	"25%": #d6d03a,
+	"50%": #fdb316,
+	"75%": #ea6205
+);
 
 %NoWrap {
 	white-space: nowrap;

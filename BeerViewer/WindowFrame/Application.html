@@ -19,7 +19,7 @@
 
 	<div id="mainbox">
 		<header id="top-area">
-			<div id="top-menubutton" class="">
+			<div id="top-menubutton">
 				<button type="button" data-role="menu">
 					<img src="assets/button_menu.png" />
 					<span>BeerViewer 2.0 dev</span>
@@ -52,7 +52,7 @@
 							</span>
 							<ul>
 								<li v-for="tool in Tools"
-									@click="tool.Action"
+									@click="OpenMenu(false) && tool.Action()"
 									:data-tool-id="tool.Id">
 									<i class="menu-icon" data-icon=""></i>
 									{{tool.Name}}
