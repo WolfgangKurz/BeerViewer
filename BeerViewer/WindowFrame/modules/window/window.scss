@@ -1,0 +1,86 @@
+﻿#cursor-overlay {
+	position: fixed;
+	left: -1px;
+	top: -1px;
+	right: -1px;
+	bottom: -1px;
+	pointer-events: none;
+	z-index: 999;
+
+	> * {
+		position: absolute;
+		pointer-events: initial !important;
+	}
+
+	> .cursor-nwse {
+		cursor: nwse-resize;
+	}
+
+	> .cursor-nesw {
+		cursor: nesw-resize;
+	}
+
+	> .cursor-ns {
+		cursor: ns-resize;
+	}
+
+	> .cursor-we {
+		cursor: ew-resize;
+	}
+
+	> .ht-topleft {
+		left: 0%;
+		top: 0%;
+		width: 8px;
+		height: 8px;
+	}
+
+	> .ht-topright {
+		right: 0%;
+		top: 0%;
+		width: 8px;
+		height: 8px;
+	}
+
+	> .ht-bottomleft {
+		left: 0%;
+		bottom: 0%;
+		width: 8px;
+		height: 8px;
+	}
+
+	> .ht-bottomright {
+		right: 0%;
+		bottom: 0%;
+		width: 8px;
+		height: 8px;
+	}
+
+	> .ht-top {
+		top: 0%;
+		left: 8px;
+		right: 8px;
+		height: 8px;
+	}
+
+	> .ht-bottom {
+		bottom: 0%;
+		left: 8px;
+		right: 8px;
+		height: 8px;
+	}
+
+	> .ht-left {
+		left: 0%;
+		top: 8px;
+		bottom: 8px;
+		width: 8px;
+	}
+
+	> .ht-right {
+		right: 0%;
+		top: 8px;
+		bottom: 8px;
+		width: 8px;
+	}
+}
