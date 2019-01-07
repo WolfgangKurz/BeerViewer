@@ -4,7 +4,7 @@
 		const target = $("#top-menubutton");
 		const openClass = "menu-open";
 
-		if (typeof open === undefined) {
+		if (open === undefined) {
 			if (target.hasClass(openClass))
 				window.OpenMenu(false);
 			else
@@ -30,7 +30,9 @@
 					mainWindow.removeClass("focused");
 			});
 
-			$.all("#top-systembutton > .system-button").event("click", e => window.API.SystemCall(this.attr("data-role")));
+			$.all("#top-systembutton > .system-button").event("click", function (e) {
+				window.API.SystemCall(this.attr("data-role"));
+			});
 
 			$("#top-menubutton > button").event("click", e => OpenMenu());
 			$("#top-menu-overlay").event("click", e => $("#top-menubutton > button").trigger("click"));

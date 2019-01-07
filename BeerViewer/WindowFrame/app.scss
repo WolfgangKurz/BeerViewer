@@ -235,7 +235,7 @@ i.menu-icon {
 
 
 		@mixin SysButton($n) {
-			&:nth-of-type($n + 1) {
+			&:nth-of-type(#{$n + 1}) {
 				background-position: (-$n * 32px) 0;
 			}
 		}
@@ -247,7 +247,7 @@ i.menu-icon {
 
 	&[data-windowstate="2"] > .system-button {
 		@mixin SysButtonMaximized($n) {
-			&:nth-of-type($n + 1) {
+			&:nth-of-type(#{$n + 1}) {
 				background-position: (-$n * 32px) -28px;
 			}
 		}

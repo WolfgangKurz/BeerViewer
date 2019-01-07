@@ -173,6 +173,7 @@
 			},
 			el: $("#mainbox"),
 			methods: {
+				OpenMenu: x => window.OpenMenu(x),
 				SelectModule: function (Area, Name) {
 					if (!(Area in this.Areas))
 						throw `Area '${Area}' not found, something wrong`;
