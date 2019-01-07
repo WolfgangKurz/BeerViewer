@@ -13,6 +13,8 @@ using System.Reflection;
 using CefSharp;
 using CefSharp.WinForms;
 using BeerViewer.Libraries;
+using MetroTrilithon.Desktop;
+using System.Diagnostics;
 
 namespace BeerViewer
 {
@@ -27,6 +29,11 @@ namespace BeerViewer
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 
+			// Unhandled Exception
+			AppDomain.CurrentDomain.UnhandledException += (sender, args) => ReportError("Application", sender, args.ExceptionObject as Exception);
+			Application.ThreadException += (sender, args) => ReportError("Application", sender, args.Exception);
+
+			// Compile SCSS to CSS
 			Sass.Instance.CompileRecursive(
 				Path.Combine(
 					Constants.EntryDir,
@@ -34,7 +41,7 @@ namespace BeerViewer
 				)
 			);
 
-			// Compile SCSS to CSS only
+			// When compile SCSS to CSS only mode
 			if (Environment.GetCommandLineArgs().Any(x => x.ToLower() == "-css-only"))
 				return;
 
@@ -44,6 +51,52 @@ namespace BeerViewer
 			Application.Run(mainWindow);
 
 			Cef.Shutdown();
+		}
+
+		private static void ReportError(string Caller, object Sender, Exception ExceptionObject)
+		{
+			try
+			{
+				var now = DateTimeOffset.Now;
+				var path = Path.Combine(
+					Constants.EntryDir,
+					"ErrorReports",
+					$"ErrorReport-{now:yyyyMMdd-HHmmss}-{now.Millisecond:000}.log"
+				);
+
+#if DEBUG
+				var IsDebug = true;
+#else
+				var IsDebug = false;
+#endif
+
+				var assembly = Assembly.GetEntryAssembly();
+				var product = ((AssemblyProductAttribute)assembly.GetCustomAttribute(typeof(AssemblyProductAttribute))).Product;
+				var _ver = assembly.GetName().Version;
+				var version = $"{_ver.ToString(3)}{(IsDebug ? " dev" : "")}{(_ver.Revision == 0 ? "" : " r" + _ver.Revision)}";
+
+				var message = $@"# Error Report from {Caller}
+### {product} v{version}
+### Report time: {now:yyyy-MM-dd HH:mm:ss}.{now.Millisecond:000}
+
+{new SystemEnvironment()}
+
+## Error information
+Sender:    {(Sender is Type t ? t : Sender?.GetType())?.FullName}
+Exception: {ExceptionObject?.GetType().FullName}
+
+{ExceptionObject}
+";
+
+				Directory.CreateDirectory(Path.GetDirectoryName(path));
+				File.AppendAllText(path, message);
+			}
+			catch (Exception ex)
+			{
+				Debug.WriteLine(ex);
+			}
+
+			Application.Exit();
 		}
 	}
 }

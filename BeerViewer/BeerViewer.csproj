@@ -71,6 +71,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web" />
     <Reference Include="Microsoft.CSharp" />
@@ -100,6 +101,7 @@
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
     <Compile Include="Libraries\Sass.cs" />
+    <Compile Include="Libraries\SystemEnvironment.cs" />
     <Compile Include="Models\Enums\FleetSituation.cs" />
     <Compile Include="Modules\Communication\ModuleInfo.cs" />
     <Compile Include="Modules\Communication\ObjectPathLevel.cs" />
