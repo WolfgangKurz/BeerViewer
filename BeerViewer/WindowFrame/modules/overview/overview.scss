@@ -113,16 +113,20 @@
 #overview-container {
 	.fleet {
 		margin: 3px 0;
+	}
+
+	.ship-container {
+		display: grid;
+		grid-template-columns: auto auto auto 20%;
+		grid-auto-rows: min-content minmax(min-content, 1fr) 3px;
+		grid-gap: 1px;
+		padding: 3px 6px;
 
 		.ship {
 			$ship: &;
-
-			display: grid;
-			grid-template-columns: auto auto auto 20%;
-			grid-template-rows: min-content minmax(min-content, 1fr);
-			grid-gap: 1px;
 			position: relative;
-			padding: 3px 6px;
+			display: contents;
+			grid-column: 1 / 5;
 			line-height: 13px;
 			vertical-align: top;
 
@@ -130,7 +134,6 @@
 				padding-right: 6px;
 				white-space: nowrap;
 				grid-column: 1 / 2;
-				grid-row: 1 / 3;
 			}
 
 			.ship-name {
@@ -155,9 +158,7 @@
 			.ship-hp {
 				float: left;
 				margin: 2px 0;
-				width: 50%;
 				grid-column: 2 / 3;
-				grid-row: 2 / 3;
 			}
 
 			.ship-morale, .ship-supply {
@@ -170,42 +171,40 @@
 				text-align: right;
 				overflow: hidden;
 				grid-column: 3 / 4;
-				grid-row: 2 / 3;
-			}
 
-			.ship-morale > * {
-				display: inline-block;
-				vertical-align: middle;
-			}
-
-			.ship-morale > .ship-morale-box {
-				width: 11px;
-				height: 11px;
-				background-color: #000;
-			}
-
-			@mixin MoraleBox($morale) {
-				.ship-morale > .ship-morale-box[data-morale="#{$morale}"] {
-					background-color: map-get($morale-colors, $morale);
+				> * {
+					display: inline-block;
+					vertical-align: middle;
 				}
-			}
 
-			@include MoraleBox("-3");
-			@include MoraleBox("-2");
-			@include MoraleBox("-1");
-			@include MoraleBox("0");
-			@include MoraleBox("+1");
+				> .ship-morale-box {
+					width: 11px;
+					height: 11px;
+					background-color: #000;
 
-			.ship-morale > .ship-morale-value {
-				padding-left: 2px;
-				padding-right: 6px;
+					@mixin MoraleBox($morale) {
+						&[data-morale="#{$morale}"] {
+							background-color: map-get($morale-colors, $morale);
+						}
+					}
+
+					@include MoraleBox("-3");
+					@include MoraleBox("-2");
+					@include MoraleBox("-1");
+					@include MoraleBox("0");
+					@include MoraleBox("+1");
+				}
+
+				> .ship-morale-value {
+					padding-left: 2px;
+					padding-right: 6px;
+				}
 			}
 
 			.ship-supply {
 				@extend %NoWrap;
 				opacity: 0.5;
 				grid-column: 4 / 5;
-				grid-row: 2 / 3;
 
 				> div {
 					margin: 2px 0;
@@ -235,6 +234,34 @@
 					display: flex;
 				}
 			}
+		}
+
+		@mixin ShipRow($i) {
+			.ship:nth-child(#{$i + 1}) {
+				> div:nth-child(1) {
+					grid-row: #{$i * 3 + 1} / #{$i * 3 + 3};
+				}
+
+				.ship-hp-bar {
+					grid-row: #{$i * 3 + 1} / #{$i * 3 + 2};
+				}
+
+				.ship-hp {
+					grid-row: #{$i * 3 + 2} / #{$i * 3 + 3};
+				}
+
+				.ship-morale {
+					grid-row: #{$i * 3 + 2} / #{$i * 3 + 3};
+				}
+
+				.ship-supply {
+					grid-row: #{$i * 3 + 2} / #{$i * 3 + 3};
+				}
+			}
+		}
+
+		@for $i from 1 through 7 {
+			@include ShipRow($i - 1);
 		}
 	}
 

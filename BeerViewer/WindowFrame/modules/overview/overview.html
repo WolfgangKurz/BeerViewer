@@ -40,34 +40,36 @@
 			<div class="summary-info" data-summary="los" :title="LoSTooltip(fleet)">{{fleet.LoS}}</div>
 		</div>
 
-		<div class="ship"
-			 v-for="ship in fleet.Ships"
-			 v-if="ship.Available"
-			 :data-idx="ship.Id"
-			 :data-state="ParseShipSituation(ship)">
-			<div>
-				<div class="ship-name" :prop="ship.Name">{{ship.Name || "???"}}</div>
-				<div class="ship-level">Lv.{{ship.Level || "???"}}</div>
-			</div>
+		<div class="ship-container">
+			<div class="ship"
+				 v-for="ship in fleet.Ships"
+				 v-if="ship.Available"
+				 :data-idx="ship.Id"
+				 :data-state="ParseShipSituation(ship)">
+				<div>
+					<div class="ship-name" :prop="ship.Name">{{ship.Name || "???"}}</div>
+					<div class="ship-level">Lv.{{ship.Level || "???"}}</div>
+				</div>
 
-			<div class="ship-hp-bar" data-type="progress" data-progress-strip="4"
-				 :data-progress="100*ship.HP.Current/ship.HP.Maximum"
-				 :title="ship.HP.Current+' / '+ship.HP.Maximum"></div>
-			<div class="ship-hp">{{ship.HP.Current}}/{{ship.HP.Maximum}}</div>
-			<div class="ship-morale">
-				<div class="ship-morale-box" :data-morale="ship.Morale.Level"></div>
-				<div class="ship-morale-value">{{ship.Morale.Value}}</div>
-			</div>
-			<div class="ship-supply">
-				<div class="ship-fuel" data-type="progress" data-progress-strip="4"
-					 :data-progress="100*ship.Fuel.Current/ship.Fuel.Maximum"
-					 :title="ship.Fuel.Current+' / '+ship.Fuel.Maximum"></div>
-				<div class="ship-ammo" data-type="progress" data-progress-strip="4"
-					 :data-progress="100*ship.Ammo.Current/ship.Ammo.Maximum"
-					 :title="ship.Ammo.Current+' / '+ship.Ammo.Maximum"></div>
-			</div>
-			<div class="ship-repairing">
-				<span>{{i18n.fleet_repairing}}</span>
+				<div class="ship-hp-bar" data-type="progress" data-progress-strip="4"
+					 :data-progress="100*ship.HP.Current/ship.HP.Maximum"
+					 :title="ship.HP.Current+' / '+ship.HP.Maximum"></div>
+				<div class="ship-hp">{{ship.HP.Current}}/{{ship.HP.Maximum}}</div>
+				<div class="ship-morale">
+					<div class="ship-morale-box" :data-morale="ship.Morale.Level"></div>
+					<div class="ship-morale-value">{{ship.Morale.Value}}</div>
+				</div>
+				<div class="ship-supply">
+					<div class="ship-fuel" data-type="progress" data-progress-strip="4"
+						 :data-progress="100*ship.Fuel.Current/ship.Fuel.Maximum"
+						 :title="ship.Fuel.Current+' / '+ship.Fuel.Maximum"></div>
+					<div class="ship-ammo" data-type="progress" data-progress-strip="4"
+						 :data-progress="100*ship.Ammo.Current/ship.Ammo.Maximum"
+						 :title="ship.Ammo.Current+' / '+ship.Ammo.Maximum"></div>
+				</div>
+				<div class="ship-repairing">
+					<span>{{i18n.fleet_repairing}}</span>
+				</div>
 			</div>
 		</div>
 	</div>
