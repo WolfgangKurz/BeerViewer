@@ -318,6 +318,7 @@
     <Content Include="WindowFrame\vendor\common.js" />
     <Content Include="WindowFrame\vendor\tippy.theme.css" />
     <Content Include="WindowFrame\vendor\tippy.all.min.js" />
+    <Content Include="WindowFrame\vendor\vue-tippy.min.js" />
     <Content Include="WindowFrame\vendor\vue.js" />
     <Content Include="WindowFrame\vendor\vue.min.js" />
     <EmbeddedResource Include="Forms\frmMain.resx">

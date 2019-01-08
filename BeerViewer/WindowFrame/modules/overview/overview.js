@@ -179,6 +179,7 @@
 							!function (shipId) {
 								const ship = {
 									Id: j,
+									Hash: `${i}${j}`,
 									Available: false,
 									Situation: 0,
 

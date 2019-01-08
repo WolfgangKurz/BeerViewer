@@ -1,10 +1,14 @@
 "use strict";
-!function(){
-	tippy.setDefaults({
+!function () {
+	const def = {
 		arrow: true,
 		placement: "bottom-start",
-		sticky: true,
+		boundary: "viewport",
 		size: "large",
-		theme: "translucent"
-	});
+		theme: "translucent",
+		interactive: true,
+		trigger: 'mouseenter',
+		hideOnClick: false
+	};
+	tippy.setDefaults(def);
 }();
