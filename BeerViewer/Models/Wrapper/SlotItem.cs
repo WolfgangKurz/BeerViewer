@@ -19,7 +19,10 @@ namespace BeerViewer.Models.Wrapper
 
 		internal SlotItem(kcsapi_slotitem Data) : base(Data)
 		{
-			this.Info = Master.Instance.SlotItems[this.RawData.api_slotitem_id] ?? SlotItemInfo.Empty;
+			if (Master.Instance.SlotItems?.ContainsKey(this.RawData.api_slotitem_id) ?? false)
+				this.Info = Master.Instance.SlotItems[this.RawData.api_slotitem_id] ?? SlotItemInfo.Empty;
+			else
+				this.Info = SlotItemInfo.Empty;
 		}
 
 		public void Remodel(int level, int masterId)

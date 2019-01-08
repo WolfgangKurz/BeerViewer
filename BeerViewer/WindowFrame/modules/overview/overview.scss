@@ -28,83 +28,83 @@
 		grid-template-columns: 1fr 1fr;
 		grid-auto-rows: 18px;
 		grid-gap: 3px;
-	}
 
-	> .summary-info {
-		padding: 0 6px 6px;
-		border-radius: 3px;
-		background-color: rgba(255, 255, 255, 0.1);
-		line-height: 18px;
-		text-align: right;
-		overflow: hidden;
-
-		&::before {
-			content: "";
-			float: left;
-			display: inline-block;
-			margin: 0 6px 0 -3px;
-			width: 18px;
-			height: 18px;
-			background-image: url(iconset_fleet.png);
-			background-position: 0 0;
-			background-repeat: no-repeat;
-			background-size: 144px 18px;
-			vertical-align: bottom;
-		}
-	}
-
-	> .summary-info[data-summary="morale"],
-	> .summary-info[data-summary="supply"] {
-		grid-column: span 2;
-	}
-
-	@mixin SummaryIcon($type, $x) {
-		> .summary-info[data-summary="#{$type}"]::before {
-			background-position: (-$x*1px) 0;
-		}
-	}
-
-	@include SummaryIcon("morale", 72);
-	@include SummaryIcon("level", 0);
-	@include SummaryIcon("aa", 18);
-	@include SummaryIcon("speed", 36);
-	@include SummaryIcon("los", 54);
-
-	> .summary-info[data-summary="supply"] {
-		&::before {
-			display: none;
-		}
-
-		&::after {
-			content: "";
-			display: table;
-			clear: both;
-		}
-
-		> * {
-			float: left;
-			width: 33.3%;
-			text-align: center;
+		> .summary-info {
+			padding: 0 6px 6px;
+			border-radius: 3px;
+			background-color: rgba(255, 255, 255, 0.1);
+			line-height: 18px;
+			text-align: right;
+			overflow: hidden;
 
 			&::before {
 				content: "";
+				float: left;
 				display: inline-block;
 				margin: 0 6px 0 -3px;
 				width: 18px;
 				height: 18px;
 				background-image: url(iconset_fleet.png);
-				background-position: -90px 0;
+				background-position: 0 0;
 				background-repeat: no-repeat;
 				background-size: 144px 18px;
 				vertical-align: bottom;
 			}
 
-			&:nth-child(2)::before {
-				background-position: -108px 0;
+			&[data-summary="morale"],
+			&[data-summary="supply"] {
+				grid-column: span 2;
 			}
 
-			&:nth-child(3)::before {
-				background-position: -126px 0;
+			@mixin SummaryIcon($type, $x) {
+				&[data-summary="#{$type}"]::before {
+					background-position: (-$x*1px) 0;
+				}
+			}
+
+			@include SummaryIcon("morale", 72);
+			@include SummaryIcon("level", 0);
+			@include SummaryIcon("aa", 18);
+			@include SummaryIcon("speed", 36);
+			@include SummaryIcon("los", 54);
+
+			&[data-summary="supply"] {
+				&::before {
+					display: none;
+				}
+
+				&::after {
+					content: "";
+					display: table;
+					clear: both;
+				}
+
+				> * {
+					float: left;
+					width: 33.3%;
+					text-align: center;
+
+					&::before {
+						content: "";
+						display: inline-block;
+						margin: 0 6px 0 -3px;
+						width: 18px;
+						height: 18px;
+						background-image: url(iconset_fleet.png);
+						background-position: -90px 0;
+						background-repeat: no-repeat;
+						background-size: 144px 18px;
+						vertical-align: bottom;
+					}
+
+					&:nth-child(2)::before {
+						background-position: -108px 0;
+					}
+
+					&:nth-child(3)::before {
+						background-position: -126px 0;
+					}
+				}
 			}
 		}
 	}

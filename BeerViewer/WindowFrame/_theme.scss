@@ -42,17 +42,17 @@ $quest-colors: (
 	"8": #c62828  // Sortie
 );
 $progress-colors: (
-	"0%": #388e3c,
-	"100%": #c62828,
+	"0%": #c62828,
+	"100%": #388e3c,
 
 	// for not 5 strip progress
-	"33%": #fdd835,
-	"66%": #f57c00,
+	"33%": #f57c00,
+	"66%": #fdd835,
 
 	// for 5 strip progress
-	"25%": #d6d03a,
+	"25%": #ea6205,
 	"50%": #fdb316,
-	"75%": #ea6205
+	"75%": #d6d03a
 );
 
 %NoWrap {

@@ -73,7 +73,7 @@ div.tab-host {
 			display: none;
 		}
 
-		&:hover, .selected {
+		&:hover, &.selected {
 			background-color: $theme-active-color;
 		}
 	}
@@ -176,6 +176,17 @@ i.menu-icon {
 		height: 100%;
 		transition: all 0.22s ease-in-out;
 	}
+
+	@mixin ProgressColor($strip) {
+		@for $i from 1 through $strip {
+			&[data-progress-strip="#{$strip}"] > .progress-bar[data-color="#{$i - 1}"] {
+				background-color: map-get($progress-colors, floor(($i - 1) / ($strip - 1) * 100) + "%");
+			}
+		}
+	}
+
+	@include ProgressColor(4);
+	@include ProgressColor(5);
 }
 
 #mainbox {

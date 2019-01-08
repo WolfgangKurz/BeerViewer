@@ -9,11 +9,12 @@
 				window.OpenMenu(false);
 			else
 				window.OpenMenu(true);
-		} else if (open) {
+		} else if (open)
 			target.addClass(openClass);
-		} else {
+		else
 			target.removeClass(openClass);
-		}
+
+		return true;
 	};
 
 	window.modules.register("window", {
@@ -38,10 +39,7 @@
 			$("#top-menu-overlay").event("click", e => $("#top-menubutton > button").trigger("click"));
 
 			!function () {
-				const getProgressColor = function (progress, strips) {
-					const index = Math.ceil(progress / (100 / strips));
-					return `${strips}-${index}`;
-				};
+				const getProgressColor = (progress, strips) => Math.min(strips - 1, Math.ceil(progress / (100 / strips)));
 				const rebindProgress = function (target) {
 					if (!target.is('[data-type="progress"]')) return;
 					if (target.is("[data-progress-binded]")) return;
