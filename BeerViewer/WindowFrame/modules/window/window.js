@@ -39,7 +39,7 @@
 			$("#top-menu-overlay").event("click", e => $("#top-menubutton > button").trigger("click"));
 
 			!function () {
-				const getProgressColor = (progress, strips) => Math.min(strips - 1, Math.ceil(progress / (100 / strips)));
+				const getProgressColor = (progress, strips) => Math.min(strips - 1, Math.floor(progress / (100 / strips)));
 				const rebindProgress = function (target) {
 					if (!target.is('[data-type="progress"]')) return;
 					if (target.is("[data-progress-binded]")) return;
