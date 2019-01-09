@@ -44,12 +44,12 @@ namespace BeerViewer.Models.Wrapper
 		public int SlotCount => this.RawData.api_slot_num;
 		#endregion
 
-		public bool IsAirCraft => ShipInfo.AircraftShipTypes.Contains(this.ShipType.Id);
+		public bool IsAirCraft => ShipInfo.AircraftShipTypes.Contains(this.ShipType?.Id ?? -1);
 
 		internal ShipInfo(kcsapi_mst_ship api_data) : base(api_data) { }
 
 		public override string ToString()
-			=> $"ID = {this.Id}, Name = \"{this.Name}\", ShipType = \"{this.ShipType.Name}\"";
+			=> $"ID = {this.Id}, Name = \"{this.Name}\", ShipType = \"{this.ShipType?.Name}\"";
 
 
 		public static ShipInfo Empty { get; } = new ShipInfo(new kcsapi_mst_ship

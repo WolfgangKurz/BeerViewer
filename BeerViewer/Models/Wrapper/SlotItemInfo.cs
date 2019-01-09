@@ -80,7 +80,7 @@ namespace BeerViewer.Models.Wrapper
 		}
 
 		public override string ToString()
-			=> $"ID = {this.Id}, Name = \"{this.Name}\", Type = {{{string.Join(", ",this.RawData.api_type)}}}";
+			=> $"ID = {this.Id}, Name = \"{this.Name}\", Type = {{{string.Join(", ",this.RawData?.api_type ?? new int[0])}}}";
 
 		public static SlotItemInfo Empty { get; } = new SlotItemInfo(
 			new kcsapi_mst_slotitem()

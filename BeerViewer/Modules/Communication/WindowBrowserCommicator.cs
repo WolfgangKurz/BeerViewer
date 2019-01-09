@@ -150,7 +150,8 @@ namespace BeerViewer.Modules.Communication
 		/// <param name="ns">Namespace on target value</param>
 		/// <param name="path">Path of target value</param>
 		/// <param name="callback">Callback when <see cref="INotifyPropertyChanged.PropertyChanged"/> fired</param>
-		public void ObserveData(string ns, string path, IJavascriptCallback callback)
+		/// <param name="ObserveOnly">If true, callback parameter is empty object always.</param>
+		public void ObserveData(string ns, string path, IJavascriptCallback callback, bool ObserveOnly = false)
 		{
 			try
 			{
@@ -160,7 +161,7 @@ namespace BeerViewer.Modules.Communication
 					{
 						try
 						{
-							if (Serialization.Serializable(x))
+							if (Serialization.Serializable(x) && !ObserveOnly)
 								callback.ExecuteAsync(x, ns, path);
 							else
 								callback.ExecuteAsync(x == null ? null : new object(), ns, path);

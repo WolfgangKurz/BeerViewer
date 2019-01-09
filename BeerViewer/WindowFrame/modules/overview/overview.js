@@ -2,8 +2,16 @@
 !function () {
 	if (!window.modules) throw "Cannot find `module`";
 
+	const getTextWidth = function (text, font) {
+		const canvas = getTextWidth.canvas || (getTextWidth.canvas = document.createElement("canvas"));
+		const context = canvas.getContext("2d");
+		context.font = font;
+		return context.measureText(text).width;
+	};
+
 	const MAX_FLEETS = 4; // Maximum fleets
 	const MAX_SHIPS = 7; // Maximum ships per fleet
+	const MAX_SLOTS = 5 + 1; // Maximum equipment slots + extra slot
 	const overview = new Vue({
 		data: {
 			i18n: window.i18n,
@@ -60,6 +68,24 @@
 				else if (ship.Situation & 1 << 4) status.push("damagecontrolled");
 				return status.join(" ");
 			}
+		},
+		watch: {
+			Fleets: {
+				handler: function (val) {
+					const font = `14px ${getComputedStyle(document.body)["fontFamily"]}`;
+					// See overview.scss:137
+
+					val.forEach(x => {
+						x.NameSize = x.Ships
+							.reduce((a, c) => Math.max(
+								a,
+								getTextWidth(c.Name || "", font)
+							), 0)
+							+ 6; // See overview.scss:131
+					});
+				},
+				deep: true
+			}
 		}
 	});
 
@@ -113,7 +139,9 @@
 							SupplyBauxite: 0,
 
 							IsRejuvenating: false,
-							RejuvenateText: "--:--:--"
+							RejuvenateText: "--:--:--",
+
+							NameSize: 0
 						};
 						const updateFleetLevel = function () {
 							fleet.TotalLevel = fleet.Ships.filter(x => x.Available).reduce((a, c) => a + c.Level, 0);
@@ -125,7 +153,7 @@
 							fleet.SupplyBauxite = fleet.Ships.filter(x => x.Available).reduce((a, c) => a + c.UsedBauxite, 0);
 						};
 
-						window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "]", function (value) {
+						window.API.ObserveData("Homeport", `Organization.Fleets[${fleetId}]`, function (value) {
 							fleet.Available = value !== null;
 
 							if (!overview.Fleets[overview.SelectedTab].Available) {
@@ -135,7 +163,7 @@
 								if (availables.Length > 0) overview.SelectFleet(available[0].idx);
 							}
 						});
-						window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].State", function (value) {
+						window.API.ObserveData("Homeport", `Organization.Fleets[${fleetId}].State`, function (value) {
 							var state = "empty"; // Empty fleet (no ships)
 
 							if ((value & 1 << 2) !== 0) // In sortie
@@ -159,7 +187,7 @@
 
 							fleet.State = state;
 						});
-						window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Speed", function (value) {
+						window.API.ObserveData("Homeport", `Organization.Fleets[${fleetId}].Speed`, function (value) {
 							const speedList = {
 								0: "fleet_speed_immovable",
 								5: "fleet_speed_slow",
@@ -169,11 +197,11 @@
 							};
 							fleet.Speed = i18n[speedList[value]];
 						});
-						window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].LOS", value => fleet.LoS = parseFloat(value).toFixed(2));
-						window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].AirSuperiorityPotentialMinimum", value => fleet.AA.Min = value);
-						window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].AirSuperiorityPotentialMaximum", value => fleet.AA.Max = value);
-						window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].IsRejuvenating", value => fleet.IsRejuvenating = value);
-						window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].RejuvenateText", value => fleet.RejuvenateText = value);
+						window.API.ObserveData("Homeport", `Organization.Fleets[${fleetId}].LOS`, value => fleet.LoS = parseFloat(value).toFixed(2));
+						window.API.ObserveData("Homeport", `Organization.Fleets[${fleetId}].AirSuperiorityPotentialMinimum`, value => fleet.AA.Min = value);
+						window.API.ObserveData("Homeport", `Organization.Fleets[${fleetId}].AirSuperiorityPotentialMaximum`, value => fleet.AA.Max = value);
+						window.API.ObserveData("Homeport", `Organization.Fleets[${fleetId}].IsRejuvenating`, value => fleet.IsRejuvenating = value);
+						window.API.ObserveData("Homeport", `Organization.Fleets[${fleetId}].RejuvenateText`, value => fleet.RejuvenateText = value);
 
 						for (let j = 0; j < MAX_SHIPS; j++)
 							!function (shipId) {
@@ -182,6 +210,8 @@
 									Hash: `${i}${j}`,
 									Available: false,
 									Situation: 0,
+
+									Slots: [],
 
 									Name: null,
 									Level: null,
@@ -194,32 +224,47 @@
 										Level: "0"
 									}
 								};
+								for (let c = 0; c < MAX_SLOTS; c++) {
+									ship.Slots.push({
+										Available: false, // Slot exists?
+										Equiped: false, // Slot using?
 
-								window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Ships[" + shipId + "]", value => ship.Available = value !== null);
-								window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Ships[" + shipId + "].Situation", value => ship.Situation = value);
+										Aircraft: {
+											Maximum: 0,
+											Current: 0
+										}, // Aircraft count
+										Equipment: {
+											Name: "",
+											Level: 0
+										}
+									});
+								}
 
-								window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Ships[" + shipId + "].Info.Name", function (value) {
+								window.API.ObserveData("Homeport", `Organization.Fleets[${fleetId}].Ships[${shipId}]`, value => ship.Available = value !== null);
+								window.API.ObserveData("Homeport", `Organization.Fleets[${fleetId}].Ships[${shipId}].Situation`, value => ship.Situation = value);
+
+								window.API.ObserveData("Homeport", `Organization.Fleets[${fleetId}].Ships[${shipId}].Info.Name`, function (value) {
 									ship.Name = i18n[value];
 									updateSize();
 								});
-								window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Ships[" + shipId + "].Level", value => {
+								window.API.ObserveData("Homeport", `Organization.Fleets[${fleetId}].Ships[${shipId}].Level`, value => {
 									ship.Level = value || 0;
 									updateFleetLevel();
 								});
-								window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Ships[" + shipId + "].HP", value => ship.HP = value || DefaultLimitedValue);
-								window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Ships[" + shipId + "].Fuel", value => {
+								window.API.ObserveData("Homeport", `Organization.Fleets[${fleetId}].Ships[${shipId}].HP`, value => ship.HP = value || DefaultLimitedValue);
+								window.API.ObserveData("Homeport", `Organization.Fleets[${fleetId}].Ships[${shipId}].Fuel`, value => {
 									ship.Fuel = value || DefaultLimitedValue;
 									updateFleetSupply();
 								});
-								window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Ships[" + shipId + "].Ammo", value => {
+								window.API.ObserveData("Homeport", `Organization.Fleets[${fleetId}].Ships[${shipId}].Ammo`, value => {
 									ship.Ammo = value || DefaultLimitedValue;
 									updateFleetSupply();
 								});
-								window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Ships[" + shipId + "].UsedBauxite", value => {
+								window.API.ObserveData("Homeport", `Organization.Fleets[${fleetId}].Ships[${shipId}].UsedBauxite`, value => {
 									ship.UsedBauxite = parseInt(value || 0) || 0;
 									updateFleetSupply();
 								});
-								window.API.ObserveData("Homeport", "Organization.Fleets[" + fleetId + "].Ships[" + shipId + "].Condition", function (value) {
+								window.API.ObserveData("Homeport", `Organization.Fleets[${fleetId}].Ships[${shipId}].Condition`, function (value) {
 									let morale = "0";
 
 									if (value >= 50) morale = "+1";
@@ -230,6 +275,11 @@
 
 									ship.Morale.Level = morale;
 									ship.Morale.Value = value;
+								});
+
+								window.API.ObserveData("Homeport", `Organization.Fleets[${fleetId}].Ships[${shipId}].Slots.Length`, function (value) {
+									// ship.Slots
+									console.log(value);
 								});
 
 								fleet.Ships.push(ship);
@@ -258,13 +308,13 @@
 						State: 0,
 						StateText: "locked"
 					};
-					window.API.ObserveData("Homeport", "Repairyard.Docks[" + (i + 1) + "].Ship.Info.Name", value => dock.Ship = value);
-					window.API.ObserveData("Homeport", "Repairyard.Docks[" + (i + 1) + "].State", value => {
+					window.API.ObserveData("Homeport", `Repairyard.Docks[${i + 1}].Ship.Info.Name`, value => dock.Ship = value);
+					window.API.ObserveData("Homeport", `Repairyard.Docks[${i + 1}].State`, value => {
 						dock.State = value || -1;
 						dock.StateText = dockState[value || -1];
 					});
-					window.API.ObserveData("Homeport", "Repairyard.Docks[" + (i + 1) + "].IsCompleted", value => dock.IsCompleted = value);
-					window.API.ObserveData("Homeport", "Repairyard.Docks[" + (i + 1) + "].RemainingText", value => dock.RemainingTime = value);
+					window.API.ObserveData("Homeport", `Repairyard.Docks[${i + 1}].IsCompleted`, value => dock.IsCompleted = value);
+					window.API.ObserveData("Homeport", `Repairyard.Docks[${i + 1}].RemainingText`, value => dock.RemainingTime = value);
 
 					overview.RepairDock.push(dock);
 				}
@@ -285,13 +335,13 @@
 						State: 0,
 						StateText: "locked"
 					};
-					window.API.ObserveData("Homeport", "Dockyard.Docks[" + (i + 1) + "].Ship.Name", value => dock.Ship = value);
-					window.API.ObserveData("Homeport", "Dockyard.Docks[" + (i + 1) + "].State", value => {
+					window.API.ObserveData("Homeport", `Dockyard.Docks[${i + 1}].Ship.Name`, value => dock.Ship = value);
+					window.API.ObserveData("Homeport", `Dockyard.Docks[${i + 1}].State`, value => {
 						dock.State = value || -1;
 						dock.StateText = dockState[value || -1];
 					});
-					window.API.ObserveData("Homeport", "Dockyard.Docks[" + (i + 1) + "].IsCompleted", value => dock.IsCompleted = value);
-					window.API.ObserveData("Homeport", "Dockyard.Docks[" + (i + 1) + "].RemainingText", value => dock.RemainingTime = value);
+					window.API.ObserveData("Homeport", `Dockyard.Docks[${i + 1}].IsCompleted`, value => dock.IsCompleted = value);
+					window.API.ObserveData("Homeport", `Dockyard.Docks[${i + 1}].RemainingText`, value => dock.RemainingTime = value);
 
 					overview.ConstructionDock.push(dock);
 				}

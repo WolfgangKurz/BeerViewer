@@ -2,13 +2,12 @@
 !function () {
 	tippy.setDefaults({
 		arrow: true,
-		placement: "bottom-start",
 		boundary: "viewport",
+		placement: "bottom",
 		size: "large",
-		theme: "translucent",
+		theme: "light-border",
 		interactive: false,
 		trigger: 'mouseenter focus',
-		popperOptions: { positionFixed: true },
 		hideOnClick: false,
 		performance: true
 	});
@@ -57,13 +56,6 @@
 					}
 				}
 			}
-
-			/*
-			// display: contents; cannot calc boundary
-			if (getComputedStyle(el)["display"].toLowerCase() === "contents") {
-				opts.boundary = el.parentNode;
-			}
-			*/
 
 			tippy(el, (x => {
 				let o = Object.assign({}, tippy.defaults);

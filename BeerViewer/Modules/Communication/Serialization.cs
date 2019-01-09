@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,9 +10,10 @@ namespace BeerViewer.Modules.Communication
 {
 	internal static class Serialization
 	{
-		public static bool Serializable(object obj)
+		public static bool Serializable(object obj, List<object> ObjectList = null)
 		{
 			if (obj == null) return true;
+			if (ObjectList == null) ObjectList = new List<object>();
 
 			var type = obj.GetType();
 			Type underlyingType = Nullable.GetUnderlyingType(type);
@@ -48,14 +50,28 @@ namespace BeerViewer.Modules.Communication
 			else if (type == typeof(DateTime))
 				return true;
 
+			// Serialize enum to sbyte, short, int, long, byte, ushort, uint, ulong (check type of enum)
+			else if (type.IsEnum)
+			{
+				var subType = Enum.GetUnderlyingType(type);
+				return (subType == typeof(SByte) ||
+					subType == typeof(Int16) ||
+					subType == typeof(Int32) ||
+					subType == typeof(Byte) ||
+					subType == typeof(UInt16) ||
+					subType == typeof(Int64) ||
+					subType == typeof(UInt32) ||
+					subType == typeof(UInt64));
+			}
+
 			// Dictionary
-			else if (typeof(IDictionary).IsAssignableFrom(type))
+			if (typeof(IDictionary).IsAssignableFrom(type))
 			{
 				var dict = (IDictionary)obj;
 				foreach (DictionaryEntry kvp in dict)
 				{
 					var fieldName = Convert.ToString(kvp.Key);
-					if (!Serializable(kvp.Value)) return false;
+					if (!Serializable(kvp.Value, ObjectList)) return false;
 				}
 				return true;
 			}
@@ -67,7 +83,7 @@ namespace BeerViewer.Modules.Communication
 
 				foreach (object arrObj in enumerable)
 				{
-					if (!Serializable(arrObj)) return false;
+					if (!Serializable(arrObj, ObjectList)) return false;
 				}
 				return true;
 			}
@@ -75,20 +91,20 @@ namespace BeerViewer.Modules.Communication
 			// Class/structs to Dictionary (key,value pairs)
 			else if (!type.IsPrimitive && !type.IsEnum)
 			{
-				var fields = type.GetFields();
+				var fields = type.GetFields(BindingFlags.Public | BindingFlags.Instance);
 				for (int i = 0; i < fields.Length; i++)
 				{
-					// var fieldName = fields[i].Name;
+					var fieldName = fields[i].Name;
 					var fieldValue = fields[i].GetValue(obj);
-					if(!Serializable(fieldValue)) return false;
+					if (!Serializable(fieldValue, ObjectList)) return false;
 				}
 
-				var properties = type.GetProperties();
+				var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
 				for (int i = 0; i < properties.Length; i++)
 				{
-					// var propertyName = properties[i].Name;
+					var propertyName = properties[i].Name;
 					var propertyValue = properties[i].GetValue(obj);
-					if (!Serializable(propertyValue)) return false;
+					if (!Serializable(propertyValue, ObjectList)) return false;
 				}
 				return true;
 			}
