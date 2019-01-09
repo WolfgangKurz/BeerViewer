@@ -209,7 +209,7 @@
 				}
 			}
 
-			&[data-state~="damaged"] > td {
+			&[data-state~="damaged"] {
 				background-color: rgba(198, 40, 40, 0.3);
 			}
 
