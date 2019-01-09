@@ -1,15 +1,5 @@
 ﻿"use strict";
 !function () {
-	let mainBox = {};
-
-	Vue.directive("dom", function (el, binding) {
-		if (binding.oldValue && binding.oldValue instanceof Element && binding.oldValue.parentNode === el)
-			binding.oldValue.remove();
-
-		if (binding.value instanceof Element)
-			el.append(binding.value);
-	});
-
 	window.modules = (function () {
 		let initialized = false;
 		const list = {};
@@ -166,7 +156,7 @@
 		if (window.modules.initialized()) return; // Call twice
 
 		window.modules.areas.init();
-		mainBox = new Vue({
+		const mainBox = new Vue({
 			data: {
 				Areas: window.modules.areas.$_Areas,
 				Tools: window.modules.areas.$_Tools

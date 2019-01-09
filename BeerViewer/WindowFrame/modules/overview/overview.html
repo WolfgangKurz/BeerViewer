@@ -46,7 +46,7 @@
 				 v-if="ship.Available"
 				 :data-idx="ship.Id"
 				 :data-state="ParseShipSituation(ship)"
-				 v-tippy="{html:'#overview-ship-tooltip-'+ship.Hash, reactive:true}">
+				 v-tippy="{html:'#overview-ship-tooltip-'+ship.Hash}">
 				<div>
 					<div class="ship-name" :prop="ship.Name">{{ship.Name || "???"}}</div>
 					<div class="ship-level">Lv.{{ship.Level || "???"}}</div>
@@ -73,7 +73,8 @@
 				</div>
 
 				<div :id="'overview-ship-tooltip-'+ship.Hash"
-					 class="tooltip-host">
+					 class="tooltip-host"
+					 v-tippy-target>
 					<div>
 						<b>이름</b>:
 						{{ship.Name}}

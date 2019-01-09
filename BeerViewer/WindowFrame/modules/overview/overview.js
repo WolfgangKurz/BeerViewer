@@ -251,6 +251,7 @@
 						2: "done"
 					};
 					const dock = {
+						Id: i + 1,
 						Ship: "???",
 						RemainingTime: "--:--:--",
 						IsCompleted: false,
@@ -277,6 +278,7 @@
 						3: "done"
 					};
 					const dock = {
+						Id: i + 1,
 						Ship: "???",
 						RemainingTime: "--:--:--",
 						IsCompleted: false,
