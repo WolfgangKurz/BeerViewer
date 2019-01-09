@@ -316,7 +316,6 @@
     <Content Include="WindowFrame\internal\example.html" />
     <Content Include="WindowFrame\MainFramePlaceholder.html" />
     <Content Include="WindowFrame\vendor\common.js" />
-    <Content Include="WindowFrame\vendor\tippy.all.js" />
     <Content Include="WindowFrame\vendor\tippy.theme.css" />
     <Content Include="WindowFrame\vendor\tippy.all.min.js" />
     <Content Include="WindowFrame\vendor\vue.js" />
