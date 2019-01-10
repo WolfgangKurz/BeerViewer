@@ -70,8 +70,8 @@ namespace BeerViewer.Models
 		#endregion
 
 		#region CompleteTime Property
-		private DateTimeOffset? _CompleteTime;
-		public DateTimeOffset? CompleteTime
+		private DateTime? _CompleteTime;
+		public DateTime? CompleteTime
 		{
 			get { return this._CompleteTime; }
 			private set
@@ -129,7 +129,7 @@ namespace BeerViewer.Models
 				? Master.Instance.Ships[Data.api_created_ship_id]
 				: null;
 			this.CompleteTime = this.State == BuildingDockState.Building
-				? (DateTimeOffset?)Extensions.UnixEpoch.AddMilliseconds(Data.api_complete_time)
+				? (DateTime?)Extensions.UnixEpoch.AddMilliseconds(Data.api_complete_time)
 				: null;
 		}
 
@@ -145,7 +145,7 @@ namespace BeerViewer.Models
 
 			if (this.CompleteTime.HasValue)
 			{
-				var remaining = this.CompleteTime.Value.Subtract(DateTimeOffset.Now);
+				var remaining = this.CompleteTime.Value.Subtract(DateTime.Now);
 				if (remaining.Ticks < 0) remaining = TimeSpan.Zero;
 
 				this.Remaining = remaining;

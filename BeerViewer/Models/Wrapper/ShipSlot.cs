@@ -14,7 +14,7 @@ namespace BeerViewer.Models.Wrapper
 		public bool IsAircraft => this.Item.Info.Type.IsNumerable();
 
 		public string Tooltip => this.Item.Info.ToolTipData;
-		public bool Equipped => this.Item != null && this.Item != SlotItem.Empty;
+		public bool Equipped => this.Item != null && this.Item != SlotItem.Empty();
 
 		#region Current Property
 		private int _Current;
@@ -34,8 +34,8 @@ namespace BeerViewer.Models.Wrapper
 
 		public ShipSlot(Ship owner, SlotItem item, int maximum, int current)
 		{
-			this.Owner = owner.Info ?? ShipInfo.Empty;
-			this.Item = item ?? SlotItem.Empty;
+			this.Owner = owner.Info ?? ShipInfo.Empty();
+			this.Item = item ?? SlotItem.Empty();
 
 			this.Maximum = maximum;
 			this.Current = current;

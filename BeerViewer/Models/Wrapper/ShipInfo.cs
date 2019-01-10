@@ -52,10 +52,11 @@ namespace BeerViewer.Models.Wrapper
 			=> $"ID = {this.Id}, Name = \"{this.Name}\", ShipType = \"{this.ShipType?.Name}\"";
 
 
-		public static ShipInfo Empty { get; } = new ShipInfo(new kcsapi_mst_ship
+		private static ShipInfo _Empty { get; } = new ShipInfo(new kcsapi_mst_ship
 		{
 			api_id = 0,
 			api_name = "???"
 		});
+		public static ShipInfo Empty() => _Empty;
 	}
 }

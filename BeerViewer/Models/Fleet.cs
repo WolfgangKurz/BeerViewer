@@ -156,14 +156,14 @@ namespace BeerViewer.Models
 		#endregion
 
 		private int MinimumCondition { get; set; }
-		private DateTimeOffset? RejuvenateTime { get; set; }
+		private DateTime? RejuvenateTime { get; set; }
 
 		public bool IsRejuvenating => this.RejuvenateTime.HasValue;
 
 		public TimeSpan? RejuvenateRemaining
 			=> !this.IsRejuvenating ? (TimeSpan?)null
-			: this.RejuvenateTime.Value < DateTimeOffset.Now ? TimeSpan.Zero
-			: this.RejuvenateTime.Value - DateTimeOffset.Now;
+			: this.RejuvenateTime.Value < DateTime.Now ? TimeSpan.Zero
+			: this.RejuvenateTime.Value - DateTime.Now;
 
 		public string RejuvenateText => this.RejuvenateRemaining.HasValue
 			? $"{(int)this.RejuvenateRemaining.Value.TotalHours:D2}:{this.RejuvenateRemaining.Value.ToString(@"mm\:ss")}"
@@ -275,12 +275,12 @@ namespace BeerViewer.Models
 			MinimumCondition = condition;
 			if (condition >= goal)
 			{
-				this.RejuvenateTime = (DateTimeOffset?)null;
+				this.RejuvenateTime = (DateTime?)null;
 				this.RaisePropertyChanged(nameof(this.IsRejuvenating));
 			}
 			else
 			{
-				var rejuvenate = DateTimeOffset.Now;
+				var rejuvenate = DateTime.Now;
 
 				var value = (goal - condition + 2) / 3 * 3; // Integral dividing
 				rejuvenate = rejuvenate.AddMinutes(value);

@@ -76,13 +76,13 @@ namespace BeerViewer.Models.Wrapper
 
 		internal SlotItemInfo(kcsapi_mst_slotitem api_data, MasterTable<SlotItemEquipType> types) : base(api_data)
 		{
-			this.EquipType = types[api_data.api_type?[2] ?? 0] ?? SlotItemEquipType.Empty;
+			this.EquipType = types[api_data.api_type?[2] ?? 0] ?? SlotItemEquipType.Empty();
 		}
 
 		public override string ToString()
 			=> $"ID = {this.Id}, Name = \"{this.Name}\", Type = {{{string.Join(", ",this.RawData?.api_type ?? new int[0])}}}";
 
-		public static SlotItemInfo Empty { get; } = new SlotItemInfo(
+		private static SlotItemInfo _Empty { get; } = new SlotItemInfo(
 			new kcsapi_mst_slotitem()
 			{
 				api_id = 0,
@@ -90,5 +90,6 @@ namespace BeerViewer.Models.Wrapper
 			},
 			new MasterTable<SlotItemEquipType>()
 		);
+		public static SlotItemInfo Empty() => _Empty;
 	}
 }

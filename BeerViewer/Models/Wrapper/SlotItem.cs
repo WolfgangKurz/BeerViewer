@@ -20,15 +20,15 @@ namespace BeerViewer.Models.Wrapper
 		internal SlotItem(kcsapi_slotitem Data) : base(Data)
 		{
 			if (Master.Instance.SlotItems?.ContainsKey(this.RawData.api_slotitem_id) ?? false)
-				this.Info = Master.Instance.SlotItems[this.RawData.api_slotitem_id] ?? SlotItemInfo.Empty;
+				this.Info = Master.Instance.SlotItems[this.RawData.api_slotitem_id] ?? SlotItemInfo.Empty();
 			else
-				this.Info = SlotItemInfo.Empty;
+				this.Info = SlotItemInfo.Empty();
 		}
 
 		public void Remodel(int level, int masterId)
 		{
 			this.RawData.api_level = level;
-			this.Info = Master.Instance.SlotItems[masterId] ?? SlotItemInfo.Empty;
+			this.Info = Master.Instance.SlotItems[masterId] ?? SlotItemInfo.Empty();
 
 			this.RaisePropertyChanged(nameof(this.Info));
 			this.RaisePropertyChanged(nameof(this.Level));
@@ -37,9 +37,11 @@ namespace BeerViewer.Models.Wrapper
 		public override string ToString()
 			=> $"ID = {this.Id}, Name = \"{this.Info.Name}\", Level = {this.Level}, Proficiency = {this.Proficiency}";
 
-		public static SlotItem Empty { get; } = new SlotItem(new kcsapi_slotitem
+
+		private static SlotItem _Empty { get; } = new SlotItem(new kcsapi_slotitem
 		{
 			api_slotitem_id = -1
 		});
+		public static SlotItem Empty() => _Empty;
 	}
 }

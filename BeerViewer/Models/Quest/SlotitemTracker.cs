@@ -138,13 +138,13 @@ namespace BeerViewer.Models.Quest
 
 			internal SlotItem(kcsapi_slotitem rawData) : base(rawData)
 			{
-				this.Info = Master.Instance.SlotItems[this.RawData.api_slotitem_id] ?? SlotItemInfo.Empty;
+				this.Info = Master.Instance.SlotItems[this.RawData.api_slotitem_id] ?? SlotItemInfo.Empty();
 			}
 
 			public void Remodel(int level, int masterId)
 			{
 				this.RawData.api_level = level;
-				this.Info = Master.Instance.SlotItems[masterId] ?? SlotItemInfo.Empty;
+				this.Info = Master.Instance.SlotItems[masterId] ?? SlotItemInfo.Empty();
 
 				this.RaisePropertyChanged(nameof(this.Info));
 			}
@@ -152,7 +152,8 @@ namespace BeerViewer.Models.Quest
 			public override string ToString()
 				=> $"ID = {this.Id}, Name = \"{this.Info.Name}\"";
 
-			public static SlotItem Dummy { get; } = new SlotItem(new kcsapi_slotitem { api_slotitem_id = -1, });
+			private static SlotItem _Dummy { get; } = new SlotItem(new kcsapi_slotitem { api_slotitem_id = -1, });
+			public static SlotItem Dummy() => _Dummy;
 		}
 	}
 }

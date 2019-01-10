@@ -57,7 +57,7 @@ namespace BeerViewer
 		{
 			try
 			{
-				var now = DateTimeOffset.Now;
+				var now = DateTime.Now;
 				var path = Path.Combine(
 					Constants.EntryDir,
 					"ErrorReports",

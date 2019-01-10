@@ -311,7 +311,7 @@ namespace BeerViewer.Models
 		{
 			this.UpdateData(Data);
 
-			this.Info = Master.Instance.Ships[Data.api_ship_id] ?? ShipInfo.Empty;
+			this.Info = Master.Instance.Ships[Data.api_ship_id] ?? ShipInfo.Empty();
 			this.HP = new LimitedValue(this.RawData.api_nowhp, this.RawData.api_maxhp, 0);
 			this.Fuel = new LimitedValue(this.RawData.api_fuel, this.Info.RawData.api_fuel_max, 0);
 			this.Ammo = new LimitedValue(this.RawData.api_bull, this.Info.RawData.api_bull_max, 0);

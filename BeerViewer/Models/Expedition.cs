@@ -59,8 +59,8 @@ namespace BeerViewer.Models
 		#endregion
 
 		#region ReturnTime / Remaining / IsInExecution Property
-		private DateTimeOffset? _ReturnTime;
-		public DateTimeOffset? ReturnTime
+		private DateTime? _ReturnTime;
+		public DateTime? ReturnTime
 		{
 			get { return this._ReturnTime; }
 			private set
@@ -77,9 +77,11 @@ namespace BeerViewer.Models
 		}
 
 		public TimeSpan? Remaining
-			=> !this.ReturnTime.HasValue ? (TimeSpan?)null
-			: this.ReturnTime.Value < DateTimeOffset.Now ? TimeSpan.Zero
-			: this.ReturnTime.Value - DateTimeOffset.Now;
+			=> !this.ReturnTime.HasValue
+			? (TimeSpan?)null
+			: this.ReturnTime.Value < DateTime.Now
+				? TimeSpan.Zero
+				: this.ReturnTime.Value - DateTime.Now;
 
 		public string RemainingText => this.Remaining.HasValue
 			? $"{(int)this.Remaining.Value.TotalHours:D2}:{this.Remaining.Value.ToString(@"mm\:ss")}"
@@ -96,7 +98,7 @@ namespace BeerViewer.Models
 				if (this.Mission == null) return new LimitedValue();
 
 				var start = this.ReturnTime.Value.Subtract(TimeSpan.FromMinutes(this.Mission.RawData.api_time));
-				var value = (int)DateTimeOffset.Now.Subtract(start).TotalSeconds;
+				var value = (int)DateTime.Now.Subtract(start).TotalSeconds;
 				return new LimitedValue(value, this.Mission.RawData.api_time * 60, 0);
 			}
 		}

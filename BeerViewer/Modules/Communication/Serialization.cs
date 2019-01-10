@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -10,10 +11,24 @@ namespace BeerViewer.Modules.Communication
 {
 	internal static class Serialization
 	{
-		public static bool Serializable(object obj, List<object> ObjectList = null)
+#if LOG_SERIALIZATION
+		private static StreamWriter writer;
+		static Serialization()
 		{
+			writer = new StreamWriter(new FileStream("serializable.txt", FileMode.Create));
+		}
+#endif
+
+		public static bool Serializable(object obj, string name = "...", int depth = 0)
+		{
+#if LOG_SERIALIZATION
+			{
+				var x = obj?.ToString() ?? "";
+				x = x.Replace(Environment.NewLine, "\\n");
+				writer.WriteLine($"{new string(' ', depth)}{name}: {x}");
+			}
+#endif
 			if (obj == null) return true;
-			if (ObjectList == null) ObjectList = new List<object>();
 
 			var type = obj.GetType();
 			Type underlyingType = Nullable.GetUnderlyingType(type);
@@ -71,7 +86,7 @@ namespace BeerViewer.Modules.Communication
 				foreach (DictionaryEntry kvp in dict)
 				{
 					var fieldName = Convert.ToString(kvp.Key);
-					if (!Serializable(kvp.Value, ObjectList)) return false;
+					if (!Serializable(kvp.Value, fieldName, depth + 1)) return false;
 				}
 				return true;
 			}
@@ -83,7 +98,7 @@ namespace BeerViewer.Modules.Communication
 
 				foreach (object arrObj in enumerable)
 				{
-					if (!Serializable(arrObj, ObjectList)) return false;
+					if (!Serializable(arrObj, "___", depth + 1)) return false;
 				}
 				return true;
 			}
@@ -96,7 +111,7 @@ namespace BeerViewer.Modules.Communication
 				{
 					var fieldName = fields[i].Name;
 					var fieldValue = fields[i].GetValue(obj);
-					if (!Serializable(fieldValue, ObjectList)) return false;
+					if (!Serializable(fieldValue, fieldName, depth + 1)) return false;
 				}
 
 				var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
@@ -104,7 +119,7 @@ namespace BeerViewer.Modules.Communication
 				{
 					var propertyName = properties[i].Name;
 					var propertyValue = properties[i].GetValue(obj);
-					if (!Serializable(propertyValue, ObjectList)) return false;
+					if (!Serializable(propertyValue, propertyName, depth + 1)) return false;
 				}
 				return true;
 			}

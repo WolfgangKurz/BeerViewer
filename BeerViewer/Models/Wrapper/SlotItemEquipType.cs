@@ -13,10 +13,11 @@ namespace BeerViewer.Models.Wrapper
 		public override string ToString()
 			=> $"ID = {this.Id}, Name = \"{this.Name}\"";
 
-		public static SlotItemEquipType Empty { get; } = new SlotItemEquipType(new kcsapi_mst_slotitem_equiptype
+		private static SlotItemEquipType _Empty { get; } = new SlotItemEquipType(new kcsapi_mst_slotitem_equiptype
 		{
 			api_id = 0,
 			api_name = "???"
 		});
+		public static SlotItemEquipType Empty() => _Empty;
 	}
 }
