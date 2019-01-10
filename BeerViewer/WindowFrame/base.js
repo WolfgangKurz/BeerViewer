@@ -118,4 +118,18 @@
 			}
 		});
 	}();
+
+	Object.prototype.Readonly = function (name, value) {
+		if (typeof value === "function") {
+			Object.defineProperty(this, name, {
+				get: value,
+				enumerable: true
+			});
+		} else {
+			Object.defineProperty(this, name, {
+				value: value,
+				enumerable: true
+			});
+		}
+	};
 }();

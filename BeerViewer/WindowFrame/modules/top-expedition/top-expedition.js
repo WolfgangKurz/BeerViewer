@@ -31,12 +31,13 @@
 						Progress: 0
 					};
 
-					window.API.ObserveData("Homeport", "Organization.Fleets[" + (i + 1) + "]", value => data.Enabled = value !== null);
-					window.API.ObserveData("Homeport", "Organization.Fleets[" + (i + 1) + "].Expedition.IsInExecution", value => data.Activated = value);
-					window.API.ObserveData("Homeport", "Organization.Fleets[" + (i + 1) + "].Expedition.Mission.DisplayNo", value => data.Id = value);
-					window.API.ObserveData("Homeport", "Organization.Fleets[" + (i + 1) + "].Expedition.RemainingText", value => data.RemainingText = value);
-					window.API.ObserveData("Homeport", "Organization.Fleets[" + (i + 1) + "].Expedition.Progress", value => data.Progress = value ? value.Current * 100 / value.Maximum : 0);
-
+					window.API.ObserveData("Homeport", "Organization.Fleets[" + (i + 1) + "]", value => data.Enabled = value !== null, true);
+					window.API.ObserveData("Homeport", "Organization.Fleets[" + (i + 1) + "].Expedition", value => {
+						data.Activated = value.IsInExecution;
+						data.Id = Mission.DisplayNo;
+						data.RemainingText = value.RemainingText;
+						data.progress = value.Progress ? value.Progress.Current * 100 / value.Progress.Maximum : 0;
+					});
 					topexp.Expeditions.push(data);
 				}(i);
 			}

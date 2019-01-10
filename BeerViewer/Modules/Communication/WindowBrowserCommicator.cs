@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -12,6 +13,7 @@ using System.Windows.Forms;
 
 using BeerViewer.Framework;
 using BeerViewer.Models;
+using BeerViewer.Network;
 using CefSharp;
 
 namespace BeerViewer.Modules.Communication
@@ -145,7 +147,6 @@ namespace BeerViewer.Modules.Communication
 		/// Observe data tree on specific namespace.
 		/// When the <see cref="INotifyPropertyChanged.PropertyChanged"/> has fired, given callback will be called.
 		/// Callback will get "newValue, Namespace, Path" as arguments.
-		/// Callback cannot throw newValue as json object, need to call GetData api.
 		/// </summary>
 		/// <param name="ns">Namespace on target value</param>
 		/// <param name="path">Path of target value</param>
@@ -272,6 +273,55 @@ namespace BeerViewer.Modules.Communication
 		public void Log(string Text)
 		{
 			Logger.Log(Text);
+		}
+
+		/// <summary>
+		/// Convert HTTP Request <see cref="NameValueCollection"/> object to <see cref="IDictionary{string, string}"/>
+		/// </summary>
+		/// <param name="c">Request data to convert</param>
+		/// <returns>Converted Dictionary data</returns>
+		private IDictionary<string, object> ConvertRequest(NameValueCollection c)
+		{
+			var output = new Dictionary<string, object>();
+
+			var n = c.Count;
+			for(var i=0; i<n; i++)
+			{
+				var key = c.Keys[i];
+				var value = c.GetValues(i);
+
+				if (value == null)
+					output.Add(key, null);
+				else if (value.Length > 1)
+				{
+					var list = new List<string>();
+					foreach (var j in value)
+						list.Add(j);
+					output.Add(key, list);
+				}
+				else if (value.Length == 1)
+					output.Add(key, value[0]);
+			}
+			return output;
+		}
+
+		/// <summary>
+		/// Observe HTTP response.
+		/// </summary>
+		/// <param name="url">Url to watch</param>
+		/// <param name="callback">Callback when get HTTP response with <paramref name="url"/>.</param>
+		public void SubscribeHTTP(string url, IJavascriptCallback callback)
+		{
+			if (callback == null || !callback.CanExecute) return;
+
+			Proxy.Instance.Register(url, e =>
+			{
+				var x = e.TryParse();
+				if (x == null) return;
+
+				if (callback != null && callback.CanExecute)
+					callback.ExecuteAsync(e.Response.BodyAsString, ConvertRequest(x.Request));
+			});
 		}
 	}
 }
