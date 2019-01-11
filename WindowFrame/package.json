@@ -10,7 +10,6 @@
   "author": "WolfgangKurz",
   "dependencies": {
     "tippy.js": "^3.4.0",
-    "vue": "^2.5.21",
-    "vue-tippy": "^2.0.24"
+    "vue": "^2.5.21"
   }
 }

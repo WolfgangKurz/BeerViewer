@@ -1,6 +1,6 @@
 import tippy from "tippy.js";
 import Vue from "vue";
-import VueTippy	from "vue-tippy";
+import VueTippy	from "./vendor/vue.tippy.js";
 
 tippy.setDefaults({
 	arrow: true,
@@ -14,7 +14,6 @@ tippy.setDefaults({
 	performance: true
 });
 
-Vue.use(VueTippy, tippy.defaults);
 Vue.directive("dom", function (el, binding) {
 	if (binding.oldValue && binding.oldValue instanceof Element && binding.oldValue.parentNode === el)
 		binding.oldValue.remove();
@@ -22,3 +21,5 @@ Vue.directive("dom", function (el, binding) {
 	if (binding.value instanceof Element)
 		el.append(binding.value);
 });
+
+Vue.use(VueTippy, tippy.defaults);
