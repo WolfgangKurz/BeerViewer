@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Performancer", "Components\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiveTranslation", "Components\LiveTranslation\LiveTranslation.csproj", "{5D9A81D9-B521-4060-B992-7F0DACBABCDB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowFrame", "WindowFrame\WindowFrame.csproj", "{2574F603-4B6C-4A30-BFDD-E3BC09EEDFDF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +31,10 @@ Global
 		{5D9A81D9-B521-4060-B992-7F0DACBABCDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5D9A81D9-B521-4060-B992-7F0DACBABCDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5D9A81D9-B521-4060-B992-7F0DACBABCDB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2574F603-4B6C-4A30-BFDD-E3BC09EEDFDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2574F603-4B6C-4A30-BFDD-E3BC09EEDFDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2574F603-4B6C-4A30-BFDD-E3BC09EEDFDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2574F603-4B6C-4A30-BFDD-E3BC09EEDFDF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

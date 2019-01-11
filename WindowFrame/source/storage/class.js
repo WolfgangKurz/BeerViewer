@@ -15,10 +15,10 @@
 
 	window.Class = {
 		RepairDock: (function () {
-			const _class = function (data) {
+			const _class = function (homeport, data) {
+				const _homeport = homeport;
 				const RawData = {
 					Id: 0,
-					Level: 0,
 					State: -1,
 					ShipId: 0,
 					Ship: null,
@@ -26,7 +26,19 @@
 					Remaining: 0
 				};
 				_class.prototype.Update = function (data) {
-					RawData.Id = data;
+					RawData.Id = data.api_id;
+					RawData.State = data.api_state;
+					RawData.ShipId = data.api_ship_id;
+					if (RawData.State === Enums.RepairDockState.Repairing) {
+						RawData.Ship = _homeport.Ships[RawData.ShipId];
+						RawData.CompleteTime = data.api_complete_time;
+					} else {
+						RawData.Ship = null;
+						RawData.CompleteTime = null;
+					}
+				};
+				_class.prototype.Finish = function () {
+					RawData.State = Enums.RepairDockState.Unlocked;
 				};
 				_class.prototype.Test = function () {
 					return RawData;
@@ -37,7 +49,7 @@
 			return _class;
 		})()
 	};
-	window.Enum = {
+	window.Enums = {
 		RepairDockState: {
 			Locked: -1,
 			Unlocked: 0,
@@ -46,7 +58,7 @@
 	};
 
 	Object.freeze(window.Class);
-	Object.freeze(window.Enum);
-	for (let i in window.Enum)
-		Object.freeze(window.Enum[i]);
+	Object.freeze(window.Enums);
+	for (let i in window.Enums)
+		Object.freeze(window.Enums[i]);
 }();

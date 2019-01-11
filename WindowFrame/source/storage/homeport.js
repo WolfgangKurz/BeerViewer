@@ -153,6 +153,5 @@
 			this.Organization.Combined = x.api_combined_flag != 0;
 			this.Materials.Update(x.api_material);
 		});
-		Subscribe(
 	};
 }();
