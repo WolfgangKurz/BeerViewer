@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-using BeerViewer.Core;
+using BeerViewer.Network;
 using BeerViewer.Models.Raw;
+using BeerViewer.Models.kcsapi;
 
 namespace BeerViewer.Models
 {
@@ -13,7 +11,7 @@ namespace BeerViewer.Models
 	{
 		private readonly Homeport homeport;
 
-		#region Docks 프로퍼티
+		#region Docks Property
 		private MemberTable<RepairingDock> _Docks;
 		public MemberTable<RepairingDock> Docks
 		{
@@ -29,20 +27,13 @@ namespace BeerViewer.Models
 		}
 		#endregion
 
-
 		internal Repairyard(Homeport parent)
 		{
 			var proxy = Proxy.Instance;
 			this.homeport = parent;
 			this.Docks = new MemberTable<RepairingDock>();
 
-			proxy.Register(Proxy.api_get_member_ndock, e =>
-			{
-				var x = e.TryParse<kcsapi_ndock[]>();
-				if (x == null) return;
-
-				this.Update(x.Data);
-			});
+			proxy.Register<kcsapi_ndock[]>(Proxy.api_get_member_ndock, x => this.Update(x.Data));
 			proxy.Register(Proxy.api_req_nyukyo_start, e =>
 			{
 				var x = e.TryParse();
@@ -91,16 +82,9 @@ namespace BeerViewer.Models
 				var ship = this.homeport.Organization.Ships[int.Parse(data.Request["api_ship_id"])];
 				var highspeed = data.Request["api_highspeed"] == "1";
 
-				if (highspeed)
-				{
-					ship.Repair();
-					this.homeport.Organization.GetFleet(ship.Id)?.State.Update();
-				}
+				if (highspeed) ship.Repair();
 			}
-			catch (Exception ex)
-			{
-				System.Diagnostics.Debug.WriteLine("입거 개시 해석 실패: {0}", ex);
-			}
+			catch { }
 		}
 
 		private void ChangeSpeed(SvData data)
@@ -112,13 +96,8 @@ namespace BeerViewer.Models
 
 				dock.Finish();
 				ship.Repair();
-
-				this.homeport.Organization.GetFleet(ship.Id)?.State.Update();
 			}
-			catch (Exception ex)
-			{
-				System.Diagnostics.Debug.WriteLine("고속수복재 해석 실패: {0}", ex);
-			}
+			catch { }
 		}
 	}
 }

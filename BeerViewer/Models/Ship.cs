@@ -1,25 +1,21 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using BeerViewer.Core;
+using BeerViewer.Network;
+using BeerViewer.Models.Enums;
 using BeerViewer.Models.Raw;
+using BeerViewer.Models.Wrapper;
+using BeerViewer.Models.kcsapi;
 
 namespace BeerViewer.Models
 {
-	/// <summary>
-	/// 모항에 소지하고 있는 칸무스 데이터
-	/// </summary>
 	public class Ship : RawDataWrapper<kcsapi_ship2>, IIdentifiable
 	{
 		private readonly Homeport homeport;
 
-		/// <summary>
-		/// 이 칸무스를 식별하는 Id
-		/// </summary>
 		public int Id => this.RawData.api_id;
 		public int FleetId
 		{
@@ -27,19 +23,20 @@ namespace BeerViewer.Models
 			{
 				try
 				{
-					foreach (var fleet in homeport.Organization.Fleets)
-						foreach (var ship in fleet.Value.Ships)
-							if (ship.Id == this.Id)
-								return fleet.Value.Id;
+					return homeport.Organization.Fleets
+						.Where(x => x.Value.Ships.Any(y => y.Id == this.Id))
+						.FirstOrDefault().Value?.Id ?? -1;
 				}
-				catch (Exception e)
-				{
-					Debug.WriteLine(e);
-					return -1;
-				}
+				catch { }
+
 				return -1;
 			}
 		}
+
+		public ShipInfo Info { get; private set; }
+		public int SortNumber => this.RawData.api_sortno;
+
+		public int Level => this.RawData.api_lv;
 		public int RemodelLevel
 		{
 			get
@@ -55,30 +52,21 @@ namespace BeerViewer.Models
 			}
 		}
 
-		public string LvName => "[Lv." + this.Level + "]  " + this.Info.Name;
 		public string RepairTimeString
 		{
 			get
 			{
 				TimeSpan? Remaining = new TimeSpan(0, 0, 0, 0, (int)this.TimeToRepair.TotalMilliseconds);
 				return Remaining.HasValue
-			? string.Format("{0:D2}:{1}",
-				(int)Remaining.Value.TotalHours,
-				Remaining.Value.ToString(@"mm\:ss"))
-			: "--:--:--";
+					? string.Format(
+						"{0:D2}:{1}",
+						(int)Remaining.Value.TotalHours,
+						Remaining.Value.ToString(@"mm\:ss")
+					)
+					: "--:--:--";
 			}
 		}
-		/// <summary>
-		/// 칸무스 도감 정보
-		/// </summary>
-		public ShipInfo Info { get; private set; }
-		public int SortNumber => this.RawData.api_sortno;
 
-		public int Level => this.RawData.api_lv;
-
-		/// <summary>
-		/// 자물쇠 여부
-		/// </summary>
 		public bool IsLocked => this.RawData.api_locked == 1;
 
 		public int Exp => this.RawData.api_exp.Get(0) ?? 0;
@@ -88,12 +76,9 @@ namespace BeerViewer.Models
 		public int ExpForMarrige => Math.Max(Experience.GetShipExpForSpecifiedLevel(this.Exp, 99), 0);
 		public int ExpForLevelMax => Experience.GetShipExpForSpecifiedLevel(this.Exp, 155);
 
-		/// <summary>
-		/// ExSlot 이 존재하는지 여부
-		/// </summary>
 		public bool ExSlotExists => this.RawData.api_slot_ex != 0;
 
-		#region HP 프로퍼티
+		#region HP Property
 		private LimitedValue _HP;
 		public LimitedValue HP
 		{
@@ -104,23 +89,16 @@ namespace BeerViewer.Models
 				this.RaisePropertyChanged();
 
 				if (value.IsHeavilyDamage())
-				{
 					this.Situation |= ShipSituation.HeavilyDamaged;
-				}
 				else
-				{
 					this.Situation &= ~ShipSituation.HeavilyDamaged;
-				}
 			}
 		}
 		#endregion
 
-		/// <summary>
-		/// 함선 속도
-		/// </summary>
 		public ShipSpeed Speed => (ShipSpeed)this.RawData.api_soku;
 
-		#region Fuel 프로퍼티
+		#region Fuel Property
 		private LimitedValue _Fuel;
 		public LimitedValue Fuel
 		{
@@ -129,26 +107,26 @@ namespace BeerViewer.Models
 			{
 				this._Fuel = value;
 				this.RaisePropertyChanged();
-				this.RaisePropertyChanged("UsedFuel");
+				this.RaisePropertyChanged(nameof(this.UsedFuel));
 			}
 		}
 		#endregion
 
-		#region Bull 프로퍼티
+		#region Bull Property
 		private LimitedValue _Bull;
-		public LimitedValue Bull
+		public LimitedValue Ammo
 		{
 			get { return this._Bull; }
 			private set
 			{
 				this._Bull = value;
 				this.RaisePropertyChanged();
-				this.RaisePropertyChanged("UsedBull");
+				this.RaisePropertyChanged(nameof(this.UsedBull));
 			}
 		}
 		#endregion
 
-		#region Firepower 프로퍼티
+		#region Firepower Property
 		private ModernizableStatus _Firepower;
 		public ModernizableStatus Firepower
 		{
@@ -161,7 +139,7 @@ namespace BeerViewer.Models
 		}
 		#endregion
 
-		#region Torpedo 프로퍼티
+		#region Torpedo Property
 		private ModernizableStatus _Torpedo;
 		public ModernizableStatus Torpedo
 		{
@@ -174,7 +152,7 @@ namespace BeerViewer.Models
 		}
 		#endregion
 
-		#region YasenFp 프로퍼티
+		#region YasenFp Property
 		private ModernizableStatus _YasenFp;
 		public ModernizableStatus YasenFp
 		{
@@ -187,7 +165,7 @@ namespace BeerViewer.Models
 		}
 		#endregion
 
-		#region AA 프로퍼티
+		#region AA Property
 		private ModernizableStatus _AA;
 		public ModernizableStatus AA
 		{
@@ -200,7 +178,7 @@ namespace BeerViewer.Models
 		}
 		#endregion
 
-		#region Armor 프로퍼티
+		#region Armor Property
 		private ModernizableStatus _Armor;
 		public ModernizableStatus Armor
 		{
@@ -213,7 +191,7 @@ namespace BeerViewer.Models
 		}
 		#endregion
 
-		#region ASW 프로퍼티
+		#region ASW Property
 		private ModernizableStatus _ASW;
 		public ModernizableStatus ASW
 		{
@@ -226,7 +204,7 @@ namespace BeerViewer.Models
 		}
 		#endregion
 
-		#region Luck 프로퍼티
+		#region Luck Property
 		private ModernizableStatus _Luck;
 		public ModernizableStatus Luck
 		{
@@ -239,7 +217,8 @@ namespace BeerViewer.Models
 		}
 		#endregion
 
-		#region Slots 프로퍼티
+
+		#region Slots Property
 		private ShipSlot[] _Slots;
 		public ShipSlot[] Slots
 		{
@@ -255,23 +234,7 @@ namespace BeerViewer.Models
 		}
 		#endregion
 
-		#region EquippedSlots 프로퍼티
-		private ShipSlot[] _EquippedSlots;
-		public ShipSlot[] EquippedItems
-		{
-			get { return this._EquippedSlots; }
-			set
-			{
-				if (this._EquippedSlots != value)
-				{
-					this._EquippedSlots = value;
-					this.RaisePropertyChanged();
-				}
-			}
-		}
-		#endregion
-
-		#region ExSlot 프로퍼티
+		#region ExSlot Property
 		private ShipSlot _ExSlot;
 		public ShipSlot ExSlot
 		{
@@ -287,7 +250,13 @@ namespace BeerViewer.Models
 		}
 		#endregion
 
-		#region TimeToRepair 프로퍼티
+		public ShipSlot[] EquippedItems
+			=> this.Slots
+				.Concat(this.ExSlotExists ? new ShipSlot[] { this.ExSlot } : new ShipSlot[] { })
+				.Where(x => x.Equipped)
+				.ToArray();
+
+		#region TimeToRepair Property
 		private TimeSpan _TimeToRepair;
 		public TimeSpan TimeToRepair
 		{
@@ -303,20 +272,20 @@ namespace BeerViewer.Models
 		}
 		#endregion
 
-		#region Used 의존변수
-		public int UsedFuel => (int)((this.Level <= 99 ? 1.0f : 0.85f) * (this.Fuel.Maximum - this.Fuel.Current));
-		public int UsedBull => (int)((this.Level <= 99 ? 1.0f : 0.85f) * (this.Bull.Maximum - this.Bull.Current));
-		#endregion
 
-		public int ViewRange => this.RawData.api_sakuteki.Get(0) ?? 0;
+		public int UsedFuel => (int)((this.Level <= 99 ? 1.0 : 0.85) * (this.Fuel.Maximum - this.Fuel.Current));
+		public int UsedBull => (int)((this.Level <= 99 ? 1.0 : 0.85) * (this.Ammo.Maximum - this.Ammo.Current));
+		public int UsedBauxite => this.Slots.Sum(x => x.Lost) * 5;
+
+		public int LOS => this.RawData.api_sakuteki.Get(0) ?? 0;
 		public bool IsMaxModernized => this.Firepower.IsMax && this.Torpedo.IsMax && this.AA.IsMax && this.Armor.IsMax;
 
 		public int Condition => this.RawData.api_cond;
-		public ConditionType ConditionType => ConditionTypeHelper.ToConditionType(this.RawData.api_cond);
+		public ConditionType ConditionType => this.RawData.api_cond.ToConditionType();
 
 		public int SallyArea => this.RawData.api_sally_area;
 
-		#region Status 프로퍼티
+		#region Status Property
 		private ShipSituation situation;
 		public ShipSituation Situation
 		{
@@ -332,44 +301,21 @@ namespace BeerViewer.Models
 		}
 		#endregion
 
-		#region IntStatus 프로퍼티
-		private int _IntStatus;
-		public int IntStatus
-		{
-			get { return this._IntStatus; }
-			set
-			{
-				if (this._IntStatus != value)
-				{
-					this._IntStatus = value;
-					this.RaisePropertyChanged();
-				}
-			}
-		}
-		#endregion
-
-		internal Ship(Homeport parent, kcsapi_ship2 RawData) : base(RawData)
+		internal Ship(Homeport parent, kcsapi_ship2 Data) : base(Data)
 		{
 			this.homeport = parent;
-			this.Update(RawData);
+			this.Update(Data);
 		}
 
-		internal void Update(kcsapi_ship2 rawData)
+		internal void Update(kcsapi_ship2 Data)
 		{
-			this.UpdateRawData(rawData);
+			this.UpdateData(Data);
 
-			this.Info = DataStorage.Instance.Master.Ships[rawData.api_ship_id] ?? ShipInfo.Dummy;
+			this.Info = Master.Instance.Ships[Data.api_ship_id] ?? ShipInfo.Empty();
 			this.HP = new LimitedValue(this.RawData.api_nowhp, this.RawData.api_maxhp, 0);
 			this.Fuel = new LimitedValue(this.RawData.api_fuel, this.Info.RawData.api_fuel_max, 0);
-			this.Bull = new LimitedValue(this.RawData.api_bull, this.Info.RawData.api_bull_max, 0);
+			this.Ammo = new LimitedValue(this.RawData.api_bull, this.Info.RawData.api_bull_max, 0);
 			this.ASW = new ModernizableStatus(new int[] { 0, this.RawData.api_taisen[1] }, this.RawData.api_taisen[0]);
-
-			double temp = (double)this.HP.Current / (double)this.HP.Maximum;
-
-			if (temp <= 0.25) IntStatus = 3;
-			else if (temp <= 0.5) IntStatus = 2;
-			else if (temp <= 0.75) IntStatus = 1;
-			else IntStatus = 0;
 
 			if (this.RawData.api_kyouka.Length >= 5)
 			{
@@ -378,8 +324,11 @@ namespace BeerViewer.Models
 				this.YasenFp = new ModernizableStatus(
 					new int[] {
 						this.Info.RawData.api_houg[0] + this.Info.RawData.api_raig[0],
-						this.Info.RawData.api_houg[1] + this.Info.RawData.api_raig[1]},
-					this.RawData.api_kyouka[0] + this.RawData.api_kyouka[1]);
+						this.Info.RawData.api_houg[1] + this.Info.RawData.api_raig[1]
+					},
+					this.RawData.api_kyouka[0] + this.RawData.api_kyouka[1]
+				);
+
 				this.AA = new ModernizableStatus(this.Info.RawData.api_tyku, this.RawData.api_kyouka[2]);
 				this.Armor = new ModernizableStatus(this.Info.RawData.api_souk, this.RawData.api_kyouka[3]);
 				this.Luck = new ModernizableStatus(this.Info.RawData.api_luck, this.RawData.api_kyouka[4]);
@@ -396,25 +345,21 @@ namespace BeerViewer.Models
 				.Select((t, i) => new ShipSlot(this, t, this.Info.RawData.api_maxeq.Get(i) ?? 0, this.RawData.api_onslot.Get(i) ?? 0))
 				.ToArray();
 			this.ExSlot = new ShipSlot(this, this.homeport.Itemyard.SlotItems[this.RawData.api_slot_ex], 0, 0);
-			this.EquippedItems = this.EnumerateAllEquippedItems().ToArray();
 
-			if (this.EquippedItems.Any(x => x.Item.Info.Type == SlotItemType.応急修理要員))
-			{
+			if (this.Slots.Any(x => x.Item.Info.Type == SlotItemType.DamageControl))
 				this.Situation |= ShipSituation.DamageControlled;
-			}
 			else
-			{
 				this.Situation &= ~ShipSituation.DamageControlled;
-			}
 
-			//장비의 대잠 수치 제외
 			this.ASW = this.ASW.Update(this.ASW.Upgraded - this.Slots.Sum(slot => slot.Item.Info.ASW));
+
+			this.RaisePropertyChanged(nameof(this.UsedBauxite));
 		}
 
 		internal void Charge(int fuel, int bull, int[] onslot)
 		{
 			this.Fuel = this.Fuel.Update(fuel);
-			this.Bull = this.Bull.Update(bull);
+			this.Ammo = this.Ammo.Update(bull);
 			for (var i = 0; i < this.Slots.Length; i++) this.Slots[i].Current = onslot.Get(i) ?? 0;
 		}
 
@@ -425,14 +370,6 @@ namespace BeerViewer.Models
 		}
 
 		public override string ToString()
-		{
-			return $"ID = {this.Id}, Name = \"{this.Info.Name}\", ShipType = \"{this.Info.ShipType.Name}\", Level = {this.Level}";
-		}
-
-		private IEnumerable<ShipSlot> EnumerateAllEquippedItems()
-		{
-			foreach (var slot in this.Slots.Where(x => x.Equipped)) yield return slot;
-			if (this.ExSlot.Equipped) yield return this.ExSlot;
-		}
+			=> $"ID = {this.Id}, Name = \"{this.Info.Name}\", ShipType = \"{this.Info.ShipType.Name}\", Level = {this.Level}";
 	}
 }

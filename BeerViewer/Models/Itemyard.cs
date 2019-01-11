@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-using BeerViewer.Core;
+using BeerViewer.Network;
 using BeerViewer.Models.Raw;
+using BeerViewer.Models.Enums;
+using BeerViewer.Models.Wrapper;
+using BeerViewer.Models.kcsapi;
 
 namespace BeerViewer.Models
 {
@@ -16,7 +15,7 @@ namespace BeerViewer.Models
 
 		public int SlotItemsCount => this.SlotItems.Count;
 
-		#region SlotItems 프로퍼티
+		#region SlotItems Property
 		private MemberTable<SlotItem> _SlotItems;
 		public MemberTable<SlotItem> SlotItems
 		{
@@ -32,7 +31,7 @@ namespace BeerViewer.Models
 		}
 		#endregion
 
-		#region UseItems 프로퍼티
+		#region UseItems Property
 		private MemberTable<UseItem> _UseItems;
 		public MemberTable<UseItem> UseItems
 		{
@@ -56,41 +55,13 @@ namespace BeerViewer.Models
 			this.SlotItems = new MemberTable<SlotItem>();
 			this.UseItems = new MemberTable<UseItem>();
 
-			proxy.Register(Proxy.api_get_member_slot_item, e =>
+			proxy.Register<kcsapi_slotitem[]>(Proxy.api_get_member_slot_item, x => this.Update(x.Data));
+			proxy.Register<kcsapi_createitem>(Proxy.api_req_kousyou_createitem, x=>this.CreateItem(x.Data));
+			proxy.Register<kcsapi_destroyitem2>(Proxy.api_req_kousyou_destroyitem2, x => this.DestroyItem(x));
+
+			proxy.Register<kcsapi_useitem[]>(Proxy.api_get_member_useitem, x => this.Update(x.Data));
+			proxy.Register<kcsapi_remodel_slot>(Proxy.api_req_kousyou_remodel_slot, x =>
 			{
-				var x = e.TryParse<kcsapi_slotitem[]>();
-				if (x == null) return;
-
-				this.Update(x.Data);
-			});
-			proxy.Register(Proxy.api_req_kousyou_createitem, e =>
-			{
-				var x = e.TryParse<kcsapi_createitem>();
-				if (x == null) return;
-
-				this.CreateItem(x.Data);
-			});
-			proxy.Register(Proxy.api_req_kousyou_destroyitem2, e =>
-			{
-				var x = e.TryParse<kcsapi_destroyitem2>();
-				if (x == null) return;
-
-				this.DestroyItem(x);
-			});
-			// 전투중 장비 집계는 무시
-
-			proxy.Register(Proxy.api_get_member_useitem, e =>
-			{
-				var x = e.TryParse<kcsapi_useitem[]>();
-				if (x == null) return;
-
-				this.Update(x.Data);
-			});
-			proxy.Register(Proxy.api_req_kousyou_remodel_slot, e =>
-			{
-				var x = e.TryParse<kcsapi_remodel_slot>();
-				if (x == null) return;
-
 				this.RemoveFromRemodel(x.Data);
 				this.RemodelSlotItem(x.Data);
 			});
@@ -113,18 +84,14 @@ namespace BeerViewer.Models
 			if (source.api_slotitem == null) return; // まるゆ
 
 			foreach (var x in source.api_slotitem.Select(x => new SlotItem(x)))
-			{
 				this.SlotItems.Add(x);
-			}
+
 			this.RaiseSlotItemsChanged();
 		}
 
 		internal void RemoveFromShip(Ship ship)
 		{
-			foreach (var x in ship.EquippedItems.ToArray())
-			{
-				this.SlotItems.Remove(x.Item);
-			}
+			ship.Slots.Where(x => x.Equipped).ForEach(x => this.SlotItems.Remove(x.Item));
 			this.RaiseSlotItemsChanged();
 		}
 
@@ -133,9 +100,8 @@ namespace BeerViewer.Models
 			if (source.api_use_slot_id != null)
 			{
 				foreach (var id in source.api_use_slot_id)
-				{
 					this.SlotItems.Remove(id);
-				}
+
 				this.RaiseSlotItemsChanged();
 			}
 		}
@@ -143,28 +109,21 @@ namespace BeerViewer.Models
 		private void CreateItem(kcsapi_createitem source)
 		{
 			if (source.api_create_flag == 1 && source.api_slot_item != null)
-			{
 				this.SlotItems.Add(new SlotItem(source.api_slot_item));
-			}
+
 			this.RaiseSlotItemsChanged();
 		}
 
 		private void DestroyItem(SvData<kcsapi_destroyitem2> data)
 		{
-			if (data == null || !data.IsSuccess) return;
-
 			try
 			{
 				foreach (var x in data.Request["api_slotitem_ids"].Split(',').Select(int.Parse))
-				{
 					this.SlotItems.Remove(x);
-				}
+
 				this.RaiseSlotItemsChanged();
 			}
-			catch (Exception ex)
-			{
-				Debug.WriteLine("装備の破棄に失敗しました: {0}", ex);
-			}
+			catch { }
 		}
 
 		private void RemodelSlotItem(kcsapi_remodel_slot source)
@@ -182,4 +141,5 @@ namespace BeerViewer.Models
 			this.RaisePropertyChanged(nameof(this.SlotItemsCount));
 		}
 	}
+
 }

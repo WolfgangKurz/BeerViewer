@@ -1,20 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using BeerViewer.Core;
+﻿using BeerViewer.Network;
 using BeerViewer.Models.Raw;
+using BeerViewer.Models.kcsapi;
 
 namespace BeerViewer.Models
 {
-	/// <summary>
-	/// 자원 데이터
-	/// </summary>
 	public class Materials : Notifier
 	{
-		#region Fuel 프로퍼티
+		#region Fuel Property
 		private int _Fuel;
 		public int Fuel
 		{
@@ -30,7 +22,7 @@ namespace BeerViewer.Models
 		}
 		#endregion
 
-		#region Ammo 프로퍼티
+		#region Ammo Property
 		private int _Ammo;
 		public int Ammo
 		{
@@ -46,7 +38,7 @@ namespace BeerViewer.Models
 		}
 		#endregion
 
-		#region Steel 프로퍼티
+		#region Steel Property
 		private int _Steel;
 		public int Steel
 		{
@@ -62,7 +54,7 @@ namespace BeerViewer.Models
 		}
 		#endregion
 
-		#region Bauxite 프로퍼티
+		#region Bauxite Property
 		private int _Bauxite;
 		public int Bauxite
 		{
@@ -78,65 +70,64 @@ namespace BeerViewer.Models
 		}
 		#endregion
 
-		#region DevMaterials 프로퍼티
-		private int _DevMaterials;
-		public int DevMaterials
+		#region DevelopmentMaterial Property
+		private int _DevelopmentMaterial;
+		public int DevelopmentMaterial
 		{
-			get { return this._DevMaterials; }
+			get { return this._DevelopmentMaterial; }
 			private set
 			{
-				if (this._DevMaterials != value)
+				if (this._DevelopmentMaterial != value)
 				{
-					this._DevMaterials = value;
+					this._DevelopmentMaterial = value;
 					this.RaisePropertyChanged();
 				}
 			}
 		}
 		#endregion
 
-		#region RepairBuckets 프로퍼티
-		private int _RepairBuckets;
-		public int RepairBuckets
+		#region RepairBucket Property
+		private int _RepairBucket;
+		public int RepairBucket
 		{
-			get { return this._RepairBuckets; }
+			get { return this._RepairBucket; }
 			private set
 			{
-				if (this._RepairBuckets != value)
+				if (this._RepairBucket != value)
 				{
-					this._RepairBuckets = value;
-					this.RaisePropertyChanged();
-					this.RaisePropertyChanged("Bucket");
-				}
-			}
-		}
-		#endregion
-
-		#region InstantBuildMaterials 프로퍼티
-		private int _InstantBuildMaterials;
-		public int BuildMaterials
-		{
-			get { return this._InstantBuildMaterials; }
-			private set
-			{
-				if (this._InstantBuildMaterials != value)
-				{
-					this._InstantBuildMaterials = value;
+					this._RepairBucket = value;
 					this.RaisePropertyChanged();
 				}
 			}
 		}
 		#endregion
 
-		#region ImprovementMaterials 프로퍼티
-		private int _ImprovementMaterials;
-		public int ImproveMaterials
+		#region InstantConstruction Property
+		private int _InstantConstruction;
+		public int InstantConstruction
 		{
-			get { return this._ImprovementMaterials; }
+			get { return this._InstantConstruction; }
+			private set
+			{
+				if (this._InstantConstruction != value)
+				{
+					this._InstantConstruction = value;
+					this.RaisePropertyChanged();
+				}
+			}
+		}
+		#endregion
+
+		#region ImprovementMaterial Property
+		private int _ImprovementMaterial;
+		public int ImprovementMaterial
+		{
+			get { return this._ImprovementMaterial; }
 			set
 			{
-				if (this._ImprovementMaterials != value)
+				if (this._ImprovementMaterial != value)
 				{
-					this._ImprovementMaterials = value;
+					this._ImprovementMaterial = value;
 					this.RaisePropertyChanged();
 				}
 			}
@@ -148,44 +139,26 @@ namespace BeerViewer.Models
 		{
 			var proxy = Proxy.Instance;
 
-			proxy.Register(Proxy.api_get_member_material, e =>
-			{
-				var x = e.TryParse<kcsapi_material[]>();
-				if (x == null) return;
-
-				this.Update(x.Data);
-			});
-			proxy.Register(Proxy.api_req_hokyu_charge, e =>
-			{
-				var x = e.TryParse<kcsapi_charge>();
-				if (x == null) return;
-
-				this.Update(x.Data.api_material);
-			});
-			proxy.Register(Proxy.api_req_kousyou_destroyship, e =>
-			{
-				var x = e.TryParse<kcsapi_destroyship>();
-				if (x == null) return;
-
-				this.Update(x.Data.api_material);
-			});
+			proxy.Register<kcsapi_material[]>(Proxy.api_get_member_material, x => this.Update(x.Data));
+			proxy.Register<kcsapi_charge>(Proxy.api_req_hokyu_charge, x => this.Update(x.Data.api_material));
+			proxy.Register<kcsapi_destroyship>(Proxy.api_req_kousyou_destroyship, x => this.Update(x.Data.api_material));
+			proxy.Register<kcsapi_destroyitem2>(Proxy.api_req_kousyou_destroyitem2, x => this.Update(x.Data.api_material));
 		}
 
 		internal void Update(kcsapi_material[] source)
 		{
-			if (source != null && 8 <= source.Length)
+			if (source != null && source.Length >= 8)
 			{
 				this.Fuel = source[0].api_value;
 				this.Ammo = source[1].api_value;
 				this.Steel = source[2].api_value;
 				this.Bauxite = source[3].api_value;
-				this.DevMaterials = source[6].api_value;
-				this.RepairBuckets = source[5].api_value;
-				this.BuildMaterials = source[4].api_value;
-				this.ImproveMaterials = source[7].api_value;
+				this.DevelopmentMaterial = source[6].api_value;
+				this.RepairBucket = source[5].api_value;
+				this.InstantConstruction = source[4].api_value;
+				this.ImprovementMaterial = source[7].api_value;
 			}
 		}
-
 		private void Update(int[] source)
 		{
 			if (source != null && source.Length == 4)

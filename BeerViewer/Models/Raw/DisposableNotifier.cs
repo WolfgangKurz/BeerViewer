@@ -1,11 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-using BeerViewer.Models;
 using MultipleDisposable = BeerViewer.Models.Raw.Disposable.MultipleDisposable;
 
 namespace BeerViewer.Models.Raw.Disposable

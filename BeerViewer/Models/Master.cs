@@ -1,69 +1,48 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
+using BeerViewer.Network;
 using BeerViewer.Models.Raw;
+using BeerViewer.Models.Wrapper;
+using BeerViewer.Models.kcsapi;
 
 namespace BeerViewer.Models
 {
-	/// <summary>
-	/// 플레이어 데이터에 존재하지 않는 마스터 데이터
-	/// </summary>
 	public class Master
 	{
-		/// <summary>
-		/// 전체 칸무스 데이터
-		/// </summary>
-		public MasterTable<ShipInfo> Ships { get; }
+		public static Master Instance { get; } = new Master();
+		public bool IsReady { get; private set; } = false;
 
-		/// <summary>
-		/// 전체 장비 타입 데이터
-		/// </summary>
-		public MasterTable<SlotItemEquipType> SlotItemEquipTypes { get; }
+		public MasterTable<ShipType> ShipTypes { get; private set; }
+		public MasterTable<ShipInfo> Ships { get; private set; }
 
-		/// <summary>
-		/// 전체 장비 데이터
-		/// </summary>
-		public MasterTable<SlotItemInfo> SlotItems { get; }
+		public MasterTable<SlotItemEquipType> SlotItemEquipTypes { get; private set; }
+		public MasterTable<SlotItemInfo> SlotItems { get; private set; }
+		public MasterTable<UseItemInfo> UseItems { get; private set; }
 
-		/// <summary>
-		/// 전체 소비 아이템 데이터
-		/// </summary>
-		public MasterTable<UseItemInfo> UseItems { get; }
+		public MasterTable<Mission> Missions { get; private set; }
 
-		/// <summary>
-		/// 함종 데이터
-		/// </summary>
-		public MasterTable<ShipType> ShipTypes { get; }
+		public MasterTable<MapInfo> MapInfos { get; private set; }
+		public MasterTable<MapArea> MapAreas { get; private set; }
 
-		/// <summary>
-		/// 전체 임무 데이터
-		/// </summary>
-		public MasterTable<Mission> Missions { get; }
-
-		/// <summary>
-		/// 전체 해역 데이터
-		/// </summary>
-		public MasterTable<MapArea> MapAreas { get; }
-
-		/// <summary>
-		/// 전체 맵 데이터
-		/// </summary>
-		public MasterTable<MapInfo> MapInfos { get; }
-
-
-		internal Master(kcsapi_start2 start2)
+		public void Ready()
 		{
-			this.ShipTypes = new MasterTable<ShipType>(start2.api_mst_stype.Select(x => new ShipType(x)));
-			this.Ships = new MasterTable<ShipInfo>(start2.api_mst_ship.Select(x => new ShipInfo(x)));
-			this.SlotItemEquipTypes = new MasterTable<SlotItemEquipType>(start2.api_mst_slotitem_equiptype.Select(x => new SlotItemEquipType(x)));
-			this.SlotItems = new MasterTable<SlotItemInfo>(start2.api_mst_slotitem.Select(x => new SlotItemInfo(x, this.SlotItemEquipTypes)));
-			this.UseItems = new MasterTable<UseItemInfo>(start2.api_mst_useitem.Select(x => new UseItemInfo(x)));
-			this.Missions = new MasterTable<Mission>(start2.api_mst_mission.Select(x => new Mission(x)));
-			this.MapInfos = new MasterTable<MapInfo>(start2.api_mst_mapinfo.Select(x => new MapInfo(x)));
-			this.MapAreas = new MasterTable<MapArea>(start2.api_mst_maparea.Select(x => new MapArea(x, this.MapInfos)));
+			if (IsReady) return;
+
+			Proxy.Instance.Register<kcsapi_start2>(Proxy.api_start2, x =>
+			{
+				this.ShipTypes = new MasterTable<ShipType>(x.Data.api_mst_stype.Select(y => new ShipType(y)));
+				this.Ships = new MasterTable<ShipInfo>(x.Data.api_mst_ship.Select(y => new ShipInfo(y)));
+
+				this.SlotItemEquipTypes = new MasterTable<SlotItemEquipType>(x.Data.api_mst_slotitem_equiptype.Select(y => new SlotItemEquipType(y)));
+				this.SlotItems = new MasterTable<SlotItemInfo>(x.Data.api_mst_slotitem.Select(y => new SlotItemInfo(y, this.SlotItemEquipTypes)));
+				this.UseItems = new MasterTable<UseItemInfo>(x.Data.api_mst_useitem.Select(y => new UseItemInfo(y)));
+
+				this.Missions = new MasterTable<Mission>(x.Data.api_mst_mission.Select(y => new Mission(y)));
+
+				this.MapInfos = new MasterTable<MapInfo>(x.Data.api_mst_mapinfo.Select(y => new MapInfo(y)));
+				this.MapAreas = new MasterTable<MapArea>(x.Data.api_mst_maparea.Select(y => new MapArea(y, this.MapInfos)));
+			});
 		}
 	}
 }

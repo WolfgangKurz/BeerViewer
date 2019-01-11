@@ -1,35 +1,14 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Windows;
 
-// 어셈블리에 대한 일반 정보는 다음 특성 집합을 통해 
-// 제어됩니다. 어셈블리와 관련된 정보를 수정하려면
-// 이러한 특성 값을 변경하세요.
 [assembly: AssemblyTitle("BeerViewer")]
-[assembly: AssemblyDescription("")]
-[assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyDescription("BeerViewer")]
+[assembly: AssemblyCompany("WolfgangKurz")]
 [assembly: AssemblyProduct("BeerViewer")]
-[assembly: AssemblyCopyright("Copyright ©  2016")]
-[assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("")]
+[assembly: AssemblyCopyright("Copyright © 2017-2018 WolfgangKurz")]
 
-// ComVisible을 false로 설정하면 이 어셈블리의 형식이 COM 구성 요소에 
-// 표시되지 않습니다.  COM에서 이 어셈블리의 형식에 액세스하려면 
-// 해당 형식에 대해 ComVisible 특성을 true로 설정하세요.
 [assembly: ComVisible(false)]
+[assembly: Guid("E750b097-B468-4102-bFA7-985EE1D94C61")]
 
-// 이 프로젝트가 COM에 노출되는 경우 다음 GUID는 typelib의 ID를 나타냅니다.
-[assembly: Guid("d8640609-09e7-4c15-bda0-92f6ff536c13")]
-
-// 어셈블리의 버전 정보는 다음 네 가지 값으로 구성됩니다.
-//
-//      주 버전
-//      부 버전 
-//      빌드 번호
-//      수정 버전
-//
-// 모든 값을 지정하거나 아래와 같이 '*'를 사용하여 빌드 번호 및 수정 번호가 자동으로 
-// 지정되도록 할 수 있습니다.
-// [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.0.13")]
+[assembly: AssemblyVersion("2.0.0.0")]

@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-using BeerViewer.Core;
+using BeerViewer.Network;
+using BeerViewer.Models.Enums;
+using BeerViewer.Models.Wrapper;
 using BeerViewer.Models.Raw;
+using BeerViewer.Models.kcsapi;
 
 namespace BeerViewer.Models
 {
-	/// <summary>
-	/// 함대 데이터
-	/// </summary>
 	public class Organization : Notifier
 	{
 		private readonly Homeport homeport;
@@ -19,7 +17,7 @@ namespace BeerViewer.Models
 		private readonly List<int> evacuatedShipsIds = new List<int>();
 		private readonly List<int> towShipIds = new List<int>();
 
-		#region Ships 프로퍼티
+		#region Ships Property
 		private MemberTable<Ship> _Ships;
 		public MemberTable<Ship> Ships
 		{
@@ -35,7 +33,7 @@ namespace BeerViewer.Models
 		}
 		#endregion
 
-		#region Fleets 프로퍼티
+		#region Fleets Property
 		private MemberTable<Fleet> _Fleets;
 		public MemberTable<Fleet> Fleets
 		{
@@ -51,7 +49,7 @@ namespace BeerViewer.Models
 		}
 		#endregion
 
-		#region Combined 프로퍼티
+		#region Combined Property
 		private bool _Combined;
 		public bool Combined
 		{
@@ -61,23 +59,6 @@ namespace BeerViewer.Models
 				if (this._Combined != value)
 				{
 					this._Combined = value;
-					this.Combine(value);
-					this.RaisePropertyChanged();
-				}
-			}
-		}
-		#endregion
-
-		#region CombinedFleet 프로퍼티
-		private CombinedFleet _CombinedFleet;
-		public CombinedFleet CombinedFleet
-		{
-			get { return this._CombinedFleet; }
-			set
-			{
-				if (this._CombinedFleet != value)
-				{
-					this._CombinedFleet = value;
 					this.RaisePropertyChanged();
 				}
 			}
@@ -92,127 +73,56 @@ namespace BeerViewer.Models
 			this.Ships = new MemberTable<Ship>();
 			this.Fleets = new MemberTable<Fleet>();
 
-			proxy.Register(Proxy.api_get_member_ship, e =>
+			proxy.Register<kcsapi_ship2[]>(Proxy.api_get_member_ship, x => this.Update(x.Data));
+			proxy.Register<kcsapi_ship2[]>(Proxy.api_get_member_ship2, x =>
 			{
-				var x = e.TryParse<kcsapi_ship2[]>();
-				if (x == null) return;
-
-				this.Update(x.Data);
-			});
-			proxy.Register(Proxy.api_get_member_ship2, e => {
-				var x = e.TryParse<kcsapi_ship2[]>();
-				if (x == null) return;
-
 				this.Update(x.Data);
 				this.Update(x.Fleets);
 			});
-			proxy.Register(Proxy.api_get_member_ship3, e => {
-				var x = e.TryParse<kcsapi_ship3>();
-				if (x == null) return;
 
+			proxy.Register<kcsapi_ship3>(Proxy.api_get_member_ship3, x =>
+			{
 				this.Update(x.Data.api_ship_data);
 				this.Update(x.Data.api_deck_data);
 			});
 
-			proxy.Register(Proxy.api_get_member_deck, e =>
+			proxy.Register<kcsapi_deck[]>(Proxy.api_get_member_deck, x => this.Update(x.Data));
+			proxy.Register<kcsapi_deck[]>(Proxy.api_get_member_deck_port, x => this.Update(x.Data));
+			proxy.Register<kcsapi_ship_deck>(Proxy.api_get_member_ship_deck, x => this.Update(x.Data));
+
+			proxy.Register<kcsapi_deck>(Proxy.api_req_hensei_preset_select, x => this.Update(x.Data));
+
+			proxy.Register(Proxy.api_req_hensei_change, e =>
 			{
-				var x = e.TryParse<kcsapi_deck[]>();
-				if (x == null) return;
-
-				this.Update(x.Data);
-			});
-			proxy.Register(Proxy.api_get_member_deck_port, e => {
-				var x = e.TryParse<kcsapi_deck[]>();
-				if (x == null) return;
-
-				this.Update(x.Data);
-			});
-			proxy.Register(Proxy.api_get_member_ship_deck, e => {
-				var x = e.TryParse<kcsapi_ship_deck>();
-				if (x == null) return;
-
-				this.Update(x.Data);
-			});
-			proxy.Register(Proxy.api_req_hensei_preset_select, e => {
-				var x = e.TryParse<kcsapi_deck>();
-				if (x == null) return;
-
-				this.Update(x.Data);
-			});
-
-			proxy.Register(Proxy.api_req_hensei_change, e => {
 				var x = e.TryParse();
 				if (x == null) return;
 
 				this.Change(x);
 			});
-			proxy.Register(Proxy.api_req_hokyu_charge, e => {
-				var x = e.TryParse<kcsapi_charge>();
-				if (x == null) return;
+			proxy.Register<kcsapi_charge>(Proxy.api_req_hokyu_charge, x => this.Charge(x.Data));
+			proxy.Register<kcsapi_powerup>(Proxy.api_req_kaisou_powerup, x => this.Powerup(x));
+			proxy.Register<kcsapi_slot_exchange_index>(Proxy.api_req_kaisou_slot_exchange_index, x => this.ExchangeSlot(x));
+			proxy.Register<kcsapi_slot_deprive>(Proxy.api_req_kaisou_slot_deprive, x => this.DepriveSlotItem(x.Data));
 
-				this.Charge(x.Data);
-			});
-			proxy.Register(Proxy.api_req_kaisou_powerup, e => {
-				var x = e.TryParse<kcsapi_powerup>();
-				if (x == null) return;
-
-				this.Powerup(x);
-			});
-			proxy.Register(Proxy.api_req_kaisou_slot_exchange_index, e => {
-				var x = e.TryParse<kcsapi_slot_exchange_index>();
-				if (x == null) return;
-
-				this.ExchangeSlot(x);
-			});
-			proxy.Register(Proxy.api_req_kaisou_slot_deprive, e => {
-				var x = e.TryParse<kcsapi_slot_deprive>();
-				if (x == null) return;
-
-				this.DepriveSlotItem(x.Data);
-			});
-
-			proxy.Register(Proxy.api_req_kousyou_getship, e => {
-				var x = e.TryParse<kcsapi_kdock_getship>();
-				if (x == null) return;
-
-				this.GetShip(x.Data);
-			});
-			proxy.Register(Proxy.api_req_kousyou_destroyship, e => {
-				var x = e.TryParse<kcsapi_destroyship>();
-				if (x == null) return;
-
-				this.DestoryShip(x);
-			});
-			proxy.Register(Proxy.api_req_member_updatedeckname, e => {
+			proxy.Register<kcsapi_kdock_getship>(Proxy.api_req_kousyou_getship, x => this.GetShip(x.Data));
+			proxy.Register<kcsapi_destroyship>(Proxy.api_req_kousyou_destroyship, x => this.DestoryShip(x));
+			proxy.Register(Proxy.api_req_member_updatedeckname, e =>
+			{
 				var x = e.TryParse();
 				if (x == null) return;
 
 				this.UpdateFleetName(x);
 			});
-
-			proxy.Register(Proxy.api_req_hensei_combined, e =>
-			{
-				var x = e.TryParse<kcsapi_hensei_combined>();
-				if (x == null) return;
-
-				this.Combined = x.Data.api_combined != 0;
-			});
+			proxy.Register<kcsapi_hensei_combined>(Proxy.api_req_hensei_combined, x => this.Combined = x.Data.api_combined != 0);
 
 			this.SubscribeSortieSessions();
 		}
 
-		/// <summary>
-		/// 칸무스가 속한 함대를 탐색
-		/// </summary>
 		internal Fleet GetFleet(int shipId)
-		{
-			return this.Fleets.Select(x => x.Value).SingleOrDefault(x => x.Ships.Any(s => s.Id == shipId));
-		}
+			=> this.Fleets.Select(x => x.Value).SingleOrDefault(x => x.Ships.Any(s => s.Id == shipId));
 
 		private void UpdateFleetName(SvData data)
 		{
-			if (data == null || !data.IsSuccess) return;
-
 			try
 			{
 				var fleet = this.Fleets[int.Parse(data.Request["api_deck_id"])];
@@ -220,10 +130,7 @@ namespace BeerViewer.Models
 
 				fleet.Name = name;
 			}
-			catch (Exception ex)
-			{
-				System.Diagnostics.Debug.WriteLine("함대명 변경에 실패: {0}", ex);
-			}
+			catch { }
 		}
 
 		private void RaiseShipsChanged()
@@ -232,7 +139,7 @@ namespace BeerViewer.Models
 		}
 
 
-		#region 모항 / 함대편성 (Update / Change)
+		#region Update / Change
 		internal void Update(kcsapi_ship2[] source)
 		{
 			if (source.Length <= 1)
@@ -243,24 +150,17 @@ namespace BeerViewer.Models
 					if (target == null) continue;
 
 					target.Update(ship);
-					this.GetFleet(target.Id)?.State.Calculate();
 				}
 			}
 			else
 			{
 				this.Ships = new MemberTable<Ship>(source.Select(x => new Ship(this.homeport, x)));
 
-				if (DataStorage.Instance.IsInSortie)
-				{
-					foreach (var id in this.evacuatedShipsIds) this.Ships[id].Situation |= ShipSituation.Evacuation;
-					foreach (var id in this.towShipIds) this.Ships[id].Situation |= ShipSituation.Tow;
-				}
+				foreach (var id in this.evacuatedShipsIds)
+					this.Ships[id].Situation |= ShipSituation.Evacuation;
 
-				foreach (var fleet in this.Fleets.Values)
-				{
-					fleet.State.Update();
-					fleet.State.Calculate();
-				}
+				foreach (var id in this.towShipIds)
+					this.Ships[id].Situation |= ShipSituation.Tow;
 			}
 		}
 
@@ -289,57 +189,42 @@ namespace BeerViewer.Models
 
 		private void Change(SvData data)
 		{
-			if (data == null || !data.IsSuccess) return;
-
 			try
 			{
 				var fleet = this.Fleets[int.Parse(data.Request["api_id"])];
-				fleet.RaiseShipsUpdated();
 
 				var index = int.Parse(data.Request["api_ship_idx"]);
-				if (index == -1)
+				var shipId = int.Parse(data.Request["api_ship_id"]);
+				if (index == 0 && shipId == -2)
 				{
-					// 旗艦以外をすべて外すケース
 					fleet.UnsetAll();
+					fleet.RaiseShipsUpdated();
 					return;
 				}
 
 				var ship = this.Ships[int.Parse(data.Request["api_ship_id"])];
 				if (ship == null)
 				{
-					// 艦を外すケース
 					fleet.Unset(index);
+					fleet.RaiseShipsUpdated();
 					return;
 				}
 
 				var currentFleet = this.GetFleet(ship.Id);
 				if (currentFleet == null)
 				{
-					// ship が、現状どの艦隊にも所属していないケース
 					fleet.Change(index, ship);
+					fleet.RaiseShipsUpdated();
 					return;
 				}
 
-				// ship が、現状いずれかの艦隊に所属しているケース
 				var currentIndex = Array.IndexOf(currentFleet.Ships, ship);
 				var old = fleet.Change(index, ship);
-
-				// Fleet.Change(int, Ship) は、変更前の艦を返す (= old) ので、
-				// ship の移動元 (currentFleet + currentIndex) に old を書き込みにいく
 				currentFleet.Change(currentIndex, old);
-			}
-			catch (Exception ex)
-			{
-				System.Diagnostics.Debug.WriteLine("편성 변경에 실패: {0}", ex);
-			}
-		}
 
-		private void Combine(bool combine)
-		{
-			this.CombinedFleet?.Dispose();
-			this.CombinedFleet = combine
-				? new CombinedFleet(this.homeport, this.Fleets.OrderBy(x => x.Key).Select(x => x.Value).Take(2).ToArray())
-				: null;
+				fleet.RaiseShipsUpdated();
+			}
+			catch { }
 		}
 
 		private void ExchangeSlot(SvData<kcsapi_slot_exchange_index> data)
@@ -354,17 +239,12 @@ namespace BeerViewer.Models
 
 				var fleet = this.Fleets.Values.FirstOrDefault(x => x.Ships.Any(y => y.Id == ship.Id));
 				if (fleet == null) return;
-
-				fleet.State.Calculate();
 			}
-			catch (Exception ex)
-			{
-				System.Diagnostics.Debug.WriteLine("장비 변경에 실패: {0}", ex);
-			}
+			catch { }
 		}
 		#endregion
 
-		#region 보급 / 근대화개수 (Charge / Powerup)
+		#region Charge / Powerup
 		private void Charge(kcsapi_charge source)
 		{
 			Fleet fleet = null;
@@ -381,12 +261,6 @@ namespace BeerViewer.Models
 					fleet = this.GetFleet(target.Id);
 				}
 			}
-
-			if (fleet != null)
-			{
-				fleet.State.Update();
-				fleet.State.Calculate();
-			}
 		}
 
 		private void Powerup(SvData<kcsapi_powerup> svd)
@@ -402,8 +276,6 @@ namespace BeerViewer.Models
 					.Select(x => this.Ships[x])
 					.ToArray();
 
-				// (改修に使った艦娘のこと item って呼ぶのどうなの…)
-
 				foreach (var x in items)
 				{
 					this.homeport.Itemyard.RemoveFromShip(x);
@@ -413,14 +285,11 @@ namespace BeerViewer.Models
 				this.RaiseShipsChanged();
 				this.Update(svd.Data.api_deck);
 			}
-			catch (Exception ex)
-			{
-				System.Diagnostics.Debug.WriteLine("근대화개수에 의한 갱신 실패: {0}", ex);
-			}
+			catch { }
 		}
 		#endregion
 
-		#region 개장 (DepriveSlotItem)
+		#region DepriveSlotItem
 		private void DepriveSlotItem(kcsapi_slot_deprive source)
 		{
 			this.Ships[source.api_ship_data.api_unset_ship.api_id]?.Update(source.api_ship_data.api_unset_ship);
@@ -428,7 +297,7 @@ namespace BeerViewer.Models
 		}
 		#endregion
 
-		#region 공창 (Get / Destroy)
+		#region Get / Destroy
 		private void GetShip(kcsapi_kdock_getship source)
 		{
 			this.homeport.Itemyard.AddFromDock(source);
@@ -450,14 +319,11 @@ namespace BeerViewer.Models
 					this.RaiseShipsChanged();
 				}
 			}
-			catch (Exception ex)
-			{
-				System.Diagnostics.Debug.WriteLine("해체에 의한 갱신 실패: {0}", ex);
-			}
+			catch { }
 		}
 		#endregion
 
-		#region 출격 (Sortie / Homing / Escape)
+		#region Sortie / Homing / Escape
 		private void SubscribeSortieSessions()
 		{
 			var proxy = Proxy.Instance;
@@ -467,7 +333,6 @@ namespace BeerViewer.Models
 				var x = e.TryParse();
 				if (x == null) return;
 
-				DataStorage.Instance.IsInSortie = true;
 				this.Sortie(x);
 			});
 			proxy.Register(Proxy.api_port, e =>
@@ -475,20 +340,18 @@ namespace BeerViewer.Models
 				var x = e.TryParse();
 				if (x == null) return;
 
-				DataStorage.Instance.IsInSortie = false;
 				this.Homing();
 			});
 
 			int[] evacuationOfferedShipIds = null;
 			int[] towOfferedShipIds = null;
 
-			proxy.Register(Proxy.api_req_combined_battle_battleresult, e => {
-				var x = e.TryParse<kcsapi_combined_battle_battleresult>();
-				if (x == null) return;
+			proxy.Register< kcsapi_combined_battle_battleresult>(Proxy.api_req_combined_battle_battleresult, x => {
 				if (x.Data.api_escape == null) return;
-				if (this.CombinedFleet == null) return;
 
-				var ships = this.CombinedFleet.Fleets.SelectMany(f => f.Ships).ToArray();
+				var ships = this.Fleets.Where(y => y.Key == 1 || y.Key == 2)
+					.SelectMany(f => f.Value.Ships).ToArray();
+
 				evacuationOfferedShipIds = x.Data.api_escape.api_escape_idx.Select(idx => ships[idx - 1].Id).ToArray();
 				towOfferedShipIds = x.Data.api_escape.api_tow_idx.Select(idx => ships[idx - 1].Id).ToArray();
 			});
@@ -496,11 +359,8 @@ namespace BeerViewer.Models
 				var x = e.TryParse();
 				if (x == null) return;
 
-				if (DataStorage.Instance.IsInSortie
-					&& evacuationOfferedShipIds != null
-					&& evacuationOfferedShipIds.Length >= 1
-					&& towOfferedShipIds != null
-					&& towOfferedShipIds.Length >= 1)
+				if (evacuationOfferedShipIds != null && evacuationOfferedShipIds.Length >= 1
+					&& towOfferedShipIds != null && towOfferedShipIds.Length >= 1)
 				{
 					this.evacuatedShipsIds.Add(evacuationOfferedShipIds[0]);
 					this.towShipIds.Add(towOfferedShipIds[0]);
@@ -517,20 +377,15 @@ namespace BeerViewer.Models
 
 		private void Sortie(SvData data)
 		{
-			if (data == null || !data.IsSuccess) return;
-
 			try
 			{
 				var id = int.Parse(data.Request["api_deck_id"]);
 				var fleet = this.Fleets[id];
-				fleet.Sortie();
 
+				fleet.Sortie();
 				if (this.Combined && id == 1) this.Fleets[2].Sortie();
 			}
-			catch (Exception ex)
-			{
-				System.Diagnostics.Debug.WriteLine("함대 출격 감지 실패: {0}", ex);
-			}
+			catch { }
 		}
 
 		private void Homing()
@@ -545,9 +400,7 @@ namespace BeerViewer.Models
 			}
 
 			foreach (var target in this.Fleets.Values)
-			{
 				target.Homing();
-			}
 		}
 
 		private void Update(kcsapi_ship_deck source)

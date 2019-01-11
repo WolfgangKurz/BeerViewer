@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace BeerViewer.Models
 {
-	/// <summary>
-	/// 경험치 테이블 데이터
-	/// </summary>
-	public class Experience
+	public struct Experience
 	{
 		public int Level { get; }
 		public int Next { get; }
@@ -22,8 +15,8 @@ namespace BeerViewer.Models
 			this.Total = total;
 		}
 
-		#region 사령부 경험치 테이블
-		internal static readonly Dictionary<int, Experience> admiralTable = new Dictionary<int, Experience>
+		#region Admiral Exp Table
+		public static IReadOnlyDictionary<int, Experience> admiralTable = new Dictionary<int, Experience>
 		{
 			{ 1, new Experience(1, 100, 0) },
 			{ 2, new Experience(2, 200, 100) },
@@ -148,8 +141,8 @@ namespace BeerViewer.Models
 		};
 		#endregion
 
-		#region 칸무스 경험치 테이블
-		internal static readonly Dictionary<int, Experience> shipTable = new Dictionary<int, Experience>
+		#region Ship Exp Table
+		internal static IReadOnlyDictionary<int, Experience> shipTable = new Dictionary<int, Experience>
 		{
 			{ 1, new Experience(1, 100, 0) },
 			{ 2, new Experience(2, 200, 100) },
@@ -309,18 +302,15 @@ namespace BeerViewer.Models
 		};
 		#endregion
 
-		/// <summary>
-		/// 사령부 레벨업까지 필요한 경험치
-		/// </summary>
 		public static int GetAdmiralExpForNextLevel(int currentLevel, int currentExperience)
-			=> admiralTable.ContainsKey(currentLevel + 1) ? admiralTable[currentLevel + 1].Total - currentExperience : 0;
+			=> admiralTable.ContainsKey(currentLevel + 1)
+				? admiralTable[currentLevel + 1].Total - currentExperience
+				: 0;
 
-		/// <summary>
-		/// 특정 레벨까지 도달하는데 필요한 경험치
-		/// </summary>
 		public static int GetShipExpForSpecifiedLevel(int currentExperience, int? targetLevel)
 			=> targetLevel.HasValue && shipTable.ContainsKey(targetLevel.Value)
 				? shipTable[targetLevel.Value].Total - currentExperience
 				: 0;
 	}
+
 }

@@ -1,20 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-using BeerViewer.Core;
+using BeerViewer.Models.Enums;
 using BeerViewer.Models.Raw;
+using BeerViewer.Models.kcsapi;
 
 namespace BeerViewer.Models
 {
+	public class RepairingCompletedEventArgs : EventArgs
+	{
+		public int DockId { get; private set; }
+		public Ship Ship { get; private set; }
+
+		public RepairingCompletedEventArgs(int id, Ship ship)
+		{
+			this.DockId = id;
+			this.Ship = ship;
+		}
+	}
+
 	public class RepairingDock : TimerNotifier, IIdentifiable
 	{
 		private readonly Homeport homeport;
 		private bool notificated;
 
-		#region Level 프로퍼티
+		#region Level Property
 		private int _Level;
 		public int Level
 		{
@@ -30,7 +39,7 @@ namespace BeerViewer.Models
 		}
 		#endregion
 
-		#region Id 프로퍼티
+		#region Id Property
 		private int _Id;
 		public int Id
 		{
@@ -46,7 +55,7 @@ namespace BeerViewer.Models
 		}
 		#endregion
 
-		#region State 프로퍼티
+		#region State Property
 		private RepairingDockState _State;
 		public RepairingDockState State
 		{
@@ -62,7 +71,7 @@ namespace BeerViewer.Models
 		}
 		#endregion
 
-		#region ShipId 프로퍼티
+		#region ShipId Property
 		private int _ShipId;
 		public int ShipId
 		{
@@ -78,7 +87,7 @@ namespace BeerViewer.Models
 		}
 		#endregion
 
-		#region Ship 프로퍼티
+		#region Ship Property
 		private Ship target;
 		public Ship Ship
 		{
@@ -99,9 +108,9 @@ namespace BeerViewer.Models
 		}
 		#endregion
 
-		#region CompleteTime 프로퍼티
-		private DateTimeOffset? _CompleteTime;
-		public DateTimeOffset? CompleteTime
+		#region CompleteTime Property
+		private DateTime? _CompleteTime;
+		public DateTime? CompleteTime
 		{
 			get { return this._CompleteTime; }
 			private set
@@ -116,7 +125,7 @@ namespace BeerViewer.Models
 		}
 		#endregion
 
-		#region Remaining 프로퍼티
+		#region Remaining Property
 		private TimeSpan? _Remaining;
 		public TimeSpan? Remaining
 		{
@@ -127,27 +136,37 @@ namespace BeerViewer.Models
 				{
 					this._Remaining = value;
 					this.RaisePropertyChanged();
+					this.RaisePropertyChanged(nameof(RemainingText));
+					this.RaisePropertyChanged(nameof(IsCompleted));
 				}
 			}
 		}
+
+		public string RemainingText => this.Remaining.HasValue
+			? $"{(int)this.Remaining.Value.TotalHours:D2}:{this.Remaining.Value.ToString(@"mm\:ss")}"
+			: "--:--:--";
+
+		public bool IsCompleted => this.Remaining.HasValue
+			? this.Remaining.Value == TimeSpan.Zero
+			: false;
 		#endregion
 
 		public event EventHandler<RepairingCompletedEventArgs> Completed;
 
-		internal RepairingDock(Homeport parent, kcsapi_ndock rawData)
+		internal RepairingDock(Homeport parent, kcsapi_ndock Data)
 		{
 			this.homeport = parent;
-			this.Update(rawData);
+			this.Update(Data);
 		}
 
-		internal void Update(kcsapi_ndock rawData)
+		internal void Update(kcsapi_ndock Data)
 		{
-			this.Id = rawData.api_id;
-			this.State = (RepairingDockState)rawData.api_state;
-			this.ShipId = rawData.api_ship_id;
+			this.Id = Data.api_id;
+			this.State = (RepairingDockState)Data.api_state;
+			this.ShipId = Data.api_ship_id;
 			this.Ship = this.State == RepairingDockState.Repairing ? this.homeport.Organization.Ships[this.ShipId] : null;
 			this.CompleteTime = this.State == RepairingDockState.Repairing
-				? (DateTimeOffset?)Const.UnixEpoch.AddMilliseconds(rawData.api_complete_time)
+				? (DateTime?)Extensions.UnixEpoch.AddMilliseconds(Data.api_complete_time)
 				: null;
 			this.Level = this.State == RepairingDockState.Repairing ? this.Ship.Level : 0;
 		}
@@ -160,19 +179,18 @@ namespace BeerViewer.Models
 			this.CompleteTime = null;
 		}
 
-
 		protected override void Tick()
 		{
 			base.Tick();
 
 			if (this.CompleteTime.HasValue)
 			{
-				var remaining = this.CompleteTime.Value - DateTimeOffset.Now;
+				var remaining = this.CompleteTime.Value - DateTime.Now;
 				if (remaining.Ticks < 0) remaining = TimeSpan.Zero;
 
 				this.Remaining = remaining;
 
-				if (!this.notificated && this.Completed != null && remaining <= TimeSpan.FromSeconds(Const.NotificationTime))
+				if (!this.notificated && this.Completed != null && remaining <= TimeSpan.FromSeconds(Settings.NotificationTime))
 				{
 					this.Completed(this, new RepairingCompletedEventArgs(this.Id, this.Ship));
 					this.notificated = true;

@@ -2,22 +2,21 @@
 using System.ComponentModel;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
+using BeerViewer.Network;
+using BeerViewer.Models.Enums;
 using BeerViewer.Models.Raw;
+using BeerViewer.Models.kcsapi;
+using BeerViewer.Models.Wrapper;
 
 namespace BeerViewer.Models
 {
-	/// <summary>
-	/// 複数の艦娘によって編成される、単一の常設艦隊を表します。
-	/// </summary>
-	public class Fleet : DisposableNotifier, IIdentifiable
+	public class Fleet : TimerNotifier, IIdentifiable
 	{
 		private readonly Homeport homeport;
-		private Ship[] originalShips; // null も含んだやつ
+		private Ship[] originalShips;
 
-		#region Id 프로퍼티
+		#region Id Property
 		private int _Id;
 		public int Id
 		{
@@ -33,7 +32,7 @@ namespace BeerViewer.Models
 		}
 		#endregion
 
-		#region Name 프로퍼티
+		#region Name Property
 		private string _Name;
 		public string Name
 		{
@@ -43,14 +42,13 @@ namespace BeerViewer.Models
 				if (this._Name != value)
 				{
 					this._Name = value;
-					this.State.Condition.Name = value;
 					this.RaisePropertyChanged();
 				}
 			}
 		}
 		#endregion
 
-		#region Ships 프로퍼티
+		#region Ships Property
 		private Ship[] _Ships = new Ship[0];
 		public Ship[] Ships
 		{
@@ -69,7 +67,13 @@ namespace BeerViewer.Models
 		public object ShipsUpdated { get; set; }
 		#endregion
 
-		#region IsInSortie 프로퍼티
+		#region FleetSpeed Property
+		public ShipSpeed Speed
+			=> this.Ships?.Select(x => x.Speed).Min()
+				?? ShipSpeed.Immovable;
+		#endregion
+
+		#region IsInSortie Property
 		private bool _IsInSortie;
 		public bool IsInSortie
 		{
@@ -85,44 +89,125 @@ namespace BeerViewer.Models
 		}
 		#endregion
 
-		public FleetState State { get; }
+		#region State Property
+		private FleetSituation _State { get; set; }
+		public FleetSituation State
+		{
+			get { return this._State; }
+			set
+			{
+				if(this._State != value)
+				{
+					this._State = value;
+					this.RaisePropertyChanged();
+				}
+			}
+		}
+		#endregion
+
 		public Expedition Expedition { get; }
 
+		#region AirSuperiorityPotentialMinimum Property
+		private int _AirSuperiorityPotentialMinimum { get; set; }
+		public int AirSuperiorityPotentialMinimum
+		{
+			get { return this._AirSuperiorityPotentialMinimum; }
+			private set
+			{
+				if(this._AirSuperiorityPotentialMinimum != value)
+				{
+					this._AirSuperiorityPotentialMinimum = value;
+					this.RaisePropertyChanged();
+				}
+			}
+		}
+		#endregion
 
-		internal Fleet(Homeport parent, kcsapi_deck rawData)
+		#region AirSuperiorityPotentialMaximum Property
+		private int _AirSuperiorityPotentialMaximum { get; set; }
+		public int AirSuperiorityPotentialMaximum
+		{
+			get { return this._AirSuperiorityPotentialMaximum; }
+			private set
+			{
+				if (this._AirSuperiorityPotentialMaximum != value)
+				{
+					this._AirSuperiorityPotentialMaximum = value;
+					this.RaisePropertyChanged();
+				}
+			}
+		}
+		#endregion
+
+		#region LOS Property
+		private double _LOS { get; set; }
+		public double LOS
+		{
+			get { return this._LOS; }
+			private set
+			{
+				if (this._LOS != value)
+				{
+					this._LOS = value;
+					this.RaisePropertyChanged();
+				}
+			}
+		}
+		#endregion
+
+		private int MinimumCondition { get; set; }
+		private DateTime? RejuvenateTime { get; set; }
+
+		public bool IsRejuvenating => this.RejuvenateTime.HasValue;
+
+		public TimeSpan? RejuvenateRemaining
+			=> !this.IsRejuvenating ? (TimeSpan?)null
+			: this.RejuvenateTime.Value < DateTime.Now ? TimeSpan.Zero
+			: this.RejuvenateTime.Value - DateTime.Now;
+
+		public string RejuvenateText => this.RejuvenateRemaining.HasValue
+			? $"{(int)this.RejuvenateRemaining.Value.TotalHours:D2}:{this.RejuvenateRemaining.Value.ToString(@"mm\:ss")}"
+			: "--:--:--";
+
+		internal Fleet(Homeport parent, kcsapi_deck Data)
 		{
 			this.homeport = parent;
+			this.CompositeDisposable.Add(this.Expedition = new Expedition(this));
 
-			this.State = new FleetState(parent, this);
-			this.Expedition = new Expedition(this);
-			this.CompositeDisposable.Add(this.State);
-			this.CompositeDisposable.Add(this.Expedition);
-
-			this.Update(rawData);
+			this.Update(Data);
 		}
 
-
-		/// <summary>
-		/// 指定した <see cref="kcsapi_deck"/> を使用して艦隊の情報をすべて更新します。
-		/// </summary>
-		/// <param name="rawData">エンド ポイントから取得したデータ。</param>
-		internal void Update(kcsapi_deck rawData)
+		internal void Update(kcsapi_deck Data)
 		{
-			this.Id = rawData.api_id;
-			this.Name = rawData.api_name;
+			this.Id = Data.api_id;
+			this.Name = Data.api_name;
 
-			this.Expedition.Update(rawData.api_mission);
-			this.UpdateShips(rawData.api_ship.Select(id => this.homeport.Organization.Ships[id]).ToArray());
+			this.Expedition.Update(Data.api_mission);
+			this.UpdateShips(Data.api_ship.Select(id => this.homeport.Organization.Ships[id]).ToArray());
+
+			this.UpdateCondition();
 		}
 
-		#region 艦の編成 (Change, Unset)
+		#region Sortie, Homing
+		internal void Sortie()
+		{
+			if (!this.IsInSortie)
+			{
+				this.IsInSortie = true;
+				this.UpdateState();
+			}
+		}
+		internal void Homing()
+		{
+			if (this.IsInSortie)
+			{
+				this.IsInSortie = false;
+				this.UpdateState();
+			}
+		}
+		#endregion
 
-		/// <summary>
-		/// 艦隊の編成を変更します。
-		/// </summary>
-		/// <param name="index">編成を変更する艦のインデックス。通常は 0 ～ 5、旗艦以外をすべて外す場合は -1。</param>
-		/// <param name="ship">艦隊の <paramref name="index"/> 番目に新たに編成する艦。<paramref name="index"/> 番目から艦を外す場合は null。</param>
-		/// <returns>このメソッドを呼び出した時点で <paramref name="index"/> に配置されていた艦。</returns>
+		#region Change, Unset
 		internal Ship Change(int index, Ship ship)
 		{
 			var current = this.originalShips[index];
@@ -147,10 +232,6 @@ namespace BeerViewer.Models
 			return current;
 		}
 
-		/// <summary>
-		/// 指定したインデックスの艦を艦隊から外します。
-		/// </summary>
-		/// <param name="index">艦隊から外す艦のインデックス。</param>
 		internal void Unset(int index)
 		{
 			var list = this.originalShips.ToList();
@@ -163,9 +244,6 @@ namespace BeerViewer.Models
 			this.UpdateShips(ships);
 		}
 
-		/// <summary>
-		/// 旗艦以外のすべての艦を艦隊から外します。
-		/// </summary>
 		internal void UnsetAll()
 		{
 			var list = this.originalShips.Take(1).ToList();
@@ -177,33 +255,112 @@ namespace BeerViewer.Models
 
 		#endregion
 
-		#region 出撃 (Sortie, Homing)
-		internal void Sortie()
-		{
-			if (!this.IsInSortie)
-			{
-				this.IsInSortie = true;
-				this.State.Update();
-			}
-		}
-
-		internal void Homing()
-		{
-			if (this.IsInSortie)
-			{
-				this.IsInSortie = false;
-				this.State.Update();
-			}
-		}
-		#endregion
-
 		private void UpdateShips(Ship[] ships)
 		{
 			this.originalShips = ships;
 			this.Ships = ships.Where(x => x != null).ToArray();
 
-			this.State.Calculate();
-			this.State.Update();
+			this.CalculateValues();
+			this.UpdateState();
+		}
+		private void UpdateCondition()
+		{
+			var condition = this.Ships.Min(x => x.Condition);
+			var goal = 49;
+
+			// Require time not changed
+			if (MinimumCondition == condition)
+				return;
+
+			MinimumCondition = condition;
+			if (condition >= goal)
+			{
+				this.RejuvenateTime = (DateTime?)null;
+				this.RaisePropertyChanged(nameof(this.IsRejuvenating));
+			}
+			else
+			{
+				var rejuvenate = DateTime.Now;
+
+				var value = (goal - condition + 2) / 3 * 3; // Integral dividing
+				rejuvenate = rejuvenate.AddMinutes(value);
+
+				this.RejuvenateTime = rejuvenate;
+				this.RaisePropertyChanged(nameof(this.IsRejuvenating));
+			}
+
+			this.UpdateState();
+		}
+
+		private void UpdateState()
+		{
+			var state = FleetSituation.Empty;
+
+			var ships = this.Ships.ToArray();
+			if (ships.Length == 0)
+			{
+			}
+			else {
+				if (this.IsInSortie)
+					state |= FleetSituation.Sortie;
+				else if (this.Expedition.IsInExecution)
+					state |= FleetSituation.Expedition;
+				else
+					state |= FleetSituation.Homeport;
+			}
+
+			if (state.HasFlag(FleetSituation.Homeport))
+			{
+				var repairing = ships.Any(x => this.homeport.Repairyard.CheckRepairing(x.Id));
+				if (repairing)
+					state |= FleetSituation.Repairing;
+
+				var inShortSupply = ships.Any(s => s.Fuel.Current < s.Fuel.Maximum || s.Ammo.Current < s.Ammo.Maximum);
+				if (inShortSupply)
+					state |= FleetSituation.InShortSupply;
+
+				if (this.IsRejuvenating)
+					state |= FleetSituation.Rejuvenating;
+			}
+
+			var heavilyDamaged = ships
+				.Where(s => !this.homeport.Repairyard.CheckRepairing(s.Id))
+				.Where(s => !s.Situation.HasFlag(ShipSituation.Evacuation) && !s.Situation.HasFlag(ShipSituation.Tow))
+				.Where(s => !(state.HasFlag(FleetSituation.Sortie) && s.Situation.HasFlag(ShipSituation.DamageControlled)))
+				.Any(s => s.HP.IsHeavilyDamage());
+			if (heavilyDamaged)
+				state |= FleetSituation.HeavilyDamaged;
+
+			if (this.Ships.Length > 0)
+			{
+				if (this.Ships[0].Info.ShipType.Id == 19)
+					state |= FleetSituation.FlagshipIsRepairShip;
+			}
+
+			this.State = state;
+		}
+
+		private void CalculateValues()
+		{
+			var ships = this.Ships
+				.Where(x => !x.Situation.HasFlag(ShipSituation.Tow) && !x.Situation.HasFlag(ShipSituation.Evacuation))
+				.ToArray();
+
+			this.AirSuperiorityPotentialMinimum = ships.Sum(x => x.GetAirSuperiorityPotential(AirSuperiorityCalculationOptions.Minimum));
+			this.AirSuperiorityPotentialMaximum = ships.Sum(x => x.GetAirSuperiorityPotential(AirSuperiorityCalculationOptions.Maximum));
+
+			this.LOS = LOSCalcLogic.Get(Settings.LOSCalcType).Calc(new Fleet[] { this });
+		}
+
+		protected override void Tick()
+		{
+			base.Tick();
+
+			if (this.RejuvenateTime.HasValue)
+			{
+				this.RaisePropertyChanged(nameof(RejuvenateRemaining));
+				this.RaisePropertyChanged(nameof(RejuvenateText));
+			}
 		}
 
 		internal void RaiseShipsUpdated()

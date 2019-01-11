@@ -1,0 +1,8 @@
+﻿<div id="top-resources">
+	<div class="top-resource"
+		 v-for="res in Resources"
+		 :data-overlimit="res.Value >= Overlimit ? 1 : 0">
+		<img class="resource-icon" :src="'modules/top-resource/icon_'+res.lowName+'.png'" />
+		<div class="resource-value">{{res.Value}}</div>
+	</div>
+</div>

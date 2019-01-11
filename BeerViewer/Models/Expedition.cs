@@ -4,19 +4,29 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using BeerViewer.Core;
+using BeerViewer.Network;
+using BeerViewer.Models;
 using BeerViewer.Models.Raw;
+using BeerViewer.Models.Wrapper;
 
 namespace BeerViewer.Models
 {
+	public class ExpeditionReturnedEventArgs : EventArgs
+	{
+		public string FleetName { get; }
+
+		internal ExpeditionReturnedEventArgs(string fleetName)
+		{
+			this.FleetName = fleetName;
+		}
+	}
+
 	public class Expedition : TimerNotifier, IIdentifiable
 	{
-		public static readonly DateTimeOffset UnixEpoch = new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero);
-
 		private readonly Fleet fleet;
 		private bool notificated;
 
-		#region Id 프로퍼티
+		#region Id Property
 		private int _Id;
 		public int Id
 		{
@@ -32,7 +42,7 @@ namespace BeerViewer.Models
 		}
 		#endregion
 
-		#region Mission 프로퍼티
+		#region Mission Property
 		private Mission _Mission;
 		public Mission Mission
 		{
@@ -48,9 +58,9 @@ namespace BeerViewer.Models
 		}
 		#endregion
 
-		#region ReturnTime / Remaining / IsInExecution 프로퍼티
-		private DateTimeOffset? _ReturnTime;
-		public DateTimeOffset? ReturnTime
+		#region ReturnTime / Remaining / IsInExecution Property
+		private DateTime? _ReturnTime;
+		public DateTime? ReturnTime
 		{
 			get { return this._ReturnTime; }
 			private set
@@ -67,12 +77,31 @@ namespace BeerViewer.Models
 		}
 
 		public TimeSpan? Remaining
-			=> !this.ReturnTime.HasValue ? (TimeSpan?)null
-			: this.ReturnTime.Value < DateTimeOffset.Now ? TimeSpan.Zero
-			: this.ReturnTime.Value - DateTimeOffset.Now;
+			=> !this.ReturnTime.HasValue
+			? (TimeSpan?)null
+			: this.ReturnTime.Value < DateTime.Now
+				? TimeSpan.Zero
+				: this.ReturnTime.Value - DateTime.Now;
+
+		public string RemainingText => this.Remaining.HasValue
+			? $"{(int)this.Remaining.Value.TotalHours:D2}:{this.Remaining.Value.ToString(@"mm\:ss")}"
+			: "--:--:--";
 
 		public bool IsInExecution => this.ReturnTime.HasValue;
 		#endregion
+
+		public LimitedValue Progress
+		{
+			get
+			{
+				if (!this.ReturnTime.HasValue) return new LimitedValue();
+				if (this.Mission == null) return new LimitedValue();
+
+				var start = this.ReturnTime.Value.Subtract(TimeSpan.FromMinutes(this.Mission.RawData.api_time));
+				var value = (int)DateTime.Now.Subtract(start).TotalSeconds;
+				return new LimitedValue(value, this.Mission.RawData.api_time * 60, 0);
+			}
+		}
 
 		public event EventHandler<ExpeditionReturnedEventArgs> Returned;
 
@@ -81,9 +110,9 @@ namespace BeerViewer.Models
 			this.fleet = fleet;
 		}
 
-		internal void Update(long[] rawData)
+		internal void Update(long[] Data)
 		{
-			if (rawData.Length != 4 || rawData.All(x => x == 0))
+			if (Data.Length != 4 || Data.All(x => x == 0))
 			{
 				this.Id = -1;
 				this.Mission = null;
@@ -91,18 +120,20 @@ namespace BeerViewer.Models
 			}
 			else
 			{
-				this.Id = (int)rawData[1];
-				this.Mission = DataStorage.Instance.Master.Missions[this.Id];
-				this.ReturnTime = Const.UnixEpoch.AddMilliseconds(rawData[2]);
-				this.UpdateCore();
+				this.Id = (int)Data[1];
+				this.Mission = Master.Instance.Missions[this.Id];
+				this.ReturnTime = Extensions.UnixEpoch.AddMilliseconds(Data[2]);
 			}
+			this.UpdateCore();
 		}
 
 		private void UpdateCore()
 		{
 			this.RaisePropertyChanged(nameof(this.Remaining));
+			this.RaisePropertyChanged(nameof(this.RemainingText));
+			this.RaisePropertyChanged(nameof(this.Progress));
 
-			if (!this.notificated && this.Returned != null && this.Remaining <= TimeSpan.FromSeconds(Const.NotificationTime))
+			if (!this.notificated && this.Returned != null && this.Remaining <= TimeSpan.FromSeconds(Settings.NotificationTime))
 			{
 				this.Returned(this, new ExpeditionReturnedEventArgs(this.fleet.Name));
 				this.notificated = true;
