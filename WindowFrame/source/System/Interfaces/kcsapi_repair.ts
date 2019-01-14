@@ -1,3 +1,5 @@
+import { HTTPRequest } from "../Exports/API";
+
 interface kcsapi_nyukyo_start extends HTTPRequest {
     api_ship_id: number;
 }

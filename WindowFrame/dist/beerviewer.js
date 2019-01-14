@@ -2,6 +2,14 @@
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 define("vendor/vue.tippy", ["require", "exports", "vue", "tippy.js"], function (require, exports, vue_1, tippy_js_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -129,6 +137,168 @@ define("base", ["require", "exports", "tippy.js", "vue", "vendor/vue.tippy"], fu
     });
     vue_2.default.use(vue_tippy_js_1.default, tippy_js_2.default.defaults);
 });
+define("System/Base", ["require", "exports", "tippy.js", "vue", "vendor/vue.tippy"], function (require, exports, tippy_js_3, vue_3, vue_tippy_js_2) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    tippy_js_3 = __importDefault(tippy_js_3);
+    vue_3 = __importDefault(vue_3);
+    vue_tippy_js_2 = __importDefault(vue_tippy_js_2);
+    tippy_js_3.default.setDefaults({
+        arrow: true,
+        boundary: "viewport",
+        placement: "bottom",
+        size: "large",
+        theme: "light-border",
+        interactive: false,
+        trigger: 'mouseenter focus',
+        hideOnClick: false,
+        performance: true
+    });
+    vue_3.default.directive("dom", function (el, binding) {
+        if (binding.oldValue && binding.oldValue instanceof Element && binding.oldValue.parentNode === el)
+            binding.oldValue.remove();
+        if (binding.value instanceof Element)
+            el.append(binding.value);
+    });
+    vue_3.default.use(vue_tippy_js_2.default, tippy_js_3.default.defaults);
+});
+class Settings {
+}
+{
+    const _origin_i18n = {};
+    window.INTERNAL = {
+        Initialized() {
+            return __awaiter(this, void 0, void 0, function* () {
+                const set = yield window.API.i18nSet();
+                const props = Object.getOwnPropertyNames(_origin_i18n);
+                for (let i = 0; i < props.length; i++)
+                    delete _origin_i18n[props[i]];
+                for (let i in set)
+                    _origin_i18n[i] = set[i];
+            });
+        },
+        zoomMainFrame(_zoomFactor) {
+            const zoomFactor = typeof _zoomFactor === "number"
+                ? _zoomFactor / 100
+                : parseFloat(_zoomFactor) / 100;
+            const frame = document.querySelector("#MAIN_FRAME");
+            if (frame === null)
+                return;
+            frame.style["transform"] = `scale(${zoomFactor})`;
+            frame.style["marginRight"] = 1200 * (zoomFactor - 1) + "px";
+            frame.style["marginBottom"] = 720 * (zoomFactor - 1) + "px";
+        },
+        loadMainFrame(url) {
+            const frame = document.querySelector("#MAIN_FRAME");
+            if (frame === null)
+                return;
+            frame.src = url;
+        }
+    };
+    window.i18n
+        = new Proxy(_origin_i18n, {
+            get: function (target, name) {
+                if (name in target)
+                    return target[name.toString()];
+                return name;
+            }
+        });
+}
+window._i18n
+    = function (text) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield window.API.i18n(text);
+        });
+    };
+function fns(Handler, ...Params) {
+    if (Handler) {
+        if (Handler.length)
+            Handler.forEach(x => typeof x === "function" && x(...Params));
+        else if (typeof Handler === "function")
+            Handler(...Params);
+    }
+}
+function using(resource, func) {
+    try {
+        func(resource);
+    }
+    finally {
+        resource.Dispose();
+    }
+}
+define("System/Base/KcsApi", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    function SubscribeKcsapi(url, callback) {
+        window.API.SubscribeHTTP("/kcsapi/" + url, (x, y) => {
+            try {
+                const svdata = x.startsWith("svdata=") ? x.substr(7) : x;
+                const json = JSON.parse(svdata.toString());
+                if (json.api_result === 1 && callback)
+                    callback(json.api_data, y);
+            }
+            catch (e) {
+                console.warn("Expected json, but not.", e);
+            }
+        });
+    }
+    ;
+});
+class Notifier {
+    constructor() {
+        this.PropertyChanged = null;
+    }
+    RaisePropertyChanged(propertyName = null) {
+        if (this.PropertyChanged === null)
+            return;
+        if (this.PropertyChanged.length) {
+            const list = this.PropertyChanged;
+            list.forEach(x => x(propertyName));
+            return;
+        }
+        this.PropertyChanged(propertyName);
+    }
+    PropertyEvent(PropertyName, Handler, RaiseRegistered = false) {
+        if (this.PropertyChanged === null) {
+            this.PropertyChanged = x => {
+                if (x === PropertyName && Handler)
+                    Handler();
+            };
+        }
+        if (RaiseRegistered && Handler)
+            Handler();
+    }
+}
+class TickNotifier extends Notifier {
+    constructor() {
+        super();
+        this.handler = setInterval(this.Tick, 1000);
+    }
+    Tick() { }
+    Dispose() {
+        clearInterval(this.handler);
+    }
+}
+class Ticker {
+    constructor() {
+        this.handler = setInterval(this.Tick, 1000);
+    }
+    Tick() { }
+    Dispose() {
+        clearInterval(this.handler);
+    }
+}
+class RawDataWrapper {
+    constructor(RawData) {
+        this._raw = RawData;
+    }
+    get raw() {
+        return this._raw;
+    }
+    UpdateData(RawData) {
+        this._raw = RawData;
+    }
+}
 var Experience;
 (function (Experience) {
     Experience.Admiral = {
@@ -289,93 +459,6 @@ var Experience;
         155: { Level: 155, Next: 240000, Total: 5470000 }
     };
 })(Experience || (Experience = {}));
-class Settings {
-}
-function fns(Handler, ...Params) {
-    if (Handler) {
-        if (Handler.length)
-            Handler.forEach(x => typeof x === "function" && x(...Params));
-        else if (typeof Handler === "function")
-            Handler(...Params);
-    }
-}
-function using(resource, func) {
-    try {
-        func(resource);
-    }
-    finally {
-        resource.Dispose();
-    }
-}
-function SubscribeKcsapi(url, callback) {
-    window.API.SubscribeHTTP("/kcsapi/" + url, (x, y) => {
-        try {
-            const svdata = x.startsWith("svdata=") ? x.substr(7) : x;
-            const json = JSON.parse(svdata.toString());
-            if (json.api_result === 1 && callback)
-                callback(json.api_data, y);
-        }
-        catch (e) {
-            console.warn("Expected json, but not.", e);
-        }
-    });
-}
-;
-class Notifier {
-    constructor() {
-        this.PropertyChanged = null;
-    }
-    RaisePropertyChanged(propertyName = null) {
-        if (this.PropertyChanged === null)
-            return;
-        if (this.PropertyChanged.length) {
-            const list = this.PropertyChanged;
-            list.forEach(x => x(propertyName));
-            return;
-        }
-        this.PropertyChanged(propertyName);
-    }
-    PropertyEvent(PropertyName, Handler, RaiseRegistered = false) {
-        if (this.PropertyChanged === null) {
-            this.PropertyChanged = x => {
-                if (x === PropertyName && Handler)
-                    Handler();
-            };
-        }
-        if (RaiseRegistered && Handler)
-            Handler();
-    }
-}
-class TickNotifier extends Notifier {
-    constructor() {
-        super();
-        this.handler = setInterval(this.Tick, 1000);
-    }
-    Tick() { }
-    Dispose() {
-        clearInterval(this.handler);
-    }
-}
-class Ticker {
-    constructor() {
-        this.handler = setInterval(this.Tick, 1000);
-    }
-    Tick() { }
-    Dispose() {
-        clearInterval(this.handler);
-    }
-}
-class RawDataWrapper {
-    constructor(RawData) {
-        this._raw = RawData;
-    }
-    get raw() {
-        return this._raw;
-    }
-    UpdateData(RawData) {
-        this._raw = RawData;
-    }
-}
 var AdmiralRank;
 (function (AdmiralRank) {
     AdmiralRank[AdmiralRank["FleetAdmiral"] = 1] = "FleetAdmiral";
@@ -594,4 +677,453 @@ class Ship {
         Situation[Situation["DamageControlled"] = 16] = "DamageControlled";
     })(Situation = Ship.Situation || (Ship.Situation = {}));
 })(Ship || (Ship = {}));
+define("vendor/common", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    window.$ = (function () {
+        const obj = (x) => document.querySelector(x);
+        obj.all = (x) => document.querySelectorAll(x);
+        const obj_new = (x, y) => {
+            const el = document.createElement(x);
+            if (typeof y !== "undefined")
+                el.className = y;
+            return el;
+        };
+        obj_new.text = (x) => document.createTextNode(x);
+        obj.new = obj_new;
+        obj.ajax = (opt) => {
+            const h = new XMLHttpRequest();
+            const o = Object.assign({
+                method: "GET",
+                url: "",
+                async: true,
+                mime: "text/html",
+                after: function () { },
+                progress: function () { },
+                error: function () { },
+                aborted: function () { },
+                callback: function () { },
+                post: null
+            }, opt);
+            h.config = o;
+            const eventLoad = () => {
+                if (h.readyState === 4) {
+                    h.config.callback(h.responseText, h);
+                    h.config.after(h);
+                }
+            };
+            const eventAbort = (e) => {
+                h.config.aborted(e, h);
+                h.config.after(h);
+            };
+            const eventError = (e) => {
+                h.config.error(e, h);
+                h.config.after(h);
+            };
+            const eventProgress = (e) => {
+                if (!e.lengthComputable)
+                    h.config.progress(1, 2, h);
+                else
+                    h.config.progress(e.loaded, e.total, h);
+            };
+            if (h.upload)
+                h.upload.addEventListener("progress", eventProgress);
+            else
+                h.addEventListener("progress", eventProgress);
+            h.addEventListener("loadend", eventLoad);
+            h.addEventListener("error", eventError);
+            h.addEventListener("abort", eventAbort);
+            h.open(o.method, o.url, o.async);
+            if (o.method && o.method.toUpperCase() === "POST" && !(o.post && o.post instanceof FormData))
+                h.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            h.overrideMimeType(o.mime);
+            h.send(o.post);
+            return h;
+        };
+        return obj;
+    })();
+    var $ = window.$;
+    Element.prototype.find
+        = function (selector) {
+            return this.querySelector(selector);
+        };
+    Element.prototype.findAll
+        = function (selector) {
+            return this.querySelectorAll(selector);
+        };
+    Element.prototype.child
+        = function (selector) {
+            const y = "_TMP$" + Math.random().toFixed(12).substr(2);
+            const z = this.id;
+            let u = null;
+            this.id = y;
+            u = $("#" + y.replace("$", "\\$") + ">" + selector);
+            if (z.length === 0)
+                this.removeAttribute("id");
+            else
+                this.id = z;
+            return u;
+        };
+    Element.prototype.childs
+        = function (selector) {
+            const y = "_TMP$" + Math.random().toFixed(12).substr(2);
+            const z = this.id;
+            let u = null;
+            this.id = y, u = $.all("#" + y.replace("$", "\\$") + ">" + selector);
+            if (z.length === 0)
+                this.removeAttribute("id");
+            else
+                this.id = z;
+            return u;
+        };
+    Element.prototype.prev
+        = function () {
+            return this.previousElementSibling;
+        };
+    Element.prototype.next
+        = function () {
+            return this.nextElementSibling;
+        };
+    Node.prototype.prev
+        = function () {
+            return this.previousSibling;
+        };
+    Node.prototype.next
+        = function () {
+            return this.nextSibling;
+        };
+    Element.prototype.prop
+        = function (x, y) {
+            if (typeof y === "undefined")
+                return this[x];
+            this[x] = y;
+            return this;
+        };
+    Element.prototype.attr
+        = function (x, y) {
+            if (typeof y === "undefined")
+                return this.getAttribute(x);
+            this.setAttribute(x, y);
+            return this;
+        };
+    HTMLElement.prototype.css
+        = function (x, y) {
+            if (typeof y === "undefined") {
+                const style = window.getComputedStyle ? window.getComputedStyle(this) : this.style;
+                return style.getPropertyValue(x);
+            }
+            this.style.setProperty(x, y);
+            return this;
+        };
+    NodeList.prototype.each
+        = function (x) {
+            for (let i = 0; i < this.length; i++)
+                if (x.apply(this[i], [i]) === false)
+                    break;
+        };
+    HTMLCollection.prototype.each
+        = function (x) {
+            for (let i = 0; i < this.length; i++)
+                if (x.apply(this[i], [i]) === false)
+                    break;
+        };
+    NodeList.prototype.css
+        = function (x, y) {
+            this.each(function () {
+                if (this instanceof HTMLElement)
+                    this.css(x, y);
+                return true;
+            });
+            return this;
+        };
+    HTMLCollection.prototype.css
+        = function (x, y) {
+            this.each(function () {
+                if (this instanceof HTMLElement)
+                    this.css(x, y);
+                return true;
+            });
+            return this;
+        };
+    Element.prototype.html
+        = function (x) {
+            if (typeof x === "undefined")
+                return this.innerHTML;
+            this.innerHTML = x;
+            return this;
+        };
+    Element.prototype.outerhtml
+        = function (x) {
+            if (typeof x === "undefined")
+                return this.outerHTML;
+            this.outerHTML = x;
+            return this;
+        };
+    Element.prototype.prepend
+        = function (x) {
+            if (x instanceof Element || x instanceof Element || x instanceof Text)
+                this.insertBefore(x, this.firstChild);
+            else
+                this.insertBefore($.new.text(x), this.firstChild);
+            return this;
+        };
+    Element.prototype.append
+        = function (x) {
+            if (x instanceof Element || x instanceof Element || x instanceof Text)
+                this.appendChild(x);
+            else
+                this.appendChild($.new.text(x));
+            return this;
+        };
+    Element.prototype.before
+        = function (x, y) {
+            if (x instanceof Element || x instanceof Text)
+                this.insertBefore(x, y);
+            else
+                this.insertBefore($.new.text(x), y);
+            return this;
+        };
+    Element.prototype.after
+        = function (x, y) {
+            if (!y)
+                throw "y cannot be null";
+            if (x instanceof Element || x instanceof Text)
+                this.insertBefore(x, y.next());
+            else
+                this.insertBefore($.new.text(x), y.next());
+            return this;
+        };
+    Element.prototype.val
+        = function (x) {
+            if (typeof x === "undefined")
+                return this.value;
+            this.value = x;
+            return this;
+        };
+    Element.prototype.clone
+        = function () {
+            return this.cloneNode(true);
+        };
+    if (window.HTMLDocument)
+        HTMLDocument.prototype.event
+            = function (x, y, z) {
+                const e = x.split(" ");
+                for (let i = 0; i < e.length; i++)
+                    this.addEventListener(e[i], y, z);
+                return this;
+            };
+    else if (window.Document)
+        Document.prototype.event
+            = function (x, y, z) {
+                const e = x.split(" ");
+                for (let i = 0; i < e.length; i++)
+                    this.addEventListener(e[i], y, z);
+                return this;
+            };
+    Element.prototype.event
+        = function (x, y, z) {
+            const e = x.split(" ");
+            for (let i = 0; i < e.length; i++)
+                this.addEventListener(e[i], y, z);
+            return this;
+        };
+    NodeList.prototype.event
+        = function (x, y, z) {
+            this.each(function () {
+                if (this instanceof Element)
+                    this.event(x, y, z);
+                return true;
+            });
+            return this;
+        };
+    HTMLCollection.prototype.event
+        = function (x, y, z) {
+            this.each(function () {
+                if (this instanceof Element)
+                    this.event(x, y, z);
+                return true;
+            });
+            return this;
+        };
+    if (window.HTMLDocument)
+        HTMLDocument.prototype.trigger
+            = function (x) {
+                const d = x.split(" ");
+                for (let i = 0; i < d.length; i++) {
+                    const e = document.createEvent("HTMLEvents");
+                    e.initEvent(d[i], false, true);
+                    this.dispatchEvent(e);
+                }
+                return this;
+            };
+    else if (window.Document)
+        Document.prototype.trigger
+            = function (x) {
+                const d = x.split(" ");
+                for (let i = 0; i < d.length; i++) {
+                    const e = document.createEvent("HTMLEvents");
+                    e.initEvent(d[i], false, true);
+                    this.dispatchEvent(e);
+                }
+                return this;
+            };
+    Element.prototype.trigger
+        = function (x) {
+            const d = x.split(" ");
+            for (let i = 0; i < d.length; i++) {
+                const e = document.createEvent("HTMLEvents");
+                e.initEvent(d[i], false, true), this.dispatchEvent(e);
+            }
+            return this;
+        };
+    NodeList.prototype.trigger
+        = function (x) {
+            this.each(function () {
+                if (this instanceof Element)
+                    this.trigger(x);
+                return true;
+            });
+            return this;
+        };
+    HTMLCollection.prototype.trigger
+        = function (x) {
+            this.each(function () {
+                if (this instanceof Element)
+                    this.trigger(x);
+                return true;
+            });
+            return this;
+        };
+    Element.prototype.is
+        = function (x) { return this.matches(x); };
+    Element.prototype.parent
+        = function (x) {
+            if (typeof x === "undefined")
+                return this.parentNode;
+            let y = this;
+            while (y !== null
+                && y.tagName
+                && y.tagName.toLowerCase() !== "body"
+                && !y.is(x))
+                y = y.parentNode;
+            return y;
+        };
+    Element.prototype.addClass
+        = function (x) {
+            const y = x.split(" "), z = this.className.split(" ");
+            for (let i = 0; i < y.length; i++) {
+                if (y[i].trim().length === 0)
+                    continue;
+                if (z.indexOf(y[i]) >= 0)
+                    continue;
+                z.push(y[i]);
+            }
+            this.className = z.filter(function (_) {
+                return _.length > 0;
+            }).join(" ");
+            return this;
+        };
+    Element.prototype.removeClass
+        = function (x) {
+            const y = x.split(" "), z = this.className.split(" ");
+            for (let i = 0, j; i < y.length; i++) {
+                if (y[i].trim().length === 0)
+                    continue;
+                while ((j = z.indexOf(y[i])) >= 0)
+                    z.splice(j, 1);
+            }
+            this.className = z.filter(function (_) {
+                return _.length > 0;
+            }).join(" ");
+            return this;
+        };
+    Element.prototype.hasClass
+        = function (x) {
+            const y = this.className.split(" ");
+            for (let i = 0, j; i < y.length; i++) {
+                if (y[i].trim().length === 0)
+                    continue;
+                if (y[i] === x)
+                    return true;
+            }
+            return false;
+        };
+    NodeList.prototype.addClass
+        = function (x) {
+            this.each(function () {
+                if (this instanceof Element)
+                    this.addClass(x);
+                return true;
+            });
+            return this;
+        };
+    NodeList.prototype.removeClass
+        = function (x) {
+            this.each(function () {
+                if (this instanceof Element)
+                    this.removeClass(x);
+                return true;
+            });
+            return this;
+        };
+    NodeList.prototype.hasClass
+        = function (x) {
+            let result = false;
+            this.each(function () {
+                if (this instanceof Element && this.hasClass(x)) {
+                    result = true;
+                    return false;
+                }
+                return true;
+            });
+            return result;
+        };
+    HTMLCollection.prototype.addClass
+        = function (x) {
+            this.each(function () {
+                if (this instanceof Element)
+                    this.addClass(x);
+                return true;
+            });
+            return this;
+        };
+    HTMLCollection.prototype.removeClass
+        = function (x) {
+            this.each(function () {
+                if (this instanceof Element)
+                    this.removeClass(x);
+                return true;
+            });
+            return this;
+        };
+    HTMLCollection.prototype.hasClass
+        = function (x) {
+            let result = false;
+            this.each(function () {
+                if (this instanceof Element && this.hasClass(x)) {
+                    result = true;
+                    return false;
+                }
+                return true;
+            });
+            return result;
+        };
+    String.prototype.int
+        = function () { return parseInt(this); };
+    String.prototype.float
+        = function () { return parseFloat(this); };
+    String.prototype.format
+        = function (...params) {
+            let template = this.toString();
+            for (let i = 0; i < params.length; i++) {
+                const reg = new RegExp(`\\{${i}\\}`, "g");
+                template = template.replace(reg, params[i]);
+            }
+            return template;
+        };
+    String.format = (template, ...params) => template.format(...params);
+    Number.prototype.format
+        = function () { return this.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); };
+    exports.default = $;
+});
 //# sourceMappingURL=beerviewer.js.map

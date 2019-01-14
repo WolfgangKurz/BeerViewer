@@ -1,7 +1,5 @@
 {
     "compilerOptions": {
-        "outFile": "dist/beerviewer.js",
-
         "target": "es6",
 
         "module": "amd",
@@ -15,12 +13,10 @@
         "removeComments": true,
         "preserveConstEnums": true,
         "allowSyntheticDefaultImports" :true,
-        "sourceMap": true
+        "sourceMap": false
     },
     "include": [
-        "source/**/*.ts"
+        "./**/*.ts"
     ],
-    "exclude": [
-        "source/modules/"
-    ]
+    "exclude": []
 }

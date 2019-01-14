@@ -1,3 +1,5 @@
+import { HTTPRequest } from "../Exports/API";
+
 interface KcsApiCallback<T, U extends HTTPRequest> {
     (Response: T, Request: U): void;
 }

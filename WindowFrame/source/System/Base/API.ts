@@ -1,55 +1,39 @@
-type HTTPRequest = { [name: string]: string | number };
-type HTTPCallback = (Response: string, Request: HTTPRequest) => void;
+{
+    const _origin_i18n: { [key: string]: string } = {};
+    window.INTERNAL = {
+        async Initialized() {
+            const set = await window.API.i18nSet();
+            const props = Object.getOwnPropertyNames(_origin_i18n);
+            for (let i = 0; i < props.length; i++) delete _origin_i18n[props[i]];
+            for (let i in set) _origin_i18n[i] = set[i];
+        },
+        zoomMainFrame(_zoomFactor: number | string) {
+            const zoomFactor = typeof _zoomFactor === "number"
+                ? _zoomFactor / 100
+                : parseFloat(_zoomFactor) / 100;
+            const frame: HTMLElement | null = document.querySelector("#MAIN_FRAME");
+            if (frame === null) return;
 
-interface Window {
-    API: Communicator;
+            frame.style["transform"] = `scale(${zoomFactor})`;
+            frame.style["marginRight"] = 1200 * (zoomFactor - 1) + "px";
+            frame.style["marginBottom"] = 720 * (zoomFactor - 1) + "px";
+        },
+        loadMainFrame(url: string) {
+            const frame : HTMLElement | null = document.querySelector("#MAIN_FRAME");
+            if (frame === null) return;
+
+            (<HTMLIFrameElement>frame).src = url;
+        }
+    };
+    window.i18n
+        = new Proxy(_origin_i18n, {
+            get: function (target, name) {
+                if (name in target) return target[name.toString()];
+                return name;
+            }
+        });
 }
-
-/** Simple module information for module.js */
-interface ModuleInfo {
-    /** Name of module */
-    Name: string;
-
-    /** Content of *.html if exists, empty otherwise. */
-    Template: string;
-
-    /** *.js exists? */
-    Scripted: boolean;
-
-    /** *.css exists? */
-    Styled: boolean;
-}
-/** Functions on Communicator(window.API) */
-interface Communicator {
-    /** Notice to communicator that browser has initialized. */
-    Initialized(): void;
-
-    /** Call reserved system "command" */
-    SystemCall(command: string): boolean;
-
-    /** Register value change observer to object what registered to communicator.
-     * "callback" will be called when changed, and observer registered.
-     */
-    ObserveData(namespace: string, path: string, callback: Function): void;
-
-    /** Get single data from object what registered to communicator */
-    GetData(namespace: string, path: string): any;
-
-    /** Get single i18n text */
-    i18n(text: string): string;
-
-    /** Get i18n texts as json table */
-    i18nSet(): { [key: string]: string; };
-
-    /** Get all loadable modules */
-    GetModuleList(): ModuleInfo[];
-
-    /** Open DevTools for browser */
-    DevTools(): void;
-
-    /** Deliver "text" to logger */
-    Log(text: string): void;
-
-    /** Subscribe browser HTTP packets for specific "url" */
-    SubscribeHTTP(url: string, callback: HTTPCallback): void;
-}
+window._i18n
+    = async function (text: string): Promise<string> {
+        return await window.API.i18n(text);
+    };
