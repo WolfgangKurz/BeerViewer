@@ -308,21 +308,6 @@
     <Compile Include="Settings.SettingValue.cs">
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
-    <Content Include="WindowFrame\assets\button_menu.png" />
-    <Content Include="WindowFrame\assets\button_system.png" />
-    <Content Include="WindowFrame\assets\icon_menu_area.png" />
-    <Content Include="WindowFrame\base.js" />
-    <Content Include="WindowFrame\internal\error.html" />
-    <Content Include="WindowFrame\internal\example.html" />
-    <Content Include="WindowFrame\MainFramePlaceholder.html" />
-    <Content Include="WindowFrame\storage\class.js" />
-    <Content Include="WindowFrame\storage\constant.js" />
-    <Content Include="WindowFrame\storage\homeport.js" />
-    <Content Include="WindowFrame\vendor\common.js" />
-    <Content Include="WindowFrame\vendor\tippy.theme.css" />
-    <Content Include="WindowFrame\vendor\tippy.all.min.js" />
-    <Content Include="WindowFrame\vendor\vue.js" />
-    <Content Include="WindowFrame\vendor\vue.min.js" />
     <EmbeddedResource Include="Forms\frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>
     </EmbeddedResource>
@@ -340,39 +325,10 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="WindowFrame\assets\fonts\SpoqaHanSansBold.woff2" />
-    <None Include="WindowFrame\assets\fonts\SpoqaHanSansJPBold.woff2" />
-    <None Include="WindowFrame\assets\fonts\SpoqaHanSansJPRegular.woff2" />
-    <None Include="WindowFrame\assets\fonts\SpoqaHanSansRegular.woff2" />
-    <None Include="WindowFrame\_theme.scss" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
     <Content Include="icon.ico" />
-    <Content Include="WindowFrame\modules\internal.js" />
-    <None Include="WindowFrame\modules\logger\logger.scss" />
-    <Content Include="WindowFrame\modules\logger\logger.js" />
-    <Content Include="WindowFrame\modules\overview\iconset_fleet.png" />
-    <None Include="WindowFrame\modules\overview\overview.scss" />
-    <Content Include="WindowFrame\modules\overview\overview.html" />
-    <Content Include="WindowFrame\modules\overview\overview.js" />
-    <Content Include="WindowFrame\modules\top-expedition\top-expedition.html" />
-    <Content Include="WindowFrame\modules\top-resource\icon_ammo.png" />
-    <Content Include="WindowFrame\modules\top-resource\icon_bauxite.png" />
-    <Content Include="WindowFrame\modules\top-resource\icon_fuel.png" />
-    <Content Include="WindowFrame\modules\top-resource\icon_improvementmaterial.png" />
-    <Content Include="WindowFrame\modules\top-resource\icon_repairbucket.png" />
-    <Content Include="WindowFrame\modules\top-resource\icon_steel.png" />
-    <Content Include="WindowFrame\modules\top-resource\top-resource.html" />
-    <Content Include="WindowFrame\modules\top-resource\top-resource.js" />
-    <None Include="WindowFrame\modules\top-resource\top-resource.scss" />
-    <None Include="WindowFrame\modules\window\window.scss" />
-    <Content Include="WindowFrame\modules\window\window.js" />
-    <None Include="WindowFrame\app.scss" />
-    <Content Include="WindowFrame\Application.html" />
-    <None Include="WindowFrame\modules\top-expedition\top-expedition.scss" />
-    <Content Include="WindowFrame\modules\top-expedition\top-expedition.js" />
-    <Content Include="WindowFrame\modules\module.js" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
@@ -406,8 +362,8 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>XCOPY "$(SolutionDir)i18n" "$(TargetDir)i18n\" /Y /V /E
-RMDIR "$(TargetDir)WindowFrame" /S /Q
-XCOPY "$(ProjectDir)WindowFrame" "$(TargetDir)WindowFrame\" /Y /V /E</PostBuildEvent>
+echo RMDIR "$(TargetDir)WindowFrame" /S /Q
+echo XCOPY "$(ProjectDir)WindowFrame" "$(TargetDir)WindowFrame\" /Y /V /E</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
