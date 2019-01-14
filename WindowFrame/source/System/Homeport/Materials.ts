@@ -1,4 +1,13 @@
-class Materials {
+import { Observable } from "../Base/Observable";
+import { SubscribeKcsapi } from "../Base/KcsApi";
+import { kcsapi_port } from "../Interfaces/kcsapi_port";
+import { kcsapi_material } from "../Interfaces/kcsapi_material";
+import { kcsapi_charge } from "../Interfaces/kcsapi_charge";
+import { kcsapi_destroyship } from "../Interfaces/kcsapi_ship";
+import { kcsapi_destroyitem2 } from "../Interfaces/kcsapi_item";
+import { kcsapi_airbase_corps_supply, kcsapi_airbase_corps_set_plane } from "../Interfaces/kcsapi_airbase_corps";
+
+export class Materials extends Observable {
     private _Fuel: number;
     private _Ammo: number;
     private _Steel: number;
@@ -18,6 +27,7 @@ class Materials {
     public get ImprovementMaterial(): number { return this._ImprovementMaterial }
 
     constructor() {
+        super();
         this._Fuel = 0;
         this._Ammo = 0;
         this._Steel = 0;

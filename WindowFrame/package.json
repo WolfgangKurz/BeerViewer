@@ -1,15 +1,28 @@
 {
-  "name": "windowframe",
-  "version": "1.0.0",
+  "name": "beerviewer-windowframe",
+  "version": "0.1.0",
   "description": "WindowFrame for BeerViewer application",
-  "main": "base.ts",
+  "main": "source/System/Base.ts",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "publish": "echo \"Test\""
   },
   "keywords": [],
-  "author": "WolfgangKurz",
+  "author": {
+    "name": "Wolfgang Kurz",
+    "email": "wolfgangkurzdev@gmail.com",
+    "url": "http://swaytwig.com/"
+  },
+  "license": "MIT",
   "dependencies": {
+    "@types/jquery": "^3.3.29",
     "tippy.js": "^3.4.0",
-    "vue": "^2.5.21"
+    "ts-loader": "^5.3.3",
+    "vue": "^2.5.21",
+    "webpack": "^4.28.4"
+  },
+  "devDependencies": {
+    "typescript": "^3.2.2",
+    "webpack-cli": "^3.2.1"
   }
 }

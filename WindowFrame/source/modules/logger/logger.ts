@@ -1,4 +1,4 @@
-﻿import Modules, { IModule } from "../module";
+﻿import { IModule } from "../../System/Module";
 import API from "../../System/Exports/API";
 
 class Logger implements IModule {

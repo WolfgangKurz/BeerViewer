@@ -1,4 +1,4 @@
-class Ship {
+export class Ship {
     public Situation: Ship.Situation;
 
     constructor(){
@@ -9,7 +9,7 @@ class Ship {
 
     }
 }
-namespace Ship {
+export namespace Ship {
     export enum Situation {
         /** Nothing special */
         None = 0,

@@ -1,6 +1,11 @@
-/// <reference path="./../Base/Notifier.ts" />
+import { SubscribeKcsapi } from "../Base/KcsApi";
+import { kcsapi_ndock } from "../Interfaces/kcsapi_ndock";
+import { kcsapi_nyukyo_start, kcsapi_nyukyo_speedchange } from "../Interfaces/kcsapi_repair";
 
-class RepairDock {
+import { Homeport } from "./Homeport";
+import { Ship } from "./Ship";
+
+export class RepairDock {
     public Docks: RepairDock.Dock[];
 
     constructor() {
@@ -54,7 +59,7 @@ class RepairDock {
         catch { }
     }
 }
-namespace RepairDock {
+export namespace RepairDock {
     interface DockComplete {
         (Dock: Dock, Id: number, Ship: Ship): void;
     }

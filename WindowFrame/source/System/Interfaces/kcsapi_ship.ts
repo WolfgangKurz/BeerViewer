@@ -1,4 +1,4 @@
-interface kcsapi_ship2 {
+export interface kcsapi_ship2 {
     api_id: number;
     api_sortno: number;
     api_ship_id: number;
@@ -33,6 +33,6 @@ interface kcsapi_ship2 {
     api_slot_ex: number;
 }
 
-interface kcsapi_destroyship {
+export interface kcsapi_destroyship {
     api_material: number[];
 }

@@ -1,5 +1,6 @@
 import Vue from "vue";
-import API from "../System/Exports/API";
+import API from "./Exports/API";
+import WindowModule from "./Base/Window";
 
 declare global {
     interface Window {
@@ -192,8 +193,12 @@ class Modules {
         if (this.list[name].ModuleObject === null) return null;
         return this.list[name].ModuleObject;
     }
+
+    public registerDefault():void {
+        this.register("window", new WindowModule());
+    }
 }
-class Callback {
+export class Callback {
     public static Instance: Callback = new Callback();
 
     private callbacks: { [name: string]: Array<Function> } = {};
@@ -220,49 +225,4 @@ class Callback {
     }
 }
 
-window.modules = Modules.Instance;
-window.CALLBACK = Callback.Instance;
-
-document.addEventListener("DOMContentLoaded", async function () {
-    if (window.modules.initialized()) return; // Call twice
-
-    window.modules.areas.init();
-    const _mainbox_elem = document.querySelector("#mainbox");
-    const mainBox = new Vue({
-        data: {
-            Areas: window.modules.areas.Areas,
-            Tools: window.modules.areas.Tools
-        },
-        el: _mainbox_elem ? _mainbox_elem : undefined,
-        methods: {
-            OpenMenu: (x: boolean) => window.OpenMenu(x),
-            SelectModule: function (Area: string, Name: string) {
-                if (!(Area in this.Areas))
-                    throw `Area '${Area}' not found, something wrong`;
-
-                const area = this.Areas[Area];
-                area.Modules.forEach(x => x.Displaying = x.Name === Name);
-            }
-        }
-    });
-
-    if ((<any>window).CefSharp)
-        await (<any>window).CefSharp.BindObjectAsync({ IgnoreCache: true }, "API");
-
-    if (typeof window.API === "undefined") {
-        // Design mode
-        window.modules.load("window", "", true, true);
-        window.modules.init();
-        return;
-    }
-    window.INTERNAL.Initialized();
-
-    window.API.GetModuleList()
-        .then(list => {
-            list.forEach(x => window.modules.load(x.Name, x.Template, x.Scripted, x.Styled));
-
-            window.modules.init();
-            window.API.Initialized();
-        });
-});
 export default Modules;

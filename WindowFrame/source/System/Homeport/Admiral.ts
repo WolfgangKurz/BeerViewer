@@ -1,4 +1,9 @@
-class Admiral extends RawDataWrapper<kcsapi_basic> {
+import { SubscribeKcsapi } from "../Base/KcsApi";
+import { kcsapi_port } from "../Interfaces/kcsapi_port";
+import { kcsapi_basic } from "../Interfaces/kcsapi_basic";
+import { kcsapi_member_updatecomment } from "../Interfaces/kcsapi_member";
+
+export class Admiral extends RawDataWrapper<kcsapi_basic> {
     public get MemberId(): string { return this.raw.api_member_id }
     public get Nickname(): string { return this.raw.api_nickname }
     public get Comment(): string { return this.raw.api_comment }

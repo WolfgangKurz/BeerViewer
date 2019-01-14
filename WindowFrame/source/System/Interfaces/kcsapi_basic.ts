@@ -1,4 +1,4 @@
-interface kcsapi_basic {
+export interface kcsapi_basic {
     api_member_id: string;
     api_nickname: string;
     api_nickname_id: string;
