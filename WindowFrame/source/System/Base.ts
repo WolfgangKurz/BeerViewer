@@ -1,26 +1,28 @@
 import tippy from "tippy.js";
 import Vue from "vue";
-import VueTippy	from "../vendor/vue.tippy";
+import VueTippy from "../vendor/vue.tippy";
 import Modules, { Callback } from "./Module";
+import { Homeport } from "./Homeport/Homeport";
+import { Master } from "./Master/Master";
 
 tippy.setDefaults({
-	arrow: true,
-	boundary: "viewport",
-	placement: "bottom",
-	size: "large",
-	theme: "light-border",
-	interactive: false,
-	trigger: 'mouseenter focus',
-	hideOnClick: false,
-	performance: true
+    arrow: true,
+    boundary: "viewport",
+    placement: "bottom",
+    size: "large",
+    theme: "light-border",
+    interactive: false,
+    trigger: 'mouseenter focus',
+    hideOnClick: false,
+    performance: true
 });
 
 Vue.directive("dom", function (el, binding) {
-	if (binding.oldValue && binding.oldValue instanceof Element && binding.oldValue.parentNode === el)
-		binding.oldValue.remove();
+    if (binding.oldValue && binding.oldValue instanceof Element && binding.oldValue.parentNode === el)
+        binding.oldValue.remove();
 
-	if (binding.value instanceof Element)
-		el.append(binding.value);
+    if (binding.value instanceof Element)
+        el.append(binding.value);
 });
 
 Vue.use(VueTippy, tippy.defaults);
@@ -32,7 +34,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     if (window.modules.initialized()) return; // Called twice
 
     window.modules.areas.init();
-    const _mainbox_elem = document.querySelector("#mainbox");
+    const _mainbox_elem = $("#mainbox")[0];
     const mainBox = new Vue({
         data: {
             Areas: window.modules.areas.Areas,
@@ -55,8 +57,8 @@ document.addEventListener("DOMContentLoaded", async function () {
         await (<any>window).CefSharp.BindObjectAsync({ IgnoreCache: true }, "API");
 
     if (typeof window.API === "undefined") {
-        // Design mode
-        window.modules.load("window", "", true, true);
+        // Browsed with not-allowed method
+        window.modules.registerDefault();
         window.modules.init();
         return;
     }
@@ -70,4 +72,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             window.modules.init();
             window.API.Initialized();
         });
+
+    Master.Instance.Ready();
+    Homeport.Instance.Ready();
 });

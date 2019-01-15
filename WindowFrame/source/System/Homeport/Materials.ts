@@ -85,7 +85,7 @@ export class Materials extends Observable {
         );
     }
 
-    private Update(source: number[] | kcsapi_material[]): void {
+    public Update(source: number[] | kcsapi_material[]): void {
         if (!source || source.length == 0) return;
         const type = typeof (<kcsapi_material>source[0]).api_value;
 

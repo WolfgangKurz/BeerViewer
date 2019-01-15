@@ -1,6 +1,6 @@
 import { kcsapi_material } from "./kcsapi_material";
 import { kcsapi_deck } from "./kcsapi_deck";
-import { kcsapi_ndock } from "./kcsapi_ndock";
+import { kcsapi_ndock } from "./kcsapi_dock";
 import { kcsapi_basic } from "./kcsapi_basic";
 import { kcsapi_ship2 } from "./kcsapi_ship";
 

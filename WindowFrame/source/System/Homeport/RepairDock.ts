@@ -1,14 +1,18 @@
+import { Observable } from "../Base/Observable";
 import { SubscribeKcsapi } from "../Base/KcsApi";
-import { kcsapi_ndock } from "../Interfaces/kcsapi_ndock";
+import { kcsapi_ndock } from "../Interfaces/kcsapi_dock";
 import { kcsapi_nyukyo_start, kcsapi_nyukyo_speedchange } from "../Interfaces/kcsapi_repair";
 
 import { Homeport } from "./Homeport";
 import { Ship } from "./Ship";
 
-export class RepairDock {
+export class RepairDock extends Observable {
     public Docks: RepairDock.Dock[];
+    private Owner: Homeport;
 
-    constructor() {
+    constructor(Owner: Homeport) {
+        super();
+        this.Owner = Owner;
         this.Docks = [];
 
         SubscribeKcsapi<kcsapi_ndock[]>(
@@ -27,7 +31,7 @@ export class RepairDock {
         );
     }
 
-    private Update(source: kcsapi_ndock[]): void {
+    public Update(source: kcsapi_ndock[]): void {
         if (this.Docks.length === source.length)
             source.forEach(raw => this.Docks[raw.api_id].Update(raw));
 
@@ -39,7 +43,7 @@ export class RepairDock {
     }
 
     private Start(request: kcsapi_nyukyo_start): void {
-        const ship = Homeport.Instance.Ships[request.api_ship_id];
+        const ship = this.Owner.Ships[request.api_ship_id];
         if (!ship) return;
 
         if (request.api_highspeed === 1)

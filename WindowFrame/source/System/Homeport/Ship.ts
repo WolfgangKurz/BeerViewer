@@ -1,7 +1,10 @@
-export class Ship {
+import { Observable } from "../Base/Observable";
+
+export class Ship extends Observable {
     public Situation: Ship.Situation;
 
     constructor(){
+        super();
         this.Situation = Ship.Situation.None;
     }
 
