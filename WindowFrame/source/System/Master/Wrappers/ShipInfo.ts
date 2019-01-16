@@ -44,4 +44,34 @@ export class ShipInfo extends RawDataWrapper<kcsapi_mst_ship> implements IIdenti
     public toString(): string {
         return `{"Id": ${this.Id}, "Name": "${this.Name}", "ShipType": ${this.ShipType}}`
     }
+
+    public static readonly Empty: ShipInfo = new ShipInfo({
+        api_id: 0,
+        api_sortno: 0,
+        api_name: "???",
+        api_yomi: "???",
+        api_stype: 0,
+        api_afterlv: 0,
+        api_aftershipid: "",
+        api_taik: [0, 0],
+        api_souk: [0, 0],
+        api_houg: [0, 0],
+        api_raig: [0, 0],
+        api_tyku: [0, 0],
+        api_luck: [0, 0],
+        api_soku: 0,
+        api_leng: 0,
+        api_slot_num: 0,
+        api_maxeq: [],
+        api_buildtime: 0,
+        api_broken: [0, 0, 0, 0],
+        api_powup: [0, 0, 0, 0],
+        api_backs: 0,
+        api_getmes: "",
+        api_afterfuel: 0,
+        api_afterbull: 0,
+        api_fuel_max: 0,
+        api_bull_max: 0,
+        api_voicef: 0
+    });
 }

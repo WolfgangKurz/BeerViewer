@@ -1,11 +1,34 @@
 import { Observable } from "../Base/Observable";
+import { GuageValue } from "../Models/GuageValue";
+import { IIdentifiable } from "../Base/Interfaces/IIdentifiable";
+import { ShipInfo } from "../Master/Wrappers/ShipInfo";
+import { Homeport } from "./Homeport";
+import { kcsapi_ship2 } from "../Interfaces/kcsapi_ship";
+import { Master } from "../Master/Master";
 
-export class Ship extends Observable {
-    public Situation: Ship.Situation;
+export class Ship extends Observable implements IIdentifiable {
+    public readonly Id: number = 0;
 
-    constructor(){
+    public Info!:ShipInfo;
+
+    public HP: GuageValue;
+
+    public Fuel: GuageValue;
+    public Ammo: GuageValue;
+
+    public State: Ship.State;
+    public Condition: number;
+
+    constructor(homeport:Homeport, api_data:kcsapi_ship2){
         super();
-        this.Situation = Ship.Situation.None;
+        this.HP = this.Fuel = this.Ammo = new GuageValue();
+        this.State = Ship.State.None;
+        this.Condition = 0;
+        this.Update(api_data);
+    }
+
+    private Update(api_data:kcsapi_ship2):void{
+        this.Info = Master.Instance.Ships!.get(api_data.api_ship_id) || ShipInfo.Empty;
     }
 
     public Repair(){
@@ -13,7 +36,7 @@ export class Ship extends Observable {
     }
 }
 export namespace Ship {
-    export enum Situation {
+    export enum State {
         /** Nothing special */
         None = 0,
         

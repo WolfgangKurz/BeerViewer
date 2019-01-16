@@ -115,6 +115,8 @@ export enum ShipType {
 
 /** Speed of ship */
 export enum ShipSpeed {
+    None = 0,
+    
     Immovable = 0,
     LandBased = 0,
     移動不可 = 0,

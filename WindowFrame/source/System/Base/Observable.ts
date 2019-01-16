@@ -1,3 +1,5 @@
+import { DisposableContainer, IDisposable } from "./Interfaces/IDisposable";
+
 /** Observable object class.
  * 
  * Register callback with `Observe` function, `ObservableCallback` will be called when property has set.
@@ -44,11 +46,50 @@ export class Observable implements IDisposable {
         return this;
     }
 
+    protected RaisePropertyChanged(name: string | number) {
+        if (name in this._callbacks)
+            fns(this._callbacks[name], name, (<any>this)[name], undefined);
+    }
+
     private PropertyChanged(name: string | number, value: any, oldValue: any): void {
         if (name in this._callbacks)
             fns(this._callbacks[name], name, value, oldValue);
     }
 }
+
+/** Observable contains `ManagedDisposable: DisposableContainer` */
+export class DisposableObservable extends Observable implements IDisposable {
+    protected ManagedDisposable: DisposableContainer;
+
+    constructor() {
+        super();
+        this.ManagedDisposable = new DisposableContainer();
+    }
+    public Dispose(): void {
+        super.Dispose();
+        this.ManagedDisposable.Dispose();
+    }
+}
+
+/** Observable contains `Tick()` called every 1sec */
+export class TickObservable extends DisposableObservable implements IDisposable {
+    private timer: number;
+
+    constructor() {
+        super();
+        this.timer = setInterval(() => this.Tick(), 1000);
+    }
+
+    protected Tick(): void { }
+
+    public Dispose(): void {
+        clearInterval(this.timer);
+        this.timer = 0;
+
+        super.Dispose();
+    }
+}
+
 /** Will be called when registered property has set. */
 export interface ObservableCallback {
     (name: string, value: any): void;

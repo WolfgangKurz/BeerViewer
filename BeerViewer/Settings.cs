@@ -69,6 +69,14 @@ namespace BeerViewer
 		/// <summary>
 		/// Notification adjust time (for expedition, construction, etc.)
 		/// </summary>
+		public static SettableSettingValue<int> NotifationConditionValue { get; } = new SettableSettingValue<int>(
+			getKey(), "Setting", 49,
+			"Notification Condition Value"
+		);
+
+		/// <summary>
+		/// Notification adjust time (for expedition, construction, etc.)
+		/// </summary>
 		public static SettableSettingValue<int> NotificationTime { get; } = new SettableSettingValue<int>(
 			getKey(), "Setting", 60,
 			"Notification Time"

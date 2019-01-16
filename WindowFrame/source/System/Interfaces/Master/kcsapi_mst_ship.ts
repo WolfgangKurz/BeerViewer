@@ -62,13 +62,13 @@ export interface kcsapi_mst_ship {
      * 
      * `[Fuel, Ammo, Steel, Bauxite]`
      */
-    api_broken: number[];
+    api_broken: [number, number, number, number];
 
     /** Earnable stats when power-up ship used this ship
      * 
      * `[FirePower, TorpedoPower, AntiAircraft, Armor]`
      */
-    api_powup: number[];
+    api_powup: [number, number, number, number];
 
     /** Rarity of ship */
     api_backs: number;

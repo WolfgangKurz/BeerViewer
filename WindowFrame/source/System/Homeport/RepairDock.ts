@@ -1,18 +1,19 @@
-import { Observable } from "../Base/Observable";
+import { Observable, TickObservable } from "../Base/Observable";
 import { SubscribeKcsapi } from "../Base/KcsApi";
 import { kcsapi_ndock } from "../Interfaces/kcsapi_dock";
 import { kcsapi_nyukyo_start, kcsapi_nyukyo_speedchange } from "../Interfaces/kcsapi_repair";
 
 import { Homeport } from "./Homeport";
 import { Ship } from "./Ship";
+import { Fleet } from "./Fleet";
 
 export class RepairDock extends Observable {
     public Docks: RepairDock.Dock[];
-    private Owner: Homeport;
+    private homeport: Homeport;
 
-    constructor(Owner: Homeport) {
+    constructor(homeport: Homeport) {
         super();
-        this.Owner = Owner;
+        this.homeport = homeport;
         this.Docks = [];
 
         SubscribeKcsapi<kcsapi_ndock[]>(
@@ -31,6 +32,17 @@ export class RepairDock extends Observable {
         );
     }
 
+    public CheckRepairing(shipId_or_fleet: number | Fleet): boolean {
+        if (shipId_or_fleet instanceof Fleet) {
+            const fleet = shipId_or_fleet;
+            const repairing = this.Docks.filter(x => x.ShipId != -1).map(x => x.ShipId);
+            return fleet.Ships.filter(x => repairing.indexOf(x.Id) >= 0).length > 0;
+        } else {
+            const shipId = shipId_or_fleet;
+            return this.Docks.filter(x => x.ShipId === shipId).length > 0;
+        }
+    }
+
     public Update(source: kcsapi_ndock[]): void {
         if (this.Docks.length === source.length)
             source.forEach(raw => this.Docks[raw.api_id].Update(raw));
@@ -38,12 +50,12 @@ export class RepairDock extends Observable {
         else {
             this.Docks.forEach(dock => dock.Dispose());
 
-            this.Docks = source.map(x => new RepairDock.Dock(x));
+            this.Docks = source.map(x => new RepairDock.Dock(this.homeport, x));
         }
     }
 
     private Start(request: kcsapi_nyukyo_start): void {
-        const ship = this.Owner.Ships[request.api_ship_id];
+        const ship = this.homeport.Ships[request.api_ship_id];
         if (!ship) return;
 
         if (request.api_highspeed === 1)
@@ -58,7 +70,7 @@ export class RepairDock extends Observable {
             const ship = dock.Ship;
 
             dock.Finish();
-            if(ship) ship.Repair();
+            if (ship) ship.Repair();
         }
         catch { }
     }
@@ -72,7 +84,8 @@ export namespace RepairDock {
         Free = 0,
         Repairing = 1,
     }
-    export class Dock extends TickNotifier {
+    export class Dock extends TickObservable {
+        private homeport: Homeport;
         private notified: boolean = false;
 
         public Completed: DockComplete | DockComplete[] | null = null;
@@ -85,43 +98,57 @@ export namespace RepairDock {
         private _Ship: Ship | null = null;
         public get Ship(): Ship | null { return this._Ship; }
         public set Ship(ship: Ship | null) {
-            if (this._Ship) this._Ship.Situation &= ~Ship.Situation.Repairing;
-            if (ship) ship.Situation |= Ship.Situation.Repairing;
+            if (this._Ship) this._Ship.State &= ~Ship.State.Repairing;
+            if (ship) ship.State |= Ship.State.Repairing;
             this._Ship = ship;
         }
 
         public CompleteTime: number = 0;
         public Remaining: number = 0;
 
-        constructor(dock: kcsapi_ndock) {
+        constructor(homeport: Homeport, dock: kcsapi_ndock) {
             super();
+
+            this.homeport = homeport;
 
             this.Update(dock);
         }
         public Update(ndock: kcsapi_ndock): void {
-            this.Id = 0;
+            this.Id = ndock.api_id;
+            this.State = ndock.api_state;
+
+            this.ShipId = ndock.api_ship_id;
+            this.Ship =
+                this.State === DockState.Repairing
+                    ? this.homeport.Ships[this, this.ShipId]
+                    : null;
+
+            this.CompleteTime =
+                this.State === DockState.Repairing
+                    ? ndock.api_complete_time
+                    : 0;
+            this.Remaining = this.CompleteTime;
         }
         public Finish(): void {
             this.State = RepairDock.DockState.Free;
             this.ShipId = -1;
             this.Ship = null;
             this.CompleteTime = 0;
+            this.Remaining = 0;
         }
 
         protected Tick(): void {
-			if (this.CompleteTime !== 0)
-			{
-				let remaining = this.CompleteTime - Date.now();
-				if (remaining < 0) remaining = 0;
-				this.Remaining = remaining;
+            if (this.CompleteTime !== 0) {
+                let remaining = this.CompleteTime - Date.now();
+                if (remaining < 0) remaining = 0;
+                this.Remaining = remaining;
 
-				if (!this.notified && this.Completed && remaining <= Settings.NotificationTime * 1000)
-				{
+                if (!this.notified && this.Completed && remaining <= Settings.NotificationTime * 1000) {
                     fns(this.Completed, this, this.Id, this.Ship as Ship);
-					this.notified = true;
-				}
-			}
-			else this.Remaining = 0;
+                    this.notified = true;
+                }
+            }
+            else this.Remaining = 0;
         }
     }
 }
