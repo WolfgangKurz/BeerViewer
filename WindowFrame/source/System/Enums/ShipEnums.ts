@@ -1,4 +1,8 @@
+/** Types of ship */
 export enum ShipType {
+    None = 0,
+    Undefined = 0,
+
     DE = 1,
     CoastalDefenseShip = 1,
     海防艦 = 1,
@@ -53,7 +57,7 @@ export enum ShipType {
     SuperDreadnoughtClassBattleship = 12,
     SuperDreadnoughtBattleship = 12,
     超弩級戦艦 = 12,
-    
+
     SS = 13,
     Submarine = 13,
     潜水艦 = 13,
@@ -107,4 +111,29 @@ export enum ShipType {
     補給船 = 22,
     味方補給船 = 22,
     補給船_味方 = 22
+}
+
+/** Speed of ship */
+export enum ShipSpeed {
+    Immovable = 0,
+    LandBased = 0,
+    移動不可 = 0,
+    陸上基地 = 0,
+
+    Slow = 5,
+    低速 = 5,
+
+    Fast = 10,
+    高速 = 10,
+
+    /** Fast+, 高速+ */
+    Faster = 15,
+    FastPlus = 15,
+    上高速 = 15,
+    高速上 = 15,
+    高速プラス = 15,
+
+    Fastest = 20,
+    最高速 = 20,
+    最速 = 20
 }

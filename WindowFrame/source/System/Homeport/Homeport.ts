@@ -6,8 +6,9 @@ import { RepairDock } from "./RepairDock";
 import { SubscribeKcsapi } from "../Base/KcsApi";
 import { kcsapi_port } from "../Interfaces/kcsapi_port";
 import { kcsapi_require_info } from "../Interfaces/kcsapi_require_info";
+import { Observable } from "../Base/Observable";
 
-export class Homeport {
+export class Homeport extends Observable {
     public static readonly Instance: Homeport = new Homeport;
 
     public Admiral: Admiral | null = null;
@@ -17,7 +18,6 @@ export class Homeport {
     public Ships: Ship[] = [];
 
     public Ready(): void {
-
         this.Materials = new Materials();
         this.RepairDock = new RepairDock(this);
         // this.ConstructionDock = new ConstructionDock(this);

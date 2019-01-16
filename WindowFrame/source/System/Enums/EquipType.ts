@@ -261,6 +261,9 @@ export enum EquipDictCategory {
     水上爆撃機 = 43
 }
 export enum EquipCategory {
+    None = 0,
+    なし = 0,
+
     SmallCaliberGun = 1,
     SmallCannon = 1,
     小口径主砲 = 1,
@@ -284,6 +287,8 @@ export enum EquipCategory {
     CarrierFighter = 6,
     艦上戦闘機 = 6,
 
+    CarrierBasedDiveBomber = 6,
+    CarrierDiveBomber = 6,
     CarrierBasedBomber = 6,
     CarrierBomber = 6,
     艦上爆撃機 = 7,
@@ -490,13 +495,16 @@ export enum EquipCategory {
     Radar_Large2 = 93,
     大型電探_II = 93,
 
-    LandBasedReconnaissance_II = 94,
-    LandBasedReconnaissance2 = 94,
-    LandBasedRecon_II = 94,
-    LandBasedRecon2 = 94,
+    CarrierBasedReconnaissance_II = 94,
+    CarrierBasedReconnaissance2 = 94,
+    CarrierBasedRecon_II = 94,
+    CarrierBasedRecon2 = 94,
     艦上偵察機_II = 94
 }
 export enum EquipIcon {
+    None = 0,
+    なし = 0,
+    
     SmallCaliberGun = 1,
     SmallCannon = 1,
     小口径主砲 = 1,
@@ -522,6 +530,8 @@ export enum EquipIcon {
     CarrierFighter = 6,
     艦上戦闘機 = 6,
 
+    CarrierBasedDiveBomber = 7,
+    CarrierDiveBomber = 7,
     CarrierBasedBomber = 7,
     CarrierBomber = 7,
     艦上爆撃機 = 7,
@@ -740,6 +750,7 @@ export enum EquipAircraft {
     OtherCountriesAircraft = 14,
     海外機 = 14,
 
+    Type99_DiveBomber = 15,
     Type99_Bomber = 15,
     Aichi_D3A = 15,
     Val = 15,

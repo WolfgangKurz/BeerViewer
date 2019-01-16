@@ -1,4 +1,4 @@
-import { ShipType } from "../../Enums/ShipType";
+import { ShipType, ShipSpeed } from "../../Enums/ShipEnums";
 
 /** Master information interface for Ship */
 export interface kcsapi_mst_ship {
@@ -24,27 +24,27 @@ export interface kcsapi_mst_ship {
     api_aftershipid: string;
 
     /** HP - Taikyuu */
-    api_taik: number[];
+    api_taik: [number, number];
 
     /** Armor - Soukou */
-    api_souk: number[];
+    api_souk: [number, number];
 
     /** Fire Power - Hougeki */
-    api_houg: number[];
+    api_houg: [number, number];
 
     /** Torpedo Power - Raigeki */
-    api_raig: number[];
+    api_raig: [number, number];
 
     /** Anti-Aircraft Power - Taikuu
      * 
      * `api_taik` already exists, so Tykuu */
-    api_tyku: number[];
+    api_tyku: [number, number];
 
     /** Luck */
-    api_luck: number[];
+    api_luck: [number, number];
 
     /** Speed of ship - Sokudo */
-    api_soku: number;
+    api_soku: ShipSpeed;
 
     /** Length of fire */
     api_leng: number;
