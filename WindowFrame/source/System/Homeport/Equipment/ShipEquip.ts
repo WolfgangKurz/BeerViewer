@@ -11,9 +11,8 @@ export class ShipEquip extends Observable {
     public readonly CurrentAircraft: number;
     public readonly LostAircraft: number;
 
-    public get IsAircraft(): boolean { return this.Item.Info.Type.IsNumerable() }
+    public get IsAircraft(): boolean { return this.Item.Info.IsNumerable }
 
-    public get Tooltip(): string { return this.Item.Info.ToolTipData }
     public get Equipped(): boolean { return this.Item != null && this.Item != Equipment.Empty }
 
     constructor(Owner: Ship | undefined | null, Item: Equipment | undefined | null, MaximumAircraft: number, CurrentAircraft: number) {
