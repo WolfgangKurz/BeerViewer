@@ -6,11 +6,13 @@ import { Ship } from "./Ship";
 import { ShipSpeed, ShipType } from "../Enums/ShipEnums";
 import Const from "../Const/System";
 import { FleetState } from "../Enums/FleetEnums";
+import { Expedition } from "./Expedition/Expedition";
 
 export class Fleet extends TickObservable implements IIdentifiable {
     public Id!: number;
     public Name!: string;
     public Ships!: Ship[];
+    public Expedition: Expedition;
 
     public get FleetSpeed(): ShipSpeed {
         return this.Ships.length > 0
