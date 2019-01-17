@@ -33,6 +33,7 @@ class TopExpedition implements IModule {
 				Progress: 0
 			};
 
+			Homeport.Instance.Admiral
 			window.API.ObserveData("Homeport", "Organization.Fleets[" + (i + 1) + "]", value => data.Enabled = value !== null, true);
 			window.API.ObserveData("Homeport", "Organization.Fleets[" + (i + 1) + "].Expedition", value => {
 				data.Activated = value.IsInExecution;

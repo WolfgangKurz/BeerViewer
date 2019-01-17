@@ -36,10 +36,10 @@ export class RepairDock extends Observable {
         if (shipId_or_fleet instanceof Fleet) {
             const fleet = shipId_or_fleet;
             const repairing = this.Docks.filter(x => x.ShipId != -1).map(x => x.ShipId);
-            return fleet.Ships.filter(x => repairing.indexOf(x.Id) >= 0).length > 0;
+            return fleet.Ships.some(x => repairing.indexOf(x.Id) >= 0);
         } else {
             const shipId = shipId_or_fleet;
-            return this.Docks.filter(x => x.ShipId === shipId).length > 0;
+            return this.Docks.some(x => x.ShipId === shipId);
         }
     }
 

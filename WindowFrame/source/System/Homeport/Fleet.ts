@@ -103,11 +103,11 @@ export class Fleet extends TickObservable implements IIdentifiable {
 
         if ((state & FleetState.Homeport) !== 0) {
             // Check repairing
-            if (ships.filter(x => this.homeport.RepairDock!.CheckRepairing(x.Id)).length > 0)
+            if (ships.some(x => this.homeport.RepairDock!.CheckRepairing(x.Id)))
                 state |= FleetState.Repairing;
 
             // Not fully supplied
-            if (ships.filter(x => x.Fuel.Current < x.Fuel.Maximum || x.Ammo.Current < x.Ammo.Maximum).length > 0)
+            if (ships.some(x => x.Fuel.Current < x.Fuel.Maximum || x.Ammo.Current < x.Ammo.Maximum))
                 state |= FleetState.NeedSupply;
 
             // Condition restoring
@@ -119,8 +119,7 @@ export class Fleet extends TickObservable implements IIdentifiable {
             .filter(x => !this.homeport.RepairDock!.CheckRepairing(x.Id))
             .filter(x => !(x.State & Ship.State.Evacuation) && !(x.State & Ship.State.Tow))
             .filter(x => !(state & FleetState.Sailing) && (x.State & Ship.State.DamageControlled))
-            .filter(x => x.HP.Percentage <= 0.25)
-            .length > 0;
+            .some(x => x.HP.Percentage <= 0.25);
         if (heavilyDamaged)
             state |= FleetState.HeavilyDamaged;
 

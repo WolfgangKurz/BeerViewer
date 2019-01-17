@@ -9,8 +9,7 @@ import { EquipInfo } from "./Wrappers/EquipInfo";
 import { ExpeditionInfo } from "./Wrappers/ExpeditionInfo";
 import { MapWorldInfo, MapAreaInfo } from "./Wrappers/MapInfos";
 import { UseItemInfo } from "./Wrappers/UseItemInfo";
-
-export type MasterWrapper<T> = ReadonlyMap<number, T>;
+import { MasterWrapper } from "../Models/TableWrapper";
 
 export class Master {
     public static Instance: Master = new Master();

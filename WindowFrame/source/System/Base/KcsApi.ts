@@ -1,7 +1,7 @@
 import { HTTPRequest } from "../Exports/API";
 
 export interface KcsApiCallback<T, U extends HTTPRequest> {
-    (Response: T, Request: U): void;
+    (Response: T, Request: U, RawJson: any): void;
 }
 
 /** Subscribe HTTP the url starts with "/kcsapi/" */
@@ -11,7 +11,7 @@ export function SubscribeKcsapi<T, U extends HTTPRequest = HTTPRequest>(url: str
             const svdata: String = x.startsWith("svdata=") ? x.substr(7) : x;
             const json = JSON.parse(svdata.toString());
             if (json.api_result === 1 && callback)
-                callback(json.api_data, y as U);
+                callback(json.api_data, y as U, json);
         } catch (e) {
             console.warn("Expected json, but not.", e);
         }

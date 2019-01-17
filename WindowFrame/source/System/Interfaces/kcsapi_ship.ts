@@ -1,3 +1,6 @@
+import { kcsapi_slot_data } from "./kcsapi_slot";
+import { kcsapi_deck } from "./kcsapi_deck";
+
 export interface kcsapi_ship2 {
     api_id: number;
     api_sortno: number;
@@ -31,6 +34,18 @@ export interface kcsapi_ship2 {
     api_locked_equip: number;
     api_sally_area: number;
     api_slot_ex: number;
+}
+export interface kcsapi_ship3 {
+    api_ship_data: kcsapi_ship2[];
+    api_deck_data: kcsapi_deck[];
+
+    /** Unused at this project */
+    api_slot_data: kcsapi_slot_data;
+}
+
+export interface kcsapi_ship_deck {
+    api_ship_data: kcsapi_ship2[];
+    api_deck_data: kcsapi_deck[];
 }
 
 export interface kcsapi_destroyship {

@@ -111,7 +111,7 @@ class ModuleAreas {
         } else
             elem = rootElement as (HTMLElement | null);
 
-        if (areaElem.Modules.filter(x => x.Id === id).length > 0) throw "Already registered name";
+        if (areaElem.Modules.some(x => x.Id === id)) throw "Already registered name";
 
         areaElem.Modules.push(new Module(
             area,

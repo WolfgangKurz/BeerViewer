@@ -31,11 +31,7 @@ export class ShipInfo extends RawDataWrapper<kcsapi_mst_ship> implements IIdenti
     public get Ammo(): number { return this.raw.api_bull_max }
     //#endregion
 
-    public IsAircraftShipType(): boolean {
-        return this.SlotAircraftCounts
-            .filter(x => x > 0)
-            .length > 0;
-    }
+    public IsAircraftShipType(): boolean { return this.SlotAircraftCounts.some(x => x > 0) }
 
     constructor(api_data: kcsapi_mst_ship) {
         super(api_data);
