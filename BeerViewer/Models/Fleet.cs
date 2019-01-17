@@ -349,7 +349,7 @@ namespace BeerViewer.Models
 			this.AirSuperiorityPotentialMinimum = ships.Sum(x => x.GetAirSuperiorityPotential(AirSuperiorityCalculationOptions.Minimum));
 			this.AirSuperiorityPotentialMaximum = ships.Sum(x => x.GetAirSuperiorityPotential(AirSuperiorityCalculationOptions.Maximum));
 
-			this.LOS = LOSCalcLogic.Get(Settings.LOSCalcType).Calc(new Fleet[] { this });
+			this.LOS = LOSCalcLogic.Get(Settings.LoSCalculator).Calc(new Fleet[] { this });
 		}
 
 		protected override void Tick()

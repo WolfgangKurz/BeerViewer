@@ -92,8 +92,8 @@ namespace BeerViewer.Models
 			var admiralScore = Math.Ceiling(Homeport.Instance.Admiral.Level * 0.4);
 
 			var isCombined = 1 < fleets.Count()
-							 && Settings.IsLOSIncludeFirstFleet
-							 && Settings.IsLOSIncludeSecondFleet;
+							 && Settings.IsLoSIncludeFirstFleet
+							 && Settings.IsLoSIncludeSecondFleet;
 			var vacancyScore = ((isCombined ? 12 : 6) - ships.Length) * 2;
 
 			return itemScore * this.Cn + shipScore - admiralScore + vacancyScore;
@@ -104,13 +104,13 @@ namespace BeerViewer.Models
 			if (fleets.Count() == 1)
 				return fleets.Single().Ships;
 
-			if (Settings.IsLOSIncludeFirstFleet && Settings.IsLOSIncludeSecondFleet)
+			if (Settings.IsLoSIncludeFirstFleet && Settings.IsLoSIncludeSecondFleet)
 				return fleets.SelectMany(x => x.Ships).ToArray();
 
-			if (Settings.IsLOSIncludeFirstFleet)
+			if (Settings.IsLoSIncludeFirstFleet)
 				return fleets.First().Ships;
 
-			if (Settings.IsLOSIncludeSecondFleet)
+			if (Settings.IsLoSIncludeSecondFleet)
 				return fleets.Last().Ships;
 
 			return new Ship[0];

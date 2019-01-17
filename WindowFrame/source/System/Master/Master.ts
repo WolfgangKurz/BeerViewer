@@ -8,6 +8,7 @@ import { EquipTypeInfo } from "./Wrappers/EquipTypeInfo";
 import { EquipInfo } from "./Wrappers/EquipInfo";
 import { ExpeditionInfo } from "./Wrappers/ExpeditionInfo";
 import { MapWorldInfo, MapAreaInfo } from "./Wrappers/MapInfos";
+import { UseItemInfo } from "./Wrappers/UseItemInfo";
 
 export type MasterWrapper<T> = ReadonlyMap<number, T>;
 
@@ -20,6 +21,8 @@ export class Master {
 
     public EquipTypes: MasterWrapper<EquipTypeInfo> | null = null;
     public Equips: MasterWrapper<EquipInfo> | null = null;
+
+    public UseItems: MasterWrapper<UseItemInfo> | null = null;
 
     public Expeditions: MasterWrapper<ExpeditionInfo> | null = null;
 

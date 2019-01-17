@@ -43,17 +43,17 @@ namespace BeerViewer
 		);
 
 		/// <summary>
-		/// Includes LOS calculator first fleet's los?
+		/// Includes LoS calculator first fleet's LoS?
 		/// </summary>
-		public static SettableSettingValue<bool> IsLOSIncludeFirstFleet { get; } = new SettableSettingValue<bool>(
+		public static SettableSettingValue<bool> IsLoSIncludeFirstFleet { get; } = new SettableSettingValue<bool>(
 			getKey(), "Setting", true,
 			"LoS Includes 1st Fleet?"
 		);
 
 		/// <summary>
-		/// Includes LOS calculator seconds fleet's los?
+		/// Includes LoS calculator seconds fleet's LoS?
 		/// </summary>
-		public static SettableSettingValue<bool> IsLOSIncludeSecondFleet { get; } = new SettableSettingValue<bool>(
+		public static SettableSettingValue<bool> IsLoSIncludeSecondFleet { get; } = new SettableSettingValue<bool>(
 			getKey(), "Setting", false,
 			"LoS Includes 2nd Fleet?"
 		);
@@ -61,9 +61,9 @@ namespace BeerViewer
 		/// <summary>
 		/// LOS calculator's formula
 		/// </summary>
-		public static SettableSettingValue<string> LOSCalcType { get; } = new SettableSettingValue<string>(
-			getKey(), "Setting", "LOSCalc.Type4",
-			"LoS Calculation Type"
+		public static SettableSettingValue<string> LoSCalculator { get; } = new SettableSettingValue<string>(
+			getKey(), "Setting", "Cn1",
+			"LoS Calculator"
 		);
 
 		/// <summary>

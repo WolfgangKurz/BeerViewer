@@ -36,7 +36,7 @@ interface kcsapi_mission {
     /** Can return after start? */
     api_return_flag: number;
 }
-export { // Same name
+export { // Alias
     kcsapi_mission as kcsapi_mission,
     kcsapi_mission as kcsapi_mst_mission
 }

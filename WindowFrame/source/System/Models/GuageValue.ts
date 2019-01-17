@@ -1,4 +1,4 @@
-export class GuageValue {
+class GuageValue {
     public readonly Current: number;
     public readonly Maximum: number;
     public readonly Minimum: number;
@@ -41,4 +41,8 @@ export class GenericGuageValue<T> {
     public Update(Current: T): GenericGuageValue<T> {
         return new GenericGuageValue<T>(Current, this.Maximum, this.Minimum);
     }
+}
+export { // Alias
+    GuageValue as Progress,
+    GuageValue as GuageValue
 }

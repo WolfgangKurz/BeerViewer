@@ -1,4 +1,7 @@
 export enum EquipBigCategory {
+    None = 0,
+    なし = 0,
+
     Cannon = 1,
     Gun = 1,
     砲 = 1,
@@ -105,6 +108,9 @@ export enum EquipBigCategory {
     陸上偵察機 = 25
 }
 export enum EquipDictCategory {
+    None = 0,
+    なし = 0,
+
     MainCannon = 1,
     MainGun = 1,
     主砲 = 1,
@@ -504,7 +510,7 @@ export enum EquipCategory {
 export enum EquipIcon {
     None = 0,
     なし = 0,
-    
+
     SmallCaliberGun = 1,
     SmallCannon = 1,
     小口径主砲 = 1,

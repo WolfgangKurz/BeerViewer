@@ -7,11 +7,16 @@ import { ShipSpeed, ShipType } from "../Enums/ShipEnums";
 import Const from "../Const/System";
 import { FleetState } from "../Enums/FleetEnums";
 import { Expedition } from "./Expedition/Expedition";
+import { AirSupremacy } from "../Models/AirSupremacy";
+import { LoSCalculator } from "../Models/LoSCalculator/LoSCalculator";
 
 export class Fleet extends TickObservable implements IIdentifiable {
-    public Id!: number;
-    public Name!: string;
-    public Ships!: Ship[];
+    public Id: number = 0;
+    public Name: string = "???";
+
+    private SourceShips: (Ship | null)[] = [];
+    public Ships: Ship[] = [];
+
     public Expedition: Expedition;
 
     public get FleetSpeed(): ShipSpeed {
@@ -27,7 +32,11 @@ export class Fleet extends TickObservable implements IIdentifiable {
     public ConditionRestoreTime: number = 0;
     public get IsConditionRestoring(): boolean { return this.ConditionRestoreTime > 0 }
 
+    public AirSupremacy: AirSupremacy = new AirSupremacy();
+    public LoS: number = 0;
+
     private homeport: Homeport;
+
 
     constructor(owner: Homeport, data: kcsapi_deck) {
         super();
@@ -46,6 +55,14 @@ export class Fleet extends TickObservable implements IIdentifiable {
         this.UpdateShips(data.api_ship.map(x => this.homeport.Ships[x]));
 
         this.UpdateCondition();
+    }
+
+    private UpdateShips(ships: Ship[]): void {
+        this.SourceShips = ships;
+        this.Ships = ships.filter(x => x !== null);
+
+        this.Calculate();
+        this.UpdateState();
     }
 
     private PrevCondition!: number;
@@ -113,6 +130,21 @@ export class Fleet extends TickObservable implements IIdentifiable {
         }
 
         this.State = state;
+    }
+
+    private Calculate(): void {
+        const ships = this.Ships.filter(x => // Only actually exists in fleet
+            (x.State & Ship.State.Tow) === 0
+            && (x.State & Ship.State.Evacuation)
+        );
+
+        this.AirSupremacy = AirSupremacy.Sum(ships.map(x => x.AirSupremacy));
+
+        const calculator = LoSCalculator.Instance.Get(Settings.LoSCalculator);
+        if (calculator)
+            this.LoS = calculator.Calc([this]);
+        else
+            this.LoS = 0;
     }
 
     protected Tick(): void {

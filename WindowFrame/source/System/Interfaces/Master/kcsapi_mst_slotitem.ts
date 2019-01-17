@@ -1,4 +1,4 @@
-import { EquipBigCategory, EquipDictCategory, EquipCategory, EquipIcon, EquipAircraft } from "../../Enums/EquipType";
+import { EquipBigCategory, EquipDictCategory, EquipCategory, EquipIcon, EquipAircraft } from "../../Enums/EquipEnums";
 
 /** Master information interface for Equipment */
 export interface kcsapi_mst_slotitem {
