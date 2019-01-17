@@ -23,8 +23,10 @@ export class Observable implements IDisposable {
                 const oldValue = target[name];
                 target[name] = value;
 
-                if (typeof name != "symbol") // Symbol cannot be used on PropertyChanged, because of callbacks.
-                    _this.PropertyChanged(name, value, oldValue);
+                if (
+                    typeof name !== "symbol" // Symbol cannot be used on PropertyChanged, because of callbacks.
+                    && !(typeof name === "string" && name[0] === '_') // Name not starts with `_`
+                ) _this.PropertyChanged(name, value, oldValue);
                 return true;
             }
         });
