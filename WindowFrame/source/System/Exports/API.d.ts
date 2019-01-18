@@ -1,5 +1,9 @@
-export type HTTPRequest = { [name: string]: string | number };
 export type HTTPCallback = (Response: string, Request: HTTPRequest) => void;
+
+export class HTTPRequest {
+    [key: string]: string | string[] | number;
+    constructor(data: any);
+}
 
 declare global {
     export interface Window {

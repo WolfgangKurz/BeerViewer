@@ -5,7 +5,7 @@ import { kcsapi_material } from "../Interfaces/kcsapi_material";
 import { kcsapi_charge } from "../Interfaces/kcsapi_charge";
 import { kcsapi_destroyship } from "../Interfaces/kcsapi_ship";
 import { kcsapi_destroyitem2 } from "../Interfaces/kcsapi_item";
-import { kcsapi_airbase_corps_supply, kcsapi_airbase_corps_set_plane } from "../Interfaces/kcsapi_airbase_corps";
+import { kcsapi_airbase_corps_supply, kcsapi_airbase_corps_set_plane, kcsapi_req_air_corps_set_plane } from "../Interfaces/kcsapi_airbase_corps";
 
 export class Materials extends Observable {
     private _Fuel: number;
@@ -70,10 +70,10 @@ export class Materials extends Observable {
         );
 
         // Set aircraft to AirBase
-        SubscribeKcsapi<kcsapi_airbase_corps_set_plane>(
+        SubscribeKcsapi<kcsapi_airbase_corps_set_plane, kcsapi_req_air_corps_set_plane>(
             "api_req_air_corps/set_plane",
             (x, y) => {
-                if (y["api_item_id"] === "-1") return;
+                if (y.api_item_id === -1) return;
                 if (x["api_plane_info"].length >= 2) return;
                 this.Update([
                     this.Fuel,

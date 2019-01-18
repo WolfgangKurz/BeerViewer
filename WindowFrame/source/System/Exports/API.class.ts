@@ -14,3 +14,19 @@ export class SubscribeInfo implements IDisposable {
             window.API.UnsubscribeHTTP(this.Id);
     }
 }
+
+export class HTTPRequest {
+    [key: string]: string[] | string | number;
+
+    constructor(data: any) {
+        if (data === undefined || data === null) return;
+
+        for (let key in data) {
+            const value = data[key], nvalue = Number(value);
+            if (nvalue.toString() === value)
+                this[key] = nvalue; // Real numeric
+            else
+                this[key] = value;
+        }
+    }
+}

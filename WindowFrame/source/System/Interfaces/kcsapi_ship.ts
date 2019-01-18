@@ -1,5 +1,6 @@
 import { kcsapi_slot_data } from "./kcsapi_slot";
 import { kcsapi_deck } from "./kcsapi_deck";
+import { HTTPRequest } from "../Exports/API";
 
 export interface kcsapi_ship2 {
     api_id: number;
@@ -50,4 +51,9 @@ export interface kcsapi_ship_deck {
 
 export interface kcsapi_destroyship {
     api_material: number[];
+}
+
+export interface kcsapi_req_kousyou_destroyship extends HTTPRequest {
+    /** "," separated string */
+    api_ship_id: string;
 }

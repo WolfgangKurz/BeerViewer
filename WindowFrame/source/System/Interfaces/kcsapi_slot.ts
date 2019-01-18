@@ -1,4 +1,5 @@
 import { kcsapi_ship2 } from "./kcsapi_ship";
+import { HTTPRequest } from "../Exports/API";
 
 export interface kcsapi_slot_deprive {
     api_ship_data: kcsapi_slot_deprive_ship_data;
@@ -43,4 +44,8 @@ export interface kcsapi_slot_data {
     api_slottype21: number[];
     api_slottype22: number[];
     api_slottype23: number[];
+}
+
+export interface kcsapi_req_kaisou_slot_exchange_index extends HTTPRequest {
+    api_id: number;
 }

@@ -1,3 +1,5 @@
+import { HTTPRequest } from "../Exports/API";
+
 export interface kcsapi_mapinfo_airbase {
 	api_air_base: kcsapi_airbase_corps[];
 }
@@ -31,4 +33,8 @@ export interface kcsapi_plane_info {
 	api_count: number;
 	api_max_count: number;
 	api_cond: number;
+}
+
+export interface kcsapi_req_air_corps_set_plane extends HTTPRequest {
+	api_item_id: number;
 }

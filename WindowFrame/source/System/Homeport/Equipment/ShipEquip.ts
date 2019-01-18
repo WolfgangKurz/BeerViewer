@@ -8,8 +8,16 @@ export class ShipEquip extends Observable {
     public readonly Item: Equipment;
 
     public readonly MaximumAircraft: number;
-    public readonly CurrentAircraft: number;
-    public readonly LostAircraft: number;
+
+    //#region CurrentAircraft
+    private _CurrentAircraft:number;
+    public get CurrentAircraft(): number { return this._CurrentAircraft }
+    //#endregion
+
+    //#region LostAircraft
+    private _LostAircraft: number;
+    public get LostAircraft(): number { return this._LostAircraft }
+    //#endregion
 
     public get IsAircraft(): boolean { return this.Item.Info.IsNumerable }
 
@@ -22,7 +30,12 @@ export class ShipEquip extends Observable {
         this.Item = Item || Equipment.Empty;
 
         this.MaximumAircraft = MaximumAircraft;
-        this.CurrentAircraft = CurrentAircraft;
-        this.LostAircraft = MaximumAircraft - CurrentAircraft;
+        this._CurrentAircraft = CurrentAircraft;
+        this._LostAircraft = MaximumAircraft - CurrentAircraft;
+    }
+
+    public UpdateAircrafts(current:number):void{
+        this._CurrentAircraft = current;
+        this._LostAircraft = this.MaximumAircraft - current;
     }
 }

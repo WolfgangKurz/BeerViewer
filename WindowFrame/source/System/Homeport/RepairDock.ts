@@ -55,10 +55,10 @@ export class RepairDock extends Observable {
     }
 
     private Start(request: kcsapi_nyukyo_start): void {
-        const ship = this.homeport.Ships[request.api_ship_id];
+        const ship = this.homeport.Ships.get(request.api_ship_id);
         if (!ship) return;
 
-        if (request.api_highspeed === 1)
+        if (parseInt(<string>request["api_highspeed"]) === 1)
             ship.Repair();
 
         // If bucket not used, ndock api will be delivered.
@@ -98,8 +98,8 @@ export namespace RepairDock {
         private _Ship: Ship | null = null;
         public get Ship(): Ship | null { return this._Ship; }
         public set Ship(ship: Ship | null) {
-            if (this._Ship) this._Ship.State &= ~Ship.State.Repairing;
-            if (ship) ship.State |= Ship.State.Repairing;
+            if (this.Ship) this.Ship.Repair();
+            if (ship) ship.Repairing();
             this._Ship = ship;
         }
 
@@ -120,7 +120,7 @@ export namespace RepairDock {
             this.ShipId = ndock.api_ship_id;
             this.Ship =
                 this.State === DockState.Repairing
-                    ? this.homeport.Ships[this, this.ShipId]
+                    ? this.homeport.Ships.get(this.ShipId) || null
                     : null;
 
             this.CompleteTime =
