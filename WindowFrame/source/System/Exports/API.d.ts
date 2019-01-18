@@ -42,8 +42,11 @@ export interface Communicator {
     /** Deliver "text" to logger */
     Log(text: string): void;
 
-    /** Subscribe browser HTTP packets for specific "url" */
-    SubscribeHTTP(url: string, callback: HTTPCallback): void;
+    /** Subscribe HTTP packets for specific "url" */
+    SubscribeHTTP(url: string, callback: HTTPCallback): number;
+
+    /** Unsubscribe HTTP packet observer with id that returned from `SubscribeHTTP` */
+    UnsubscribeHTTP(SubscribeId: number): boolean;
 }
 
 /** Callable from Communicator */

@@ -310,11 +310,11 @@ namespace BeerViewer.Modules.Communication
 		/// </summary>
 		/// <param name="url">Url to watch</param>
 		/// <param name="callback">Callback when get HTTP response with <paramref name="url"/>.</param>
-		public void SubscribeHTTP(string url, IJavascriptCallback callback)
+		public int SubscribeHTTP(string url, IJavascriptCallback callback)
 		{
-			if (callback == null || !callback.CanExecute) return;
+			if (callback == null || !callback.CanExecute) return -1;
 
-			Proxy.Instance.Register(url, e =>
+			return Proxy.Instance.Register(url, e =>
 			{
 				var x = e.TryParse();
 				if (x == null) return;
@@ -322,6 +322,18 @@ namespace BeerViewer.Modules.Communication
 				if (callback != null && callback.CanExecute)
 					callback.ExecuteAsync(e.Response.BodyAsString, ConvertRequest(x.Request));
 			});
+		}
+
+		/// <summary>
+		/// Remove HTTP response observer.
+		/// </summary>
+		/// <param name="SubsrcibeId">Id that returned from <see cref="WindowBrowserCommicator.SubscribeHTTP(string, IJavascriptCallback)"/></param>
+		public bool UnsubscribeHTTP(int SubsrcibeId)
+		{
+			if (SubsrcibeId < 0) return false;
+
+			Proxy.Instance.Unregister(SubsrcibeId);
+			return true;
 		}
 	}
 }

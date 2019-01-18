@@ -28,10 +28,16 @@ export class Observable implements IDisposable {
                 else if (typeof name === "number") // Convert number to string
                     name = name.toString();
 
-                if (
-                    name.length !== 0 // maybe empty Symbol undefined
-                    && name[0] !== '_' // Name not starts with `_`
-                ) _this.PropertyChanged(name, value, oldValue);
+                // maybe empty Symbol or undefined Symbol
+                if (name.length !== 0) {
+                    if (name[0] !== '_') { // Name not starts with `_`
+                        _this.PropertyChanged(name, value, oldValue);
+                    } else if (name[1] !== '_') { // Name not starts with `__` (double underscore), When single underscore
+                        const key = name.substr(1);
+                        if (key in target)
+                            _this.PropertyChanged(key, value, oldValue); // Call original name if exists
+                    }
+                }
                 return true;
             }
         });

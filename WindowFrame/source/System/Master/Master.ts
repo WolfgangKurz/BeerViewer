@@ -33,22 +33,16 @@ export class Master {
         this.IsReady = true;
 
         SubscribeKcsapi<kcsapi_start2>("/api_start2", x => {
-            this.ShipTypes = this.WrapMaster<ShipTypeInfo>(x.api_mst_stype.map(y => new ShipTypeInfo(y)));
-            this.Ships = this.WrapMaster<ShipInfo>(x.api_mst_ship.map(y => new ShipInfo(y)));
+            this.ShipTypes = new MasterWrapper<ShipTypeInfo>(x.api_mst_stype.map(y => new ShipTypeInfo(y)));
+            this.Ships = new MasterWrapper<ShipInfo>(x.api_mst_ship.map(y => new ShipInfo(y)));
 
-            this.EquipTypes = this.WrapMaster<EquipTypeInfo>(x.api_mst_slotitem_equiptype.map(y => new EquipTypeInfo(y)));
-            this.Equips = this.WrapMaster<EquipInfo>(x.api_mst_slotitem.map(y => new EquipInfo(y)));
+            this.EquipTypes = new MasterWrapper<EquipTypeInfo>(x.api_mst_slotitem_equiptype.map(y => new EquipTypeInfo(y)));
+            this.Equips = new MasterWrapper<EquipInfo>(x.api_mst_slotitem.map(y => new EquipInfo(y)));
 
-            this.Expeditions = this.WrapMaster<ExpeditionInfo>(x.api_mst_mission.map(y => new ExpeditionInfo(y)));
+            this.Expeditions = new MasterWrapper<ExpeditionInfo>(x.api_mst_mission.map(y => new ExpeditionInfo(y)));
 
-            this.MapWorlds = this.WrapMaster<MapWorldInfo>(x.api_mst_maparea.map(y => new MapWorldInfo(y)));
-            this.MapAreas = this.WrapMaster<MapAreaInfo>(x.api_mst_mapinfo.map(y => new MapAreaInfo(y)));
+            this.MapWorlds = new MasterWrapper<MapWorldInfo>(x.api_mst_maparea.map(y => new MapWorldInfo(y)));
+            this.MapAreas = new MasterWrapper<MapAreaInfo>(x.api_mst_mapinfo.map(y => new MapAreaInfo(y)));
         });
-    }
-
-    private WrapMaster<T extends IIdentifiable>(array: T[]) {
-        return new Map(
-            array.map(x => [x.Id, x] as [number, T])
-        );
     }
 }

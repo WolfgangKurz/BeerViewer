@@ -98,20 +98,5 @@ export class Homeport extends Observable {
             this.FleetCombined = x.api_combined != 0;
             this.FleetCombinedType = <CombinedFleetType>parseInt(y["api_combined_type"].toString());
         });
-
-        SubscribeKcsapi<kcsapi_mission_result>("api_req_mission/result", x => {
-            const mission = Master.Instance.Expeditions!
-                .valueArray()
-                .find(y => y.Title === x.api_quest_name);
-
-            if (mission) {
-                var fleet = this.Fleets
-                    .valueArray()
-                    .find(y => y.Expedition.Id == mission.Id);
-
-                if (fleet != null)
-                    fleet.Expedition.Done(x);
-            }
-        });
     }
 }

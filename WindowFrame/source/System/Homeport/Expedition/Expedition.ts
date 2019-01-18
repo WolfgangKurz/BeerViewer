@@ -4,6 +4,8 @@ import { ExpeditionInfo } from "../../Master/Wrappers/ExpeditionInfo";
 import { Progress } from "../../Models/GuageValue";
 import { ExpeditionResult } from "./ExpeditionResult";
 import { Master } from "../../Master/Master";
+import { SubscribeKcsapi } from "../../Base/KcsApi";
+import { kcsapi_mission_result } from "../../Interfaces/kcsapi_mission_result";
 
 export class Expedition extends TickObservable {
     private readonly fleet: Fleet;
@@ -12,16 +14,20 @@ export class Expedition extends TickObservable {
     public Id: number = -1;
     public Expedition: ExpeditionInfo | null = null;
 
-    private _ReturnTime: number = 0;
-    public get ReturnTime(): number { return this._ReturnTime }
-    public set ReturnTime(value: number) {
-        this._ReturnTime = value;
-        if (this._ReturnTime != value) {
+    //#region ReturnTime
+    // set _ReturnTime -> Observable will call "ReturnTime" PropertyChanged callbacks
+    private __ReturnTime: number = 0;
+    private get _ReturnTime(): number { return this.__ReturnTime }
+    private set _ReturnTime(value: number) {
+        if (this.__ReturnTime != value) {
+            this.__ReturnTime = value;
             this.notificated = false;
             this.RaisePropertyChanged(nameof(this.Remaining));
             this.RaisePropertyChanged(nameof(this.IsInExecution));
         }
     }
+    public get ReturnTime(): number { return this._ReturnTime }
+    //#endregion
 
     /** Is this expedition executing? */
     public get IsInExecution(): boolean { return this.ReturnTime != 0 }
@@ -44,17 +50,30 @@ export class Expedition extends TickObservable {
     constructor(fleet: Fleet) {
         super();
         this.fleet = fleet;
+
+        this.ManagedDisposable.Add(
+            SubscribeKcsapi<kcsapi_mission_result>("api_req_mission/result", x => {
+                const mission = Master.Instance.Expeditions!.values()
+                    .find(y => y.Title === x.api_quest_name);
+
+                if (mission && mission.Id === this.Id) this.Done(x);
+            })
+        );
+    }
+
+    public Done(mission: kcsapi_mission_result) {
+        this.ExpeditionResult = new ExpeditionResult(mission);
     }
 
     public Update(rawData: [number, number, number, number]): void {
         if (rawData.length != 4 || rawData.filter(x => x === 0).length == 4) {
             this.Id = -1;
             this.Expedition = null;
-            this.ReturnTime = 0;
+            this._ReturnTime = 0;
         } else {
             this.Id = rawData[1];
             this.Expedition = Master.Instance.Expeditions!.get(this.Id) || null;
-            this.ReturnTime = rawData[2];
+            this._ReturnTime = rawData[2];
         }
     }
 }

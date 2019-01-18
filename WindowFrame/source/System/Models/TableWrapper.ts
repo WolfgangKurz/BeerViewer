@@ -1,76 +1,66 @@
-class MasterWrapper<T> implements ReadonlyMap<number, T>{
-    forEach(callbackfn: (value: T, key: number, map: ReadonlyMap<number, T>) => void, thisArg?: any): void {
-        throw new Error("Method not implemented.");
-    } get(key: number): T | undefined {
-        throw new Error("Method not implemented.");
-    }
-    has(key: number): boolean {
-        throw new Error("Method not implemented.");
-    }
-    public get size(): number { return 0 }
-    [Symbol.iterator](): IterableIterator<[number, T]> {
-        throw new Error("Method not implemented.");
-    }
-    entries(): IterableIterator<[number, T]> {
-        throw new Error("Method not implemented.");
-    }
-    keys(): IterableIterator<number> {
-        throw new Error("Method not implemented.");
-    }
-    values(): IterableIterator<T> {
-        throw new Error("Method not implemented.");
+import { IIdentifiable } from "../Base/Interfaces/IIdentifiable";
+
+class MasterWrapper<T extends IIdentifiable> {
+    protected _map: Map<number, T> = new Map<number, T>();
+
+    get size(): number { return this._map.size }
+
+    constructor(data?: T[]) {
+        if (data)
+            data.forEach(x => this._map.set(x.Id, x));
     }
 
-    valueArray(): T[] {
-        const output: T[] = [];
-        this.forEach(x => output.push(x));
+    forEach(callbackfn: (value: T, key: number, map: MasterWrapper<T>) => void, thisArg?: any): void {
+        this._map.forEach((v, k) => callbackfn.call(thisArg, v, k, this));
+    }
+    get(key: number): T | undefined {
+        return this._map.get(key);
+    }
+    has(key: number): boolean {
+        return this._map.has(key);
+    }
+    *[Symbol.iterator](): IterableIterator<[number, T]> {
+        for (const entry of this._map)
+            yield entry;
+    }
+    entries(): [number, T][] {
+        const output: [number, T][] = [];
+        for (const entry of this) output.push(entry);
         return output;
     }
+    keys(): number[] {
+        const output: number[] = [];
+        for (const entry of this) output.push(entry[0]);
+        return output;
+    }
+    values(): T[] {
+        const output: T[] = [];
+        for (const entry of this) output.push(entry[1]);
+        return output;
+    }
+    get [Symbol.toStringTag](): string { return "MasterWrapper" }
 }
 export { // Alias
     MasterWrapper as MasterWrapper,
     MasterWrapper as MasterTable
 }
 
-class IdentifiableWrapper<T> implements Map<number, T>{
+class IdentifiableWrapper<T extends IIdentifiable> extends MasterWrapper<T> {
+    constructor(data?: T[]) {
+        super(data);
+    }
+
     clear(): void {
-        throw new Error("Method not implemented.");
+        this._map.clear();
     }
     delete(key: number): boolean {
-        throw new Error("Method not implemented.");
-    }
-    forEach(callbackfn: (value: T, key: number, map: Map<number, T>) => void, thisArg?: any): void {
-        throw new Error("Method not implemented.");
-    }
-    get(key: number): T | undefined {
-        throw new Error("Method not implemented.");
-    }
-    has(key: number): boolean {
-        throw new Error("Method not implemented.");
+        return this._map.delete(key);
     }
     set(key: number, value: T): this {
-        throw new Error("Method not implemented.");
+        this._map.set(key, value);
+        return this;
     }
-    public get size(): number { return 0 }
-    [Symbol.iterator](): IterableIterator<[number, T]> {
-        throw new Error("Method not implemented.");
-    }
-    entries(): IterableIterator<[number, T]> {
-        throw new Error("Method not implemented.");
-    }
-    keys(): IterableIterator<number> {
-        throw new Error("Method not implemented.");
-    }
-    values(): IterableIterator<T> {
-        throw new Error("Method not implemented.");
-    }
-    [Symbol.toStringTag]: string;
-
-    valueArray(): T[] {
-        const output: T[] = [];
-        this.forEach(x => output.push(x));
-        return output;
-    }
+    get [Symbol.toStringTag](): string { return "IdentifiableWrapper" }
 }
 export {
     IdentifiableWrapper as IdentifiableWrapper,
