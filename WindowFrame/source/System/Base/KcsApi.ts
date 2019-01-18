@@ -1,5 +1,5 @@
 import { HTTPRequest } from "../Exports/API";
-import { SubscribeInfo } from "../Exports/API.class";
+import { SubscribeInfo } from "../Exports/API";
 
 export interface KcsApiCallback<T, U extends HTTPRequest> {
     (Response: T, Request: U, RawJson: any): void;

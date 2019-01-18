@@ -1,4 +1,4 @@
-import { HTTPRequest } from "../Exports/API.class";
+import { HTTPRequest } from "../Exports/API";
 
 export interface kcsapi_hensei_combined {
     api_combined: number;

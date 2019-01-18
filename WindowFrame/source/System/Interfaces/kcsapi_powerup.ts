@@ -1,4 +1,4 @@
-import { HTTPRequest } from "../Exports/API.class";
+import { HTTPRequest } from "../Exports/API";
 import { kcsapi_ship2 } from "./kcsapi_ship";
 import { kcsapi_deck } from "./kcsapi_deck";
 

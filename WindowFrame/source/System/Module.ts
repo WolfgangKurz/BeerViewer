@@ -1,5 +1,4 @@
 import Vue from "vue";
-import API from "./Exports/API";
 import WindowModule from "./Base/Window";
 
 declare global {
