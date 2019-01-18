@@ -1,10 +1,10 @@
-import { LoSCalcLogic } from "./LoSCalculator";
 import { Ship } from "../../Homeport/Ship";
 import { Homeport } from "../../Homeport/Homeport";
 import { Fleet } from "../../Homeport/Fleet";
 import { EquipCategory } from "../../Enums/EquipEnums";
 import { Equipment } from "../../Homeport/Equipment/Equipment";
 import { ShipEquip } from "../../Homeport/Equipment/ShipEquip";
+import { LoSCalcLogic } from "./LoSCalcLogic";
 
 export abstract class TypeCnLoS implements LoSCalcLogic {
     public abstract readonly Id: string;

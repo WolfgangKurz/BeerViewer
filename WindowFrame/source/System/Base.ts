@@ -4,6 +4,7 @@ import VueTippy from "../vendor/vue.tippy";
 import Modules, { Callback } from "./Module";
 import { Homeport } from "./Homeport/Homeport";
 import { Master } from "./Master/Master";
+import BaseAPI from "./Base/API"
 
 tippy.setDefaults({
     arrow: true,
@@ -29,6 +30,8 @@ Vue.use(VueTippy, tippy.defaults);
 
 window.modules = Modules.Instance;
 window.CALLBACK = Callback.Instance;
+
+new BaseAPI(); // Initialize BaseAPI
 
 document.addEventListener("DOMContentLoaded", async function () {
     if (window.modules.initialized()) return; // Called twice
@@ -64,6 +67,9 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
     window.INTERNAL.Initialized();
 
+    Master.Instance.Ready();
+    Homeport.Instance.Ready();
+
     window.API.GetModuleList()
         .then(list => {
             list.forEach(x => window.modules.load(x.Name, x.Template, x.Scripted, x.Styled));
@@ -72,7 +78,4 @@ document.addEventListener("DOMContentLoaded", async function () {
             window.modules.init();
             window.API.Initialized();
         });
-
-    Master.Instance.Ready();
-    Homeport.Instance.Ready();
 });

@@ -1,10 +1,10 @@
-import { LoSCalcLogic } from "./LoSCalculator";
 import { Fleet } from "../../Homeport/Fleet";
 import { Ship } from "../../Homeport/Ship";
 import { EquipDictCategory, EquipCategory } from "../../Enums/EquipEnums";
 import { EquipInfo } from "../../Master/Wrappers/EquipInfo";
 import { Homeport } from "../../Homeport/Homeport";
 import { ShipEquip } from "../../Homeport/Equipment/ShipEquip";
+import { LoSCalcLogic } from "./LoSCalcLogic";
 
 export class Fall2_5LoS extends LoSCalcLogic {
     public readonly Id: string = "Fall2_5";

@@ -60,14 +60,17 @@ export class EquipInfo extends RawDataWrapper<kcsapi_mst_slotitem> implements II
     constructor(api_data: kcsapi_mst_slotitem) {
         super(api_data);
 
-        this.EquipType = Master.Instance.EquipTypes!.get(this.Category) || EquipTypeInfo.Empty;
+        if (this.Category === -1)
+            this.EquipType = EquipTypeInfo.Empty;
+        else
+            this.EquipType = Master.Instance.EquipTypes!.get(this.Category) || EquipTypeInfo.Empty;
     }
 
-    public static readonly Empty:EquipInfo = new EquipInfo({
+    public static readonly Empty: EquipInfo = new EquipInfo({
         api_id: -1,
         api_sortno: 0,
         api_name: "???",
-        api_type: [0, 0, 0, 0, 0],
+        api_type: [-1, -1, -1, -1, -1],
         api_taik: 0,
         api_souk: 0,
         api_houg: 0,

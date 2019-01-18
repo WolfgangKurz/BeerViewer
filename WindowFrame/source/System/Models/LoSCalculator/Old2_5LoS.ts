@@ -1,7 +1,7 @@
-import { LoSCalcLogic } from "./LoSCalculator";
 import { Fleet } from "../../Homeport/Fleet";
 import { Ship } from "../../Homeport/Ship";
 import { EquipDictCategory } from "../../Enums/EquipEnums";
+import { LoSCalcLogic } from "./LoSCalcLogic";
 
 export class Old2_5LoS extends LoSCalcLogic {
     public readonly Id: string = "Old2_5";

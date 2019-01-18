@@ -204,8 +204,8 @@ namespace BeerViewer.Forms
 			};
 
 			this.Resize += (s, e) => this.WindowBrowser.Size = this.ClientSize;
-			// this.WindowBrowser.Load("file:///" + Constants.EntryDir.Replace("\\", "/") + "/WindowFrame/Application.html");
-			this.WindowBrowser.Load("chrome://version/");
+			this.WindowBrowser.Load("file:///" + Constants.EntryDir.Replace("\\", "/") + "/WindowFrame/Application.html");
+			// this.WindowBrowser.Load("chrome://version/");
 			this.Controls.Add(this.WindowBrowser);
 
 			this.WindowBrowser.IsBrowserInitializedChanged += (s, e) =>

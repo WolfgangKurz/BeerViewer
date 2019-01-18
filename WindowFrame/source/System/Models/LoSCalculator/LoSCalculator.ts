@@ -1,17 +1,8 @@
-import { Fleet } from "../../Homeport/Fleet";
 import { SimpleSumLoS } from "./SimpleSumLoS";
 import { Old2_5LoS } from "./Old2_5LoS";
 import { Fall2_5LoS } from "./Fall2_5LoS";
 import { Cn1LoS, Cn3LoS, Cn4LoS } from "./CnLoS";
-
-export interface ILoSCalculator {
-    readonly Id: string;
-    readonly Name: string;
-
-    readonly HasCombinedSettings: boolean;
-
-    Calc(fleets: Fleet[]): number;
-}
+import { ILoSCalculator, LoSCalcLogic } from "./LoSCalcLogic";
 
 export class LoSCalculator {
     public static Instance: LoSCalculator = new LoSCalculator();
@@ -43,10 +34,4 @@ export class LoSCalculator {
         this.logics.set(logic.Id, logic);
         return true;
     }
-}
-export abstract class LoSCalcLogic implements ILoSCalculator {
-    public readonly abstract Id: string;
-    public readonly abstract Name: string;
-    public readonly abstract HasCombinedSettings: boolean;
-    public abstract Calc(fleets: Fleet[]): number;
 }

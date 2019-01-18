@@ -1,6 +1,6 @@
-import { LoSCalcLogic } from "./LoSCalculator";
 import { Fleet } from "../../Homeport/Fleet";
 import { Ship } from "../../Homeport/Ship";
+import { LoSCalcLogic } from "./LoSCalcLogic";
 
 /** Sum all LoS value simply */
 export class SimpleSumLoS extends LoSCalcLogic {

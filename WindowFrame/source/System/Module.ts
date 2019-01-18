@@ -194,6 +194,7 @@ class Modules {
     }
 
     public registerDefault():void {
+        this.load("window", "", false, false);
         this.register("window", new WindowModule());
     }
 }

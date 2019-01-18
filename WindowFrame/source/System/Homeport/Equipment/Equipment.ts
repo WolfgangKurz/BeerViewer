@@ -32,7 +32,7 @@ export class Equipment extends RawDataWrapper<kcsapi_slotitem> implements IIdent
     constructor(api_data: kcsapi_slotitem) {
         super(api_data);
 
-        if (Master.Instance.Equips!.has(this.raw.api_slotitem_id))
+        if (this.raw.api_slotitem_id >= 0 && Master.Instance.Equips!.has(this.raw.api_slotitem_id))
             this.Info = Master.Instance.Equips!.get(this.raw.api_slotitem_id) || EquipInfo.Empty;
         else
             this.Info = EquipInfo.Empty;
