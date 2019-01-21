@@ -65,31 +65,32 @@ export class Ship extends ObservableDataWrapper<kcsapi_ship2> implements IIdenti
     }
 
     public Update(api_data: kcsapi_ship2): void {
-        this.Info = Master.Instance.Ships!.get(api_data.api_ship_id) || ShipInfo.Empty;
+        this.$.Info = Master.Instance.Ships!.get(api_data.api_ship_id) || ShipInfo.Empty;
     }
 
     public Repair(): void {
-        this._State &= ~Ship.State.Repairing;
+        this.$._State &= ~Ship.State.Repairing;
         this.raw.api_nowhp = this.HP.Maximum;
+        this.RaisePropertyChanged(nameof(this.HP));
     }
     public Repairing(): void {
-        this._State |= Ship.State.Repairing;
+        this.$._State |= Ship.State.Repairing;
     }
 
     public Supply(fuel: number, ammo: number, aircrafts: number[]) {
-        this._Fuel = this.Fuel.Update(fuel);
-        this._Ammo = this.Ammo.Update(ammo);
+        this.$._Fuel = this.Fuel.Update(fuel);
+        this.$._Ammo = this.Ammo.Update(ammo);
 
         for (let i = 0; i < this.Equips.length; i++)
             this.Equips[i].UpdateAircrafts(aircrafts[i] || 0);
     }
 
     public UpdateEquipSlots(equipSlots: number[]): void {
-        this._Equips = this.raw.api_slot
+        this.$._Equips = this.raw.api_slot
             .map(id => this.homeport.Equipments.Equips.get(id)).filter(x => x)
             .map((t, i) => new ShipEquip(this, t, this.Info.raw.api_maxeq[i] || 0, this.raw.api_onslot[i] || 0));
 
-        this._ExtraEquip = new ShipEquip(this, this.homeport.Equipments.Equips.get(this.raw.api_slot_ex), 0, 0);
+        this.$._ExtraEquip = new ShipEquip(this, this.homeport.Equipments.Equips.get(this.raw.api_slot_ex), 0, 0);
 
         if (this.Equips.some(x => x.Item.Info.Category === EquipCategory.DamageController))
             this._State |= Ship.State.DamageControlled;

@@ -1,4 +1,5 @@
 import { DisposableContainer, IDisposable } from "./Interfaces/IDisposable";
+import { fns } from "./Base";
 
 /** Observable object class.
  * 
@@ -14,6 +15,9 @@ export class Observable implements IDisposable {
         [name: string]: ObservableCallback[],
         [name: number]: ObservableCallback[]
     }
+
+    /** When set value with `$`, Property changed event will be called */
+    public get $(): this { return <this>this._proxy.proxy }
 
     constructor() {
         const _this = this;

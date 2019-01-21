@@ -38,7 +38,10 @@ export class Admiral extends ObservableDataWrapper<kcsapi_basic> {
         );
         SubscribeKcsapi<{}, kcsapi_member_updatecomment>(
             "api_req_member/updatecomment",
-            (x, y) => this.raw.api_comment = y.api_cmt
+            (x, y) =>{
+                this.raw.api_comment = y.api_cmt;
+                this.RaisePropertyChanged(nameof(this.Comment));
+            }
         );
     }
 }

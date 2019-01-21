@@ -21,7 +21,7 @@ export class RawDataWrapper<T> implements IRawDataWrapper<T> {
 export class ObservableDataWrapper<T> extends Observable implements IRawDataWrapper<T> {
     private _raw: T;
     public get raw(): T {
-        return this._raw;
+        return this.$._raw;
     }
 
     constructor(RawData: T) {
@@ -30,6 +30,6 @@ export class ObservableDataWrapper<T> extends Observable implements IRawDataWrap
     }
 
     protected UpdateData(RawData: T): void {
-        this._raw = RawData;
+        this.$._raw = RawData;
     }
 }

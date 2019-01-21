@@ -5,6 +5,7 @@ import { kcsapi_kdock, kcsapi_kdock_getship, kcsapi_req_kousyou_createship_speed
 import { Homeport } from "./Homeport";
 import { Ship } from "./Ship";
 import { Settings } from "../Settings";
+import { fns } from "../Base/Base";
 
 export class ConstructionDock extends Observable {
     public Docks: ConstructionDock.Dock[];
@@ -37,7 +38,7 @@ export class ConstructionDock extends Observable {
 
         else {
             this.Docks.forEach(dock => dock.Dispose());
-            this.Docks = source.map(x => new ConstructionDock.Dock(this.homeport, x));
+            this.$.Docks = source.map(x => new ConstructionDock.Dock(this.homeport, x));
         }
     }
 
@@ -78,7 +79,7 @@ export namespace ConstructionDock {
         public set Ship(ship: Ship | null) {
             if (this.Ship) this.Ship.Repair();
             if (ship) ship.Repairing();
-            this._Ship = ship;
+            this.$._Ship = ship;
         }
 
         public CompleteTime: number = 0;
@@ -91,38 +92,38 @@ export namespace ConstructionDock {
             this.Update(dock);
         }
         public Update(ndock: kcsapi_kdock): void {
-            this.Id = ndock.api_id;
-            this.State = ndock.api_state;
+            this.$.Id = ndock.api_id;
+            this.$.State = ndock.api_state;
 
-            this.ShipId = ndock.api_created_ship_id;
-            this.Ship =
+            this.$.ShipId = ndock.api_created_ship_id;
+            this.$.Ship =
                 this.State === DockState.Building
                     ? this.homeport.Ships.get(this.ShipId) || null
                     : null;
 
-            this.CompleteTime =
+            this.$.CompleteTime =
                 this.State === DockState.Building
                     ? ndock.api_complete_time
                     : 0;
-            this.Remaining = this.CompleteTime;
+            this.$.Remaining = this.CompleteTime;
         }
         public Finish(): void {
-            this.State = ConstructionDock.DockState.Done;
-            this.CompleteTime = 0;
+            this.$.State = ConstructionDock.DockState.Done;
+            this.$.CompleteTime = 0;
         }
 
         protected Tick(): void {
             if (this.CompleteTime !== 0) {
                 let remaining = this.CompleteTime - Date.now();
                 if (remaining < 0) remaining = 0;
-                this.Remaining = remaining;
+                this.$.Remaining = remaining;
 
                 if (!this.notified && this.Completed && remaining <= Settings.Instance.NotificationTime * 1000) {
                     fns(this.Completed, this, this.Id, this.Ship as Ship);
-                    this.notified = true;
+                    this.$.notified = true;
                 }
             }
-            else this.Remaining = 0;
+            else this.$.Remaining = 0;
         }
     }
 }

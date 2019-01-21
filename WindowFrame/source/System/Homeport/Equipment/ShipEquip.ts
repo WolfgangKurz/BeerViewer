@@ -35,7 +35,7 @@ export class ShipEquip extends Observable {
     }
 
     public UpdateAircrafts(current:number):void{
-        this._CurrentAircraft = current;
-        this._LostAircraft = this.MaximumAircraft - current;
+        this.$._CurrentAircraft = current;
+        this.$._LostAircraft = this.MaximumAircraft - current;
     }
 }

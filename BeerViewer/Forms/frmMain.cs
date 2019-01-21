@@ -11,7 +11,6 @@ using System.Threading;
 using System.Windows.Forms;
 
 using BeerViewer.Framework;
-using BeerViewer.Models;
 using BeerViewer.Modules;
 using BeerViewer.Modules.Communication;
 
@@ -124,8 +123,6 @@ namespace BeerViewer.Forms
 					await this.Communicator.CallScript("window.INTERNAL.loadMainFrame", Constants.GameURL);
 				}
 			);
-			this.Communicator.RegisterObserveObject(nameof(Master), Master.Instance);
-			this.Communicator.RegisterObserveObject(nameof(Homeport), Homeport.Instance);
 
 			this.WindowBrowser.Cursor = Cursors.Cross;
 

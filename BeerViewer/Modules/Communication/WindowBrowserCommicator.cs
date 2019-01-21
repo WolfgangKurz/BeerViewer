@@ -12,7 +12,6 @@ using System.Web;
 using System.Windows.Forms;
 
 using BeerViewer.Framework;
-using BeerViewer.Models;
 using BeerViewer.Network;
 using CefSharp;
 
@@ -316,13 +315,12 @@ namespace BeerViewer.Modules.Communication
 
 			return Proxy.Instance.Register(url, async e =>
 			{
-				var x = e.TryParse();
-				if (x == null) return;
-
 				if (callback != null && callback.CanExecute)
 				{
-					var res = await callback.ExecuteAsync(e.Response.BodyAsString, ConvertRequest(x.Request));
-					Logger.Log($"Success: {res.Success}, Result: {res.Result?.ToString()}, Message: {res.Message}");
+					await callback.ExecuteAsync(
+						e.Response.BodyAsString,
+						ConvertRequest(HttpUtility.ParseQueryString(e.Request.BodyAsString))
+					);
 				}
 			});
 		}

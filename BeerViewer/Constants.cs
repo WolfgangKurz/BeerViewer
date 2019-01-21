@@ -18,7 +18,8 @@ namespace BeerViewer
 		public static string DMMCookie => "void(eval(\"document.cookie='cklg=ja;expires=Sun, 09 Feb 2055 09:00:09 GMT;domain=dmm.com;path=/';"
 			+ "document.cookie='ckcy=1;expires=Sun, 09 Feb 2055 09:00:09 GMT;domain=osapi.dmm.com;path=/';"
 			+ "document.cookie='ckcy=1;expires=Sun, 09 Feb 2055 09:00:09 GMT;domain=203.104.209.7;path=/';"
-			+ "document.cookie='ckcy=1;expires=Sun, 09 Feb 2055 09:00:09 GMT;domain=www.dmm.com;path=/netgame/';\"))";
+			+ "document.cookie='ckcy=1;expires=Sun, 09 Feb 2055 09:00:09 GMT;domain=www.dmm.com;path=/netgame/';\"));"
+			+ "location.href=\"" + Constants.GameURL + "\"";
 
 		public static string WelcomePatch => "!function(){var x=document.querySelector('#welcome'); if(x) x.parentNode.removeChild(x); }();";
 

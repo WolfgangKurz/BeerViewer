@@ -91,21 +91,21 @@ export class Materials extends Observable {
 
         if (source.length >= 4 && type === "undefined") {
             const casted = source as number[];
-            this._Fuel = casted[0];
-            this._Ammo = casted[1];
-            this._Steel = casted[2];
-            this._Bauxite = casted[3];
+            this.$._Fuel = casted[0];
+            this.$._Ammo = casted[1];
+            this.$._Steel = casted[2];
+            this.$._Bauxite = casted[3];
         }
         else if (source.length >= 8 && type !== "undefined") {
             const casted = source as kcsapi_material[];
-            this._Fuel = casted[0].api_value;
-            this._Ammo = casted[1].api_value;
-            this._Steel = casted[2].api_value;
-            this._Bauxite = casted[3].api_value;
-            this._InstantConstruction = casted[4].api_value;
-            this._RepairBucket = casted[5].api_value;
-            this._DevelopmentMaterial = casted[6].api_value;
-            this._ImprovementMaterial = casted[7].api_value;
+            this.$._Fuel = casted[0].api_value;
+            this.$._Ammo = casted[1].api_value;
+            this.$._Steel = casted[2].api_value;
+            this.$._Bauxite = casted[3].api_value;
+            this.$._InstantConstruction = casted[4].api_value;
+            this.$._RepairBucket = casted[5].api_value;
+            this.$._DevelopmentMaterial = casted[6].api_value;
+            this.$._ImprovementMaterial = casted[7].api_value;
         }
     }
 }

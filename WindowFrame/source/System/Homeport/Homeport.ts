@@ -77,36 +77,36 @@ export class Homeport extends Observable {
     }
 
     public Ready(): Homeport {
-        this._Materials = new Materials();
-        this._RepairDock = new RepairDock(this);
-        this._ConstructionDock = new ConstructionDock(this);
-        this._Equipments = new Equipments();
+        this.$._Materials = new Materials();
+        this.$._RepairDock = new RepairDock(this);
+        this.$._ConstructionDock = new ConstructionDock(this);
+        this.$._Equipments = new Equipments();
 
-        this._Ships = new IdentifiableTable<Ship>();
-        this._Fleets = new IdentifiableTable<Fleet>();
+        this.$._Ships = new IdentifiableTable<Ship>();
+        this.$._Fleets = new IdentifiableTable<Fleet>();
 
         // this.Quests = new Quests();
 
         SubscribeKcsapi<kcsapi_require_info>("api_get_member/require_info", x => {
             if(this._Admiral) this._Admiral.Dispose();
-            this._Admiral = new Admiral(x.api_basic);
+            this.$._Admiral = new Admiral(x.api_basic);
             this.Equipments.Update(x.api_slot_item);
             this.ConstructionDock!.Update(x.api_kdock);
         });
         SubscribeKcsapi<kcsapi_port>("api_port", x => {
             if(this._Admiral) this._Admiral.Dispose();
-            this._Admiral = new Admiral(x.api_basic);
+            this.$._Admiral = new Admiral(x.api_basic);
             this.RepairDock!.Update(x.api_ndock);
 
             this.UpdateShips(x.api_ship);
             this.UpdateDecks(x.api_deck_port);
-            this._FleetCombined = x.api_combined_flag !== 0;
+            this.$._FleetCombined = x.api_combined_flag !== 0;
 
             this.Materials!.Update(x.api_material);
         });
         SubscribeKcsapi<kcsapi_basic>("api_get_member/basic", x => {
             if(this._Admiral) this._Admiral.Dispose();
-            this._Admiral = new Admiral(x);
+            this.$._Admiral = new Admiral(x);
         });
 
 
@@ -142,8 +142,8 @@ export class Homeport extends Observable {
         );
 
         SubscribeKcsapi<kcsapi_hensei_combined, kcsapi_req_hensei_combined>("api_req_hensei/combined", (x, y) => {
-            this._FleetCombined = x.api_combined != 0;
-            this._FleetCombinedType = <CombinedFleetType>y.api_combined_type;
+            this.$._FleetCombined = x.api_combined != 0;
+            this.$._FleetCombinedType = <CombinedFleetType>y.api_combined_type;
         });
 
         return this;
@@ -156,12 +156,12 @@ export class Homeport extends Observable {
         fleet.Update(source);
     }
     private UpdateDecks(source: kcsapi_deck[]): void {
-        if (this.Fleets.size === source.length) {
+        if (this.$.Fleets.size === source.length) {
             for (const raw of source)
                 this.Fleets.get(raw.api_id)!.Update(raw);
         } else {
-            this.Fleets.forEach(x => x.Dispose());
-            this._Fleets = new IdentifiableTable<Fleet>(source.map(x => new Fleet(this, x)));
+            this.$.Fleets.forEach(x => x.Dispose());
+            this.$._Fleets = new IdentifiableTable<Fleet>(source.map(x => new Fleet(this, x)));
         }
     }
     private UpdateShips(source: kcsapi_ship2[]): void {
@@ -176,7 +176,7 @@ export class Homeport extends Observable {
             const shipsEvacuated: number[] = this._Ships.values().filter(x => x.State & Ship.State.Evacuation).map(x => x.Id);
             const shipsTow: number[] = this._Ships.values().filter(x => x.State & Ship.State.Tow).map(x => x.Id);
 
-            this._Ships = new IdentifiableTable<Ship>(
+            this.$._Ships = new IdentifiableTable<Ship>(
                 source.map(x => new Ship(this, x))
             );
 

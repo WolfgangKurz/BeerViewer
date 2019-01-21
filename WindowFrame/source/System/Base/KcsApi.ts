@@ -13,10 +13,7 @@ export function SubscribeKcsapi<T, U extends HTTPRequest = HTTPRequest>(url: str
             let json: any;
             try {
                 svdata = x.startsWith("svdata=") ? x.substr(7) : x;
-                console.log(svdata, y);
-    
                 json = JSON.parse(svdata.toString());
-                console.log(json);
             } catch (e) {
                 console.warn("Expected json, but not.", e);
                 return;
