@@ -314,13 +314,16 @@ namespace BeerViewer.Modules.Communication
 		{
 			if (callback == null || !callback.CanExecute) return -1;
 
-			return Proxy.Instance.Register(url, e =>
+			return Proxy.Instance.Register(url, async e =>
 			{
 				var x = e.TryParse();
 				if (x == null) return;
 
 				if (callback != null && callback.CanExecute)
-					callback.ExecuteAsync(e.Response.BodyAsString, ConvertRequest(x.Request));
+				{
+					var res = await callback.ExecuteAsync(e.Response.BodyAsString, ConvertRequest(x.Request));
+					Logger.Log($"Success: {res.Success}, Result: {res.Result?.ToString()}, Message: {res.Message}");
+				}
 			});
 		}
 

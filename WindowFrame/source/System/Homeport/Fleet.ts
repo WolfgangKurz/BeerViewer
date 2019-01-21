@@ -11,6 +11,7 @@ import { AirSupremacy } from "../Models/AirSupremacy";
 import { LoSCalculator } from "../Models/LoSCalculator/LoSCalculator";
 import { SubscribeKcsapi } from "../Base/KcsApi";
 import { HTTPRequest } from "../Exports/API";
+import { Settings } from "../Settings";
 
 export class Fleet extends TickObservable implements IIdentifiable {
     //#region Id
@@ -177,7 +178,7 @@ export class Fleet extends TickObservable implements IIdentifiable {
 
         this._AirSupremacy = AirSupremacy.Sum(ships.map(x => x.AirSupremacy));
 
-        const calculator = LoSCalculator.Instance.Get(Settings.LoSCalculator);
+        const calculator = LoSCalculator.Instance.Get(Settings.Instance.LoSCalculator);
         if (calculator)
             this._LoS = calculator.Calc([this]);
         else

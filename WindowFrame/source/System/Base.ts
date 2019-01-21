@@ -5,6 +5,7 @@ import Modules, { Callback } from "./Module";
 import { Homeport } from "./Homeport/Homeport";
 import { Master } from "./Master/Master";
 import BaseAPI from "./Base/API"
+import { Settings } from "./Settings";
 
 tippy.setDefaults({
     arrow: true,
@@ -67,6 +68,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
     window.INTERNAL.Initialized();
 
+    window.Settings = new Settings().Ready();
     window.Master = new Master().Ready();
     window.Homeport = new Homeport().Ready();
 

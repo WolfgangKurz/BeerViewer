@@ -1,9 +1,16 @@
-class Settings {
-    static NotificationConditionValue: number;
-    static NotificationTime: number;
+export class Settings {
+    public static get Instance(): Settings { return window.Settings }
 
-    static IsLoSIncludeFirstFleet: boolean;
-    static IsLoSIncludeSecondFleet: boolean;
+    public NotificationConditionValue: number = 49;
+    public NotificationTime: number = 60;
 
-    static LoSCalculator: string;
+    public IsLoSIncludeFirstFleet: boolean = true;
+    public IsLoSIncludeSecondFleet: boolean = true;
+
+    public LoSCalculator: string = "Cn1";
+
+    public Ready(): Settings {
+        // Placeholder
+        return this;
+    }
 }

@@ -1,6 +1,7 @@
 import { IDisposable } from "../Base/Interfaces/IDisposable";
 import { Master } from "../Master/Master";
 import { Homeport } from "../Homeport/Homeport";
+import { Settings } from "../Settings";
 
 export type HTTPCallback = (Response: string, Request: HTTPRequest) => void;
 
@@ -14,6 +15,7 @@ declare global {
 
         Master: Master;
         Homeport: Homeport;
+        Settings: Settings;
     }
 }
 

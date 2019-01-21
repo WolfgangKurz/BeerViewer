@@ -105,13 +105,14 @@ class ModuleAreas {
         const areaElem = this._Areas[area];
 
         let elem: HTMLElement | null;
-        if (rootElement instanceof Vue) {
+        if (rootElement !== null && "$el" in rootElement) {
             elem = (<Vue>rootElement).$el as (HTMLElement | null);
         } else
             elem = rootElement as (HTMLElement | null);
 
         if (areaElem.Modules.some(x => x.Id === id)) throw "Already registered name";
 
+        console.log(elem);
         areaElem.Modules.push(new Module(
             area,
             id,

@@ -42,8 +42,8 @@ namespace BeerViewer.Forms
 
 			Logger.Register("MainLogger");
 
-			Master.Instance.Ready();
-			Homeport.Instance.Ready();
+			// Master.Instance.Ready();
+			// Homeport.Instance.Ready();
 
 			this.FormClosed += (s, e) =>
 			{

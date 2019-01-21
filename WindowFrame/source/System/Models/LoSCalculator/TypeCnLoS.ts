@@ -5,6 +5,7 @@ import { EquipCategory } from "../../Enums/EquipEnums";
 import { Equipment } from "../../Homeport/Equipment/Equipment";
 import { ShipEquip } from "../../Homeport/Equipment/ShipEquip";
 import { LoSCalcLogic } from "./LoSCalcLogic";
+import { Settings } from "../../Settings";
 
 export abstract class TypeCnLoS implements LoSCalcLogic {
     public abstract readonly Id: string;
@@ -22,8 +23,8 @@ export abstract class TypeCnLoS implements LoSCalcLogic {
         if (ships.length === 0) return 0;
 
         const isCombined: boolean = fleets.length > 1
-            && Settings.IsLoSIncludeFirstFleet
-            && Settings.IsLoSIncludeSecondFleet;
+            && Settings.Instance.IsLoSIncludeFirstFleet
+            && Settings.Instance.IsLoSIncludeSecondFleet;
 
         const itemScore: number = ships
             .reduce((a, c) => a.concat(c.EquippedItems), <ShipEquip[]>[])
@@ -44,13 +45,13 @@ export abstract class TypeCnLoS implements LoSCalcLogic {
         if (fleets.length == 1)
             return fleets[0].Ships;
 
-        if (Settings.IsLoSIncludeFirstFleet && Settings.IsLoSIncludeSecondFleet)
+        if (Settings.Instance.IsLoSIncludeFirstFleet && Settings.Instance.IsLoSIncludeSecondFleet)
             return fleets.reduce((a, c) => a.concat(c.Ships), <Ship[]>[]);
 
-        if (Settings.IsLoSIncludeFirstFleet)
+        if (Settings.Instance.IsLoSIncludeFirstFleet)
             return fleets[0].Ships;
 
-        if (Settings.IsLoSIncludeSecondFleet)
+        if (Settings.Instance.IsLoSIncludeSecondFleet)
             return fleets[1].Ships;
 
         return [];

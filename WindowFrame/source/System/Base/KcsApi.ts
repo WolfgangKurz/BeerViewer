@@ -9,14 +9,21 @@ export interface KcsApiCallback<T, U extends HTTPRequest> {
 export function SubscribeKcsapi<T, U extends HTTPRequest = HTTPRequest>(url: string, callback: KcsApiCallback<T, U>): SubscribeInfo {
     return new SubscribeInfo(
         window.API.SubscribeHTTP("/kcsapi/" + url, (x: String, y) => {
+            let svdata: String;
+            let json: any;
             try {
-                const svdata: String = x.startsWith("svdata=") ? x.substr(7) : x;
-                const json = JSON.parse(svdata.toString());
-                if (json.api_result === 1 && callback)
-                    callback(json.api_data, y as U, json);
+                svdata = x.startsWith("svdata=") ? x.substr(7) : x;
+                console.log(svdata, y);
+    
+                json = JSON.parse(svdata.toString());
+                console.log(json);
             } catch (e) {
                 console.warn("Expected json, but not.", e);
+                return;
             }
+
+            if (json.api_result && json.api_result === 1 && callback)
+                callback(json.api_data, y as U, json);
         })
     );
 }

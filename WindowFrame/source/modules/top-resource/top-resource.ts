@@ -12,18 +12,25 @@ interface ResourceData {
 class TopResources implements IModule {
 	private readonly ResourceList: string[] = ["Fuel", "Ammo", "Steel", "Bauxite", "RepairBucket", "ImprovementMaterial"];
 
-	public Resources: ResourceData[] = [];
-	public Overlimit: number = 5000;
+	private VueObject = new Vue({
+		data: {
+			Resources: <ResourceData[]>[],
+			Overlimit: <number>5000
+		},
+		el: $("#top-resources")[0]
+	});
 
 	init(): void {
+		const Resources: ResourceData[] = [];
 		this.ResourceList.forEach(x => {
 			const res: ResourceData = {
 				Name: x,
 				LowerName: x.toLowerCase(),
 				Value: 0
 			};
-			this.Resources.push(res);
+			Resources.push(res);
 		});
+		this.VueObject.Resources = Resources;
 
 		(function (this: Materials | null, _this: TopResources) {
 			if (!this) throw "Materials not set yet, something wrong";
@@ -37,26 +44,20 @@ class TopResources implements IModule {
 		}).call(Homeport.Instance.Materials, this);
 
 		Homeport.Instance.Observe(
-			(_, value) => Homeport.Instance.Admiral!.Observe((_, value) => value && (this.Overlimit = value), nameof(Homeport.Instance.Admiral!.ResourceLimit)),
+			(_, value) => Homeport.Instance.Admiral!.Observe(
+				(_, value) => value && (this.VueObject.Overlimit = value),
+				nameof(Homeport.Instance.Admiral!.ResourceLimit)
+			),
 			nameof(Homeport.Instance.Admiral)
 		);
 
-		window.modules.areas.register("top", "top-resource", "Resources bar", "", topres);
+		window.modules.areas.register("top", "top-resource", "Resources bar", "", this.VueObject);
 	}
 
 	private UpdateResource(name: string, value: number) {
 		if (typeof value !== "number") return;
-		this.Resources.forEach(x => x.Name == name && (x.Value = value));
+		this.VueObject.Resources.forEach(x => x.Name == name && (x.Value = value));
 	}
 }
-export default TopResources;
-
-const topres = new Vue({
-	data: {
-		Resources: [],
-		Overlimit: 5000
-	},
-	el: $("#top-resources")[0]
-});
-
 window.modules.register("top-resource", new TopResources());
+export default TopResources;

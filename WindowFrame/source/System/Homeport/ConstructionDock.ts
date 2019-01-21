@@ -4,6 +4,7 @@ import { kcsapi_kdock, kcsapi_kdock_getship, kcsapi_req_kousyou_createship_speed
 
 import { Homeport } from "./Homeport";
 import { Ship } from "./Ship";
+import { Settings } from "../Settings";
 
 export class ConstructionDock extends Observable {
     public Docks: ConstructionDock.Dock[];
@@ -116,7 +117,7 @@ export namespace ConstructionDock {
                 if (remaining < 0) remaining = 0;
                 this.Remaining = remaining;
 
-                if (!this.notified && this.Completed && remaining <= Settings.NotificationTime * 1000) {
+                if (!this.notified && this.Completed && remaining <= Settings.Instance.NotificationTime * 1000) {
                     fns(this.Completed, this, this.Id, this.Ship as Ship);
                     this.notified = true;
                 }
