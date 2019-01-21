@@ -105,5 +105,5 @@ export class TickObservable extends DisposableObservable implements IDisposable 
 
 /** Will be called when registered property has set. */
 export interface ObservableCallback {
-    (name: string, value: any): void;
+    (name: string, value: any, oldValue: any): void;
 }

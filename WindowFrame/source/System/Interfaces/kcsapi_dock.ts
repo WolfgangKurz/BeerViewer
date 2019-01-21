@@ -1,3 +1,7 @@
+import { kcsapi_ship2 } from "./kcsapi_ship";
+import { kcsapi_slotitem } from "./kcsapi_item";
+import { HTTPRequest } from "../Exports/API";
+
 export interface kcsapi_ndock {
     api_member_id: number;
     api_id: number;
@@ -22,4 +26,15 @@ export interface kcsapi_kdock {
     api_item3: number;
     api_item4: number;
     api_item5: number;
+}
+export interface kcsapi_kdock_getship {
+    api_id: number;
+    api_ship_id: number;
+    api_kdock: kcsapi_kdock[];
+    api_ship: kcsapi_ship2;
+    api_slotitem: kcsapi_slotitem[];
+}
+export interface kcsapi_req_kousyou_createship_speedchange extends HTTPRequest {
+    api_kdock_id: number;
+    api_highspeed: number;
 }

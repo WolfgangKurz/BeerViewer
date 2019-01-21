@@ -20,8 +20,8 @@
 		 :data-idx="fleet.Id"
 		 :data-display="SelectedTab === fleet.Id ? 1 : 0">
 		<div class="summary-container">
-			<div class="summary-info" data-summary="morale" v-if="fleet.IsRejuvenating">
-				<span style="float:left">{{i18n.fleet_revejunate}}</span>
+			<div class="summary-info" data-summary="morale" v-if="fleet.IsConditionRestoring">
+				<span style="float:left">{{i18n.fleet_condition_restoring}}</span>
 				{{fleet.RejuvenateText}}
 			</div>
 			<div class="summary-info" data-summary="supply" v-if="fleet.SupplyFuel || fleet.SupplyAmmo || fleet.SupplyBauxite">
@@ -43,31 +43,31 @@
 		<div class="ship-container">
 			<div class="ship"
 				 v-for="ship in fleet.Ships"
-				 v-if="ship.Available"
+				 v-if="ship !== null"
 				 :data-idx="ship.Id"
-				 :data-state="ParseShipSituation(ship)"
+				 :data-state="ParseShipState(ship)"
 				 :style="{'grid-template-columns': fleet.NameSize+'px auto auto 20%'}"
-				 v-tippy="{html:'#overview-ship-tooltip-'+ship.Hash}">
+				 v-tippy="{html:`#overview-ship-tooltip-${fleet.Id}${ship.Id}`}">
 				<div>
-					<div class="ship-name" :prop="ship.Name">{{ship.Name || "???"}}</div>
+					<div class="ship-name" :prop="ship.Name">{{i18n[ship.Info.Name] || "???"}}</div>
 					<div class="ship-level">Lv.{{ship.Level || "???"}}</div>
 				</div>
 
 				<div class="ship-hp-bar" data-type="progress" data-progress-strip="4"
-					 :data-progress="100*ship.HP.Current/ship.HP.Maximum"
-					 :title="ship.HP.Current+' / '+ship.HP.Maximum"></div>
+					 :data-progress="100 * ship.HP.Current / ship.HP.Maximum"
+					 :title="ship.HP.Current + ' / ' + ship.HP.Maximum"></div>
 				<div class="ship-hp">{{ship.HP.Current}}/{{ship.HP.Maximum}}</div>
 				<div class="ship-morale">
-					<div class="ship-morale-box" :data-morale="ship.Morale.Level"></div>
-					<div class="ship-morale-value">{{ship.Morale.Value}}</div>
+					<div class="ship-morale-box" :data-morale="GetConditionLevel(ship.Condition)"></div>
+					<div class="ship-morale-value">{{ship.Condition}}</div>
 				</div>
 				<div class="ship-supply">
 					<div class="ship-fuel" data-type="progress" data-progress-strip="4"
-						 :data-progress="100*ship.Fuel.Current/ship.Fuel.Maximum"
-						 :title="ship.Fuel.Current+' / '+ship.Fuel.Maximum"></div>
+						 :data-progress="100 * ship.Fuel.Current / ship.Fuel.Maximum"
+						 :title="ship.Fuel.Current + ' / ' + ship.Fuel.Maximum"></div>
 					<div class="ship-ammo" data-type="progress" data-progress-strip="4"
-						 :data-progress="100*ship.Ammo.Current/ship.Ammo.Maximum"
-						 :title="ship.Ammo.Current+' / '+ship.Ammo.Maximum"></div>
+						 :data-progress="100 * ship.Ammo.Current / ship.Ammo.Maximum"
+						 :title="ship.Ammo.Current + ' / ' + ship.Ammo.Maximum"></div>
 				</div>
 				<div class="ship-repairing">
 					<span>{{i18n.fleet_repairing}}</span>
@@ -78,7 +78,7 @@
 					 v-tippy-target>
 					<div>
 						<b>이름</b>:
-						{{ship.Name}}
+						{{i18n[ship.Info.Name] || "???"}}
 					</div>
 					<div>
 						<b>체력</b>:

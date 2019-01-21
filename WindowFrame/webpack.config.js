@@ -1,5 +1,6 @@
-var path = require('path')
-var webpack = require('webpack')
+const path = require('path')
+const webpack = require('webpack')
+const tsNameof = require("ts-nameof");
 
 module.exports = {
   entry: "./source/System/Base.ts",
@@ -35,6 +36,7 @@ module.exports = {
         exclude: /node_modules/,
         options: {
           appendTsSuffixTo: [/\.vue$/],
+          getCustomTransformers: () => ({ before: [tsNameof] })
         }
       }
     ]

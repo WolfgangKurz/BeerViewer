@@ -16,4 +16,8 @@ export class Equipments extends Observable {
     public RemoveAllFromShip(ship: Ship): void {
 
     }
+
+    public Update(arg:any):void{
+
+    }
 }

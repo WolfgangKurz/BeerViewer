@@ -12,7 +12,7 @@ import { UseItemInfo } from "./Wrappers/UseItemInfo";
 import { MasterWrapper } from "../Models/TableWrapper";
 
 export class Master {
-    public static Instance: Master = new Master();
+    public static get Instance(): Master { return window.Master }
     private IsReady: boolean = false;
 
     public ShipTypes: MasterWrapper<ShipTypeInfo> | null = null;
@@ -28,11 +28,11 @@ export class Master {
     public MapWorlds: MasterWrapper<MapWorldInfo> | null = null;
     public MapAreas: MasterWrapper<MapAreaInfo> | null = null;
 
-    public Ready(): void {
-        if (this.IsReady) return;
+    public Ready(): Master {
+        if (this.IsReady) return this;
         this.IsReady = true;
 
-        SubscribeKcsapi<kcsapi_start2>("/api_start2", x => {
+        SubscribeKcsapi<kcsapi_start2>("api_start2", x => {
             this.ShipTypes = new MasterWrapper<ShipTypeInfo>(x.api_mst_stype.map(y => new ShipTypeInfo(y)));
             this.Ships = new MasterWrapper<ShipInfo>(x.api_mst_ship.map(y => new ShipInfo(y)));
 
@@ -44,5 +44,6 @@ export class Master {
             this.MapWorlds = new MasterWrapper<MapWorldInfo>(x.api_mst_maparea.map(y => new MapWorldInfo(y)));
             this.MapAreas = new MasterWrapper<MapAreaInfo>(x.api_mst_mapinfo.map(y => new MapAreaInfo(y)));
         });
+        return this;
     }
 }

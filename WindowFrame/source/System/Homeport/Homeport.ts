@@ -13,15 +13,16 @@ import { kcsapi_deck, kcsapi_req_hensei_combined } from "../Interfaces/kcsapi_de
 import { kcsapi_charge } from "../Interfaces/kcsapi_charge";
 import { kcsapi_powerup, kcsapi_req_kaisou_powerup } from "../Interfaces/kcsapi_powerup";
 import { kcsapi_slot_exchange_index, kcsapi_slot_deprive, kcsapi_req_kaisou_slot_exchange_index } from "../Interfaces/kcsapi_slot";
-import { kcsapi_kdock_getship } from "../Interfaces/kcsapi_kdock";
 import { kcsapi_hensei_combined, kcsapi_req_hensei_change } from "../Interfaces/kcsapi_hensei";
 import { CombinedFleetType } from "../Enums/CombinedFleetType";
 import { IdentifiableTable } from "../Models/TableWrapper";
 import { HTTPRequest } from "../Exports/API";
 import { Equipments } from "./Equipment/Equipments";
+import { ConstructionDock as ConstructionDock } from "./ConstructionDock";
+import { kcsapi_kdock_getship } from "../Interfaces/kcsapi_dock";
 
 export class Homeport extends Observable {
-    public static readonly Instance: Homeport = new Homeport;
+    public static get Instance(): Homeport { return window.Homeport }
 
     //#region Admiral
     private _Admiral: Admiral | null = null;
@@ -36,6 +37,11 @@ export class Homeport extends Observable {
     //#region RepairDock
     private _RepairDock: RepairDock | null = null;
     public get RepairDock(): RepairDock | null { return this._RepairDock }
+    //#endregion
+
+    //#region ConstructionDock
+    private _ConstructionDock: ConstructionDock | null = null;
+    public get ConstructionDock(): ConstructionDock | null { return this._ConstructionDock }
     //#endregion
 
 
@@ -70,35 +76,38 @@ export class Homeport extends Observable {
         super();
     }
 
-    public Ready(): void {
+    public Ready(): Homeport {
         this._Materials = new Materials();
         this._RepairDock = new RepairDock(this);
+        this._ConstructionDock = new ConstructionDock(this);
+        this._Equipments = new Equipments();
 
         this._Ships = new IdentifiableTable<Ship>();
         this._Fleets = new IdentifiableTable<Fleet>();
-        // this.ConstructionDock = new ConstructionDock(this);
 
-        // this.Itemyard = new Itemyard(this);
-        // this.Organization = new Organization(this);
         // this.Quests = new Quests();
 
         SubscribeKcsapi<kcsapi_require_info>("api_get_member/require_info", x => {
+            if(this._Admiral) this._Admiral.Dispose();
             this._Admiral = new Admiral(x.api_basic);
-            // this.Itemyard.Update(x.api_slot_item);
-            // this.Dockyard.Update(x.api_kdock);
+            this.Equipments.Update(x.api_slot_item);
+            this.ConstructionDock!.Update(x.api_kdock);
         });
         SubscribeKcsapi<kcsapi_port>("api_port", x => {
+            if(this._Admiral) this._Admiral.Dispose();
             this._Admiral = new Admiral(x.api_basic);
             this.RepairDock!.Update(x.api_ndock);
 
-            /*
-            this.Organization.Update(x.api_ship);
-            this.Organization.Update(x.api_deck_port);
-            this.Organization.Combined = x.api_combined_flag != 0;
-            */
+            this.UpdateShips(x.api_ship);
+            this.UpdateDecks(x.api_deck_port);
+            this._FleetCombined = x.api_combined_flag !== 0;
+
             this.Materials!.Update(x.api_material);
         });
-        SubscribeKcsapi<kcsapi_basic>("api_get_member/basic", x => this._Admiral = new Admiral(x));
+        SubscribeKcsapi<kcsapi_basic>("api_get_member/basic", x => {
+            if(this._Admiral) this._Admiral.Dispose();
+            this._Admiral = new Admiral(x);
+        });
 
 
         // For fleets
@@ -136,6 +145,8 @@ export class Homeport extends Observable {
             this._FleetCombined = x.api_combined != 0;
             this._FleetCombinedType = <CombinedFleetType>y.api_combined_type;
         });
+
+        return this;
     }
 
     private UpdateDeck(source: kcsapi_deck): void {

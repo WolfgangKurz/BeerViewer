@@ -1,4 +1,6 @@
 import { IDisposable } from "../Base/Interfaces/IDisposable";
+import { Master } from "../Master/Master";
+import { Homeport } from "../Homeport/Homeport";
 
 export type HTTPCallback = (Response: string, Request: HTTPRequest) => void;
 
@@ -7,8 +9,11 @@ declare global {
         API: Communicator;
         INTERNAL: Internal;
 
-        i18n?: { [key: string]: string };
+        i18n: { [key: string]: string };
         _i18n(text: string): Promise<string>;
+
+        Master: Master;
+        Homeport: Homeport;
     }
 }
 

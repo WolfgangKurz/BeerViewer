@@ -1,4 +1,5 @@
-﻿import Vue from "vue";
+﻿/// <reference path="../../../node_modules/ts-nameof/ts-nameof.d.ts" />
+import Vue from "vue";
 import { IModule } from "../../System/Module"
 import { Homeport } from "../../System/Homeport/Homeport";
 import { Materials } from "../../System/Homeport/Materials";
@@ -27,15 +28,18 @@ class TopResources implements IModule {
 		(function (this: Materials | null, _this: TopResources) {
 			if (!this) throw "Materials not set yet, something wrong";
 
-			this.Observe((name, value) => value && _this.UpdateResource(name, value), "Fuel");
-			this.Observe((name, value) => value && _this.UpdateResource(name, value), "Ammo");
-			this.Observe((name, value) => value && _this.UpdateResource(name, value), "Steel");
-			this.Observe((name, value) => value && _this.UpdateResource(name, value), "Bauxite");
-			this.Observe((name, value) => value && _this.UpdateResource(name, value), "RepairBucket");
-			this.Observe((name, value) => value && _this.UpdateResource(name, value), "ImprovementMaterial");
+			this.Observe((name, value) => value && _this.UpdateResource(name, value), nameof(this.Fuel));
+			this.Observe((name, value) => value && _this.UpdateResource(name, value), nameof(this.Ammo));
+			this.Observe((name, value) => value && _this.UpdateResource(name, value), nameof(this.Steel));
+			this.Observe((name, value) => value && _this.UpdateResource(name, value), nameof(this.Bauxite));
+			this.Observe((name, value) => value && _this.UpdateResource(name, value), nameof(this.RepairBucket));
+			this.Observe((name, value) => value && _this.UpdateResource(name, value), nameof(this.ImprovementMaterial));
 		}).call(Homeport.Instance.Materials, this);
 
-		Homeport.Instance.Admiral!.Observe((name, value) => value && (this.Overlimit = value), "ResourceLimit");
+		Homeport.Instance.Observe(
+			(_, value) => Homeport.Instance.Admiral!.Observe((_, value) => value && (this.Overlimit = value), nameof(Homeport.Instance.Admiral!.ResourceLimit)),
+			nameof(Homeport.Instance.Admiral)
+		);
 
 		window.modules.areas.register("top", "top-resource", "Resources bar", "", topres);
 	}

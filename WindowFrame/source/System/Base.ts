@@ -67,8 +67,8 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
     window.INTERNAL.Initialized();
 
-    Master.Instance.Ready();
-    Homeport.Instance.Ready();
+    window.Master = new Master().Ready();
+    window.Homeport = new Homeport().Ready();
 
     window.API.GetModuleList()
         .then(list => {

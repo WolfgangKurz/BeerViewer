@@ -1,4 +1,5 @@
-﻿import Vue from "vue";
+﻿/// <reference path="../../../node_modules/ts-nameof/ts-nameof.d.ts" />
+import Vue from "vue";
 import { IModule } from "../../System/Module";
 import { Homeport } from "../../System/Homeport/Homeport";
 
@@ -18,41 +19,6 @@ function GetExpeditionState(expedition: ExpeditionData): string {
 			? "executing" : "waiting"
 		: "disabled";
 };
-class TopExpedition implements IModule {
-	private Expeditions: ExpeditionData[];
-
-	init(): void {
-		// First fleet cannot go expedition
-		for (let i = 1; i < MAX_FLEETS; i++) {
-			const data = {
-				Enabled: false,
-				Activated: false,
-
-				Id: 0,
-				RemainingText: "--:--:--",
-				Progress: 0
-			};
-
-			Homeport.Instance.Admiral
-			window.API.ObserveData("Homeport", "Organization.Fleets[" + (i + 1) + "]", value => data.Enabled = value !== null, true);
-			window.API.ObserveData("Homeport", "Organization.Fleets[" + (i + 1) + "].Expedition", value => {
-				data.Activated = value.IsInExecution;
-				data.Id = Mission.DisplayNo;
-				data.RemainingText = value.RemainingText;
-				data.progress = value.Progress ? value.Progress.Current * 100 / value.Progress.Maximum : 0;
-			});
-			topexp.Expeditions.push(data);
-		}
-
-		Homeport.Instance!.Observe((name, value: Fleet[]) => {
-			if (!value) return;
-			this.Expeditions.forEach(x => x.Enabled = false);
-			value.length
-		}, "Fleets");
-
-		window.modules.areas.register("top", "top-expedition", "Expeditions bar", "", topexp);
-	}
-}
 
 const topexp = new Vue({
 	data: {
@@ -63,6 +29,54 @@ const topexp = new Vue({
 		ExpeditionState: GetExpeditionState
 	}
 });
+
+class TopExpedition implements IModule {
+	private Expeditions: ExpeditionData[] = [];
+
+	init(): void {
+		// First fleet cannot go expedition
+		for (let i = 1; i < MAX_FLEETS; i++) {
+			const data: ExpeditionData = {
+				Enabled: false,
+				Activated: false,
+
+				Id: 0,
+				RemainingText: "--:--:--",
+				Progress: 0
+			};
+			this.Expeditions.push(data);
+		}
+
+		Homeport.Instance.Observe(() => this.Reload(), nameof(Homeport.Instance.Fleets));
+
+		window.modules.areas.register("top", "top-expedition", "Expeditions bar", "", topexp);
+	}
+
+	private Reload(): void {
+		Homeport.Instance.Fleets.forEach((x, idx) => {
+			const id = idx - 2; // Begin at 2nd fleet
+			this.Expeditions[id].Enabled = x ? true : false;
+
+			if (x) {
+				x.Observe((name, value, oldValue) => {
+					this.Expeditions[id].Activated = value.IsInExecution;
+					this.Expeditions[id].Id = value.Id;
+					this.Expeditions[id].RemainingText = this.GetRemainingText(value.Remaining);
+					this.Expeditions[id].Progress = value.Progress.Maximum > 0
+						? value.Progress.Percentage * 100 : 0;
+				}, nameof(x.Expedition));
+			}
+		});
+	}
+
+	private GetRemainingText(remaining: number): string {
+		const asSecs = Math.floor(remaining);
+		const hours = Math.floor((asSecs / 3600) % 60);
+		const mins = Math.floor((asSecs / 60) % 60);
+		const secs = (asSecs % 60);
+		return `${("0" + hours).slice(-2)}:${("0" + mins).slice(-2)}:${("0" + secs).slice(-2)}`;
+	}
+}
 
 window.modules.register("top-expedition", new TopExpedition());
 export default TopExpedition;

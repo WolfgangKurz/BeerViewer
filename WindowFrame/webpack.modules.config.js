@@ -1,6 +1,7 @@
-var path = require('path')
-var webpack = require('webpack')
-var glob = require("glob")
+const path = require('path')
+const webpack = require('webpack')
+const glob = require("glob")
+const tsNameof = require("ts-nameof");
 
 function getEntries() {
     const list = glob.sync("./source/modules/**/*.ts");
@@ -52,6 +53,7 @@ module.exports = {
                 exclude: /node_modules/,
                 options: {
                     appendTsSuffixTo: [/\.vue$/],
+                    getCustomTransformers: () => ({ before: [tsNameof] })
                 }
             }
         ]

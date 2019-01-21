@@ -1,14 +1,12 @@
 import { Observable, TickObservable } from "../Base/Observable";
 import { SubscribeKcsapi } from "../Base/KcsApi";
-import { kcsapi_ndock } from "../Interfaces/kcsapi_dock";
-import { kcsapi_req_nyukyo_start, kcsapi_req_nyukyo_speedchange } from "../Interfaces/kcsapi_repair";
+import { kcsapi_kdock, kcsapi_kdock_getship, kcsapi_req_kousyou_createship_speedchange } from "../Interfaces/kcsapi_dock";
 
 import { Homeport } from "./Homeport";
 import { Ship } from "./Ship";
-import { Fleet } from "./Fleet";
 
-export class RepairDock extends Observable {
-    public Docks: RepairDock.Dock[];
+export class ConstructionDock extends Observable {
+    public Docks: ConstructionDock.Dock[];
     private homeport: Homeport;
 
     constructor(homeport: Homeport) {
@@ -16,72 +14,52 @@ export class RepairDock extends Observable {
         this.homeport = homeport;
         this.Docks = [];
 
-        SubscribeKcsapi<kcsapi_ndock[]>(
-            "api_get_member/ndock",
+        SubscribeKcsapi<kcsapi_kdock[]>(
+            "api_get_member/kdock",
             x => this.Update(x)
         );
-        SubscribeKcsapi<{}, kcsapi_req_nyukyo_start>(
-            "api_req_nyukyo/start",
-            (x, y) => this.Start(y)
+        SubscribeKcsapi<kcsapi_kdock_getship>(
+            "api_req_kousyou/getship",
+            x => this.GetShip(x)
         );
 
         // Used bucket while normal repair
-        SubscribeKcsapi<{}, kcsapi_req_nyukyo_speedchange>(
-            "api_req_nyukyo/speedchange",
+        SubscribeKcsapi<{}, kcsapi_req_kousyou_createship_speedchange>(
+            "api_req_kousyou/createship_speedchange",
             (x, y) => this.ChangeSpeed(y)
         );
     }
 
-    public CheckRepairing(shipId_or_fleet: number | Fleet): boolean {
-        if (shipId_or_fleet instanceof Fleet) {
-            const fleet = shipId_or_fleet;
-            const repairing = this.Docks.filter(x => x.ShipId != -1).map(x => x.ShipId);
-            return fleet.Ships.some(x => repairing.indexOf(x.Id) >= 0);
-        } else {
-            const shipId = shipId_or_fleet;
-            return this.Docks.some(x => x.ShipId === shipId);
-        }
-    }
-
-    public Update(source: kcsapi_ndock[]): void {
+    public Update(source: kcsapi_kdock[]): void {
         if (this.Docks.length === source.length)
             source.forEach(raw => this.Docks[raw.api_id].Update(raw));
 
         else {
             this.Docks.forEach(dock => dock.Dispose());
-            this.Docks = source.map(x => new RepairDock.Dock(this.homeport, x));
+            this.Docks = source.map(x => new ConstructionDock.Dock(this.homeport, x));
         }
     }
 
-    private Start(request: kcsapi_req_nyukyo_start): void {
-        const ship = this.homeport.Ships.get(request.api_ship_id);
-        if (!ship) return;
-
-        if (request.api_highspeed === 1)
-            ship.Repair();
-
-        // If bucket not used, ndock api will be delivered.
-        // So, not need to process ndock data.
+    private GetShip(source: kcsapi_kdock_getship): void {
+        this.Update(source.api_kdock);
     }
-    private ChangeSpeed(request: kcsapi_req_nyukyo_speedchange): void {
+    private ChangeSpeed(request: kcsapi_req_kousyou_createship_speedchange): void {
         try {
-            const dock = this.Docks[request.api_ndock_id];
-            const ship = dock.Ship;
-
-            dock.Finish();
-            if (ship) ship.Repair();
+            const dock = this.Docks[request.api_kdock_id];
+            if (request.api_highspeed === 1) dock.Finish();
         }
         catch { }
     }
 }
-export namespace RepairDock {
+export namespace ConstructionDock {
     interface DockComplete {
         (Dock: Dock, Id: number, Ship: Ship): void;
     }
     export enum DockState {
         Locked = -1,
         Free = 0,
-        Repairing = 1,
+        Building = 2,
+        Done = 3
     }
     export class Dock extends TickObservable {
         private homeport: Homeport;
@@ -105,34 +83,31 @@ export namespace RepairDock {
         public CompleteTime: number = 0;
         public Remaining: number = 0;
 
-        constructor(homeport: Homeport, dock: kcsapi_ndock) {
+        constructor(homeport: Homeport, dock: kcsapi_kdock) {
             super();
             this.homeport = homeport;
 
             this.Update(dock);
         }
-        public Update(ndock: kcsapi_ndock): void {
+        public Update(ndock: kcsapi_kdock): void {
             this.Id = ndock.api_id;
             this.State = ndock.api_state;
 
-            this.ShipId = ndock.api_ship_id;
+            this.ShipId = ndock.api_created_ship_id;
             this.Ship =
-                this.State === DockState.Repairing
+                this.State === DockState.Building
                     ? this.homeport.Ships.get(this.ShipId) || null
                     : null;
 
             this.CompleteTime =
-                this.State === DockState.Repairing
+                this.State === DockState.Building
                     ? ndock.api_complete_time
                     : 0;
             this.Remaining = this.CompleteTime;
         }
         public Finish(): void {
-            this.State = RepairDock.DockState.Free;
-            this.ShipId = -1;
-            this.Ship = null;
+            this.State = ConstructionDock.DockState.Done;
             this.CompleteTime = 0;
-            this.Remaining = 0;
         }
 
         protected Tick(): void {
