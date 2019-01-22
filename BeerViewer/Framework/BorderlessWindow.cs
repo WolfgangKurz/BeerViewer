@@ -140,8 +140,6 @@ namespace BeerViewer.Framework
 					nccsp.rgrc0.right += 2;
 				}
 
-				nccsp.rgrc0.bottom++;
-
 				Marshal.StructureToPtr(nccsp, m.LParam, true);
 			}
 
