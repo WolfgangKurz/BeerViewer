@@ -17,7 +17,5 @@ function Main {
     # webpack compile
     npx webpack
     npx webpack --config webpack.modules.config.js
-
-    Start-Sleep 10
 }
 Main
