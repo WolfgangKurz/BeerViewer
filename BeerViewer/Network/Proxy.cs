@@ -37,17 +37,16 @@ namespace BeerViewer.Network
 
 		private Proxy()
 		{
-			this.Handlers = new ProxyHandlerContainer<ProxyHandler> ();
-			this.ModifiableHandlers = new ProxyHandlerContainer< ModifiableProxyHandler >();
+			this.Handlers = new ProxyHandlerContainer<ProxyHandler>();
+			this.ModifiableHandlers = new ProxyHandlerContainer<ModifiableProxyHandler>();
 			if (IsInDesignMode) return;
 
 			HttpProxy.AfterSessionComplete += (_ =>
 			{
-				this.Handlers.Values.ToList().ForEach(x =>
-				{
-					if ((x.Where == null) || (_.Request.PathAndQuery == x.Where))
-						x.Handler.Invoke(_);
-				});
+				this.Handlers.Values
+					.Where(x => x.Where == null || x.Where == _.Request.PathAndQuery)
+					.ToList()
+					.ForEach(x => x.Handler.Invoke(_));
 			});
 
 			bool AlterPort = false;

@@ -5,8 +5,11 @@ export interface IDisposable {
 export class DisposableContainer implements IDisposable {
     private readonly DisposableList: IDisposable[] = [];
 
-    public Add(disposable: IDisposable): void {
-        this.DisposableList.push(disposable);
+    public Add(disposable: IDisposable | Promise<IDisposable>): void {
+        if(disposable instanceof Promise){
+            disposable.then(x => this.DisposableList.push(x));
+        }else
+            this.DisposableList.push(disposable);
     }
     public Dispose(): void {
         this.DisposableList

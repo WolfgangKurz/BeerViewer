@@ -1,4 +1,3 @@
-import { IDisposable } from "../Base/Interfaces/IDisposable";
 import { Master } from "../Master/Master";
 import { Homeport } from "../Homeport/Homeport";
 import { Settings } from "../Settings";
@@ -51,10 +50,10 @@ export interface Communicator {
     Log(text: string): void;
 
     /** Subscribe HTTP packets for specific "url" */
-    SubscribeHTTP(url: string, callback: HTTPCallback): number;
+    SubscribeHTTP(url: string, callback: HTTPCallback): Promise<number>;
 
     /** Unsubscribe HTTP packet observer with id that returned from `SubscribeHTTP` */
-    UnsubscribeHTTP(SubscribeId: number): boolean;
+    UnsubscribeHTTP(SubscribeId: number): Promise<boolean>;
 }
 
 /** Callable from Communicator */
@@ -77,21 +76,6 @@ export interface ModuleInfo {
 
     /** *.css exists? */
     Styled: boolean;
-}
-
-/** Subscribe information */
-export class SubscribeInfo implements IDisposable {
-    private _Id: number;
-    public get Id(): number { return this._Id }
-
-    constructor(Id: number) {
-        this._Id = Id;
-    }
-
-    Dispose(): void {
-        if (this.Id >= 0)
-            window.API.UnsubscribeHTTP(this.Id);
-    }
 }
 
 export class HTTPRequest {

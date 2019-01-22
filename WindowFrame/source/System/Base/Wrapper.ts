@@ -1,4 +1,4 @@
-import { Observable, ObservableCallback } from "./Observable";
+import { Observable, ObservableCallback, DisposableObservable } from "./Observable";
 
 export interface IRawDataWrapper<T> {
     raw: T;
@@ -19,6 +19,21 @@ export class RawDataWrapper<T> implements IRawDataWrapper<T> {
     }
 }
 export class ObservableDataWrapper<T> extends Observable implements IRawDataWrapper<T> {
+    private _raw: T;
+    public get raw(): T {
+        return this.$._raw;
+    }
+
+    constructor(RawData: T) {
+        super();
+        this._raw = RawData;
+    }
+
+    protected UpdateData(RawData: T): void {
+        this.$._raw = RawData;
+    }
+}
+export class DisposableObservableDataWrapper<T> extends DisposableObservable implements IRawDataWrapper<T> {
     private _raw: T;
     public get raw(): T {
         return this.$._raw;

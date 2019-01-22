@@ -8,15 +8,16 @@ import { Ship } from "./Ship";
 import { Fleet } from "./Fleet";
 import { Settings } from "../Settings";
 import { fns } from "../Base/Base";
+import { IdentifiableTable } from "../Models/TableWrapper";
 
 export class RepairDock extends Observable {
-    public Docks: RepairDock.Dock[];
+    public Docks: IdentifiableTable<RepairDock.Dock>;
     private homeport: Homeport;
 
     constructor(homeport: Homeport) {
         super();
         this.homeport = homeport;
-        this.Docks = [];
+        this.Docks = new IdentifiableTable<RepairDock.Dock>();
 
         SubscribeKcsapi<kcsapi_ndock[]>(
             "api_get_member/ndock",
@@ -37,21 +38,21 @@ export class RepairDock extends Observable {
     public CheckRepairing(shipId_or_fleet: number | Fleet): boolean {
         if (shipId_or_fleet instanceof Fleet) {
             const fleet = shipId_or_fleet;
-            const repairing = this.Docks.filter(x => x.ShipId != -1).map(x => x.ShipId);
+            const repairing = this.Docks.values().filter(x => x.ShipId != -1).map(x => x.ShipId);
             return fleet.Ships.some(x => repairing.indexOf(x.Id) >= 0);
         } else {
             const shipId = shipId_or_fleet;
-            return this.Docks.some(x => x.ShipId === shipId);
+            return this.Docks.values().some(x => x.ShipId === shipId);
         }
     }
 
     public Update(source: kcsapi_ndock[]): void {
-        if (this.Docks.length === source.length)
-            source.forEach(raw => this.Docks[raw.api_id].Update(raw));
+        if (this.Docks.size === source.length)
+            source.forEach(raw => this.Docks.get(raw.api_id)!.Update(raw));
 
         else {
             this.Docks.forEach(dock => dock.Dispose());
-            this.$.Docks = source.map(x => new RepairDock.Dock(this.homeport, x));
+            this.$.Docks = new IdentifiableTable<RepairDock.Dock>(source.map(x => new RepairDock.Dock(this.homeport, x)));
         }
     }
 
@@ -67,10 +68,10 @@ export class RepairDock extends Observable {
     }
     private ChangeSpeed(request: kcsapi_req_nyukyo_speedchange): void {
         try {
-            const dock = this.Docks[request.api_ndock_id];
-            const ship = dock.Ship;
+            const dock = this.Docks.get(request.api_ndock_id);
+            const ship = dock!.Ship;
 
-            dock.Finish();
+            dock!.Finish();
             if (ship) ship.Repair();
         }
         catch { }

@@ -60,6 +60,8 @@ export class Observable implements IDisposable {
 
         if (!(name in this._callbacks)) this._callbacks[name] = [];
         this._callbacks[name].push(callback);
+
+        if(CallSetup) callback(name.toString(), (<any>this)[name], undefined);
         return this;
     }
 
@@ -83,8 +85,8 @@ export class DisposableObservable extends Observable implements IDisposable {
         this.ManagedDisposable = new DisposableContainer();
     }
     public Dispose(): void {
-        super.Dispose();
         this.ManagedDisposable.Dispose();
+        super.Dispose();
     }
 }
 
@@ -107,7 +109,10 @@ export class TickObservable extends DisposableObservable implements IDisposable 
     }
 }
 
-/** Will be called when registered property has set. */
+/** Will be called when registered property has set.
+ * 
+ * `ObservableCallback(name: string, value: any, oldValue: any): void;`
+ */
 export interface ObservableCallback {
     (name: string, value: any, oldValue: any): void;
 }

@@ -2,6 +2,8 @@
 import Vue from "vue";
 import { IModule } from "../../System/Module";
 import { Homeport } from "../../System/Homeport/Homeport";
+import { IdentifiableTable } from "../../System/Models/TableWrapper";
+import { Progress } from "../../System/Models/GuageValue";
 
 interface ExpeditionData {
 	Enabled: boolean;
@@ -12,65 +14,71 @@ interface ExpeditionData {
 	Progress: number;
 }
 
-const MAX_FLEETS = 4; // Maximum fleets
-function GetExpeditionState(expedition: ExpeditionData): string {
-	return expedition.Enabled
-		? expedition.Activated
-			? "executing" : "waiting"
-		: "disabled";
-};
-
-const topexp = new Vue({
-	data: {
-		Expeditions: []
-	},
-	el: $("#top-expeditions")[0],
-	methods: {
-		ExpeditionState: GetExpeditionState
-	}
-});
-
 class TopExpedition implements IModule {
-	private Expeditions: ExpeditionData[] = [];
+	private readonly MAX_FLEETS = 4; // Maximum fleets
+
+	private Expeditions: IdentifiableTable<ExpeditionData> = new IdentifiableTable<ExpeditionData>();
+
+	private VueObject = new Vue({
+		data: {
+			Expeditions: <ExpeditionData[]>[]
+		},
+		el: $("#top-expeditions")[0],
+		methods: {
+			ExpeditionState(exp: ExpeditionData): string {
+				return exp.Enabled
+					? exp.Activated
+						? "executing" : "waiting"
+					: "disabled";
+			}
+		}
+	});
 
 	init(): void {
 		// First fleet cannot go expedition
-		for (let i = 1; i < MAX_FLEETS; i++) {
+		const list: ExpeditionData[] = [];
+		for (let i = 2; i <= this.MAX_FLEETS; i++) {
 			const data: ExpeditionData = {
 				Enabled: false,
 				Activated: false,
 
-				Id: 0,
+				Id: i,
 				RemainingText: "--:--:--",
 				Progress: 0
 			};
-			this.Expeditions.push(data);
+			list.push(data);
 		}
+		this.Expeditions = new IdentifiableTable<ExpeditionData>(list);
+		this.VueObject.Expeditions = this.Expeditions.values();
 
 		Homeport.Instance.Observe(() => this.Reload(), nameof(Homeport.Instance.Fleets));
 
-		window.modules.areas.register("top", "top-expedition", "Expeditions bar", "", topexp);
+		window.modules.areas.register("top", "top-expedition", "Expeditions bar", "", this.VueObject);
 	}
 
 	private Reload(): void {
-		Homeport.Instance.Fleets.forEach((x, idx) => {
-			const id = idx - 2; // Begin at 2nd fleet
-			this.Expeditions[id].Enabled = x ? true : false;
+		Homeport.Instance.Fleets.forEach(x => {
+			const id = x.Id; // Begin at 2nd fleet
+			const target = this.Expeditions.get(id);
+			if(!target) return;
+			target.Enabled = x ? true : false;
 
-			if (x) {
-				x.Observe((name, value, oldValue) => {
-					this.Expeditions[id].Activated = value.IsInExecution;
-					this.Expeditions[id].Id = value.Id;
-					this.Expeditions[id].RemainingText = this.GetRemainingText(value.Remaining);
-					this.Expeditions[id].Progress = value.Progress.Maximum > 0
-						? value.Progress.Percentage * 100 : 0;
-				}, nameof(x.Expedition));
+			if (x && x.Expedition) {
+				const exp = x.Expedition;
+				exp.Observe((_, value: boolean) => target.Activated = value, nameof(exp.IsInExecution));
+				exp.Observe((_, value: number) => target.Id = value, nameof(exp.Id));
+				exp.Observe((_, value: number) => target.RemainingText = this.GetRemainingText(value), nameof(exp.Remaining));
+				exp.Observe((_, value: Progress) => {
+					target.Progress = value.Maximum > 0
+						? value.Percentage * 100 : 0;
+				}, nameof(exp.Progress));
 			}
+			this.VueObject.Expeditions = this.Expeditions.values(); // Update?
 		});
 	}
 
 	private GetRemainingText(remaining: number): string {
-		const asSecs = Math.floor(remaining);
+		const asSecs = Math.floor(remaining / 1000);
 		const hours = Math.floor((asSecs / 3600) % 60);
 		const mins = Math.floor((asSecs / 60) % 60);
 		const secs = (asSecs % 60);

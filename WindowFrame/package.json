@@ -1,5 +1,5 @@
 {
-  "name": "beerviewer-windowframe",
+  "name": "beerviewer",
   "version": "0.1.0",
   "description": "WindowFrame for BeerViewer application",
   "main": "source/System/Base.ts",

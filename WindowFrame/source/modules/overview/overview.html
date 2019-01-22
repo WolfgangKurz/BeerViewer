@@ -2,7 +2,6 @@
 	<div class="tab-host">
 		<a href="#"
 		   v-for="fleet in Fleets"
-		   v-if="fleet.Available"
 		   :class="{selected: SelectedTab === fleet.Id}"
 		   :data-idx="fleet.Id"
 		   @click.prevent="SelectFleet(fleet.Id)">
@@ -15,7 +14,6 @@
 
 	<div class="fleet"
 		 v-for="fleet in Fleets"
-		 v-if="fleet.Available"
 		 v-show="SelectedTab === fleet.Id"
 		 :data-idx="fleet.Id"
 		 :data-display="SelectedTab === fleet.Id ? 1 : 0">

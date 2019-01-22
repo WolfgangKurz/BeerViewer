@@ -1,10 +1,10 @@
-import { ObservableDataWrapper } from "../Base/Wrapper";
+import { DisposableObservableDataWrapper } from "../Base/Wrapper";
 import { SubscribeKcsapi } from "../Base/KcsApi";
 import { kcsapi_port } from "../Interfaces/kcsapi_port";
 import { kcsapi_basic } from "../Interfaces/kcsapi_basic";
 import { kcsapi_member_updatecomment } from "../Interfaces/kcsapi_member";
 
-export class Admiral extends ObservableDataWrapper<kcsapi_basic> {
+export class Admiral extends DisposableObservableDataWrapper<kcsapi_basic> {
     public get MemberId(): string { return this.raw.api_member_id }
     public get Nickname(): string { return this.raw.api_nickname }
     public get Comment(): string { return this.raw.api_comment }
@@ -32,16 +32,20 @@ export class Admiral extends ObservableDataWrapper<kcsapi_basic> {
     constructor(data: kcsapi_basic) {
         super(data);
 
-        SubscribeKcsapi<kcsapi_port>(
-            "api_port/port",
-            x => this.UpdateData(x.api_basic)
+        this.ManagedDisposable.Add(
+            SubscribeKcsapi<kcsapi_port>(
+                "api_port/port",
+                x => this.UpdateData(x.api_basic)
+            )
         );
-        SubscribeKcsapi<{}, kcsapi_member_updatecomment>(
-            "api_req_member/updatecomment",
-            (x, y) =>{
-                this.raw.api_comment = y.api_cmt;
-                this.RaisePropertyChanged(nameof(this.Comment));
-            }
+        this.ManagedDisposable.Add(
+            SubscribeKcsapi<{}, kcsapi_member_updatecomment>(
+                "api_req_member/updatecomment",
+                (x, y) => {
+                    this.raw.api_comment = y.api_cmt;
+                    this.RaisePropertyChanged(nameof(this.Comment));
+                }
+            )
         );
     }
 }

@@ -2,7 +2,7 @@
     "compilerOptions": {
         "outDir": "_dist",
         "target": "es6",
-        "module": "amd",
+        "module": "commonjs",
         "moduleResolution": "node",
         "strict": true,
 

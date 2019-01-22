@@ -231,6 +231,7 @@ class Overview implements IModule {
 			x.Observe((_, value: number) => fleet.ConditionRestoringText = this.GetRemainingText(value), nameof(x.ConditionRestoreTime));
 
 			fleet.Ships = x.Ships;
+			newData.push(fleet);
 		});
 
 		this.VueObject.Fleets = newData;
@@ -248,7 +249,7 @@ class Overview implements IModule {
 				State: RepairDock.DockState.Locked,
 				StateText: ""
 			};
-			x.Observe((_, value: Ship) => dock.Ship = value.Info.Name, nameof(x.Ship));
+			x.Observe((_, value: Ship | null) => dock.Ship = (value && value.Info.Name) || "???", nameof(x.Ship));
 			x.Observe((_, value: RepairDock.DockState) => {
 				dock.State = value;
 				dock.StateText = RepairDock.DockState[value].toLowerCase();
@@ -265,7 +266,7 @@ class Overview implements IModule {
 	}
 	private updateConstructionDocks(): void {
 		const docks: ConstructionDockData[] = [];
-		Homeport.Instance.RepairDock!.Docks.forEach(x => {
+		Homeport.Instance.ConstructionDock!.Docks.forEach(x => {
 			const dock: ConstructionDockData = {
 				Id: x.Id,
 				Ship: "???",
@@ -274,10 +275,10 @@ class Overview implements IModule {
 				State: ConstructionDock.DockState.Locked,
 				StateText: ""
 			};
-			x.Observe((_, value: Ship) => dock.Ship = value.Info.Name, nameof(x.Ship));
+			x.Observe((_, value: Ship) => dock.Ship = (value && value.Info.Name) || "???", nameof(x.Ship));
 			x.Observe((_, value: ConstructionDock.DockState) => {
 				dock.State = value;
-				dock.StateText = RepairDock.DockState[value].toLowerCase();
+				dock.StateText = ConstructionDock.DockState[value].toLowerCase();
 			}, nameof(x.State));
 			x.Observe((_, value: number) => {
 				dock.IsCompleted = value <= 0;

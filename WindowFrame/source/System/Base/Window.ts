@@ -48,7 +48,7 @@ class WindowModule implements IModule {
 
         const getProgressColor = (progress: number, strips: number): number => {
             let x = 0, index = -1;
-            while (progress > x) x = ++index * 100 / strips;
+            while (progress > x) x = (++index + 1) * 100 / strips;
             return Math.min(strips - 1, index);
         };
         const rebindProgress = function (target: Node) {

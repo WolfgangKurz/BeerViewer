@@ -156,7 +156,7 @@ export class Homeport extends Observable {
         fleet.Update(source);
     }
     private UpdateDecks(source: kcsapi_deck[]): void {
-        if (this.$.Fleets.size === source.length) {
+        if (this.Fleets.size === source.length) {
             for (const raw of source)
                 this.Fleets.get(raw.api_id)!.Update(raw);
         } else {
@@ -286,7 +286,7 @@ export class Homeport extends Observable {
         if (!ship) return;
 
         ship.raw.api_slot = source.api_slot;
-        ship.UpdateEquipSlots(source.api_slot);
+        ship.UpdateEquipSlots();
 
         const fleet = this.Fleets.values().find(x => x.Ships.some(y => y.Id === ship.Id));
         if (!fleet) return;

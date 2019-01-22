@@ -3,6 +3,7 @@ import Vue from "vue";
 import { IModule } from "../../System/Module"
 import { Homeport } from "../../System/Homeport/Homeport";
 import { Materials } from "../../System/Homeport/Materials";
+import { Admiral } from "../../System/Homeport/Admiral";
 
 interface ResourceData {
 	Name: string;
@@ -44,8 +45,8 @@ class TopResources implements IModule {
 		}).call(Homeport.Instance.Materials, this);
 
 		Homeport.Instance.Observe(
-			(_, value) => Homeport.Instance.Admiral!.Observe(
-				(_, value) => value && (this.VueObject.Overlimit = value),
+			(_, value: Admiral) => value && value.Observe(
+				(_, value: number) => value && (this.VueObject.Overlimit = value),
 				nameof(Homeport.Instance.Admiral!.ResourceLimit)
 			),
 			nameof(Homeport.Instance.Admiral)

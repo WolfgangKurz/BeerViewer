@@ -6,15 +6,16 @@ import { Homeport } from "./Homeport";
 import { Ship } from "./Ship";
 import { Settings } from "../Settings";
 import { fns } from "../Base/Base";
+import { IdentifiableTable } from "../Models/TableWrapper";
 
 export class ConstructionDock extends Observable {
-    public Docks: ConstructionDock.Dock[];
+    public Docks: IdentifiableTable<ConstructionDock.Dock>;
     private homeport: Homeport;
 
     constructor(homeport: Homeport) {
         super();
         this.homeport = homeport;
-        this.Docks = [];
+        this.Docks = new IdentifiableTable<ConstructionDock.Dock>();
 
         SubscribeKcsapi<kcsapi_kdock[]>(
             "api_get_member/kdock",
@@ -33,12 +34,12 @@ export class ConstructionDock extends Observable {
     }
 
     public Update(source: kcsapi_kdock[]): void {
-        if (this.Docks.length === source.length)
-            source.forEach(raw => this.Docks[raw.api_id].Update(raw));
+        if (this.Docks.size === source.length)
+            source.forEach(raw => this.Docks.get(raw.api_id)!.Update(raw));
 
         else {
             this.Docks.forEach(dock => dock.Dispose());
-            this.$.Docks = source.map(x => new ConstructionDock.Dock(this.homeport, x));
+            this.$.Docks = new IdentifiableTable<ConstructionDock.Dock>(source.map(x => new ConstructionDock.Dock(this.homeport, x)));
         }
     }
 
@@ -47,8 +48,8 @@ export class ConstructionDock extends Observable {
     }
     private ChangeSpeed(request: kcsapi_req_kousyou_createship_speedchange): void {
         try {
-            const dock = this.Docks[request.api_kdock_id];
-            if (request.api_highspeed === 1) dock.Finish();
+            const dock = this.Docks.get(request.api_kdock_id);
+            if (request.api_highspeed === 1) dock!.Finish();
         }
         catch { }
     }

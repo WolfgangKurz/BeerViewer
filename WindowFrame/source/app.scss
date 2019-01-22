@@ -261,6 +261,10 @@ i.menu-icon {
 				background-position: (-$n * 32px) -28px;
 			}
 		}
+
+		@include SysButtonMaximized(0);
+		@include SysButtonMaximized(1);
+		@include SysButtonMaximized(2);
 	}
 }
 

@@ -6,13 +6,18 @@ import { ExpeditionResult } from "./ExpeditionResult";
 import { Master } from "../../Master/Master";
 import { SubscribeKcsapi } from "../../Base/KcsApi";
 import { kcsapi_mission_result } from "../../Interfaces/kcsapi_mission_result";
+import { Settings } from "../../Settings";
+import { fns } from "../../Base/Base";
 
 export class Expedition extends TickObservable {
     private readonly fleet: Fleet;
     private notificated: boolean = false;
 
-    public Id: number = -1;
-    public Expedition: ExpeditionInfo | null = null;
+    private _Id: number = -1;
+    public get Id(): number { return this._Id }
+
+    private _Expedition: ExpeditionInfo | null = null;
+    public get Expedition(): ExpeditionInfo | null { return this._Expedition }
 
     //#region ReturnTime
     // set _ReturnTime -> Observable will call "ReturnTime" PropertyChanged callbacks
@@ -45,6 +50,8 @@ export class Expedition extends TickObservable {
         return new Progress(value, this.Expedition.raw.api_time * 60, 0);
     }
 
+    public Returned: Expedition.ExpeditionComplete | Expedition.ExpeditionComplete[] | null = null;
+
     public ExpeditionResult: ExpeditionResult | null = null;
 
     constructor(fleet: Fleet) {
@@ -67,13 +74,28 @@ export class Expedition extends TickObservable {
 
     public Update(rawData: [number, number, number, number]): void {
         if (rawData.length != 4 || rawData.filter(x => x === 0).length == 4) {
-            this.Id = -1;
-            this.Expedition = null;
+            this._Id = -1;
+            this._Expedition = null;
             this._ReturnTime = 0;
         } else {
-            this.Id = rawData[1];
-            this.Expedition = Master.Instance.Expeditions!.get(this.Id) || null;
+            this._Id = rawData[1];
+            this._Expedition = Master.Instance.Expeditions!.get(this.Id) || null;
             this._ReturnTime = rawData[2];
         }
+    }
+
+    protected Tick(): void {
+        this.RaisePropertyChanged(nameof(this.Remaining));
+        this.RaisePropertyChanged(nameof(this.Progress));
+
+        if (!this.notificated && this.Returned != null && this.Remaining <= Settings.Instance.NotificationTime * 1000) {
+            fns(this.Returned, this.fleet.Name);
+            this.notificated = true;
+        }
+    }
+}
+export namespace Expedition {
+    export interface ExpeditionComplete {
+        (Fleet: string): void;
     }
 }

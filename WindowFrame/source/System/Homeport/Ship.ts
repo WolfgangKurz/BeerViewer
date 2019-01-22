@@ -9,11 +9,13 @@ import { AirSupremacy } from "../Models/AirSupremacy";
 import { ShipEquip } from "./Equipment/ShipEquip";
 import { ObservableDataWrapper } from "../Base/Wrapper";
 import { EquipCategory } from "../Enums/EquipEnums";
+import { UpgradeStatus } from "../Models/UpgradeStatus";
 
 export class Ship extends ObservableDataWrapper<kcsapi_ship2> implements IIdentifiable {
-    public readonly Id: number = 0;
+    public get Id(): number { return this.raw.api_id }
 
-    public Info!: ShipInfo;
+    private _Info!: ShipInfo;
+    public get Info(): ShipInfo { return this._Info }
 
     public get Level(): number { return this.raw.api_lv }
 
@@ -55,6 +57,36 @@ export class Ship extends ObservableDataWrapper<kcsapi_ship2> implements IIdenti
             .filter(x => x.Equipped);
     }
 
+    //#region FirePower
+    private _FirePower: UpgradeStatus = new UpgradeStatus();
+    public get FirePower(): UpgradeStatus { return this._FirePower }
+    //#endregion
+
+    //#region Torpedo
+    private _Torpedo: UpgradeStatus = new UpgradeStatus();
+    public get Torpedo(): UpgradeStatus { return this._Torpedo }
+    //#endregion
+
+    //#region AA
+    private _AA: UpgradeStatus = new UpgradeStatus();
+    public get AA(): UpgradeStatus { return this._AA }
+    //#endregion
+
+    //#region Armor
+    private _Armor: UpgradeStatus = new UpgradeStatus();
+    public get Armor(): UpgradeStatus { return this._Armor }
+    //#endregion
+
+    //#region Luck
+    private _Luck: UpgradeStatus = new UpgradeStatus();
+    public get Luck(): UpgradeStatus { return this._Luck }
+    //#endregion
+
+    //#region ASW
+    private _ASW: UpgradeStatus = new UpgradeStatus();
+    public get ASW(): UpgradeStatus { return this._ASW }
+    //#endregion
+
 
     private homeport: Homeport;
     constructor(homeport: Homeport, api_data: kcsapi_ship2) {
@@ -62,10 +94,6 @@ export class Ship extends ObservableDataWrapper<kcsapi_ship2> implements IIdenti
 
         this.homeport = homeport;
         this.Update(api_data);
-    }
-
-    public Update(api_data: kcsapi_ship2): void {
-        this.$.Info = Master.Instance.Ships!.get(api_data.api_ship_id) || ShipInfo.Empty;
     }
 
     public Repair(): void {
@@ -85,10 +113,32 @@ export class Ship extends ObservableDataWrapper<kcsapi_ship2> implements IIdenti
             this.Equips[i].UpdateAircrafts(aircrafts[i] || 0);
     }
 
-    public UpdateEquipSlots(equipSlots: number[]): void {
+    public Update(api_data: kcsapi_ship2): void {
+        this.UpdateData(api_data);
+
+        this.$._Info = Master.Instance.Ships!.get(api_data.api_ship_id) || ShipInfo.Empty;
+        this.RaisePropertyChanged(nameof(this.Id));
+        this.RaisePropertyChanged(nameof(this.HP));
+
+        this.$._Fuel = new GuageValue(this.raw.api_fuel, this.Info.Fuel, 0);
+        this.$._Ammo = new GuageValue(this.raw.api_bull, this.Info.Ammo, 0);
+
+        this.$._ASW = new UpgradeStatus(0, this.raw.api_taisen[1], this.raw.api_taisen[0]);
+
+        if (this.raw.api_kyouka.length >= 5) {
+            this._FirePower = new UpgradeStatus(this.Info.FirePower, this.raw.api_kyouka[0]);
+            this._Torpedo = new UpgradeStatus(this.Info.Torpedo, this.raw.api_kyouka[1]);
+            this._AA = new UpgradeStatus(this.Info.AA, this.raw.api_kyouka[2]);
+            this._Armor = new UpgradeStatus(this.Info.Armor, this.raw.api_kyouka[3]);
+            this._Luck = new UpgradeStatus(this.Info.Luck, this.raw.api_kyouka[4]);
+        }
+        this.UpdateEquipSlots();
+    }
+
+    public UpdateEquipSlots(): void {
         this.$._Equips = this.raw.api_slot
             .map(id => this.homeport.Equipments.Equips.get(id)).filter(x => x)
-            .map((t, i) => new ShipEquip(this, t, this.Info.raw.api_maxeq[i] || 0, this.raw.api_onslot[i] || 0));
+            .map((t, i) => new ShipEquip(this, t, this._Info.raw.api_maxeq[i] || 0, this.raw.api_onslot[i] || 0));
 
         this.$._ExtraEquip = new ShipEquip(this, this.homeport.Equipments.Equips.get(this.raw.api_slot_ex), 0, 0);
 
