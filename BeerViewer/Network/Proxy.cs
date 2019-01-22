@@ -32,13 +32,13 @@ namespace BeerViewer.Network
 
 		public static Proxy Instance { get; } = new Proxy();
 
-		internal ConcurrentDictionary<int, ProxyHandler> Handlers { get; }
-		internal ConcurrentDictionary<int, ModifiableProxyHandler> ModifiableHandlers { get; }
+		internal ProxyHandlerContainer<ProxyHandler> Handlers { get; }
+		internal ProxyHandlerContainer<ModifiableProxyHandler> ModifiableHandlers { get; }
 
 		private Proxy()
 		{
-			this.Handlers = new ConcurrentDictionary<int, ProxyHandler>();
-			this.ModifiableHandlers = new ConcurrentDictionary<int, ModifiableProxyHandler>();
+			this.Handlers = new ProxyHandlerContainer<ProxyHandler> ();
+			this.ModifiableHandlers = new ProxyHandlerContainer< ModifiableProxyHandler >();
 			if (IsInDesignMode) return;
 
 			HttpProxy.AfterSessionComplete += (_ =>
@@ -153,9 +153,7 @@ namespace BeerViewer.Network
 
 			try
 			{
-				var key = this.Handlers.Count;
-				this.Handlers.TryAdd(
-					key,
+				var key = this.Handlers.TryAdd(
 					new ProxyHandler
 					{
 						Where = Where,
@@ -183,9 +181,7 @@ namespace BeerViewer.Network
 
 			try
 			{
-				var key = this.ModifiableHandlers.Count;
-				this.ModifiableHandlers.TryAdd(
-					key,
+				var key = this.ModifiableHandlers.TryAdd(
 					new ModifiableProxyHandler
 					{
 						Where = Where,
@@ -213,9 +209,7 @@ namespace BeerViewer.Network
 
 			try
 			{
-				var key = this.ModifiableHandlers.Count;
-				this.ModifiableHandlers.TryAdd(
-					key,
+				var key = this.ModifiableHandlers.TryAdd(
 					new ModifiableProxyHandler
 					{
 						Where = Where,
