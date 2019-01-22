@@ -32,7 +32,7 @@ export class Master {
         if (this.IsReady) return this;
         this.IsReady = true;
 
-        SubscribeKcsapi<kcsapi_start2>("api_start2", x => {
+        SubscribeKcsapi<kcsapi_start2>("api_start2/getData", x => {
             this.ShipTypes = new MasterWrapper<ShipTypeInfo>(x.api_mst_stype.map(y => new ShipTypeInfo(y)));
             this.Ships = new MasterWrapper<ShipInfo>(x.api_mst_ship.map(y => new ShipInfo(y)));
 

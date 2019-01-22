@@ -160,7 +160,7 @@ export class Homeport extends Observable {
             for (const raw of source)
                 this.Fleets.get(raw.api_id)!.Update(raw);
         } else {
-            this.$.Fleets.forEach(x => x.Dispose());
+            this.Fleets.forEach(x => x.Dispose());
             this.$._Fleets = new IdentifiableTable<Fleet>(source.map(x => new Fleet(this, x)));
         }
     }
