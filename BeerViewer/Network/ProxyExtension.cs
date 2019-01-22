@@ -36,9 +36,9 @@ namespace BeerViewer.Network
 		public bool TryGetValue(int key, out T value) => this.dict.TryGetValue(key, out value);
 		public int TryAdd(T Handler)
 		{
-			var ret = this.dict.TryAdd(this.keyCounter, Handler);
-			if (ret)
-				return this.keyCounter++;
+			var key = this.getAvailableKey();
+			var ret = this.dict.TryAdd(key, Handler);
+			if (ret) return key;
 			return ProxyHandlerContainer<T>.INVALID_KEY;
 		}
 		public bool TryRemove(int Key, out T Value) => this.dict.TryRemove(Key, out Value);
@@ -47,5 +47,17 @@ namespace BeerViewer.Network
 
 		IEnumerator<KeyValuePair<int, T>> IEnumerable<KeyValuePair<int, T>>.GetEnumerator() => this.dict.GetEnumerator();
 		IEnumerator IEnumerable.GetEnumerator() => this.dict.GetEnumerator();
+
+		private int getAvailableKey()
+		{
+			while (this.ContainsKey(this.keyCounter))
+			{
+				if (this.keyCounter >= int.MaxValue)
+					this.keyCounter = 0; // Repeat from 0, find removed key
+				else
+					this.keyCounter++;
+			}
+			return this.keyCounter;
+		}
 	}
 }
