@@ -93,7 +93,7 @@ export class Homeport extends Observable {
             this.Equipments.Update(x.api_slot_item);
             this.ConstructionDock!.Update(x.api_kdock);
         });
-        SubscribeKcsapi<kcsapi_port>("api_port", x => {
+        SubscribeKcsapi<kcsapi_port>("api_port/port", x => {
             if(this._Admiral) this._Admiral.Dispose();
             this.$._Admiral = new Admiral(x.api_basic);
             this.RepairDock!.Update(x.api_ndock);
