@@ -1,15 +1,15 @@
-import { SubscribeKcsapi } from "../Base/KcsApi";
-import { kcsapi_start2 } from "../Interfaces/Master/kcsapi_start2";
-import { ShipType } from "../Enums/ShipEnums";
+import { SubscribeKcsapi } from "System/Base/KcsApi";
+import { kcsapi_start2 } from "System/Interfaces/Master/kcsapi_start2";
+import { ShipType } from "System/Enums/ShipEnums";
 import { ShipInfo } from "./Wrappers/ShipInfo";
 import { ShipTypeInfo } from "./Wrappers/ShipTypeInfo";
-import { IIdentifiable } from "../Base/Interfaces/IIdentifiable";
+import { IIdentifiable } from "System/Base/Interfaces/IIdentifiable";
 import { EquipTypeInfo } from "./Wrappers/EquipTypeInfo";
 import { EquipInfo } from "./Wrappers/EquipInfo";
 import { ExpeditionInfo } from "./Wrappers/ExpeditionInfo";
 import { MapWorldInfo, MapAreaInfo } from "./Wrappers/MapInfos";
 import { UseItemInfo } from "./Wrappers/UseItemInfo";
-import { MasterWrapper } from "../Models/TableWrapper";
+import { MasterWrapper } from "System/Models/TableWrapper";
 
 export class Master {
     public static get Instance(): Master { return window.Master }

@@ -1,4 +1,4 @@
-import { HTTPRequest } from "../Exports/API";
+import { HTTPRequest } from "System/Exports/API";
 
 export interface kcsapi_deck {
     api_member_id: number;

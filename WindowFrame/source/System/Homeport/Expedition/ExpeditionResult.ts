@@ -1,6 +1,6 @@
-import { kcsapi_mission_result, kcsapi_mission_result_item } from "../../Interfaces/kcsapi_mission_result";
-import { Master } from "../../Master/Master";
-import { ExpeditionResultItemKind } from "../../Enums/ExpeditionEnums";
+import { kcsapi_mission_result, kcsapi_mission_result_item } from "System/Interfaces/kcsapi_mission_result";
+import { Master } from "System/Master/Master";
+import { ExpeditionResultItemKind } from "System/Enums/ExpeditionEnums";
 
 export class ExpeditionResult {
     public Result: number;

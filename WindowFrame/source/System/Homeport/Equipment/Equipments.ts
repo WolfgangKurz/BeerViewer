@@ -1,7 +1,7 @@
-import { Observable } from "../../Base/Observable";
+import { Observable } from "System/Base/Observable";
+import { IdentifiableTable } from "System/Models/TableWrapper";
+import { Ship } from "System/Homeport/Ship";
 import { Equipment } from "./Equipment";
-import { IdentifiableTable } from "../../Models/TableWrapper";
-import { Ship } from "../Ship";
 
 export class Equipments extends Observable {
     //#region Equips

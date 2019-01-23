@@ -1,12 +1,12 @@
 ﻿/// <reference path="../../../node_modules/ts-nameof/ts-nameof.d.ts" />
 import Vue from "vue";
-import { Ship } from "../../System/Homeport/Ship";
-import { AirSupremacy } from "../../System/Models/AirSupremacy";
-import { RepairDock } from "../../System/Homeport/RepairDock";
-import { ConstructionDock } from "../../System/Homeport/ConstructionDock";
-import { IModule } from "../../System/Module";
-import { Homeport } from "../../System/Homeport/Homeport";
-import { FleetState } from "../../System/Enums/FleetEnums";
+import { Ship } from "System/Homeport/Ship";
+import { AirSupremacy } from "System/Models/AirSupremacy";
+import { RepairDock } from "System/Homeport/RepairDock";
+import { ConstructionDock } from "System/Homeport/ConstructionDock";
+import { IModule } from "System/Module";
+import { Homeport } from "System/Homeport/Homeport";
+import { FleetState } from "System/Enums/FleetEnums";
 
 const getTextWidth = function (text: string, font: string) {
 	const canvas: HTMLCanvasElement = (<any>getTextWidth).canvas || ((<any>getTextWidth).canvas = document.createElement("canvas"));

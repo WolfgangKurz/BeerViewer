@@ -1,17 +1,17 @@
-import { IIdentifiable } from "../Base/Interfaces/IIdentifiable";
+import { IIdentifiable } from "System/Base/Interfaces/IIdentifiable";
 import { Homeport } from "./Homeport";
-import { kcsapi_deck, kcsapi_req_member_updatedeckname } from "../Interfaces/kcsapi_deck";
-import { TickObservable } from "../Base/Observable";
+import { kcsapi_deck, kcsapi_req_member_updatedeckname } from "System/Interfaces/kcsapi_deck";
+import { TickObservable } from "System/Base/Observable";
 import { Ship } from "./Ship";
-import { ShipSpeed, ShipType } from "../Enums/ShipEnums";
-import Const from "../Const/System";
-import { FleetState } from "../Enums/FleetEnums";
+import { ShipSpeed, ShipType } from "System/Enums/ShipEnums";
+import Const from "System/Const/System";
+import { FleetState } from "System/Enums/FleetEnums";
 import { Expedition } from "./Expedition/Expedition";
-import { AirSupremacy } from "../Models/AirSupremacy";
-import { LoSCalculator } from "../Models/LoSCalculator/LoSCalculator";
-import { SubscribeKcsapi } from "../Base/KcsApi";
-import { HTTPRequest } from "../Exports/API";
-import { Settings } from "../Settings";
+import { AirSupremacy } from "System/Models/AirSupremacy";
+import { LoSCalculator } from "System/Models/LoSCalculator/LoSCalculator";
+import { SubscribeKcsapi } from "System/Base/KcsApi";
+import { HTTPRequest } from "System/Exports/API";
+import { Settings } from "System/Settings";
 
 export class Fleet extends TickObservable implements IIdentifiable {
     //#region Id

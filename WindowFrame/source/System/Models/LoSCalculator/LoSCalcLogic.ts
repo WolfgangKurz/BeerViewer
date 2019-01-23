@@ -1,4 +1,4 @@
-import { Fleet } from "../../Homeport/Fleet";
+import { Fleet } from "System/Homeport/Fleet";
 
 export interface ILoSCalculator {
     readonly Id: string;

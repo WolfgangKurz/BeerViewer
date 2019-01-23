@@ -1,11 +1,11 @@
-import { Observable } from "../Base/Observable";
-import { SubscribeKcsapi } from "../Base/KcsApi";
-import { kcsapi_port } from "../Interfaces/kcsapi_port";
-import { kcsapi_material } from "../Interfaces/kcsapi_material";
-import { kcsapi_charge } from "../Interfaces/kcsapi_charge";
-import { kcsapi_destroyship } from "../Interfaces/kcsapi_ship";
-import { kcsapi_destroyitem2 } from "../Interfaces/kcsapi_item";
-import { kcsapi_airbase_corps_supply, kcsapi_airbase_corps_set_plane, kcsapi_req_air_corps_set_plane } from "../Interfaces/kcsapi_airbase_corps";
+import { Observable } from "System/Base/Observable";
+import { SubscribeKcsapi } from "System/Base/KcsApi";
+import { kcsapi_port } from "System/Interfaces/kcsapi_port";
+import { kcsapi_material } from "System/Interfaces/kcsapi_material";
+import { kcsapi_charge } from "System/Interfaces/kcsapi_charge";
+import { kcsapi_destroyship } from "System/Interfaces/kcsapi_ship";
+import { kcsapi_destroyitem2 } from "System/Interfaces/kcsapi_item";
+import { kcsapi_airbase_corps_supply, kcsapi_airbase_corps_set_plane, kcsapi_req_air_corps_set_plane } from "System/Interfaces/kcsapi_airbase_corps";
 
 export class Materials extends Observable {
     private _Fuel: number;

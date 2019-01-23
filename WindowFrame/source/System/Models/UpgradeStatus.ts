@@ -1,5 +1,5 @@
 import { GuageValue } from "./GuageValue";
-import { MasterMinMax } from "../Master/MasterMinMax";
+import { MasterMinMax } from "System/Master/MasterMinMax";
 
 export class UpgradeStatus extends GuageValue {
     constructor();

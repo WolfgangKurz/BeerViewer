@@ -1,4 +1,4 @@
-import { ExpeditionResultType, ExpeditionResultItemKind } from "../Enums/ExpeditionEnums";
+import { ExpeditionResultType, ExpeditionResultItemKind } from "System/Enums/ExpeditionEnums";
 
 export interface kcsapi_mission_result {
     api_ship_id: number[];

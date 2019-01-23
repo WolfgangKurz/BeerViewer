@@ -1,9 +1,9 @@
-import { Fleet } from "../../Homeport/Fleet";
-import { Ship } from "../../Homeport/Ship";
-import { EquipDictCategory, EquipCategory } from "../../Enums/EquipEnums";
-import { EquipInfo } from "../../Master/Wrappers/EquipInfo";
-import { Homeport } from "../../Homeport/Homeport";
-import { ShipEquip } from "../../Homeport/Equipment/ShipEquip";
+import { Fleet } from "System/Homeport/Fleet";
+import { Ship } from "System/Homeport/Ship";
+import { EquipCategory } from "System/Enums/EquipEnums";
+import { EquipInfo } from "System/Master/Wrappers/EquipInfo";
+import { Homeport } from "System/Homeport/Homeport";
+import { ShipEquip } from "System/Homeport/Equipment/ShipEquip";
 import { LoSCalcLogic } from "./LoSCalcLogic";
 
 export class Fall2_5LoS extends LoSCalcLogic {

@@ -112,7 +112,6 @@ class ModuleAreas {
 
         if (areaElem.Modules.some(x => x.Id === id)) throw "Already registered name";
 
-        console.log(elem);
         areaElem.Modules.push(new Module(
             area,
             id,

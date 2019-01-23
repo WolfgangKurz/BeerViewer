@@ -6,13 +6,15 @@ module.exports = {
   entry: "./source/System/Base.ts",
   output: {
     path: path.resolve(__dirname, "./dist"),
-    filename: "beerviewer.js"
+    filename: "beerviewer.js",
+    libraryTarget: 'umd'
   },
   resolve: {
-    extensions: ['.ts', '.js', '.vue', '.json'],
-    alias: {
-      'vue$': 'vue/dist/vue.esm.js'
-    }
+    modules: [
+      "node_modules",
+      path.resolve(__dirname, "source")
+    ],
+    extensions: ['.ts', '.js', '.vue', '.json']
   },
   module: {
     rules: [
@@ -40,6 +42,15 @@ module.exports = {
         }
       }
     ]
+  },
+  externals: {
+    "vue": "Vue",
+    "tippy.js": {
+      root: "tippy",
+      commonjs2: "tippy.js",
+      commonjs: "tippy.js",
+      amd: "tippy.js"
+    }
   },
   devtool: "source-map",
   mode: "development"

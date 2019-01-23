@@ -1,5 +1,5 @@
-import { Fleet } from "../../Homeport/Fleet";
-import { Ship } from "../../Homeport/Ship";
+import { Fleet } from "System/Homeport/Fleet";
+import { Ship } from "System/Homeport/Ship";
 import { LoSCalcLogic } from "./LoSCalcLogic";
 
 /** Sum all LoS value simply */

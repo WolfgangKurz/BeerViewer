@@ -1,6 +1,6 @@
-import { RawDataWrapper } from "../../Base/Wrapper";
-import { kcsapi_mst_maparea, kcsapi_mst_mapinfo } from "../../Interfaces/Master/kcsapi_map";
-import { IIdentifiable } from "../../Base/Interfaces/IIdentifiable";
+import { RawDataWrapper } from "System/Base/Wrapper";
+import { kcsapi_mst_maparea, kcsapi_mst_mapinfo } from "System/Interfaces/Master/kcsapi_map";
+import { IIdentifiable } from "System/Base/Interfaces/IIdentifiable";
 
 export class MapWorldInfo extends RawDataWrapper<kcsapi_mst_maparea> implements IIdentifiable {
     public get Id(): number { return this.raw.api_id }

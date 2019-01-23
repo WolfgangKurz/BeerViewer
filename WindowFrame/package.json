@@ -5,7 +5,10 @@
   "main": "source/System/Base.ts",
   "private": true,
   "scripts": {
-    "publish": "echo \"Test\""
+    "build1": "webpack",
+    "build2": "webpack --config webpack.modules.config.js",
+    "build": "webpack && webpack --config webpack.modules.config.js",
+    "publish": "@powershell -NoProfile -ExecutionPolicy Unrestricted -Command ./package.ps1"
   },
   "keywords": [],
   "author": {

@@ -23,13 +23,15 @@ module.exports = {
     entry: getEntries(),
     output: {
         path: path.resolve(__dirname, "./dist/modules/"),
-        filename: "[name].js"
+        filename: "[name].js",
+        libraryTarget: 'umd'
     },
     resolve: {
-        extensions: ['.ts', '.js', '.vue', '.json'],
-        alias: {
-            'vue$': 'vue/dist/vue.esm.js'
-        }
+        modules: [
+            "node_modules",
+            path.resolve(__dirname, "source")
+        ],
+        extensions: ['.ts', '.js', '.vue', '.json']
     },
     module: {
         rules: [
@@ -59,9 +61,13 @@ module.exports = {
         ]
     },
     externals: {
-        "vue": "Vue",
-        "tippy.js": "Tippy.js",
-        "@types/jquery": "jQuery"
+      "vue": "Vue",
+      "tippy.js": {
+        root: "tippy",
+        commonjs2: "tippy",
+        commonjs: "tippy",
+        amd: "tippy"
+      }
     },
     devtool: "source-map",
     mode: "development"

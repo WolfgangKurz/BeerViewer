@@ -1,4 +1,4 @@
-import { HTTPRequest } from "../Exports/API";
+import { HTTPRequest } from "System/Exports/API";
 
 export interface kcsapi_mapinfo_airbase {
 	api_air_base: kcsapi_airbase_corps[];

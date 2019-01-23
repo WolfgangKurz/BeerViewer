@@ -1,4 +1,4 @@
-import { IModule } from "../Module";
+import { IModule } from "System/Module";
 
 declare global {
     interface Window {
@@ -54,10 +54,9 @@ class WindowModule implements IModule {
         const rebindProgress = function (target: Node) {
             const $target = $(target);
             if (!$target.is('[data-type="progress"]')) return;
-            if ($target.is("[data-progress-binded]")) return;
             $target.attr("data-progress-binded", "1");
 
-            $target.find(".progress-strip").remove();
+            $target.empty();
 
             const strips = parseInt($target.attr("data-progress-strip") || "1");
             for (let i = 1; i < strips; i++) {
@@ -80,20 +79,20 @@ class WindowModule implements IModule {
                 .css("width", progress + "%");
         };
 
-        var observer = new MutationObserver(m => {
-            m.forEach(x => {
-                const $target = $(x.target);
+        const observer = new MutationObserver(ml => {
+            ml.forEach(m => {
+                const $target = $(m.target), target = m.target;
 
-                if (x.type === "childList") {
+                if (m.type == "childList") {
                     $target.find('[data-type="progress"]').each(function () { rebindProgress(this) });
-                } else if (x.type === "attributes") {
+                } else if (m.type === "attributes") {
                     if ($target.is('[data-type="progress"][data-progress-binded]')) {
-                        switch (x.attributeName) {
+                        switch (m.attributeName) {
                             case "data-progress":
-                                updateProgress(x.target);
+                                updateProgress(target);
                                 break;
                             case "data-progress-strip":
-                                rebindProgress(x.target);
+                                rebindProgress(target);
                                 break;
                         }
                     }

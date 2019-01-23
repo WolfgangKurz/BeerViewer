@@ -1,15 +1,15 @@
-import { GuageValue } from "../Models/GuageValue";
-import { IIdentifiable } from "../Base/Interfaces/IIdentifiable";
-import { ShipInfo } from "../Master/Wrappers/ShipInfo";
+import { GuageValue } from "System/Models/GuageValue";
+import { IIdentifiable } from "System/Base/Interfaces/IIdentifiable";
+import { ShipInfo } from "System/Master/Wrappers/ShipInfo";
 import { Homeport } from "./Homeport";
-import { kcsapi_ship2 } from "../Interfaces/kcsapi_ship";
-import { Master } from "../Master/Master";
-import { ShipSpeed } from "../Enums/ShipEnums";
-import { AirSupremacy } from "../Models/AirSupremacy";
+import { kcsapi_ship2 } from "System/Interfaces/kcsapi_ship";
+import { Master } from "System/Master/Master";
+import { ShipSpeed } from "System/Enums/ShipEnums";
+import { AirSupremacy } from "System/Models/AirSupremacy";
 import { ShipEquip } from "./Equipment/ShipEquip";
-import { ObservableDataWrapper } from "../Base/Wrapper";
-import { EquipCategory } from "../Enums/EquipEnums";
-import { UpgradeStatus } from "../Models/UpgradeStatus";
+import { ObservableDataWrapper } from "System/Base/Wrapper";
+import { EquipCategory } from "System/Enums/EquipEnums";
+import { UpgradeStatus } from "System/Models/UpgradeStatus";
 
 export class Ship extends ObservableDataWrapper<kcsapi_ship2> implements IIdentifiable {
     public get Id(): number { return this.raw.api_id }
@@ -31,9 +31,12 @@ export class Ship extends ObservableDataWrapper<kcsapi_ship2> implements IIdenti
     public get UsedAmmo(): number { return (this.Ammo.Maximum - this.Ammo.Current) * (this.Level > 99 ? 0.85 : 1.0) }
     public get UsedBauxite(): number { return this.EquippedItems.reduce((a, c) => a + c.LostAircraft, 0) * 5 }
 
+    //#region State Property
     private _State: Ship.State = Ship.State.None;
     public get State(): Ship.State { return this._State }
-    public Condition: number = 0;
+    //#endregion
+
+    public get Condition(): number { return this.raw.api_cond }
 
     public Speed: ShipSpeed = ShipSpeed.None;
 
@@ -115,6 +118,7 @@ export class Ship extends ObservableDataWrapper<kcsapi_ship2> implements IIdenti
 
     public Update(api_data: kcsapi_ship2): void {
         this.UpdateData(api_data);
+        this.RaisePropertyChanged(nameof(this.Condition));
 
         this.$._Info = Master.Instance.Ships!.get(api_data.api_ship_id) || ShipInfo.Empty;
         this.RaisePropertyChanged(nameof(this.Id));

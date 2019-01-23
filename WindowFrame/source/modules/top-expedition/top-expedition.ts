@@ -1,9 +1,9 @@
 ﻿/// <reference path="../../../node_modules/ts-nameof/ts-nameof.d.ts" />
 import Vue from "vue";
-import { IModule } from "../../System/Module";
-import { Homeport } from "../../System/Homeport/Homeport";
-import { IdentifiableTable } from "../../System/Models/TableWrapper";
-import { Progress } from "../../System/Models/GuageValue";
+import { IModule } from "System/Module";
+import { Homeport } from "System/Homeport/Homeport";
+import { IdentifiableTable } from "System/Models/TableWrapper";
+import { Progress } from "System/Models/GuageValue";
 
 interface ExpeditionData {
 	Enabled: boolean;

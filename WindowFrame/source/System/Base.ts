@@ -1,6 +1,6 @@
 import tippy from "tippy.js";
 import Vue from "vue";
-import VueTippy from "../vendor/vue.tippy";
+import VueTippy from "vendor/vue.tippy";
 import Modules, { Callback } from "./Module";
 import { Homeport } from "./Homeport/Homeport";
 import { Master } from "./Master/Master";

@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+        "baseUrl": "./source",
         "outDir": "_dist",
         "target": "es6",
         "module": "commonjs",
@@ -19,8 +20,5 @@
     },
     "include": [
         "source/**/*.ts"
-    ],
-    "exclude": [
-        "source/modules/*/"
     ]
 }

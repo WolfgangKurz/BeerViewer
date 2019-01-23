@@ -1,5 +1,5 @@
 import { kcsapi_ship2 } from "./kcsapi_ship";
-import { HTTPRequest } from "../Exports/API";
+import { HTTPRequest } from "System/Exports/API";
 
 export interface kcsapi_slot_deprive {
     api_ship_data: kcsapi_slot_deprive_ship_data;

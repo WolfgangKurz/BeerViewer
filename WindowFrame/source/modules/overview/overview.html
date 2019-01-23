@@ -32,7 +32,7 @@
 				<span>({{fleet.AvgLevel.toFixed(2)}})</span>
 			</div>
 			<div class="summary-info" data-summary="aa" :title="AATooltip(fleet)">
-				{{fleet.AA.Min}}<span>~{{fleet.AA.Max}}</span>
+				{{fleet.AA.Mininum}}<span>~{{fleet.AA.Maxinum}}</span>
 			</div>
 			<div class="summary-info" data-summary="speed" :title="SpeedTooltip(fleet)">{{fleet.Speed}}</div>
 			<div class="summary-info" data-summary="los" :title="LoSTooltip(fleet)">{{fleet.LoS}}</div>
@@ -42,10 +42,10 @@
 			<div class="ship"
 				 v-for="ship in fleet.Ships"
 				 v-if="ship !== null"
-				 :data-idx="ship.Id"
+				 :data-id="ship.Id"
 				 :data-state="ParseShipState(ship)"
 				 :style="{'grid-template-columns': fleet.NameSize+'px auto auto 20%'}"
-				 v-tippy="{html:`#overview-ship-tooltip-${fleet.Id}${ship.Id}`}">
+				 v-tippy="{html:`#overview-ship-tooltip-${ship.Id}`}">
 				<div>
 					<div class="ship-name" :prop="ship.Name">{{i18n[ship.Info.Name] || "???"}}</div>
 					<div class="ship-level">Lv.{{ship.Level || "???"}}</div>
@@ -71,7 +71,7 @@
 					<span>{{i18n.fleet_repairing}}</span>
 				</div>
 
-				<div :id="'overview-ship-tooltip-'+ship.Hash"
+				<div :id="'overview-ship-tooltip-'+ship.Id"
 					 class="tooltip-host"
 					 v-tippy-target>
 					<div>

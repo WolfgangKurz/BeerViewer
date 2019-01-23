@@ -1,4 +1,4 @@
-import { HTTPRequest } from "../Exports/API";
+import { HTTPRequest } from "System/Exports/API";
 import { IDisposable } from "./Interfaces/IDisposable";
 
 export interface KcsApiCallback<T, U extends HTTPRequest> {

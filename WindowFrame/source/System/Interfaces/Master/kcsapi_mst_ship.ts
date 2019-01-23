@@ -1,4 +1,4 @@
-import { ShipType, ShipSpeed } from "../../Enums/ShipEnums";
+import { ShipType, ShipSpeed } from "System/Enums/ShipEnums";
 
 /** Master information interface for Ship */
 export interface kcsapi_mst_ship {

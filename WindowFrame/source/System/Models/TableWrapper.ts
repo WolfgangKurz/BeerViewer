@@ -1,4 +1,4 @@
-import { IIdentifiable } from "../Base/Interfaces/IIdentifiable";
+import { IIdentifiable } from "System/Base/Interfaces/IIdentifiable";
 
 class MasterWrapper<T extends IIdentifiable> {
     protected _map: Map<number, T> = new Map<number, T>();

@@ -1,8 +1,8 @@
-import { RawDataWrapper } from "../../Base/Wrapper";
-import { kcsapi_mst_slotitem } from "../../Interfaces/Master/kcsapi_mst_slotitem";
-import { IIdentifiable } from "../../Base/Interfaces/IIdentifiable";
-import { EquipIcon, EquipCategory, EquipDictCategory } from "../../Enums/EquipEnums";
-import { Master } from "../Master";
+import { RawDataWrapper } from "System/Base/Wrapper";
+import { kcsapi_mst_slotitem } from "System/Interfaces/Master/kcsapi_mst_slotitem";
+import { IIdentifiable } from "System/Base/Interfaces/IIdentifiable";
+import { EquipIcon, EquipCategory, EquipDictCategory } from "System/Enums/EquipEnums";
+import { Master } from "System/Master/Master";
 import { EquipTypeInfo } from "./EquipTypeInfo";
 
 export class EquipInfo extends RawDataWrapper<kcsapi_mst_slotitem> implements IIdentifiable {

@@ -1,25 +1,24 @@
 import { Admiral } from "./Admiral";
 import { Materials } from "./Materials";
 import { Ship } from "./Ship";
-import { kcsapi_basic } from "../Interfaces/kcsapi_basic";
+import { kcsapi_basic } from "System/Interfaces/kcsapi_basic";
 import { RepairDock } from "./RepairDock";
-import { SubscribeKcsapi } from "../Base/KcsApi";
-import { kcsapi_port } from "../Interfaces/kcsapi_port";
-import { kcsapi_require_info } from "../Interfaces/kcsapi_require_info";
-import { Observable } from "../Base/Observable";
+import { SubscribeKcsapi } from "System/Base/KcsApi";
+import { kcsapi_port } from "System/Interfaces/kcsapi_port";
+import { kcsapi_require_info } from "System/Interfaces/kcsapi_require_info";
+import { Observable } from "System/Base/Observable";
 import { Fleet } from "./Fleet";
-import { kcsapi_ship2, kcsapi_ship3, kcsapi_destroyship, kcsapi_ship_deck, kcsapi_req_kousyou_destroyship } from "../Interfaces/kcsapi_ship";
-import { kcsapi_deck, kcsapi_req_hensei_combined } from "../Interfaces/kcsapi_deck";
-import { kcsapi_charge } from "../Interfaces/kcsapi_charge";
-import { kcsapi_powerup, kcsapi_req_kaisou_powerup } from "../Interfaces/kcsapi_powerup";
-import { kcsapi_slot_exchange_index, kcsapi_slot_deprive, kcsapi_req_kaisou_slot_exchange_index } from "../Interfaces/kcsapi_slot";
-import { kcsapi_hensei_combined, kcsapi_req_hensei_change } from "../Interfaces/kcsapi_hensei";
-import { CombinedFleetType } from "../Enums/CombinedFleetType";
-import { IdentifiableTable } from "../Models/TableWrapper";
-import { HTTPRequest } from "../Exports/API";
+import { kcsapi_ship2, kcsapi_ship3, kcsapi_destroyship, kcsapi_ship_deck, kcsapi_req_kousyou_destroyship } from "System/Interfaces/kcsapi_ship";
+import { kcsapi_deck, kcsapi_req_hensei_combined } from "System/Interfaces/kcsapi_deck";
+import { kcsapi_charge } from "System/Interfaces/kcsapi_charge";
+import { kcsapi_powerup, kcsapi_req_kaisou_powerup } from "System/Interfaces/kcsapi_powerup";
+import { kcsapi_slot_exchange_index, kcsapi_slot_deprive, kcsapi_req_kaisou_slot_exchange_index } from "System/Interfaces/kcsapi_slot";
+import { kcsapi_hensei_combined, kcsapi_req_hensei_change } from "System/Interfaces/kcsapi_hensei";
+import { CombinedFleetType } from "System/Enums/CombinedFleetType";
+import { IdentifiableTable } from "System/Models/TableWrapper";
 import { Equipments } from "./Equipment/Equipments";
 import { ConstructionDock as ConstructionDock } from "./ConstructionDock";
-import { kcsapi_kdock_getship } from "../Interfaces/kcsapi_dock";
+import { kcsapi_kdock_getship } from "System/Interfaces/kcsapi_dock";
 
 export class Homeport extends Observable {
     public static get Instance(): Homeport { return window.Homeport }

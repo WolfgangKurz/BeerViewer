@@ -1,13 +1,13 @@
-import { Fleet } from "../Fleet";
-import { TickObservable } from "../../Base/Observable";
-import { ExpeditionInfo } from "../../Master/Wrappers/ExpeditionInfo";
-import { Progress } from "../../Models/GuageValue";
+import { Fleet } from "System/Homeport/Fleet";
+import { TickObservable } from "System/Base/Observable";
+import { ExpeditionInfo } from "System/Master/Wrappers/ExpeditionInfo";
+import { Progress } from "System/Models/GuageValue";
 import { ExpeditionResult } from "./ExpeditionResult";
-import { Master } from "../../Master/Master";
-import { SubscribeKcsapi } from "../../Base/KcsApi";
-import { kcsapi_mission_result } from "../../Interfaces/kcsapi_mission_result";
-import { Settings } from "../../Settings";
-import { fns } from "../../Base/Base";
+import { Master } from "System/Master/Master";
+import { SubscribeKcsapi } from "System/Base/KcsApi";
+import { kcsapi_mission_result } from "System/Interfaces/kcsapi_mission_result";
+import { Settings } from "System/Settings";
+import { fns } from "System/Base/Base";
 
 export class Expedition extends TickObservable {
     private readonly fleet: Fleet;
@@ -35,7 +35,7 @@ export class Expedition extends TickObservable {
     //#endregion
 
     /** Is this expedition executing? */
-    public get IsInExecution(): boolean { return this.ReturnTime != 0 }
+    public get IsInExecution(): boolean { return this.Id > 0 && this.ReturnTime != 0 }
 
     /** Remaining time in msecs that return from expedition */
     public get Remaining(): number { return Math.max(0, this.ReturnTime - Date.now()) }

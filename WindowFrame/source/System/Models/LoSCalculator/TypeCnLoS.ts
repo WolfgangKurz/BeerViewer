@@ -1,11 +1,11 @@
-import { Ship } from "../../Homeport/Ship";
-import { Homeport } from "../../Homeport/Homeport";
-import { Fleet } from "../../Homeport/Fleet";
-import { EquipCategory } from "../../Enums/EquipEnums";
-import { Equipment } from "../../Homeport/Equipment/Equipment";
-import { ShipEquip } from "../../Homeport/Equipment/ShipEquip";
+import { Ship } from "System/Homeport/Ship";
+import { Homeport } from "System/Homeport/Homeport";
+import { Fleet } from "System/Homeport/Fleet";
+import { EquipCategory } from "System/Enums/EquipEnums";
+import { Equipment } from "System/Homeport/Equipment/Equipment";
+import { ShipEquip } from "System/Homeport/Equipment/ShipEquip";
 import { LoSCalcLogic } from "./LoSCalcLogic";
-import { Settings } from "../../Settings";
+import { Settings } from "System/Settings";
 
 export abstract class TypeCnLoS implements LoSCalcLogic {
     public abstract readonly Id: string;

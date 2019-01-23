@@ -1,6 +1,6 @@
-import { RawDataWrapper } from "../../Base/Wrapper";
-import { kcsapi_mst_stype } from "../../Interfaces/Master/kcsapi_mst_ship";
-import { IIdentifiable } from "../../Base/Interfaces/IIdentifiable";
+import { RawDataWrapper } from "System/Base/Wrapper";
+import { kcsapi_mst_stype } from "System/Interfaces/Master/kcsapi_mst_ship";
+import { IIdentifiable } from "System/Base/Interfaces/IIdentifiable";
 
 export class ShipTypeInfo extends RawDataWrapper<kcsapi_mst_stype> implements IIdentifiable {
     public get Id(): number { return this.raw.api_id }

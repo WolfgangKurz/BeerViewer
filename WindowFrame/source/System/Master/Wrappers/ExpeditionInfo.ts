@@ -1,6 +1,6 @@
-import { RawDataWrapper } from "../../Base/Wrapper";
-import { kcsapi_mst_mission } from "../../Interfaces/kcsapi_mission";
-import { IIdentifiable } from "../../Base/Interfaces/IIdentifiable";
+import { RawDataWrapper } from "System/Base/Wrapper";
+import { kcsapi_mst_mission } from "System/Interfaces/kcsapi_mission";
+import { IIdentifiable } from "System/Base/Interfaces/IIdentifiable";
 
 export class ExpeditionInfo extends RawDataWrapper<kcsapi_mst_mission> implements IIdentifiable {
     public get Id(): number { return this.raw.api_id }

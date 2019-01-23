@@ -1,6 +1,6 @@
-import { Observable } from "../../Base/Observable";
-import { ShipInfo } from "../../Master/Wrappers/ShipInfo";
-import { Ship } from "../Ship";
+import { Observable } from "System/Base/Observable";
+import { ShipInfo } from "System/Master/Wrappers/ShipInfo";
+import { Ship } from "System/Homeport/Ship";
 import { Equipment } from "./Equipment";
 
 export class ShipEquip extends Observable {

@@ -1,14 +1,14 @@
-import { Observable, TickObservable } from "../Base/Observable";
-import { SubscribeKcsapi } from "../Base/KcsApi";
-import { kcsapi_ndock } from "../Interfaces/kcsapi_dock";
-import { kcsapi_req_nyukyo_start, kcsapi_req_nyukyo_speedchange } from "../Interfaces/kcsapi_repair";
+import { Observable, TickObservable } from "System/Base/Observable";
+import { SubscribeKcsapi } from "System/Base/KcsApi";
+import { kcsapi_ndock } from "System/Interfaces/kcsapi_dock";
+import { kcsapi_req_nyukyo_start, kcsapi_req_nyukyo_speedchange } from "System/Interfaces/kcsapi_repair";
 
 import { Homeport } from "./Homeport";
 import { Ship } from "./Ship";
 import { Fleet } from "./Fleet";
-import { Settings } from "../Settings";
-import { fns } from "../Base/Base";
-import { IdentifiableTable } from "../Models/TableWrapper";
+import { Settings } from "System/Settings";
+import { fns } from "System/Base/Base";
+import { IdentifiableTable } from "System/Models/TableWrapper";
 
 export class RepairDock extends Observable {
     public Docks: IdentifiableTable<RepairDock.Dock>;

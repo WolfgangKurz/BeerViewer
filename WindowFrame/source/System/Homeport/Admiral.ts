@@ -1,8 +1,8 @@
-import { DisposableObservableDataWrapper } from "../Base/Wrapper";
-import { SubscribeKcsapi } from "../Base/KcsApi";
-import { kcsapi_port } from "../Interfaces/kcsapi_port";
-import { kcsapi_basic } from "../Interfaces/kcsapi_basic";
-import { kcsapi_member_updatecomment } from "../Interfaces/kcsapi_member";
+import { DisposableObservableDataWrapper } from "System/Base/Wrapper";
+import { SubscribeKcsapi } from "System/Base/KcsApi";
+import { kcsapi_port } from "System/Interfaces/kcsapi_port";
+import { kcsapi_basic } from "System/Interfaces/kcsapi_basic";
+import { kcsapi_member_updatecomment } from "System/Interfaces/kcsapi_member";
 
 export class Admiral extends DisposableObservableDataWrapper<kcsapi_basic> {
     public get MemberId(): string { return this.raw.api_member_id }

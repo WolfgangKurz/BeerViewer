@@ -1,6 +1,6 @@
-import { IIdentifiable } from "../../Base/Interfaces/IIdentifiable";
-import { RawDataWrapper } from "../../Base/Wrapper";
-import { kcsapi_mst_slotitem_equiptype, kcsapi_mst_slotitem } from "../../Interfaces/Master/kcsapi_mst_slotitem";
+import { IIdentifiable } from "System/Base/Interfaces/IIdentifiable";
+import { RawDataWrapper } from "System/Base/Wrapper";
+import { kcsapi_mst_slotitem_equiptype } from "System/Interfaces/Master/kcsapi_mst_slotitem";
 
 export class EquipTypeInfo extends RawDataWrapper<kcsapi_mst_slotitem_equiptype> implements IIdentifiable {
     public get Id(): number { return this.raw.api_id }

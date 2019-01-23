@@ -1,4 +1,4 @@
-﻿import { IModule } from "../../System/Module";
+﻿import { IModule } from "System/Module";
 
 class Logger implements IModule {
 	private logger: HTMLElement | null = null;
@@ -16,7 +16,7 @@ class Logger implements IModule {
 	public log(text: string): void {
 		if (!this.logger) return;
 
-		$(this.logger).append(
+		$(this.logger).prepend(
 			$('<div class="logger-log">').append(text)
 		);
 	}

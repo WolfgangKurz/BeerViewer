@@ -1,6 +1,6 @@
-import { Master } from "../Master/Master";
-import { Homeport } from "../Homeport/Homeport";
-import { Settings } from "../Settings";
+import { Master } from "System/Master/Master";
+import { Homeport } from "System/Homeport/Homeport";
+import { Settings } from "System/Settings";
 
 export type HTTPCallback = (Response: string, Request: HTTPRequest) => void;
 

@@ -1,6 +1,6 @@
-import { Fleet } from "../../Homeport/Fleet";
-import { Ship } from "../../Homeport/Ship";
-import { EquipDictCategory } from "../../Enums/EquipEnums";
+import { Fleet } from "System/Homeport/Fleet";
+import { Ship } from "System/Homeport/Ship";
+import { EquipDictCategory } from "System/Enums/EquipEnums";
 import { LoSCalcLogic } from "./LoSCalcLogic";
 
 export class Old2_5LoS extends LoSCalcLogic {

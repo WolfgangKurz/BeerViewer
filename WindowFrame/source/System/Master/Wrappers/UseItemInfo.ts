@@ -1,7 +1,7 @@
-import { IIdentifiable } from "../../Base/Interfaces/IIdentifiable";
-import { RawDataWrapper } from "../../Base/Wrapper";
-import { kcsapi_mst_useitem } from "../../Interfaces/Master/kcsapi_mst_useitem";
-import { UseItemType, UseItemCategory } from "../../Enums/UseItemEnums";
+import { IIdentifiable } from "System/Base/Interfaces/IIdentifiable";
+import { RawDataWrapper } from "System/Base/Wrapper";
+import { kcsapi_mst_useitem } from "System/Interfaces/Master/kcsapi_mst_useitem";
+import { UseItemType, UseItemCategory } from "System/Enums/UseItemEnums";
 
 export class UseItemInfo extends RawDataWrapper<kcsapi_mst_useitem> implements IIdentifiable {
     public get Id(): number { return this.raw.api_id }

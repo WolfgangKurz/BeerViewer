@@ -1,12 +1,12 @@
-import { Observable, TickObservable } from "../Base/Observable";
-import { SubscribeKcsapi } from "../Base/KcsApi";
-import { kcsapi_kdock, kcsapi_kdock_getship, kcsapi_req_kousyou_createship_speedchange } from "../Interfaces/kcsapi_dock";
+import { Observable, TickObservable } from "System/Base/Observable";
+import { SubscribeKcsapi } from "System/Base/KcsApi";
+import { kcsapi_kdock, kcsapi_kdock_getship, kcsapi_req_kousyou_createship_speedchange } from "System/Interfaces/kcsapi_dock";
 
 import { Homeport } from "./Homeport";
 import { Ship } from "./Ship";
-import { Settings } from "../Settings";
-import { fns } from "../Base/Base";
-import { IdentifiableTable } from "../Models/TableWrapper";
+import { Settings } from "System/Settings";
+import { fns } from "System/Base/Base";
+import { IdentifiableTable } from "System/Models/TableWrapper";
 
 export class ConstructionDock extends Observable {
     public Docks: IdentifiableTable<ConstructionDock.Dock>;

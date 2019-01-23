@@ -1,9 +1,9 @@
-import { RawDataWrapper } from "../../Base/Wrapper";
-import { kcsapi_mst_ship } from "../../Interfaces/Master/kcsapi_mst_ship";
-import { IIdentifiable } from "../../Base/Interfaces/IIdentifiable";
-import { ShipType, ShipSpeed } from "../../Enums/ShipEnums";
-import { Master } from "../Master";
-import { MasterMinMax } from "../MasterMinMax";
+import { RawDataWrapper } from "System/Base/Wrapper";
+import { kcsapi_mst_ship } from "System/Interfaces/Master/kcsapi_mst_ship";
+import { IIdentifiable } from "System/Base/Interfaces/IIdentifiable";
+import { ShipType, ShipSpeed } from "System/Enums/ShipEnums";
+import { Master } from "System/Master/Master";
+import { MasterMinMax } from "System/Master/MasterMinMax";
 import { ShipTypeInfo } from "./ShipTypeInfo";
 
 export class ShipInfo extends RawDataWrapper<kcsapi_mst_ship> implements IIdentifiable {
