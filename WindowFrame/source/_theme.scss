@@ -6,6 +6,7 @@ $theme-highlight-line-color: #414141;
 
 $theme-highlight-color: #1565c0;
 
+$theme-background-color: #000000;
 $theme-text-color: #ffffff;
 
 $theme-shadow-color: rgba(0, 0, 0, 0.76);
@@ -22,7 +23,8 @@ $state-colors: (
 	"expedition": #1565c0,
 	"damaged": #e63838,
 	"not-ready": #f57c00,
-	"ready": #388e3c
+	"ready": #388e3c,
+	"repairing": #6d4c41
 );
 $morale-colors: (
 	"-3": #c62828,

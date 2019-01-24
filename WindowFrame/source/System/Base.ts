@@ -16,7 +16,7 @@ tippy.setDefaults({
     interactive: false,
     trigger: 'mouseenter focus',
     hideOnClick: false,
-    performance: true
+    performance: false
 });
 
 Vue.directive("dom", function (el, binding) {

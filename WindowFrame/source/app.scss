@@ -64,7 +64,7 @@ div.tab-host {
 		padding: 5px 0;
 		text-decoration: none;
 		cursor: pointer;
-		color: #fff;
+		color: $theme-text-color;
 	}
 
 	> a {
@@ -94,7 +94,7 @@ ul.menu-host {
 		overflow: hidden;
 
 		.menu-active {
-			border-right-color: #fff;
+			border-right-color: $theme-text-color;
 		}
 
 		&:not(.menu-group) {
@@ -314,7 +314,7 @@ i.menu-icon {
 		top: 100%;
 		min-width: 140px;
 		background-color: $theme-hover-color;
-		box-shadow: 0 0 11px rgba(0, 0, 0, 0.76);
+		box-shadow: 0 0 11px $theme-shadow-color;
 		transition: opacity 0.07s ease-in;
 		pointer-events: none;
 		opacity: 0;
@@ -323,7 +323,7 @@ i.menu-icon {
 
 	&.menu-open {
 		> button:not(:active) {
-			background-color: #313131 !important;
+			background-color: $theme-hover-color !important;
 		}
 
 		> #top-menu,

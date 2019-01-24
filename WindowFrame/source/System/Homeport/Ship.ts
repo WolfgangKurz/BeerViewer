@@ -103,6 +103,9 @@ export class Ship extends ObservableDataWrapper<kcsapi_ship2> implements IIdenti
         this.$._State &= ~Ship.State.Repairing;
         this.raw.api_nowhp = this.HP.Maximum;
         this.RaisePropertyChanged(nameof(this.HP));
+
+        this.raw.api_cond = Math.max(40, this.Condition);
+        this.RaisePropertyChanged(nameof(this.Condition));
     }
     public Repairing(): void {
         this.$._State |= Ship.State.Repairing;

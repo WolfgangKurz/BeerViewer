@@ -1,4 +1,6 @@
-﻿i[data-module-id="top-expedition"] {
+﻿@import "../../_theme.scss";
+
+i[data-module-id="top-expedition"] {
 	order: 1;
 }
 #top-expeditions {
@@ -12,7 +14,7 @@
 		margin: 7px 5px;
 		width: 80px;
 		height: 14px;
-		background-color: #434343;
+		background-color: $theme-highlight-line-color;
 		line-height: 14px;
 		text-align: center;
 		font-size: 10px;
@@ -30,7 +32,7 @@
 		.expedition-progress {
 			display: inline-block;
 			width: 0%;
-			background-color: #1565c0;
+			background-color: map-get($state-colors, "expedition");
 		}
 
 		.expedition-text {
@@ -61,11 +63,11 @@
 		}
 
 		&[data-state="executing"] {
-			background-color: #575757;
+			background-color: $theme-active-color;
 		}
 
 		&[data-state="fail"] > .expedition-progress {
-			background-color: #c62828;
+			background-color: map-get($state-colors, "sortie");
 		}
 	}
 }

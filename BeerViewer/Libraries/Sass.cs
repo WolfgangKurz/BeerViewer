@@ -18,10 +18,23 @@ namespace BeerViewer.Libraries
 			var targets = SassFiles.Where(x => !Path.GetFileName(x).StartsWith("_"));
 
 			foreach (var file in targets) {
+				var result = Scss.ConvertFileToCss(file, new ScssOptions {
+					OutputStyle = ScssOutputStyle.Expanded,
+					GenerateSourceMap = true,
+					OutputFile = Path.ChangeExtension(file, ".css")
+				});
+
 				File.WriteAllText(
 					Path.ChangeExtension(file, ".css"),
-					Scss.ConvertFileToCss(file, new ScssOptions { OutputStyle = ScssOutputStyle.Expanded }).Css
+					result.Css
 				);
+				if (result.SourceMap != null)
+				{
+					File.WriteAllText(
+						Path.ChangeExtension(file, ".css.map"),
+						result.SourceMap
+					);
+				}
 			}
 		}
 		public void CompileRecursive(string dir)
