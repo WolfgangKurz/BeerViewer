@@ -20,7 +20,7 @@ private _Disposed: boolean = false;
 
         window.API.SubscribeHTTP("/kcsapi/" + url, (x: String, y) => {
             if (!this._Disposed)
-                this.Caller(x, y);
+                this.Caller(x, new HTTPRequest(y));
             else // Something wrong?
                 this.Dispose();
         }).then(x => this._Id = x);

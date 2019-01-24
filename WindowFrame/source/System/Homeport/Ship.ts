@@ -38,10 +38,10 @@ export class Ship extends ObservableDataWrapper<kcsapi_ship2> implements IIdenti
 
     public get Condition(): number { return this.raw.api_cond }
 
-    public Speed: ShipSpeed = ShipSpeed.None;
+    public get Speed(): ShipSpeed { return this.raw.api_soku }
 
-    public AirSupremacy: AirSupremacy = new AirSupremacy();
-    public LoS: number = 0;
+    public get AirSupremacy(): AirSupremacy { return AirSupremacy.Sum(this.EquippedItems.map(x => x.AirSupremacy)) }
+    public get LoS(): number { return this.raw.api_sakuteki[0] }
 
 
     //#region Equips Property
@@ -154,6 +154,7 @@ export class Ship extends ObservableDataWrapper<kcsapi_ship2> implements IIdenti
         this.UpdateASW();
 
         this.RaisePropertyChanged(nameof(this.UsedBauxite));
+        this.RaisePropertyChanged(nameof(this.AirSupremacy));
     }
 
     private UpdateASW(): void {

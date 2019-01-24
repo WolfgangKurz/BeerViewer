@@ -95,9 +95,10 @@ export class Homeport extends Observable {
         SubscribeKcsapi<kcsapi_port>("api_port/port", x => {
             if(this._Admiral) this._Admiral.Dispose();
             this.$._Admiral = new Admiral(x.api_basic);
+            
+            this.UpdateShips(x.api_ship);
             this.RepairDock!.Update(x.api_ndock);
 
-            this.UpdateShips(x.api_ship);
             this.UpdateDecks(x.api_deck_port);
             this.$._FleetCombined = x.api_combined_flag !== 0;
 
@@ -302,7 +303,7 @@ export class Homeport extends Observable {
         // TODO
     }
 
-    private GetFleetFromShipId(shipId: number): Fleet | undefined {
+    public GetFleetFromShipId(shipId: number): Fleet | undefined {
         return this.Fleets.values()
             .find(x => x.Ships.some(s => s.Id === shipId));
     }

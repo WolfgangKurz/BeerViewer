@@ -82,12 +82,12 @@ export class Fleet extends TickObservable implements IIdentifiable {
         const fleetId = data.api_deck_id;;
         if (this.Id !== fleetId) return;
 
-        this._Name = data.api_name.toString(); // Could be numeric name like "1234"
+        this.$._Name = data.api_name.toString(); // Could be numeric name like "1234"
     }
 
     public Update(data: kcsapi_deck): void {
-        this._Id = data.api_id;
-        this._Name = data.api_name;
+        this.$._Id = data.api_id;
+        this.$._Name = data.api_name;
 
         this.Expedition.Update(data.api_mission);
         this.UpdateShips(
@@ -99,10 +99,11 @@ export class Fleet extends TickObservable implements IIdentifiable {
 
     private UpdateShips(ships: Ship[]): void {
         this.SourceShips = ships;
-        this._Ships = ships.filter(x => x !== null);
+        this.$._Ships = ships.filter(x => x !== null);
 
         this.Calculate();
         this.UpdateState();
+        this.ShipUpdated();
     }
 
     private PrevCondition!: number;
@@ -115,14 +116,14 @@ export class Fleet extends TickObservable implements IIdentifiable {
 
         this.PrevCondition = condition;
         if (condition >= goal)
-            this._ConditionRestoreTime = 0;
+            this.$._ConditionRestoreTime = 0;
         else {
             let restore = Date.now();
 
             const value = Math.floor((goal - condition + 2) / 3) * 3; // Integer dividing
             restore = restore + value * 60 * 1000;
 
-            this._ConditionRestoreTime = restore;
+            this.$._ConditionRestoreTime = restore;
         }
         this.RaisePropertyChanged(nameof(this.IsConditionRestoring));
         this.UpdateState();
@@ -168,28 +169,38 @@ export class Fleet extends TickObservable implements IIdentifiable {
                 state |= FleetState.FlagshipRepairShip;
         }
 
-        this._State = state;
+        this.$._State = state;
     }
     public Calculate(): void {
         const ships = this.Ships.filter(x => // Only actually exists in fleet
             (x.State & Ship.State.Tow) === 0
-            && (x.State & Ship.State.Evacuation)
+            && (x.State & Ship.State.Evacuation) === 0
         );
 
-        this._AirSupremacy = AirSupremacy.Sum(ships.map(x => x.AirSupremacy));
+        this.$._AirSupremacy = AirSupremacy.Sum(ships.map(x => x.AirSupremacy));
 
         const calculator = LoSCalculator.Instance.Get(Settings.Instance.LoSCalculator);
         if (calculator)
-            this._LoS = calculator.Calc([this]);
+            this.$._LoS = calculator.Calc([this]);
         else
-            this._LoS = 0;
+            this.$._LoS = 0;
     }
 
     public UnsetAll(): void {
+        const list = [this.SourceShips[0]];
+        const ships = new Array(this.SourceShips.length);
+        for (let i = 0; i < list.length; i++)
+            ships[i] = list[i];
 
+        this.UpdateShips(ships);
     }
     public Unset(index: number): void {
+        const list = this.SourceShips.filter((_, y) => y !== index);
+        const ships = new Array(this.SourceShips.length);
+        for (let i = 0; i < list.length; i++)
+            ships[i] = list[i];
 
+        this.UpdateShips(ships);
     }
     public Change(index: number, ship: Ship): Ship {
         const current = this.SourceShips[index];
@@ -212,9 +223,16 @@ export class Fleet extends TickObservable implements IIdentifiable {
 
         return <Ship>current;
     }
+    public ShipUpdated(): void {
+        this.RaisePropertyChanged(nameof(this.Ships));
+        this.RaisePropertyChanged(nameof(this.FleetSpeed));
+    }
 
     protected Tick(): void {
         super.Tick();
 
+        if(this.IsConditionRestoring){
+            this.RaisePropertyChanged(nameof(this.ConditionRestoreTime));
+        }
     }
 }

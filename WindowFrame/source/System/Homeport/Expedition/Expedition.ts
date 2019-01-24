@@ -82,6 +82,7 @@ export class Expedition extends TickObservable {
             this._Expedition = Master.Instance.Expeditions!.get(this.Id) || null;
             this._ReturnTime = rawData[2];
         }
+        this.RaisePropertyChanged(nameof(this.IsInExecution));
     }
 
     protected Tick(): void {

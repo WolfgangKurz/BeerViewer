@@ -92,11 +92,22 @@ export namespace RepairDock {
 
         public Completed: DockComplete | DockComplete[] | null = null;
 
-        public Id: number = -1;
-        public State: DockState = DockState.Locked;
+        //#region Id
+        private _Id: number = -1;
+        public get Id(): number { return this._Id }
+        //#endregion
 
-        public ShipId: number = -1;
+        //#region State
+        private _State: DockState = DockState.Locked;
+        public get State(): DockState { return this._State }
+        //#endregion
 
+        //#region ShipId
+        private _ShipId: number = -1;
+        public get ShipId(): number { return this._ShipId }
+        //#endregion
+
+        //#region Ship
         private _Ship: Ship | null = null;
         public get Ship(): Ship | null { return this._Ship; }
         public set Ship(ship: Ship | null) {
@@ -104,9 +115,17 @@ export namespace RepairDock {
             if (ship) ship.Repairing();
             this.$._Ship = ship;
         }
+        //#endregion
 
-        public CompleteTime: number = 0;
-        public Remaining: number = 0;
+        //#region CompleteTime
+        private _CompleteTime: number = 0;
+        public get CompleteTime(): number { return this._CompleteTime }
+        //#endregion
+
+        //#region Remaining
+        private _Remaining: number = 0;
+        public get Remaining(): number { return this._Remaining }
+        //#endregion
 
         constructor(homeport: Homeport, dock: kcsapi_ndock) {
             super();
@@ -115,41 +134,41 @@ export namespace RepairDock {
             this.Update(dock);
         }
         public Update(ndock: kcsapi_ndock): void {
-            this.$.Id = ndock.api_id;
-            this.$.State = ndock.api_state;
+            this.$._Id = ndock.api_id;
+            this.$._State = ndock.api_state;
 
-            this.$.ShipId = ndock.api_ship_id;
+            this.$._ShipId = ndock.api_ship_id;
             this.Ship =
                 this.State === DockState.Repairing
                     ? this.homeport.Ships.get(this.ShipId) || null
                     : null;
 
-            this.CompleteTime =
+            this.$._CompleteTime =
                 this.State === DockState.Repairing
                     ? ndock.api_complete_time
                     : 0;
-            this.$.Remaining = this.CompleteTime;
+            this.$._Remaining = this.CompleteTime;
         }
         public Finish(): void {
-            this.$.State = RepairDock.DockState.Free;
-            this.$.ShipId = -1;
+            this.$._State = RepairDock.DockState.Free;
+            this.$._ShipId = -1;
             this.$.Ship = null;
-            this.$.CompleteTime = 0;
-            this.$.Remaining = 0;
+            this.$._CompleteTime = 0;
+            this.$._Remaining = 0;
         }
 
         protected Tick(): void {
             if (this.CompleteTime !== 0) {
                 let remaining = this.CompleteTime - Date.now();
                 if (remaining < 0) remaining = 0;
-                this.$.Remaining = remaining;
+                this.$._Remaining = remaining;
 
                 if (!this.notified && this.Completed && remaining <= Settings.Instance.NotificationTime * 1000) {
                     fns(this.Completed, this, this.Id, this.Ship as Ship);
                     this.$.notified = true;
                 }
             }
-            else this.$.Remaining = 0;
+            else this.$._Remaining = 0;
         }
     }
 }

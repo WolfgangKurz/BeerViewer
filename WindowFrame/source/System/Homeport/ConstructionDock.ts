@@ -78,8 +78,6 @@ export namespace ConstructionDock {
         private _Ship: Ship | null = null;
         public get Ship(): Ship | null { return this._Ship; }
         public set Ship(ship: Ship | null) {
-            if (this.Ship) this.Ship.Repair();
-            if (ship) ship.Repairing();
             this.$._Ship = ship;
         }
 

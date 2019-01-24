@@ -7,6 +7,7 @@ import { ConstructionDock } from "System/Homeport/ConstructionDock";
 import { IModule } from "System/Module";
 import { Homeport } from "System/Homeport/Homeport";
 import { FleetState } from "System/Enums/FleetEnums";
+import { ObservableCallback } from "System/Base/Observable";
 
 const getTextWidth = function (text: string, font: string) {
 	const canvas: HTMLCanvasElement = (<any>getTextWidth).canvas || ((<any>getTextWidth).canvas = document.createElement("canvas"));
@@ -35,6 +36,8 @@ interface FleetData {
 	ConditionRestoringText: string;
 
 	NameSize: number;
+
+	_Observations: [Ship, ObservableCallback][];
 }
 interface RepairDockData {
 	Id: number;
@@ -197,7 +200,9 @@ class Overview implements IModule {
 				IsConditionRestoring: false,
 				ConditionRestoringText: "--:--:--",
 
-				NameSize: 0
+				NameSize: 0,
+
+				_Observations: []
 			};
 			x.Observe((_, value: FleetState) => {
 				let state = "empty"; // Empty fleet (no ships)
@@ -229,8 +234,18 @@ class Overview implements IModule {
 			x.Observe((_, value: AirSupremacy) => fleet.AA = value, nameof(x.AirSupremacy));
 			x.Observe((_, value: boolean) => fleet.IsConditionRestoring = value, nameof(x.IsConditionRestoring));
 			x.Observe((_, value: number) => fleet.ConditionRestoringText = this.GetRemainingText(value), nameof(x.ConditionRestoreTime));
+			x.Observe((_, value: Ship[]) => {
+				fleet.Ships = value;
 
-			fleet.Ships = x.Ships;
+				fleet._Observations.forEach(y => y[0].Deobserve(y[1]));
+				value.forEach(x => {
+					const f: ObservableCallback = (_, value) => {
+						this.VueObject.Fleets = newData; // Update?
+					};
+					x.Observe(f);
+					fleet._Observations.push([x, f]);
+				});
+			}, nameof(x.Ships));
 			newData.push(fleet);
 		});
 

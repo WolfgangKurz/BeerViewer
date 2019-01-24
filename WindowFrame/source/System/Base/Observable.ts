@@ -52,7 +52,7 @@ export class Observable implements IDisposable {
 
     /** @description Register observer to object, call callback when property has set.
      * @param {ObservableCallback} callback Callback that be called when property has set.
-     * @param {string | number} name If set, register `Property scope observer`. If not, register `Global scope observer`.
+     * @param {string | number | undefined} name If set, register `Property scope observer`. If not, register `Global scope observer`.
      * @param {boolean} CallSetup If set as true, `callback` will be called after register observer. Default is `true`.
      */
     public Observe(callback: ObservableCallback, name?: string | number, CallSetup: boolean = true): Observable {
@@ -61,7 +61,17 @@ export class Observable implements IDisposable {
         if (!(name in this._callbacks)) this._callbacks[name] = [];
         this._callbacks[name].push(callback);
 
-        if(CallSetup) callback(name.toString(), (<any>this)[name], undefined);
+        if (CallSetup) callback(name.toString(), (<any>this)[name], undefined);
+        return this;
+    }
+
+    /** @description Remove observer from object, registered by `Observe` function.
+     * @param {ObservableCallback} callback Callback that registered.
+     * @param {string | number | undefined} name Name of registered callback.
+     */
+    public Deobserve(callback: ObservableCallback, name?: string | number): Observable {
+        if (!name) name = "*";
+        this._callbacks[name] = this._callbacks[name].filter(x => x !== callback);
         return this;
     }
 

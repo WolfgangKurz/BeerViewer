@@ -2,7 +2,7 @@ import { Master } from "System/Master/Master";
 import { Homeport } from "System/Homeport/Homeport";
 import { Settings } from "System/Settings";
 
-export type HTTPCallback = (Response: string, Request: HTTPRequest) => void;
+export type HTTPCallback = (Response: string, Request: { [key: string]: string }) => void;
 
 declare global {
     export interface Window {
