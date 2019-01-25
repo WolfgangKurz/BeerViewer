@@ -1,5 +1,4 @@
 import Vue from "vue";
-import WindowModule from "./Base/Window";
 
 declare global {
     interface Window {
@@ -139,13 +138,13 @@ class Modules {
     public initialized(): boolean {
         return this._initialized;
     }
-    public load(name: string, template: string, script: boolean, css: boolean): void {
+    public load(name: string, template: string, script: boolean, css: boolean, base: string = "modules"): void {
         if (name in this.list) throw "Tried to load module already loaded";
 
         this.list[name] = new ModuleInfo(
             null, name, template,
-            script ? `modules/${name}/${name}.js` : null,
-            css ? `modules/${name}/${name}.css` : null
+            script ? `${base}/${name}/${name}.js` : null,
+            css ? `${base}/${name}/${name}.css` : null
         );
         const module = this.list[name];
         const el_module = document.createElement("div");
@@ -191,11 +190,6 @@ class Modules {
         if (!(name in this.list)) return null;
         if (this.list[name].ModuleObject === null) return null;
         return this.list[name].ModuleObject;
-    }
-
-    public registerDefault():void {
-        this.load("window", "", false, false);
-        this.register("window", new WindowModule());
     }
 }
 export class Callback {

@@ -107,6 +107,7 @@
     <Compile Include="Modules\Communication\ObservedTreeData.cs" />
     <Compile Include="Modules\Communication\ObservedTreeManager.cs" />
     <Compile Include="Modules\Communication\Serialization.cs" />
+    <Compile Include="Modules\Communication\SettingInfo.cs" />
     <Compile Include="Modules\Component\Component.cs" />
     <Compile Include="Modules\Component\ComponentService.cs" />
     <Compile Include="Modules\Component\IComponent.cs" />

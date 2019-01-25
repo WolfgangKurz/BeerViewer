@@ -1,5 +1,9 @@
+import { fns } from "./Base";
+
 export class BaseAPI {
+    private callbacks: { [key: string]: ((value: any) => void)[] } = {};
     constructor() {
+        const _this = this;
         const _origin_i18n: { [key: string]: string } = {};
         window.INTERNAL = {
             async Initialized() {
@@ -12,18 +16,18 @@ export class BaseAPI {
                 const zoomFactor = typeof _zoomFactor === "number"
                     ? _zoomFactor / 100
                     : parseFloat(_zoomFactor) / 100;
-                const frame: HTMLElement | null = document.querySelector("#MAIN_FRAME");
-                if (frame === null) return;
 
-                frame.style["transform"] = `scale(${zoomFactor})`;
-                frame.style["marginRight"] = 1200 * (zoomFactor - 1) + "px";
-                frame.style["marginBottom"] = 720 * (zoomFactor - 1) + "px";
+                $("#MAIN_FRAME")
+                    .css("transform", `scale(${zoomFactor})`)
+                    .css("marginRight", 1200 * (zoomFactor - 1) + "px")
+                    .css("marginBottom", 720 * (zoomFactor - 1) + "px");
+
+                fns(_this.callbacks.zoomMainFrame, zoomFactor);
             },
             loadMainFrame(url: string) {
-                const frame: HTMLElement | null = document.querySelector("#MAIN_FRAME");
-                if (frame === null) return;
+                $("#MAIN_FRAME").prop("src", url);
 
-                (<HTMLIFrameElement>frame).src = url;
+                fns(_this.callbacks.loadMainFrame, url);
             }
         };
         window.i18n
@@ -37,6 +41,13 @@ export class BaseAPI {
             = async function (text: string): Promise<string> {
                 return await window.API.i18n(text);
             };
+    }
+
+    Event(type: string, callback: (value: any) => void): void {
+        if (!(type in this.callbacks))
+            this.callbacks[type] = [];
+
+        this.callbacks[type].push(callback);
     }
 }
 export default BaseAPI;

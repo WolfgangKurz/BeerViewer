@@ -20,11 +20,14 @@ tippy.setDefaults({
 });
 
 Vue.directive("dom", function (el, binding) {
-    if (binding.oldValue && binding.oldValue instanceof Element && binding.oldValue.parentNode === el)
-        binding.oldValue.remove();
+    if (binding.value === binding.oldValue) return;
+
+    if (binding.oldValue && binding.oldValue instanceof Element && binding.oldValue.parentNode === el) {
+        $(binding.oldValue).appendTo($("#modules"));
+    }
 
     if (binding.value instanceof Element)
-        el.append(binding.value);
+        $(el).append(binding.value);
 });
 
 Vue.use(VueTippy, tippy.defaults);
@@ -32,19 +35,23 @@ Vue.use(VueTippy, tippy.defaults);
 window.modules = Modules.Instance;
 window.CALLBACK = Callback.Instance;
 
-new BaseAPI(); // Initialize BaseAPI
+const baseAPI = new BaseAPI(); // Initialize BaseAPI
 
 document.addEventListener("DOMContentLoaded", async function () {
     if (window.modules.initialized()) return; // Called twice
 
     window.modules.areas.init();
-    const _mainbox_elem = $("#mainbox")[0];
     const mainBox = new Vue({
         data: {
             Areas: window.modules.areas.Areas,
-            Tools: window.modules.areas.Tools
+            Tools: window.modules.areas.Tools,
+
+            Frame: {
+                Width: 1200,
+                Height: 720
+            }
         },
-        el: _mainbox_elem ? _mainbox_elem : undefined,
+        el: $("#mainbox")[0],
         methods: {
             OpenMenu: (x: boolean) => window.OpenMenu(x),
             SelectModule: function (Area: string, Name: string) {
@@ -56,13 +63,16 @@ document.addEventListener("DOMContentLoaded", async function () {
             }
         }
     });
+    baseAPI.Event("zoomMainFrame", v =>{
+        mainBox.Frame.Width = 1200 * v;
+        mainBox.Frame.Height = 720 * v;
+    });
 
     if ((<any>window).CefSharp)
         await (<any>window).CefSharp.BindObjectAsync({ IgnoreCache: true }, "API");
 
     if (typeof window.API === "undefined") {
         // Browsed with not-allowed method
-        window.modules.registerDefault();
         window.modules.init();
         return;
     }
@@ -73,10 +83,9 @@ document.addEventListener("DOMContentLoaded", async function () {
     window.Homeport = new Homeport().Ready();
 
     window.API.GetModuleList()
-        .then(list => {
+        .then(async list => {
             list.forEach(x => window.modules.load(x.Name, x.Template, x.Scripted, x.Styled));
 
-            window.modules.registerDefault();
             window.modules.init();
             window.API.Initialized();
         });

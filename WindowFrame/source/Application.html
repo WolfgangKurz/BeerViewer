@@ -19,7 +19,8 @@
 		<iframe src="MainFramePlaceholder.html" id="MAIN_FRAME" name="MAIN_FRAME"></iframe>
 	</div>
 
-	<div id="mainbox">
+	<div id="mainbox"
+		:style="{'grid-template-columns': `${Frame.Width}px 1fr`, 'grid-template-rows': `28px ${Frame.Height}px 1fr`}">
 		<header id="top-area">
 			<div id="top-menubutton">
 				<button type="button" data-role="menu">
@@ -73,6 +74,7 @@
 				<i data-type="module-content"
 				   v-for="module in Areas.top.Modules"
 				   :data-module-id="module.Id"
+				   :key="module.Id"
 				   v-show="module.Displaying"
 				   v-dom="module.Element"></i>
 			</div>
@@ -83,6 +85,7 @@
 				<i data-type="module-content"
 				   v-for="module in Areas.main.Modules"
 				   :data-module-id="module.Id"
+				   :key="module.Id"
 				   v-show="module.Displaying"
 				   v-dom="module.Element"></i>
 			</div>
@@ -93,6 +96,7 @@
 				<i data-type="module-content"
 				   v-for="module in Areas.side.Modules"
 				   :data-module-id="module.Id"
+				   :key="module.Id"
 				   v-show="module.Displaying"
 				   v-dom="module.Element"></i>
 			</div>
@@ -103,6 +107,7 @@
 				<i data-type="module-content"
 				   v-for="module in Areas.sub.Modules"
 				   :data-module-id="module.Id"
+				   :key="module.Id"
 				   v-show="module.Displaying"
 				   v-dom="module.Element"></i>
 			</div>

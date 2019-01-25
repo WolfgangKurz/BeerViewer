@@ -1,10 +1,10 @@
-fleet_level	Lv
 fleet_speed_immovable	Landbased
 fleet_speed_slow			Slow speed
 fleet_speed_fast			Fast speed
 fleet_speed_faster			Fast+ speed
 fleet_speed_fastest		Fastest speed
 
+fleet_level	Lv
 fleet_totallevel	Total Level
 fleet_averagelevel	Avg. Level
 fleet_speed	Speed
@@ -14,7 +14,7 @@ fleet_aa		AA
 fleet_aa_min	Min AA
 fleet_aa_max	Max AA
 fleet_repairing	Repairing
-fleet_revejunate	Morale remain
+fleet_condition_restoring	Condition Restoring in
 fleet_supply	Supply costs
 
 fleet_locked				Locked
@@ -30,9 +30,9 @@ fleet_status_supply		Need to Supply
 fleet_status_repairship	RepairShip is Flagship
 fleet_status_ready			Ready to Sortie
 
-loscalc_type1	Simple Sum
-loscalc_type2	2-5 (Old)
-loscalc_type3	2-5 (Autumn)
-loscalc_type4	Formula 33 (Cn=1, for 2-5)
-loscalc_type5	Formula 33 (Cn=3, for 6-2, 6-3)
-loscalc_type6	Formula 33 (Cn=4, for 3-5, 6-1)
+loscalc_simplesum	Simple Sum
+loscalc_old2_5		2-5 (Old)
+loscalc_fall2_5	2-5 (Fall)
+loscalc_cn1			Formula 33 (Cn=1, for 2-5)
+loscalc_cn3			Formula 33 (Cn=3, for 6-2, 6-3)
+loscalc_cn4			Formula 33 (Cn=4, for 3-5, 6-1)

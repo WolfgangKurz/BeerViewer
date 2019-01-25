@@ -48,18 +48,18 @@
 				<span>{{fleet.SupplyBauxite}}</span>
 			</div>
 			<div class="summary-info" data-summary="level"
-				 v-tippy="{html:`summary-level-${fleet.Id}`}">
+				 v-tippy="{html:`#summary-level-${fleet.Id}`}">
 				{{fleet.TotalLevel}}
 				<span>({{fleet.AvgLevel.toFixed(2)}})</span>
 			</div>
 			<div class="summary-info" data-summary="aa"
-				 v-tippy="{html:`summary-aa-${fleet.Id}`}">
+				 v-tippy="{html:`#summary-aa-${fleet.Id}`}">
 				{{fleet.AA.Minimum}}<span>~{{fleet.AA.Maximum}}</span>
 			</div>
 			<div class="summary-info" data-summary="speed"
-				 v-tippy="{html:`summary-speed-${fleet.Id}`}">{{fleet.Speed}}</div>
+				 v-tippy="{html:`#summary-speed-${fleet.Id}`}">{{fleet.Speed}}</div>
 			<div class="summary-info" data-summary="los"
-				 v-tippy="{html:`summary-los-${fleet.Id}`}">{{fleet.LoS}}</div>
+				 v-tippy="{html:`#summary-los-${fleet.Id}`}">{{fleet.LoS}}</div>
 		</div>
 
 		<div class="ship-container">

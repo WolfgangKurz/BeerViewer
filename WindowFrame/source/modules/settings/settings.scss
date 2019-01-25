@@ -1,0 +1,40 @@
+@import "../../_theme.scss";
+
+#settings-container {
+    display: grid;
+    grid-template-columns: auto 1fr;
+
+    .setting {
+        display: content;
+
+        > label {
+            padding: 6px 12px;
+            text-align: right;
+            font-size: 14px;
+            grid-column: 1 / 2;
+        }
+        > *:not(label) {
+            padding: 7px 8px;
+            grid-column: 2 / 3;
+        }
+        > * {
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .setting-description {
+            grid-row: 2 / 3;
+            font-size: 11px;
+            color: transparentize($theme-text-color, 0.34);
+        }
+        .setting-caution {
+            grid-row: 2 / 3;
+            font-size: 11px;
+            color: map-get($state-colors, "sortie");
+
+            &::before {
+                content: "※ ";
+            }
+        }
+    }
+}

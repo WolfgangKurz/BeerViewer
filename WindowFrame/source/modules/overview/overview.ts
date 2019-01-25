@@ -80,19 +80,6 @@ class Overview implements IModule {
 		methods: {
 			SelectFleet(id: number): void { this.SelectedTab = id },
 
-			LevelTooltip(fleet: FleetData): string {
-				return `${this.i18n.fleet_totallevel}: ${fleet.TotalLevel}\n${this.i18n.fleet_averagelevel}: ${fleet.AvgLevel.toFixed(2)}`;
-			},
-			AATooltip(fleet: FleetData): string {
-				return `${this.i18n.fleet_aa_min}: ${fleet.AA.Minimum}\n${this.i18n.fleet_aa_max}: ${fleet.AA.Maximum}`;
-			},
-			SpeedTooltip(fleet: FleetData): string {
-				return `${this.i18n.fleet_speed}: ${fleet.Speed}`;
-			},
-			LoSTooltip(fleet: FleetData): string {
-				return `${this.i18n.fleet_los}: ${fleet.LoS}\n${this.LoSType}`;
-			},
-
 			GetConditionLevel(condition: number): string {
 				let level: string = "0";
 
@@ -151,6 +138,52 @@ class Overview implements IModule {
 			}
 		}
 	});
+
+	init(): void {
+		Homeport.Instance.Observe(() => this.updateFleets(), nameof(Homeport.Instance.Fleets));
+
+		// Repair docks
+		Homeport.Instance.RepairDock!.Observe(() => this.updateRepairDocks(), nameof(Homeport.Instance.RepairDock!.Docks));
+
+		// Construction docks
+		Homeport.Instance.ConstructionDock!.Observe(() => this.updateConstructionDocks(), nameof(Homeport.Instance.ConstructionDock!.Docks));
+
+		// Setup quests
+		/*
+		(async function () {
+			const quests = $.new("div", "quest-container");
+	
+			window.API.ObserveData("Homeport", "Quests.All", async function (value) {
+				const progress = ["", "50%", "80%", "100%"];
+	
+				quests.findAll("div").each(function () {
+					this.remove();
+				});
+				if (value === null) return;
+	
+				const length = await window.API.GetData("Homeport", "Quests.All.Length");
+				for (let i = 0; i < length; i++) {
+					const type = await window.API.GetData("Homeport", "Quests.All[" + i + "].Category");
+					const title = await window.API.GetData("Homeport", "Quests.All[" + i + "].Title");
+					const progress = await window.API.GetData("Homeport", "Quests.All[" + i + "].Progress");
+	
+					const item = $.new("div", "quest-item")
+						.append($.new("div", "quest-category").attr("data-quest-category", type))
+						.append($.new("div", "quest-title").html(await i18n(title)))
+						.append($.new("div", "quest-progress").html(progress[progress]));
+	
+					quests.append(item);
+				}
+			});
+	
+			overview.append(quests);
+		})();
+		*/
+		window.addEventListener("resize", () => this.updateSize());
+		this.updateSize();
+
+		window.modules.areas.register("side", "overview", "Overview", "", this.VueObject);
+	}
 
 	private GetRemainingText(remaining: number): string {
 		const asSecs = Math.floor(remaining);
@@ -304,52 +337,6 @@ class Overview implements IModule {
 		});
 
 		this.VueObject.ConstructionDock = docks;
-	}
-
-	init(): void {
-		Homeport.Instance.Observe(() => this.updateFleets(), nameof(Homeport.Instance.Fleets));
-
-		// Repair docks
-		Homeport.Instance.RepairDock!.Observe(() => this.updateRepairDocks(), nameof(Homeport.Instance.RepairDock!.Docks));
-
-		// Construction docks
-		Homeport.Instance.ConstructionDock!.Observe(() => this.updateConstructionDocks(), nameof(Homeport.Instance.ConstructionDock!.Docks));
-
-		// Setup quests
-		/*
-		(async function () {
-			const quests = $.new("div", "quest-container");
-	
-			window.API.ObserveData("Homeport", "Quests.All", async function (value) {
-				const progress = ["", "50%", "80%", "100%"];
-	
-				quests.findAll("div").each(function () {
-					this.remove();
-				});
-				if (value === null) return;
-	
-				const length = await window.API.GetData("Homeport", "Quests.All.Length");
-				for (let i = 0; i < length; i++) {
-					const type = await window.API.GetData("Homeport", "Quests.All[" + i + "].Category");
-					const title = await window.API.GetData("Homeport", "Quests.All[" + i + "].Title");
-					const progress = await window.API.GetData("Homeport", "Quests.All[" + i + "].Progress");
-	
-					const item = $.new("div", "quest-item")
-						.append($.new("div", "quest-category").attr("data-quest-category", type))
-						.append($.new("div", "quest-title").html(await i18n(title)))
-						.append($.new("div", "quest-progress").html(progress[progress]));
-	
-					quests.append(item);
-				}
-			});
-	
-			overview.append(quests);
-		})();
-		*/
-		window.addEventListener("resize", () => this.updateSize());
-		this.updateSize();
-
-		window.modules.areas.register("side", "overview", "Overview", "", this.VueObject);
 	}
 }
 

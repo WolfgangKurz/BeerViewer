@@ -6,7 +6,7 @@ declare global {
     }
 }
 
-window.OpenMenu = open => {
+window.OpenMenu = (open?: boolean): boolean => {
     const target = $("#top-menubutton");
     const openClass = "menu-open";
 
@@ -119,4 +119,5 @@ class WindowModule implements IModule {
         );
     }
 }
+window.modules.register("window", new WindowModule());
 export default WindowModule;

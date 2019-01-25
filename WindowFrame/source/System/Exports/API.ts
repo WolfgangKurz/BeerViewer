@@ -54,6 +54,12 @@ export interface Communicator {
 
     /** Unsubscribe HTTP packet observer with id that returned from `SubscribeHTTP` */
     UnsubscribeHTTP(SubscribeId: number): Promise<boolean>;
+
+    /** Get all settable settings list */
+    GetSettings(): Promise<SettingInfo[]>;
+
+    /** Get html content of Built-in module if exists. */
+    GetBuiltinModule(ModuleName: string): Promise<string>;
 }
 
 /** Callable from Communicator */
@@ -63,7 +69,7 @@ export interface Internal {
     loadMainFrame(url: string): void;
 }
 
-/** Simple module information for module.js */
+/** Simple module information for `Module.ts` */
 export interface ModuleInfo {
     /** Name of module */
     Name: string;
@@ -78,6 +84,22 @@ export interface ModuleInfo {
     Styled: boolean;
 }
 
+/** Setting information for `Settings` built-in module */
+export interface SettingInfo {
+    Type: string;
+
+    Name: string;
+    Provider: string;
+    Value: any;
+
+    DisplayName: string;
+    Description: string | null | undefined;
+    Caution: string | null | undefined;
+
+    Enums: any[] | null | undefined;
+}
+
+/** Requset data for HTTP request/response */
 export class HTTPRequest {
     [key: string]: string[] | string | number;
 

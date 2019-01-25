@@ -14,6 +14,7 @@ using System.Windows.Forms;
 using BeerViewer.Framework;
 using BeerViewer.Network;
 using CefSharp;
+using static BeerViewer.Settings;
 
 namespace BeerViewer.Modules.Communication
 {
@@ -335,6 +336,26 @@ namespace BeerViewer.Modules.Communication
 
 			Proxy.Instance.Unregister(SubsrcibeId);
 			return true;
+		}
+
+		/// <summary>
+		/// Get all settable settings.
+		/// </summary>
+		public SettingInfo[] GetSettings()
+		{
+			var flag = BindingFlags.Public | BindingFlags.Static;
+			var props = typeof(Settings).GetProperties(flag);
+			var list = new List<SettingInfo>();
+
+			foreach (var prop in props)
+			{
+				if (prop.PropertyType.GetGenericTypeDefinition() == typeof(SettableSettingValue<>))
+				{
+					var info = SettingInfo.Create(prop.GetValue(null));
+					list.Add(info);
+				}
+			}
+			return list.ToArray();
 		}
 	}
 }

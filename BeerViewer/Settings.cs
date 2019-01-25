@@ -13,7 +13,7 @@ namespace BeerViewer
 	public partial class Settings
 	{
 		private static string getKey([CallerMemberName] string propertyName = "")
-			=> nameof(Settings) + "." + propertyName;
+			=> propertyName;
 
 
 		/// <summary>
@@ -30,7 +30,8 @@ namespace BeerViewer
 		public static SettableSettingValue<bool> HardwareAccelerationEnabled { get; } = new SettableSettingValue<bool>(
 			getKey(), "Setting", true,
 			"Enable Hardware Acceleration",
-			"Use hardware acceleration for CEF browser."
+			"Use hardware acceleration for CEF browser.",
+			"Restart viewer required for apply this setting."
 		);
 
 		/// <summary>

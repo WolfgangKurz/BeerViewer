@@ -36,6 +36,8 @@ namespace BeerViewer
 			}
 			#endregion
 
+			public Type Type { get; } = typeof(T);
+
 			public string Name { get; }
 			public string Provider { get; }
 			public event EventHandler ValueChanged;
@@ -557,6 +559,7 @@ namespace BeerViewer
 
 				return false; // unknown type
 			}
+			#endregion
 		}
 
 		public sealed class SettableSettingValue<T> : SettingValue<T>
@@ -574,6 +577,5 @@ namespace BeerViewer
 				this.Enums = Enums;
 			}
 		}
-		#endregion
 	}
 }
