@@ -1,4 +1,4 @@
-quest_101_code	A1
+﻿quest_101_code	A1
 quest_101_name	첫 "편성"!
 quest_101_desc	2척 이상의 함선으로 이루어진 함대를 "편성"하라!
 quest_102_code	A2

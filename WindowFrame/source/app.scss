@@ -205,37 +205,49 @@ i.menu-icon {
 	@include ProgressColor(5);
 }
 
+body {
+	background-image: url(./theme/background.png);
+	background-repeat: no-repeat;
+	background-size: cover;
+}
 #mainbox {
 	display: grid;
 	width: 100%;
 	height: 100%;
 	border: 1px solid $theme-active-color;
+	background-color: transparentize($theme-color, 0.3);
 	overflow: hidden;
 
 	html.focused & {
 		border: 1px solid $theme-highlight-color;
 	}
+
+	.grid-placeholder {
+		background-color: $theme-split-color;
+	}
 }
 
 #top-area {
 	line-height: 28px;
-	grid-column: 1 / 3;
+	background-color: transparentize($theme-color, 0.6);
+	grid-column: 1 / 4;
 	grid-row: 1;
 }
 #main-area {
 	grid-column: 1;
 	grid-row: 2;
+	overflow: auto;
 }
 #side-area {
 	display: flex; /* to maximize module */
-	grid-column: 2;
-	grid-row: 2 / 4;
+	grid-column: 3;
+	grid-row: 2 / 5;
 	overflow: hidden;
 }
 #sub-area {
 	display: flex; /* to maximize module */
 	grid-column: 1;
-	grid-row: 3;
+	grid-row: 4;
 	overflow: hidden;
 }
 #side-area > *,
@@ -366,11 +378,16 @@ i.menu-icon {
 }
 
 i[data-type="module-content"] {
+	display: block;
 	font: inherit;
 
 	> * {
 		width: 100%;
 		height: 100%;
+	}
+
+	&[data-module-id="game"] {
+		overflow: hidden;
 	}
 }
 

@@ -1,4 +1,4 @@
-fleet_speed_immovable	Landbased
+﻿fleet_speed_immovable	Landbased
 fleet_speed_slow			Slow speed
 fleet_speed_fast			Fast speed
 fleet_speed_faster			Fast+ speed

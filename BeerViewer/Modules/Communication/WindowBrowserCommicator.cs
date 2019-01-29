@@ -218,7 +218,9 @@ namespace BeerViewer.Modules.Communication
 		/// <returns>Registered i18n text dictionary</returns>
 		public Dictionary<string, string> i18nSet()
 		{
-			return Modules.i18n.Current.Table as Dictionary<string, string>;
+			var y = Modules.i18n.Current.Table
+				.Concat(Modules.i18n.i["g"].Table);
+			return y.ToDictionary(x => x.Key, x => x.Value);
 		}
 
 		/// <summary>

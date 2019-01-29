@@ -8,105 +8,105 @@ import { LoSCalcLogic } from "./LoSCalcLogic";
 import { Settings } from "System/Settings";
 
 export abstract class TypeCnLoS implements LoSCalcLogic {
-    public abstract readonly Id: string;
-    public abstract readonly Name: string;
-    public abstract readonly Cn: number;
-    public readonly HasCombinedSettings: boolean = true;
+	public abstract readonly Id: string;
+	public abstract readonly Name: string;
+	public abstract readonly Cn: number;
+	public readonly HasCombinedSettings: boolean = true;
 
-    public Calc(fleets: Fleet[]): number {
-        if (!fleets || fleets.length === 0) return 0;
+	public Calc(fleets: Fleet[]): number {
+		if (!fleets || fleets.length === 0) return 0;
 
-        const ships: Ship[] = this.GetTargetShips(fleets)
-            .filter(x => (x.State & Ship.State.Evacuation) === 0)
-            .filter(x => (x.State & Ship.State.Tow) === 0);
+		const ships: Ship[] = this.GetTargetShips(fleets)
+			.filter(x => (x.State & Ship.State.Evacuation) === 0)
+			.filter(x => (x.State & Ship.State.Tow) === 0);
 
-        if (ships.length === 0) return 0;
+		if (ships.length === 0) return 0;
 
-        const isCombined: boolean = fleets.length > 1
-            && Settings.Instance.IsLoSIncludeFirstFleet
-            && Settings.Instance.IsLoSIncludeSecondFleet;
+		const isCombined: boolean = fleets.length > 1
+			&& Settings.Instance.IsLoSIncludeFirstFleet
+			&& Settings.Instance.IsLoSIncludeSecondFleet;
 
-        const itemScore: number = ships
-            .reduce((a, c) => a.concat(c.EquippedItems), <ShipEquip[]>[])
-            .map(x => x.Item)
-            .reduce((a, c) => a + (c.Info.LoS + TypeCnLoS.GetLevelCoefficient(c)) * TypeCnLoS.GetTypeCoefficient(c.Info.Category), 0);
+		const itemScore: number = ships
+			.reduce((a, c) => a.concat(c.EquippedItems), <ShipEquip[]>[])
+			.map(x => x.Item)
+			.reduce((a, c) => a + (c.Info.LoS + TypeCnLoS.GetLevelCoefficient(c)) * TypeCnLoS.GetTypeCoefficient(c.Info.Category), 0);
 
-        const shipScore: number = ships
-            .map(x => x.LoS - x.EquippedItems.reduce((a, c) => a + c.Item.Info.LoS, 0))
-            .reduce((a, c) => a + Math.sqrt(c));
+		const shipScore: number = ships
+			.map(x => x.LoS - x.EquippedItems.reduce((a, c) => a + c.Item.Info.LoS, 0))
+			.reduce((a, c) => a + Math.sqrt(c));
 
-        const admiralScore: number = Math.ceil(Homeport.Instance.Admiral!.Level * 0.4);
-        const vacancyScore: number = ((isCombined ? 12 : 6) - ships.length) * 2;
+		const admiralScore: number = Math.ceil(Homeport.Instance.Admiral!.Level * 0.4);
+		const vacancyScore: number = ((isCombined ? 12 : 6) - ships.length) * 2;
 
-        return itemScore * this.Cn + shipScore - admiralScore + vacancyScore;
-    }
+		return itemScore * this.Cn + shipScore - admiralScore + vacancyScore;
+	}
 
-    private GetTargetShips(fleets: Fleet[]): Ship[] {
-        if (fleets.length == 1)
-            return fleets[0].Ships;
+	private GetTargetShips(fleets: Fleet[]): Ship[] {
+		if (fleets.length == 1)
+			return fleets[0].Ships;
 
-        if (Settings.Instance.IsLoSIncludeFirstFleet && Settings.Instance.IsLoSIncludeSecondFleet)
-            return fleets.reduce((a, c) => a.concat(c.Ships), <Ship[]>[]);
+		if (Settings.Instance.IsLoSIncludeFirstFleet && Settings.Instance.IsLoSIncludeSecondFleet)
+			return fleets.reduce((a, c) => a.concat(c.Ships), <Ship[]>[]);
 
-        if (Settings.Instance.IsLoSIncludeFirstFleet)
-            return fleets[0].Ships;
+		if (Settings.Instance.IsLoSIncludeFirstFleet)
+			return fleets[0].Ships;
 
-        if (Settings.Instance.IsLoSIncludeSecondFleet)
-            return fleets[1].Ships;
+		if (Settings.Instance.IsLoSIncludeSecondFleet)
+			return fleets[1].Ships;
 
-        return [];
-    }
-    private static GetLevelCoefficient(item: Equipment): number {
-        switch (item.Info.Category) {
-            case EquipCategory.SeaplaneRecon:
-                return Math.sqrt(item.Level) * 1.2;
+		return [];
+	}
+	private static GetLevelCoefficient(item: Equipment): number {
+		switch (item.Info.Category) {
+			case EquipCategory.SeaplaneRecon:
+				return Math.sqrt(item.Level) * 1.2;
 
-            case EquipCategory.SmallRadar:
-            case EquipCategory.LargeRadar:
-            case EquipCategory.LargeRadar_II:
-                return Math.sqrt(item.Level) * 1.25;
+			case EquipCategory.SmallRadar:
+			case EquipCategory.LargeRadar:
+			case EquipCategory.LargeRadar_II:
+				return Math.sqrt(item.Level) * 1.25;
 
-            default:
-                return 0;
-        }
-    }
-    private static GetTypeCoefficient(type: EquipCategory): number {
-        switch (type) {
-            case EquipCategory.CarrierBasedFighter:
-            case EquipCategory.CarrierBasedDiveBomber:
-            case EquipCategory.SmallRadar:
-            case EquipCategory.LargeRadar:
-            case EquipCategory.LargeRadar_II:
-            case EquipCategory.AntiSubmarinePatrolAircraft:
-            case EquipCategory.Searchlight:
-            case EquipCategory.CommandFacility:
-            case EquipCategory.AviationPersonnel:
-            case EquipCategory.SurfaceShipPersonnel:
-            case EquipCategory.LargeSonar:
-            case EquipCategory.LargeFlyingBoat:
-            case EquipCategory.LargeSearchlight:
-            case EquipCategory.SeaplaneFighter:
-            case EquipCategory.JetPoweredFighter: // Maybe
-            case EquipCategory.JetPoweredFighterBomber:
-                return 0.6;
+			default:
+				return 0;
+		}
+	}
+	private static GetTypeCoefficient(type: EquipCategory): number {
+		switch (type) {
+			case EquipCategory.CarrierBasedFighter:
+			case EquipCategory.CarrierBasedDiveBomber:
+			case EquipCategory.SmallRadar:
+			case EquipCategory.LargeRadar:
+			case EquipCategory.LargeRadar_II:
+			case EquipCategory.AntiSubmarinePatrolAircraft:
+			case EquipCategory.Searchlight:
+			case EquipCategory.CommandFacility:
+			case EquipCategory.AviationPersonnel:
+			case EquipCategory.SurfaceShipPersonnel:
+			case EquipCategory.LargeSonar:
+			case EquipCategory.LargeFlyingBoat:
+			case EquipCategory.LargeSearchlight:
+			case EquipCategory.SeaplaneFighter:
+			case EquipCategory.JetPoweredFighter: // Maybe
+			case EquipCategory.JetPoweredFighterBomber:
+				return 0.6;
 
-            case EquipCategory.CarrierBasedTorpedoBomber:
-            case EquipCategory.JetPoweredTorpedoBomber: // Maybe
-                return 0.8;
+			case EquipCategory.CarrierBasedTorpedoBomber:
+			case EquipCategory.JetPoweredTorpedoBomber: // Maybe
+				return 0.8;
 
-            case EquipCategory.CarrierBasedRecon:
-            case EquipCategory.CarrierBasedRecon_II:
-                return 1.0;
+			case EquipCategory.CarrierBasedRecon:
+			case EquipCategory.CarrierBasedRecon_II:
+				return 1.0;
 
-            case EquipCategory.SeaplaneBomber:
-                return 1.1;
+			case EquipCategory.SeaplaneBomber:
+				return 1.1;
 
-            case EquipCategory.SeaplaneRecon:
-            case EquipCategory.JetPoweredRecon: // Maybe
-                return 1.2;
+			case EquipCategory.SeaplaneRecon:
+			case EquipCategory.JetPoweredRecon: // Maybe
+				return 1.2;
 
-            default:
-                return 0.0;
-        }
-    }
+			default:
+				return 0.0;
+		}
+	}
 }

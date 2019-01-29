@@ -20,7 +20,7 @@
 	</div>
 
 	<div id="mainbox"
-		:style="{'grid-template-columns': `${Frame.Width}px 1fr`, 'grid-template-rows': `28px ${Frame.Height}px 1fr`}">
+		:style="{'grid-template-columns': `${Frame.Width}px 2px 1fr`, 'grid-template-rows': `28px ${Frame.Height}px 2px 1fr`}">
 		<header id="top-area">
 			<div id="top-menubutton">
 				<button type="button" data-role="menu">
@@ -37,28 +37,28 @@
 							<span class="menu-group-name">
 								<i class="menu-icon"
 								   :data-icon="area.Type+'screen'"></i>
-								{{area.Name}} screen
+								{{i18n[`menu.${area.Name}`] || `${area.Name} screen`}}
 							</span>
 							<ul>
 								<li v-for="module in area.Modules"
 									:class="{'menu-active': module.Displaying}"
 									@click="SelectModule(module.Area, module.Name)">
 									<i class="menu-icon" :data-icon="module.Icon"></i>
-									{{module.Name}}
+									{{i18n[`module.${module.Name}`] || module.Name}}
 								</li>
 							</ul>
 						</li>
 						<li class="menu-group">
 							<span class="menu-group-name">
 								<i class="menu-icon" data-icon="tools"></i>
-								Tools
+								{{i18n["menu.Tools"] || "Tools"}}
 							</span>
 							<ul>
 								<li v-for="tool in Tools"
 									@click="OpenMenu(false) && tool.Action()"
 									:data-tool-id="tool.Id">
 									<i class="menu-icon" data-icon=""></i>
-									{{tool.Name}}
+									{{i18n[`tool.${tool.Name}`] || tool.Name}}
 								</li>
 							</ul>
 						</li>
@@ -112,6 +112,9 @@
 				   v-dom="module.Element"></i>
 			</div>
 		</div>
+
+		<div class="grid-placeholder" style="grid-column:2;grid-row:2/5"></div>
+		<div class="grid-placeholder" style="grid-column:1;grid-row:3"></div>
 	</div>
 </body>
 </html>

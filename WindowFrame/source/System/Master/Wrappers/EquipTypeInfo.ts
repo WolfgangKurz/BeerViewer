@@ -3,20 +3,20 @@ import { RawDataWrapper } from "System/Base/Wrapper";
 import { kcsapi_mst_slotitem_equiptype } from "System/Interfaces/Master/kcsapi_mst_slotitem";
 
 export class EquipTypeInfo extends RawDataWrapper<kcsapi_mst_slotitem_equiptype> implements IIdentifiable {
-    public get Id(): number { return this.raw.api_id }
-    public get Name(): string { return this.raw.api_name }
+	public get Id(): number { return this.raw.api_id }
+	public get Name(): string { return this.raw.api_name }
 
-    constructor(api_data: kcsapi_mst_slotitem_equiptype) {
-        super(api_data);
-    }
+	constructor(api_data: kcsapi_mst_slotitem_equiptype) {
+		super(api_data);
+	}
 
-    public toString(): string {
-        return `{"Id": ${this.Id}, "Name": "${this.Name}"}`;
-    }
+	public toString(): string {
+		return `{"Id": ${this.Id}, "Name": "${this.Name}"}`;
+	}
 
-    public static readonly Empty: EquipTypeInfo = new EquipTypeInfo({
-        api_id: 0,
-        api_name: "???",
-        api_show_flg: 0
-    });
+	public static readonly Empty: EquipTypeInfo = new EquipTypeInfo({
+		api_id: 0,
+		api_name: "???",
+		api_show_flg: 0
+	});
 }

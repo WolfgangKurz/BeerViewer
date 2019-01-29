@@ -1,48 +1,45 @@
 <div id="settings-container">
-    <form>
-        <div class="setting" v-for="setting in Settings">
-            <span class="setting-name">{{setting.DisplayName}}</span>
+	<form>
+		<div class="setting-group"
+			v-for="(group, key) in Settings">
+			<h2 class="setting-group-name">{{i18n[`group.${key}`] || key}}</h2>
+			<div class="setting-line"
+				v-for="setting in group">
+				<span class="setting-name">{{i18n[setting.DisplayName] || setting.DisplayName}}</span>
 
-            <div class="setting-content"
-                 :data-enum="setting.Enums ? '1' : '0'">
-                <template v-if="setting.Enums">
-                    <!--
-                    <select :name="`${setting.Provider}.${setting.Name}`"
-                            v-model="setting.Value">
-                        <option v-for="(item, key) in setting.Enums"
-                                :value="key">{{i18n[(setting.i18nPrefix||"")+key.toLowerCase()] || item}}</option>
-                    </select>
-                    -->
-                    <label class="setting-content-item"
-                           data-type="radio"
-                           v-for="(item, key) in setting.Enums"
-                           :data-state="setting.Value === key ? 'selected' : ''">
-                        <input type="radio"
-                               :name="`${setting.Provider}.${setting.Name}`"
-                               :value="key"
-                               v-model="setting.Value">
-                        {{i18n[(setting.i18nPrefix||"")+key.toLowerCase()] || item}}
-                    </label>
-                </template>
-                <template v-else-if="setting.Type === 'Boolean'">
-                    <input id="input_checkbox" type="checkbox" value="1">
+				<div class="setting-content"
+					:data-enum="setting.Enums ? '1' : '0'">
+					<template v-if="setting.Enums">
+						<label class="setting-content-item"
+							data-type="radio"
+							v-for="(item, key) in setting.Enums"
+							:data-state="setting.Value === key ? 'selected' : ''">
+							<input type="radio"
+								:name="`${setting.Provider}.${setting.Name}`"
+								:value="key"
+								v-model="setting.Value">
+							{{i18n[(setting.i18nPrefix || "")+key.toLowerCase()] || item}}
+						</label>
+					</template>
+					<template v-else-if="setting.Type === 'Boolean'">
+						<label class="setting-content-item"
+							data-type="checkbox"
+							:data-state="setting.Value ? 'checked' : ''">
+							<input type="checkbox"
+								:name="`${setting.Provider}.${setting.Name}`"
+								v-model="setting.Value">
+						</label>
+					</template>
+					<template v-else>
+						<input :name="`${setting.Provider}.${setting.Name}`"
+							:value="setting.Value">
+					</template>
 
-                    <div class="switchbox"></div>
-                    <input type="checkbox"
-                           :name="`${setting.Provider}.${setting.Name}`"
-                           v-model="setting.Value"
-                           true-value="true"
-                           false-value="false">
-                </template>
-                <template v-else>
-                    <input :name="`${setting.Provider}.${setting.Name}`"
-                           :value="setting.Value">
-                </template>
-
-                <div class="setting-description">{{setting.Description}}</div>
-                <div class="setting-caution"
-                     v-if="setting.Caution">{{setting.Caution}}</div>
-            </div>
-        </div>
-    </form>
+					<div class="setting-description">{{i18n[setting.Description] || setting.Description}}</div>
+					<div class="setting-caution"
+						v-if="setting.Caution">{{i18n[setting.Caution] || setting.Caution}}</div>
+				</div>
+			</div>
+		</div>
+	</form>
 </div>

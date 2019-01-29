@@ -1,16 +1,16 @@
 export class Settings {
-    public static get Instance(): Settings { return window.Settings }
+	public static get Instance(): Settings { return window.Settings }
 
-    public NotificationConditionValue: number = 49;
-    public NotificationTime: number = 60;
+	public NotificationConditionValue: number = 49;
+	public NotificationTime: number = 60;
 
-    public IsLoSIncludeFirstFleet: boolean = true;
-    public IsLoSIncludeSecondFleet: boolean = true;
+	public IsLoSIncludeFirstFleet: boolean = true;
+	public IsLoSIncludeSecondFleet: boolean = true;
 
-    public LoSCalculator: string = "Cn1";
+	public LoSCalculator: string = "Cn1";
 
-    public Ready(): Settings {
-        // Placeholder
-        return this;
-    }
+	public Ready(): Settings {
+		// Placeholder
+		return this;
+	}
 }

@@ -1,4 +1,12 @@
-﻿fleet_speed_immovable		육상기지
+﻿menu.Main		메인 화면
+menu.Side		우측 화면
+menu.Sub		하단 화면
+menu.Tools		도구
+
+module.Game		게임 화면
+tool.DevTools	개발자 도구
+
+fleet_speed_immovable		육상기지
 fleet_speed_slow			저속
 fleet_speed_fast			고속
 fleet_speed_faster			고속+
@@ -30,9 +38,9 @@ fleet_status_supply			보급 필요
 fleet_status_repairship		공작함 기함
 fleet_status_ready			준비 완료
 
-loscalc_simplesum	단순 합계
-loscalc_old2_5		2-5 (구)
-loscalc_fall2_5	2-5 (가을)
-loscalc_cn1			33식 (Cn=1, 2-5)
-loscalc_cn3			33식 (Cn=3, 6-2, 6-3)
-loscalc_cn4			33식 (Cn=4, 3-5, 6-1)
+los.simplesum	단순 합계
+los.old2_5		2-5 (구)
+los.fall2_5	2-5 (가을)
+los.cn1			33식 (Cn=1, 2-5)
+los.cn3			33식 (Cn=3, 6-2, 6-3)
+los.cn4			33식 (Cn=4, 3-5, 6-1)

@@ -19,7 +19,7 @@ namespace BeerViewer.Modules
 			: i18nLang.Empty;
 
 		protected Dictionary<string, i18nLang> Languages { get; set; }
-		public string[] LanguageList => this.Languages.Keys.ToArray();
+		public string[] LanguageList => this.Languages.Keys.Where(x => x != "g").ToArray();
 
 		public i18nLang this[string lang]
 		{
@@ -41,19 +41,60 @@ namespace BeerViewer.Modules
 				"i18n"
 			);
 
-			var list = Directory.GetFiles(path, "*.txt")
-				.Select(x => Path.GetFileNameWithoutExtension(x))
-				.Where(x => !x.Contains("_"));
-
 			Languages = new Dictionary<string, i18nLang>();
+			LoadRecursive(@".\i18n", "*.txt");
+			LoadRecursive(@".\WindowFrame");
+		}
 
-			if (list.Contains("en")) // Default langauge
-			{
-				Languages.Add("en", new i18nLang("en"));
-				list = list.Where(x => x != "en");
-			}
+		private void LoadLanguage(IDictionary<string, string> list)
+		{
 			foreach (var x in list)
-				Languages.Add(x, new i18nLang(x));
+			{
+				var y = x.Key;
+				if (y.StartsWith("i18n.")) y = y.Substring(5);
+				if (y.Contains("_"))
+				{
+					var sublang = y.Contains("_"); // Is this "LANG_SUB.txt" ?
+					var origin = sublang ? y.Substring(0, y.IndexOf("_")) : y; // Without SUB
+
+					if (Languages.ContainsKey(origin)) // Already registered
+						Languages[origin].Update(x.Value);
+
+					else if (!sublang) // Base language
+						Languages.Add(origin, new i18nLang(x.Value));
+
+					else if (!list.Any(m =>
+							 m.Key.StartsWith(origin + ".")
+							 || m.Key.StartsWith(origin + "_")
+							 || m.Key.StartsWith("i18n." + origin + ".")
+							 || m.Key.StartsWith("i18n." + origin + "_")
+						))
+						/* Sub language without base language
+						 * ex)
+						 * i18n.ko.txt (for module directory)
+						 * i18n.ko_equip.txt
+						 * ko.txt (for i18n directory)
+						 * ko_equip.txt
+						 */
+						Languages.Add(origin, new i18nLang(x.Value));
+				}
+
+				else if (Languages.ContainsKey(y)) // Already registered
+					Languages[y].Update(x.Value);
+
+				else
+					Languages.Add(y, new i18nLang(x.Value));
+			}
+		}
+		private void LoadRecursive(string dir, string pattern = "i18n.*.txt")
+		{
+			this.LoadLanguage(
+				Directory.GetFiles(dir, pattern)
+					.ToDictionary(x => Path.GetFileNameWithoutExtension(x), x => x)
+			);
+
+			var dirs = Directory.GetDirectories(dir);
+			foreach (var _dir in dirs) this.LoadRecursive(_dir);
 		}
 	}
 	public class i18nLang
@@ -67,33 +108,22 @@ namespace BeerViewer.Modules
 		{
 			this.Table = new Dictionary<string, string>(); // Just empty table
 		}
-		public i18nLang(string Language)
+		public i18nLang(string fullPath)
 		{
-			var path = Path.Combine(
-				Path.GetDirectoryName(Assembly.GetEntryAssembly().Location),
-				"i18n"
-			);
+			var Language = Path.GetFileNameWithoutExtension(fullPath);
 			var filename = $"{Language}.txt";
-			var fullPath = Path.Combine(path, filename);
+			var path = Path.GetDirectoryName(fullPath);
 
 			if (File.Exists(fullPath))
 			{
-				this.Table =
-					Directory.GetFiles(path, "*.txt")
-						.Select(x => Path.GetFileName(x))
-						.Where(x => x == filename || x.StartsWith(Language + "_"))
-						.Select(x => Path.Combine(path, x))
-						.SelectMany(y =>
-							File.ReadAllLines(y)
-								.Select(x => x.Trim())
-								.Where(x => !string.IsNullOrWhiteSpace(x) && x.Contains('\t'))
-								.Select(x => regex.Match(x).Groups)
-								.ToDictionary(
-									x => x[1].Value,
-									x => x[2].Value
-								)
-						)
-						.ToDictionary(x => x.Key, x => x.Value);
+				this.Table = File.ReadAllLines(fullPath)
+					.Select(x => x.Trim())
+					.Where(x => !string.IsNullOrWhiteSpace(x) && x.Contains('\t'))
+					.Select(x => regex.Match(x).Groups)
+					.ToDictionary(
+						x => x[1].Value,
+						x => x[2].Value
+					);
 			}
 		}
 
@@ -106,6 +136,34 @@ namespace BeerViewer.Modules
 					return value;
 				else
 					return text;
+			}
+		}
+
+		internal void Update(string fullPath)
+		{
+			var Language = Path.GetFileNameWithoutExtension(fullPath);
+			var filename = $"{Language}.txt";
+			var path = Path.GetDirectoryName(fullPath);
+
+			if (File.Exists(fullPath))
+			{
+				var _ = File.ReadAllLines(fullPath)
+					.Select(x => x.Trim())
+					.Where(x => !string.IsNullOrWhiteSpace(x) && x.Contains('\t'))
+					.Select(x => regex.Match(x).Groups)
+					.ToDictionary(
+						x => x[1].Value,
+						x => x[2].Value
+					);
+
+				var target = this.Table as IDictionary<string, string>;
+				foreach (var item in _)
+				{
+					if (target.ContainsKey(item.Key))
+						target[item.Key] = item.Value;
+					else
+						target.Add(item);
+				}
 			}
 		}
 	}

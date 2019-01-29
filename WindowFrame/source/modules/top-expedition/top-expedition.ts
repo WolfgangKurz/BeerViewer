@@ -17,7 +17,7 @@ interface ExpeditionData {
 class TopExpedition implements IModule {
 	private readonly MAX_FLEETS = 4; // Maximum fleets
 
-	private Expeditions: IdentifiableTable<ExpeditionData> = new IdentifiableTable<ExpeditionData>();
+	private Expeditions: IdentifiableTable<ExpeditionData> | null = null;
 
 	private VueObject = new Vue({
 		data: {
@@ -59,8 +59,8 @@ class TopExpedition implements IModule {
 	private Reload(): void {
 		Homeport.Instance.Fleets.forEach(x => {
 			const id = x.Id; // Begin at 2nd fleet
-			const target = this.Expeditions.get(id);
-			if(!target) return;
+			const target = this.Expeditions!.get(id);
+			if (!target) return;
 			target.Enabled = x ? true : false;
 
 			if (x && x.Expedition) {
@@ -73,7 +73,7 @@ class TopExpedition implements IModule {
 						? value.Percentage * 100 : 0;
 				}, nameof(exp.Progress));
 			}
-			this.VueObject.Expeditions = this.Expeditions.values(); // Update?
+			this.VueObject.Expeditions = this.Expeditions!.values(); // Update?
 		});
 	}
 
