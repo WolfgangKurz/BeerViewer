@@ -4,6 +4,8 @@
 	<meta charset="utf-8" />
 	<title>BeerViewer Application</title>
 
+	<script src="http://localhost:8098"></script>
+
 	<!-- Vendor -->
 	<script type="text/javascript" src="vendor/jquery.slim.min.js"></script>
 	<script type="text/javascript" src="vendor/tippy.all.min.js"></script>
@@ -15,9 +17,7 @@
 	<script type="text/javascript" src="beerviewer.js"></script>
 </head>
 <body>
-	<div id="modules">
-		<iframe src="MainFramePlaceholder.html" id="MAIN_FRAME" name="MAIN_FRAME"></iframe>
-	</div>
+	<div id="modules"></div>
 
 	<div id="mainbox"
 		:style="{'grid-template-columns': `${Frame.Width}px 2px 1fr`, 'grid-template-rows': `28px ${Frame.Height}px 2px 1fr`}">
@@ -75,8 +75,12 @@
 				   v-for="module in Areas.top.Modules"
 				   :data-module-id="module.Id"
 				   :key="module.Id"
-				   v-show="module.Displaying"
-				   v-dom="module.Element"></i>
+				   v-show="module.Displaying">
+				   	<keep-alive>
+						<component :is="module.ComponentName"
+								   :i18n="i18n"></component>
+					</keep-alive>
+				</i>
 			</div>
 		</header>
 
@@ -86,8 +90,12 @@
 				   v-for="module in Areas.main.Modules"
 				   :data-module-id="module.Id"
 				   :key="module.Id"
-				   v-show="module.Displaying"
-				   v-dom="module.Element"></i>
+				   v-show="module.Displaying">
+				   	<keep-alive>
+						<component :is="module.ComponentName"
+								   :i18n="i18n"></component>
+					</keep-alive>
+				</i>
 			</div>
 		</div>
 
@@ -97,8 +105,12 @@
 				   v-for="module in Areas.side.Modules"
 				   :data-module-id="module.Id"
 				   :key="module.Id"
-				   v-show="module.Displaying"
-				   v-dom="module.Element"></i>
+				   v-show="module.Displaying">
+				   	<keep-alive>
+						<component :is="module.ComponentName"
+								   :i18n="i18n"></component>
+					</keep-alive>
+				</i>
 			</div>
 		</div>
 
@@ -108,8 +120,12 @@
 				   v-for="module in Areas.sub.Modules"
 				   :data-module-id="module.Id"
 				   :key="module.Id"
-				   v-show="module.Displaying"
-				   v-dom="module.Element"></i>
+				   v-show="module.Displaying">
+				   	<keep-alive>
+						<component :is="module.ComponentName"
+								   :i18n="i18n"></component>
+					</keep-alive>
+				</i>
 			</div>
 		</div>
 

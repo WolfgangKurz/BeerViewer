@@ -8,6 +8,7 @@ import { IModule } from "System/Module";
 import { Homeport } from "System/Homeport/Homeport";
 import { FleetState } from "System/Enums/FleetEnums";
 import { ObservableCallback } from "System/Base/Observable";
+import TemplateContent from "./overview.html";
 
 const getTextWidth = function (text: string, font: string) {
 	const canvas: HTMLCanvasElement = (<any>getTextWidth).canvas || ((<any>getTextWidth).canvas = document.createElement("canvas"));
@@ -65,79 +66,84 @@ class Overview implements IModule {
 		20: "fleet_speed_fastest"
 	};
 
-	private VueObject = new Vue({
-		data: {
-			i18n: window.i18n,
+	private Data = {
+		SelectedTab: <number>1,
+		Fleets: <FleetData[]>[],
+		RepairDock: <RepairDockData[]>[],
+		ConstructionDock: <ConstructionDockData[]>[],
 
-			SelectedTab: 1,
-			Fleets: <FleetData[]>[],
-			RepairDock: <RepairDockData[]>[],
-			ConstructionDock: <ConstructionDockData[]>[],
+		LosType: <string>""
+	}
 
-			LoSType: ""
-		},
-		el: $("#overview-container")[0],
-		methods: {
-			SelectFleet(id: number): void { this.SelectedTab = id },
+	constructor() {
+		Vue.component("overview-component", {
+			data: () => this.Data,
+			template: TemplateContent,
 
-			GetConditionLevel(condition: number): string {
-				let level: string = "0";
+			methods: {
+				GetConditionLevel(condition: number): string {
+					let level: string = "0";
 
-				if (condition >= 50)
-					level = "+1";
-				else if (condition >= 40)
-					level = "0";
-				else if (condition >= 30)
-					level = "-1";
-				else if (condition >= 20)
-					level = "-2";
-				else
-					level = "-3";
+					if (condition >= 50)
+						level = "+1";
+					else if (condition >= 40)
+						level = "0";
+					else if (condition >= 30)
+						level = "-1";
+					else if (condition >= 20)
+						level = "-2";
+					else
+						level = "-3";
 
-				return level;
-			},
-			ParseShipState(ship: Ship): string {
-				const states = [];
-				if (ship.State & Ship.State.Repairing)
-					states.push("repairing");
-				else if (ship.State & Ship.State.Evacuation)
-					states.push("evacuation");
-				else if (ship.State & Ship.State.Tow)
-					states.push("tow");
-				else if (ship.State & Ship.State.HeavilyDamaged)
-					states.push("damaged");
-				else if (ship.State & Ship.State.DamageControlled)
-					states.push("damagecontrolled");
-
-				return states.join(" ");
-			}
-		},
-		watch: {
-			Fleets: {
-				handler(val: FleetData[]) {
-					const font = `14px ${getComputedStyle(document.body)["fontFamily"]}`;
-					// See overview.scss:137
-
-					val.forEach(fleet => {
-						const ships = fleet.Ships;
-						fleet.SupplyFuel = ships.reduce((a, c) => a + c.UsedFuel, 0);
-						fleet.SupplyAmmo = ships.reduce((a, c) => a + c.UsedAmmo, 0);
-						fleet.SupplyBauxite = ships.reduce((a, c) => a + c.UsedBauxite, 0);
-						fleet.TotalLevel = fleet.Ships
-							.reduce((a, c) => a + c.Level, 0);
-						fleet.AvgLevel = fleet.Ships.length > 0
-							? fleet.TotalLevel / fleet.Ships.length
-							: 0;
-
-						fleet.NameSize = ships
-							.reduce((a, c) => Math.max(a, getTextWidth(c.Info.Name || "???", font)), 0)
-							+ 6; // See overview.scss:131
-					});
+					return level;
 				},
-				deep: true
+				ParseShipState(ship: Ship): string {
+					const states = [];
+					if (ship.State & Ship.State.Repairing)
+						states.push("repairing");
+					else if (ship.State & Ship.State.Evacuation)
+						states.push("evacuation");
+					else if (ship.State & Ship.State.Tow)
+						states.push("tow");
+					else if (ship.State & Ship.State.HeavilyDamaged)
+						states.push("damaged");
+					else if (ship.State & Ship.State.DamageControlled)
+						states.push("damagecontrolled");
+
+					return states.join(" ");
+				}
+			},
+			watch: {
+				Fleets: {
+					handler(val: FleetData[]) {
+						const font = `14px ${getComputedStyle(document.body)["fontFamily"]}`;
+						// See overview.scss:137
+
+						val.forEach(fleet => {
+							const ships = fleet.Ships;
+							fleet.SupplyFuel = ships.reduce((a, c) => a + c.UsedFuel, 0);
+							fleet.SupplyAmmo = ships.reduce((a, c) => a + c.UsedAmmo, 0);
+							fleet.SupplyBauxite = ships.reduce((a, c) => a + c.UsedBauxite, 0);
+							fleet.TotalLevel = fleet.Ships
+								.reduce((a, c) => a + c.Level, 0);
+							fleet.AvgLevel = fleet.Ships.length > 0
+								? fleet.TotalLevel / fleet.Ships.length
+								: 0;
+
+							fleet.NameSize = ships
+								.reduce((a, c) => Math.max(a, getTextWidth(c.Info.Name || "???", font)), 0)
+								+ 6; // See overview.scss:131
+						});
+					},
+					deep: true
+				}
 			}
-		}
-	});
+		});
+	}
+
+	private SelectFleet(id: number): void {
+		this.Data.SelectedTab = id;
+	}
 
 	init(): void {
 		Homeport.Instance.Observe(() => this.updateFleets(), nameof(Homeport.Instance.Fleets));
@@ -182,7 +188,7 @@ class Overview implements IModule {
 		window.addEventListener("resize", () => this.updateSize());
 		this.updateSize();
 
-		window.modules.areas.register("side", "overview", "Overview", "", this.VueObject);
+		window.modules.areas.register("side", "overview", "Overview", "", "overview-component");
 	}
 
 	private GetRemainingText(remaining: number): string {
@@ -273,7 +279,7 @@ class Overview implements IModule {
 				fleet._Observations.forEach(y => y[0].Deobserve(y[1]));
 				value.forEach(x => {
 					const f: ObservableCallback = (_, value) => {
-						this.VueObject.Fleets = newData; // Update?
+						this.Data.Fleets = newData; // Update?
 					};
 					x.Observe(f);
 					fleet._Observations.push([x, f]);
@@ -282,9 +288,9 @@ class Overview implements IModule {
 			newData.push(fleet);
 		});
 
-		this.VueObject.Fleets = newData;
-		if (newData.length <= this.VueObject.SelectedTab && newData.length > 0)
-			this.VueObject.SelectFleet(0);
+		this.Data.Fleets = newData;
+		if (newData.length <= this.Data.SelectedTab && newData.length > 0)
+			this.SelectFleet(0);
 	}
 	private updateRepairDocks(): void {
 		const docks: RepairDockData[] = [];
@@ -310,7 +316,7 @@ class Overview implements IModule {
 			docks.push(dock);
 		});
 
-		this.VueObject.RepairDock = docks;
+		this.Data.RepairDock = docks;
 	}
 	private updateConstructionDocks(): void {
 		const docks: ConstructionDockData[] = [];
@@ -336,7 +342,7 @@ class Overview implements IModule {
 			docks.push(dock);
 		});
 
-		this.VueObject.ConstructionDock = docks;
+		this.Data.ConstructionDock = docks;
 	}
 }
 

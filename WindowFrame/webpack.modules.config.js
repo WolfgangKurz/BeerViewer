@@ -3,6 +3,8 @@ const webpack = require('webpack')
 const glob = require("glob")
 const tsNameof = require("ts-nameof");
 
+const ENV = "development";
+
 function getEntries() {
     const list = glob.sync("./source/modules/**/*.ts");
     const output = {};
@@ -57,7 +59,16 @@ module.exports = {
                     appendTsSuffixTo: [/\.vue$/],
                     getCustomTransformers: () => ({ before: [tsNameof] })
                 }
-            }
+            },
+			{
+				test: /\.(html)$/,
+				use: {
+					loader: 'html-loader',
+					options: {
+						attrs: [':data-src']
+					}
+				}
+			}
         ]
     },
     externals: {
@@ -70,5 +81,5 @@ module.exports = {
       }
     },
     devtool: "source-map",
-    mode: "development"
+	mode: ENV
 }

@@ -236,7 +236,7 @@ namespace BeerViewer.Modules.Communication
 				"modules"
 			);
 			var dirs = Directory.GetDirectories(baseDir);
-			foreach(var dir in dirs)
+			foreach (var dir in dirs)
 			{
 				var moduleName = Path.GetFileName(dir);
 				var scriptFile = Path.Combine(dir, moduleName + ".js");
@@ -287,7 +287,7 @@ namespace BeerViewer.Modules.Communication
 			var output = new Dictionary<string, object>();
 
 			var n = c.Count;
-			for(var i=0; i<n; i++)
+			for (var i = 0; i < n; i++)
 			{
 				var key = c.Keys[i];
 				var value = c.GetValues(i);
@@ -358,6 +358,30 @@ namespace BeerViewer.Modules.Communication
 				}
 			}
 			return list.ToArray();
+		}
+
+		public bool UpdateSetting(string Provider, string Name, dynamic Value)
+		{
+			if (string.IsNullOrWhiteSpace(Provider) || string.IsNullOrWhiteSpace(Name)) return false;
+
+			var flag = BindingFlags.Public | BindingFlags.Static;
+			var props = typeof(Settings).GetProperties(flag);
+			var list = new List<SettingInfo>();
+
+			foreach (var prop in props)
+			{
+				if (prop.PropertyType.GetGenericTypeDefinition() == typeof(SettableSettingValue<>))
+				{
+					var target = prop.GetValue(null);
+					var info = SettingInfo.Create(target);
+					if (info.Provider == Provider && info.Name == Name)
+					{
+						target.GetType().GetProperty("Value").SetValue(target, Value);
+						return true;
+					}
+				}
+			}
+			return false;
 		}
 	}
 }

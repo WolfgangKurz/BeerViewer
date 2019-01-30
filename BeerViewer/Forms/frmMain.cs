@@ -114,6 +114,8 @@ namespace BeerViewer.Forms
 						Logger.Unregister("MainLogger");
 					}
 
+					Settings.LanguageCode.ValueChanged += async (s, e) => await this.Communicator.CallbackScript("i18n", Settings.LanguageCode.Value);
+
 					this.ClientSizeChanged += (s, e) => this.Communicator?.CallbackScript("WindowState", (int)this.WindowState);
 					this.Activated += (s, e) => this.Communicator?.CallbackScript("FocusState", true);
 					this.Deactivate += (s, e) => this.Communicator?.CallbackScript("FocusState", false);
@@ -184,7 +186,8 @@ namespace BeerViewer.Forms
 			};
 			this.WindowBrowser.LoadError += (s, e) =>
 			{
-				switch (e.ErrorCode) {
+				switch (e.ErrorCode)
+				{
 					case CefSharp.CefErrorCode.FileNotFound:
 					case CefSharp.CefErrorCode.ConnectionFailed:
 					case CefSharp.CefErrorCode.ConnectionRefused:

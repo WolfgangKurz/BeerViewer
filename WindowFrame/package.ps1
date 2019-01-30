@@ -1,7 +1,7 @@
 function Main {
     # Remove and create dist directory
-    Remove-Item ./dist -Recurse -Force
-    New-Item ./dist -ItemType directory
+    Remove-Item ./dist -Recurse -Force | Out-Null
+    New-Item ./dist -ItemType directory | Out-Null
 
     # Copy from source and remove *.ts and useless files
     Copy-Item ./source/* ./dist -Force -Recurse
@@ -15,7 +15,11 @@ function Main {
     } while ($dirs.count -gt 0)
 
     # webpack compile
-    npx webpack
-    npx webpack --config webpack.modules.config.js
+	"Compiling WindowFrame..."
+    npx webpack --progress
+	"Compiling Modules..."
+    npx webpack --progress --config webpack.modules.config.js
+
+	"Done."
 }
 Main

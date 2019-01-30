@@ -19,6 +19,7 @@
   "license": "MIT",
   "dependencies": {
     "@types/jquery": "^3.3.29",
+    "html-loader": "^0.5.5",
     "tippy.js": "^3.4.0",
     "ts-loader": "^5.3.3",
     "ts-nameof": "^2.0.0",

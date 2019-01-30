@@ -3,6 +3,7 @@ import Vue from "vue";
 import { IModule } from "System/Module";
 import { SettingInfo } from "System/Exports/API";
 import { LoSCalculator } from "System/Models/LoSCalculator/LoSCalculator";
+import TemplateContent from "./settings.html";
 
 declare global {
 	interface Window {
@@ -24,24 +25,47 @@ interface ProcessedSettingInfo {
 
 	Enums: { [key: string]: any } | null;
 }
+type ListTable<T> = { [key: string]: T[] };
 
 class SettingsModule implements IModule {
-	private VueObject = new Vue({
-		data: {
-			i18n: window.i18n,
+	private Data = {
+		Settings: <ListTable<ProcessedSettingInfo>>{}
+	};
 
-			Settings: <{ [key: string]: ProcessedSettingInfo[] }>{}
-		},
-		el: $("#settings-container")[0]
+	private VueObject = Vue.component("settings-component", {
+		props: ["i18n"],
+		data: () => this.Data,
+		template: TemplateContent,
+		methods: {
+			i18nf(input: string, def?: string) {
+				console.log(input, def, this.i18n);
+				if (input in this.i18n) return this.i18n[input];
+				return def || input;
+			},
+
+			UpdateSetting(event: Event) {
+				const target = <HTMLInputElement | HTMLSelectElement>event.target;
+
+				const name: string[] = target.name.split(".");
+				const Provider: string = name[0];
+				const Name: string = name[1];
+				let Value: string | boolean = target.value;
+
+				if (target instanceof HTMLInputElement && target.type === "checkbox")
+					Value = target.checked;
+
+				window.API.UpdateSetting(Provider, Name, Value);
+			}
+		}
 	});
 
 	init(): void {
 		(async () => {
 			const settings = await window.API.GetSettings();
-			this.VueObject.Settings = this.Preprocess(settings);
+			this.Data.Settings = this.Preprocess(settings);
 		})();
 
-		window.modules.areas.register("main", "settings", "Settings", "", this.VueObject);
+		window.modules.areas.register("main", "settings", "Settings", "setting", "settings-component");
 	}
 
 	private Preprocess(settings: SettingInfo[]): { [key: string]: ProcessedSettingInfo[] } {

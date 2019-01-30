@@ -4,6 +4,7 @@ import { IModule } from "System/Module";
 import { Homeport } from "System/Homeport/Homeport";
 import { IdentifiableTable } from "System/Models/TableWrapper";
 import { Progress } from "System/Models/GuageValue";
+import TemplateContent from "./top-expedition.html";
 
 interface ExpeditionData {
 	Enabled: boolean;
@@ -17,13 +18,14 @@ interface ExpeditionData {
 class TopExpedition implements IModule {
 	private readonly MAX_FLEETS = 4; // Maximum fleets
 
-	private Expeditions: IdentifiableTable<ExpeditionData> | null = null;
+	private Expedition: IdentifiableTable<ExpeditionData> | null = null;
+	private Data = {
+		Expeditions: <ExpeditionData[]>[]
+	};
 
-	private VueObject = new Vue({
-		data: {
-			Expeditions: <ExpeditionData[]>[]
-		},
-		el: $("#top-expeditions")[0],
+	private VueObject = Vue.component("top-expedition-component", {
+		data: () => this.Data,
+		template: TemplateContent,
 		methods: {
 			ExpeditionState(exp: ExpeditionData): string {
 				return exp.Enabled
@@ -48,18 +50,18 @@ class TopExpedition implements IModule {
 			};
 			list.push(data);
 		}
-		this.Expeditions = new IdentifiableTable<ExpeditionData>(list);
-		this.VueObject.Expeditions = this.Expeditions.values();
+		this.Expedition = new IdentifiableTable<ExpeditionData>(list);
+		this.Data.Expeditions = this.Expedition.values();
 
 		Homeport.Instance.Observe(() => this.Reload(), nameof(Homeport.Instance.Fleets));
 
-		window.modules.areas.register("top", "top-expedition", "Expeditions bar", "", this.VueObject);
+		window.modules.areas.register("top", "top-expedition", "Expeditions bar", "", "top-expedition-component");
 	}
 
 	private Reload(): void {
 		Homeport.Instance.Fleets.forEach(x => {
 			const id = x.Id; // Begin at 2nd fleet
-			const target = this.Expeditions!.get(id);
+			const target = this.Expedition!.get(id);
 			if (!target) return;
 			target.Enabled = x ? true : false;
 
@@ -73,7 +75,7 @@ class TopExpedition implements IModule {
 						? value.Percentage * 100 : 0;
 				}, nameof(exp.Progress));
 			}
-			this.VueObject.Expeditions = this.Expeditions!.values(); // Update?
+			this.Data.Expeditions = this.Expedition!.values(); // Update?
 		});
 	}
 

@@ -30,12 +30,16 @@ Vue.directive("dom", function (el, binding) {
 		$(el).append(binding.value);
 });
 
+Vue.component("game-component", {
+	template: `<iframe src="MainFramePlaceholder.html" id="MAIN_FRAME" name="MAIN_FRAME"></iframe>`
+});
+
 Vue.use(VueTippy, tippy.defaults);
 
 window.modules = Modules.Instance;
 window.CALLBACK = Callback.Instance;
 
-const baseAPI = new BaseAPI(); // Initialize BaseAPI
+window.BaseAPI = new BaseAPI(); // Initialize BaseAPI
 
 document.addEventListener("DOMContentLoaded", async function () {
 	if (window.modules.initialized()) return; // Called twice
@@ -65,9 +69,17 @@ document.addEventListener("DOMContentLoaded", async function () {
 			}
 		}
 	});
-	baseAPI.Event("zoomMainFrame", v =>{
+	window.BaseAPI.Event("zoomMainFrame", v => {
 		mainBox.Frame.Width = 1200 * v;
 		mainBox.Frame.Height = 720 * v;
+	});
+	window.BaseAPI.Event("i18n", v => {
+		mainBox.i18n = window.i18n;
+		mainBox.$forceUpdate();
+		mainBox.$nextTick(() => {
+			mainBox.$forceUpdate();
+		});
+		mainBox.$nextTick();
 	});
 
 	if ((<any>window).CefSharp)

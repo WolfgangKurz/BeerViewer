@@ -1,43 +1,46 @@
 <div id="settings-container">
 	<form>
 		<div class="setting-group"
-			v-for="(group, key) in Settings">
-			<h2 class="setting-group-name">{{i18n[`group.${key}`] || key}}</h2>
+				v-for="(group, key) in Settings">
+			<h2 class="setting-group-name">{{i18nf(`group.${key}`, key)}}</h2>
 			<div class="setting-line"
-				v-for="setting in group">
-				<span class="setting-name">{{i18n[setting.DisplayName] || setting.DisplayName}}</span>
+					v-for="setting in group">
+				<span class="setting-name">{{i18nf(setting.DisplayName, setting.DisplayName)}}</span>
 
 				<div class="setting-content"
-					:data-enum="setting.Enums ? '1' : '0'">
+						:data-enum="setting.Enums ? '1' : '0'">
 					<template v-if="setting.Enums">
 						<label class="setting-content-item"
-							data-type="radio"
-							v-for="(item, key) in setting.Enums"
-							:data-state="setting.Value === key ? 'selected' : ''">
+								data-type="radio"
+								v-for="(item, key) in setting.Enums"
+								:data-state="setting.Value === key ? 'selected' : ''">
 							<input type="radio"
-								:name="`${setting.Provider}.${setting.Name}`"
-								:value="key"
-								v-model="setting.Value">
-							{{i18n[(setting.i18nPrefix || "")+key.toLowerCase()] || item}}
+									:name="`${setting.Provider}.${setting.Name}`"
+									:value="key"
+									v-model="setting.Value"
+									@change="UpdateSetting">
+							{{i18nf((setting.i18nPrefix || "")+key.toLowerCase(), item)}}
 						</label>
 					</template>
 					<template v-else-if="setting.Type === 'Boolean'">
 						<label class="setting-content-item"
-							data-type="checkbox"
-							:data-state="setting.Value ? 'checked' : ''">
+								data-type="checkbox"
+								:data-state="setting.Value ? 'checked' : ''">
 							<input type="checkbox"
-								:name="`${setting.Provider}.${setting.Name}`"
-								v-model="setting.Value">
+									:name="`${setting.Provider}.${setting.Name}`"
+									v-model="setting.Value"
+									@change="UpdateSetting">
 						</label>
 					</template>
 					<template v-else>
 						<input :name="`${setting.Provider}.${setting.Name}`"
-							:value="setting.Value">
+								:value="setting.Value"
+								@change="UpdateSetting">
 					</template>
 
-					<div class="setting-description">{{i18n[setting.Description] || setting.Description}}</div>
+					<div class="setting-description">{{i18nf(setting.Description, setting.Description)}}</div>
 					<div class="setting-caution"
-						v-if="setting.Caution">{{i18n[setting.Caution] || setting.Caution}}</div>
+							v-if="setting.Caution">{{i18nf(setting.Caution, setting.Caution)}}</div>
 				</div>
 			</div>
 		</div>

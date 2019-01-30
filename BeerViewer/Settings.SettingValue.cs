@@ -29,8 +29,9 @@ namespace BeerViewer
 					if (!object.Equals(this._Value, value))
 					{
 						this._Value = value;
-						this.ValueChanged?.Invoke(this, EventArgs.Empty);
 						this.Save();
+
+						this.ValueChanged?.Invoke(this, EventArgs.Empty);
 					}
 				}
 			}
@@ -177,6 +178,11 @@ namespace BeerViewer
 								rValue = (T)Convert.ChangeType(v, typeof(T));
 								break;
 							}
+
+						case TypeCode.String:
+							ret = true;
+							rValue = (T)Convert.ChangeType(sValue.ToString(), typeof(T));
+							break;
 
 						default:
 							if (typeof(T) == typeof(WindowInfo))

@@ -1,9 +1,11 @@
-import Vue from "vue";
+import Vue, { VueConstructor } from "vue";
+import BaseAPI from "./Base/API";
 
 declare global {
 	interface Window {
 		modules: Modules;
 		CALLBACK: Callback;
+		BaseAPI: BaseAPI;
 	}
 }
 
@@ -32,15 +34,15 @@ export class Module {
 	public Name: string;
 	public Icon: string;
 	public Displaying: boolean;
-	public Element: HTMLElement | null;
+	public ComponentName: string;
 
-	constructor(Area: string, Id: string, Name: string, Icon: string, Displaying: boolean, TargetElement: HTMLElement | null) {
+	constructor(Area: string, Id: string, Name: string, Icon: string, Displaying: boolean, ComponentName: string) {
 		this.Area = Area;
 		this.Id = Id;
 		this.Name = Name;
 		this.Icon = Icon;
 		this.Displaying = Displaying;
-		this.Element = TargetElement;
+		this.ComponentName = ComponentName;
 	}
 }
 class ModuleArea {
@@ -79,7 +81,7 @@ class ModuleAreas {
 	}
 
 	private ValidIcon(icon: string): boolean {
-		return ["", "game", "plugin", "devtool"].indexOf(icon) >= 0;
+		return ["", "game", "plugin", "devtool", "setting"].indexOf(icon) >= 0;
 	}
 
 	public init(): void {
@@ -89,7 +91,7 @@ class ModuleAreas {
 		});
 
 		// Main browser
-		this.register("main", "game", "Game", "game", document.querySelector("#MAIN_FRAME") as HTMLElement);
+		this.register("main", "game", "Game", "game", "game-component");
 
 		// Devtools
 		this._Tools["devtools"] = new MenuTool(
@@ -99,15 +101,9 @@ class ModuleAreas {
 		);
 	}
 
-	public register(area: string, id: string, name: string, icon: string, rootElement: Vue | HTMLElement | null): void {
+	public register(area: string, id: string, name: string, icon: string, componentName: string): void {
 		if (!(area in this._Areas)) throw `Area '${area}' not supported`;
 		const areaElem = this._Areas[area];
-
-		let elem: HTMLElement | null;
-		if (rootElement !== null && "$el" in rootElement) {
-			elem = (<Vue>rootElement).$el as (HTMLElement | null);
-		} else
-			elem = rootElement as (HTMLElement | null);
 
 		if (areaElem.Modules.some(x => x.Id === id)) throw "Already registered name";
 
@@ -117,7 +113,7 @@ class ModuleAreas {
 			name,
 			this.ValidIcon(icon) ? icon : "unknown",
 			areaElem.Modules.length === 0 || area === "top",
-			elem
+			componentName
 		));
 	}
 }

@@ -1,3 +1,4 @@
+module.Settings		뷰어 설정
 group.Language		언어 설정
 group.System		시스템 설정
 group.LoS			색적 설정

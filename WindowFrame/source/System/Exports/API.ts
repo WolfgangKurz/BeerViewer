@@ -60,6 +60,9 @@ export interface Communicator {
 
 	/** Get html content of Built-in module if exists. */
 	GetBuiltinModule(ModuleName: string): Promise<string>;
+
+	/** Save settings has updated */
+	UpdateSetting(Provider: string, Name: string, Value: any): Promise<boolean>;
 }
 
 /** Callable from Communicator */

@@ -4,6 +4,7 @@ import { IModule } from "System/Module"
 import { Homeport } from "System/Homeport/Homeport";
 import { Materials } from "System/Homeport/Materials";
 import { Admiral } from "System/Homeport/Admiral";
+import TemplateContent from "./top-resource.html";
 
 interface ResourceData {
 	Name: string;
@@ -13,13 +14,18 @@ interface ResourceData {
 class TopResources implements IModule {
 	private readonly ResourceList: string[] = ["Fuel", "Ammo", "Steel", "Bauxite", "RepairBucket", "ImprovementMaterial"];
 
-	private VueObject = new Vue({
-		data: {
-			Resources: <ResourceData[]>[],
-			Overlimit: <number>5000
-		},
-		el: $("#top-resources")[0]
-	});
+	private Resources: ResourceData[] = [];
+	private Overlimit: number = 5000;
+
+	constructor() {
+		Vue.component("top-resource-component", {
+			data: () => ({
+				Resources: this.Resources,
+				Overlimit: this.Overlimit
+			}),
+			template: TemplateContent
+		});
+	}
 
 	init(): void {
 		const Resources: ResourceData[] = [];
@@ -31,7 +37,7 @@ class TopResources implements IModule {
 			};
 			Resources.push(res);
 		});
-		this.VueObject.Resources = Resources;
+		this.Resources = Resources;
 
 		(function (this: Materials | null, _this: TopResources) {
 			if (!this) throw "Materials not set yet, something wrong";
@@ -46,18 +52,18 @@ class TopResources implements IModule {
 
 		Homeport.Instance.Observe(
 			(_, value: Admiral) => value && value.Observe(
-				(_, value: number) => value && (this.VueObject.Overlimit = value),
+				(_, value: number) => value && (this.Overlimit = value),
 				nameof(Homeport.Instance.Admiral!.ResourceLimit)
 			),
 			nameof(Homeport.Instance.Admiral)
 		);
 
-		window.modules.areas.register("top", "top-resource", "Resources bar", "", this.VueObject);
+		window.modules.areas.register("top", "top-resource", "Resources bar", "", "top-resource-component");
 	}
 
 	private UpdateResource(name: string, value: number) {
 		if (typeof value !== "number") return;
-		this.VueObject.Resources.forEach(x => x.Name == name && (x.Value = value));
+		this.Resources.forEach(x => x.Name == name && (x.Value = value));
 	}
 }
 window.modules.register("top-resource", new TopResources());
