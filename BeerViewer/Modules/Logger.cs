@@ -4,36 +4,40 @@ using System.Diagnostics;
 
 namespace BeerViewer.Modules
 {
+	public class LogData
+	{
+		public string Format { get; }
+		public object[] Arguments { get; }
+
+		public LogData(string format, object[] arguments)
+		{
+			this.Format = format;
+			this.Arguments = arguments;
+		}
+	}
 	public class Logger
 	{
-		public delegate void LogEventHandler(string Log);
+		public delegate void LogEventHandler(string format, params object[] args);
 		public static event LogEventHandler Logged;
 
 		private static Logger Instance { get; } = new Logger();
 
-		private Dictionary<string, Queue<string>> RegisteredLoggers { get; }
+		private Dictionary<string, Queue<LogData>> RegisteredLoggers { get; }
 
 		private Logger()
 		{
-			this.RegisteredLoggers = new Dictionary<string, Queue<string>>();
+			this.RegisteredLoggers = new Dictionary<string, Queue<LogData>>();
 		}
 
-		private void _Log(string Log)
+		private void _Log(string format, params object[] args)
 		{
-			var _Log = string.Format(
-				"[{0}] {1}",
-				DateTime.Now.ToString("HH:mm:ss"),
-				Log
-			);
-
-			Logger.Logged?.Invoke(_Log);
-			Debug.WriteLine(_Log);
+			Logger.Logged?.Invoke(format, args);
 
 			foreach (var kv in this.RegisteredLoggers)
-				kv.Value.Enqueue(_Log);
+				kv.Value.Enqueue(new LogData(format, args));
+
+			Debug.WriteLine(string.Format(format, args));
 		}
-		private void _Log(string format, params object[] args)
-			=> this._Log(string.Format(format, args));
 
 
 		public static void Log(string Log)
@@ -43,12 +47,12 @@ namespace BeerViewer.Modules
 
 		public static void Register(string Name)
 		{
-			Instance.RegisteredLoggers.Add(Name, new Queue<string>());
+			Instance.RegisteredLoggers.Add(Name, new Queue<LogData>());
 		}
 		public static void Unregister(string Name)
 			=> Instance.RegisteredLoggers.Remove(Name);
 
-		public static string Fetch(string Name)
+		public static LogData Fetch(string Name)
 		{
 			var item = Instance.RegisteredLoggers[Name];
 			item.TrimExcess();

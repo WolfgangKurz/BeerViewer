@@ -1,11 +1,14 @@
 import tippy from "tippy.js";
 import Vue from "vue";
+import Vuex, { mapState } from "vuex";
 import VueTippy from "vendor/vue.tippy";
 import Modules, { Callback } from "./Module";
 import { Homeport } from "./Homeport/Homeport";
 import { Master } from "./Master/Master";
 import BaseAPI from "./Base/API"
 import { Settings } from "./Settings";
+
+Vue.use(Vuex);
 
 tippy.setDefaults({
 	arrow: true,
@@ -40,6 +43,18 @@ window.modules = Modules.Instance;
 window.CALLBACK = Callback.Instance;
 
 window.BaseAPI = new BaseAPI(); // Initialize BaseAPI
+const vueStore = new Vuex.Store({
+	state: {
+		i18n: window.i18n
+	},
+	mutations: {
+		i18n(state, n) {
+			state.i18n = n;
+		}
+	}
+});
+window.BaseAPI.Event("i18n", v => vueStore.commit("i18n", window.i18n));
+console.log(vueStore);
 
 document.addEventListener("DOMContentLoaded", async function () {
 	if (window.modules.initialized()) return; // Called twice
@@ -47,8 +62,6 @@ document.addEventListener("DOMContentLoaded", async function () {
 	window.modules.areas.init();
 	const mainBox = new Vue({
 		data: {
-			i18n: window.i18n,
-
 			Areas: window.modules.areas.Areas,
 			Tools: window.modules.areas.Tools,
 
@@ -58,6 +71,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 			}
 		},
 		el: $("#mainbox")[0],
+		store: vueStore,
 		methods: {
 			OpenMenu: (x: boolean) => window.OpenMenu(x),
 			SelectModule: function (Area: string, Name: string) {
@@ -67,19 +81,14 @@ document.addEventListener("DOMContentLoaded", async function () {
 				const area = this.Areas[Area];
 				area.Modules.forEach(x => x.Displaying = x.Name === Name);
 			}
-		}
+		},
+		computed: mapState({
+			i18n: "i18n"
+		})
 	});
 	window.BaseAPI.Event("zoomMainFrame", v => {
 		mainBox.Frame.Width = 1200 * v;
 		mainBox.Frame.Height = 720 * v;
-	});
-	window.BaseAPI.Event("i18n", v => {
-		mainBox.i18n = window.i18n;
-		mainBox.$forceUpdate();
-		mainBox.$nextTick(() => {
-			mainBox.$forceUpdate();
-		});
-		mainBox.$nextTick();
 	});
 
 	if ((<any>window).CefSharp)

@@ -10,6 +10,7 @@
 	<script type="text/javascript" src="vendor/jquery.slim.min.js"></script>
 	<script type="text/javascript" src="vendor/tippy.all.min.js"></script>
 	<script type="text/javascript" src="vendor/vue.js"></script>
+	<script type="text/javascript" src="vendor/vuex.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="vendor/tippy.theme.css" />
 
 	<!-- Base -->
@@ -77,8 +78,7 @@
 				   :key="module.Id"
 				   v-show="module.Displaying">
 				   	<keep-alive>
-						<component :is="module.ComponentName"
-								   :i18n="i18n"></component>
+						<component :is="module.ComponentName"></component>
 					</keep-alive>
 				</i>
 			</div>
@@ -92,8 +92,7 @@
 				   :key="module.Id"
 				   v-show="module.Displaying">
 				   	<keep-alive>
-						<component :is="module.ComponentName"
-								   :i18n="i18n"></component>
+						<component :is="module.ComponentName"></component>
 					</keep-alive>
 				</i>
 			</div>
@@ -107,8 +106,7 @@
 				   :key="module.Id"
 				   v-show="module.Displaying">
 				   	<keep-alive>
-						<component :is="module.ComponentName"
-								   :i18n="i18n"></component>
+						<component :is="module.ComponentName"></component>
 					</keep-alive>
 				</i>
 			</div>
@@ -122,8 +120,7 @@
 				   :key="module.Id"
 				   v-show="module.Displaying">
 				   	<keep-alive>
-						<component :is="module.ComponentName"
-								   :i18n="i18n"></component>
+						<component :is="module.ComponentName"></component>
 					</keep-alive>
 				</i>
 			</div>

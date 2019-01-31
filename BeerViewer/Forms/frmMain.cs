@@ -102,18 +102,6 @@ namespace BeerViewer.Forms
 				this.WindowBrowser,
 				async () => // After communicator initialized
 				{
-					{
-						// Register to Logger
-						Logger.Logged += e => this.Communicator.CallbackScript("Logged", e);
-
-						// Logged before initialized
-						string prevLog;
-						while ((prevLog = Logger.Fetch("MainLogger")) != null)
-							await this.Communicator.CallbackScript("Logged", prevLog);
-
-						Logger.Unregister("MainLogger");
-					}
-
 					Settings.LanguageCode.ValueChanged += async (s, e) => await this.Communicator.CallbackScript("i18n", Settings.LanguageCode.Value);
 
 					this.ClientSizeChanged += (s, e) => this.Communicator?.CallbackScript("WindowState", (int)this.WindowState);
@@ -123,6 +111,18 @@ namespace BeerViewer.Forms
 					this.GameBrowser = this.WindowBrowser.GetBrowser().GetFrame("MAIN_FRAME");
 					await this.Communicator.CallScript("window.INTERNAL.zoomMainFrame", 66.6666);
 					await this.Communicator.CallScript("window.INTERNAL.loadMainFrame", Constants.GameURL);
+
+					{
+						// Register to Logger
+						Logger.Logged += (f, a) => this.Communicator.CallbackScript("Logged", f, a);
+
+						// Logged before initialized
+						LogData prevLog;
+						while ((prevLog = Logger.Fetch("MainLogger")) != null)
+							await this.Communicator.CallbackScript("Logged", prevLog.Format, prevLog.Arguments);
+
+						Logger.Unregister("MainLogger");
+					}
 				}
 			);
 

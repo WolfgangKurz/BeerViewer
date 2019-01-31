@@ -1,1 +1,8 @@
 module.Log		로그 화면
+
+Logger module has been loaded					Logger 모듈이 로드되었습니다.
+Login page detected, applying Welcome patch		로그인 화면이 감지되었습니다. Welcome 패치를 적용합니다.
+Failed to control game frame...					게임 화면 프레임을 제어하는데 실패했습니다.
+Foreign page detected, applying DMM cookie		해외 접속 페이지가 감지되었습니다. DMM 쿠키를 적용합니다.
+Game CSS applied								게임 화면 CSS가 적용되었습니다.
+Default port already in using, use {0} instead.	기본 포트가 이미 사용중입니다. 대신 {0} 포트를 사용합니다.

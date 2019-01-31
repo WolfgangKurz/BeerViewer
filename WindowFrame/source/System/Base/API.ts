@@ -7,15 +7,16 @@ export class BaseAPI {
 
 	constructor() {
 		const _this = this;
+		Object.freeze(this._origin_i18n);
 
 		window.INTERNAL = {
 			async Initialized(): Promise<void> {
 				await _this.LoadLanguage();
+				fns(_this.callbacks.i18n, window.i18n);
 
 				window.CALLBACK.register("i18n", async (language: string) => {
 					await _this.LoadLanguage();
-					fns(_this.callbacks.i18n);
-					Vue.nextTick();
+					fns(_this.callbacks.i18n, window.i18n);
 				});
 			},
 			zoomMainFrame(_zoomFactor: number | string): void {
@@ -36,14 +37,7 @@ export class BaseAPI {
 				fns(_this.callbacks.loadMainFrame, url);
 			}
 		};
-		window.i18n
-			= new Proxy({}, {
-				get: function (_, name) {
-					const target = _this._origin_i18n;
-					if (name in target) return target[name.toString()];
-					return undefined; // name;
-				}
-			});
+		window.i18n = this._origin_i18n;
 		window._i18n
 			= async function (text: string): Promise<string> {
 				return await window.API.i18n(text);
@@ -64,6 +58,9 @@ export class BaseAPI {
 		for (let i = 0; i < props.length; i++) delete target[props[i]];
 		for (let i in set) target[i] = set[i];
 		this._origin_i18n = target;
+
+		Object.freeze(this._origin_i18n);
+		window.i18n = this._origin_i18n;
 	}
 }
 export default BaseAPI;

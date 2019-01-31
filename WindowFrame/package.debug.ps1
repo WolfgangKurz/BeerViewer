@@ -25,6 +25,11 @@ function Main {
 	"Compiling Modules..."
     npx webpack --progress --config webpack.modules.config.js
 
+	"Copying dist to Debug directory..."
+    Remove-Item ../BeerViewer/bin/Debug/WindowFrame -Recurse -Force | Out-Null
+    New-Item ../BeerViewer/bin/Debug/WindowFrame -ItemType directory | Out-Null
+    Copy-Item ./dist/* ../BeerViewer/bin/Debug/WindowFrame -Force -Recurse
+
 	"Done."
 }
 Main

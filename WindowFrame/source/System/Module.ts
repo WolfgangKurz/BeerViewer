@@ -9,7 +9,7 @@ declare global {
 	}
 }
 
-export type CallbackFunction = (Parameter: any) => void;
+export type CallbackFunction = (...Parameter: any) => void;
 export interface IModule {
 	init(): void;
 }

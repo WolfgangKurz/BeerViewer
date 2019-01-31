@@ -66,7 +66,7 @@ namespace BeerViewer.Network
 			} while (true);
 
 			if (AlterPort)
-				Logger.Log($"Default port already in using, use {this.ListeningPort} instead.");
+				Logger.Log("Default port already in using, use {0} instead.", this.ListeningPort);
 
 			HttpProxy.BeforeRequest += _ =>
 				this.ModifiableHandlers

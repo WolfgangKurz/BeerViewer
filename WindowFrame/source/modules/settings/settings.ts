@@ -1,5 +1,6 @@
 /// <reference path="../../../node_modules/ts-nameof/ts-nameof.d.ts" />
 import Vue from "vue";
+import { mapState } from "vuex";
 import { IModule } from "System/Module";
 import { SettingInfo } from "System/Exports/API";
 import { LoSCalculator } from "System/Models/LoSCalculator/LoSCalculator";
@@ -33,16 +34,12 @@ class SettingsModule implements IModule {
 	};
 
 	private VueObject = Vue.component("settings-component", {
-		props: ["i18n"],
 		data: () => this.Data,
 		template: TemplateContent,
+		computed: mapState({
+			i18n: "i18n"
+		}),
 		methods: {
-			i18nf(input: string, def?: string) {
-				console.log(input, def, this.i18n);
-				if (input in this.i18n) return this.i18n[input];
-				return def || input;
-			},
-
 			UpdateSetting(event: Event) {
 				const target = <HTMLInputElement | HTMLSelectElement>event.target;
 

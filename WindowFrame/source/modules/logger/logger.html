@@ -1,4 +1,7 @@
 <div id="logger-container">
 	<div class="logger-log"
-		 v-for="log in Logs">{{log}}</div>
+		 v-for="loginfo in Logs">
+		 [{{loginfo.Date}}]
+		 {{format(i18n[loginfo.Text] || loginfo.Text, loginfo.Arguments)}}
+	</div>
 </div>

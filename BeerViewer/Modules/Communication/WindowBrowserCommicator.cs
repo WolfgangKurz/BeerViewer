@@ -104,19 +104,19 @@ namespace BeerViewer.Modules.Communication
 		/// <returns>Script result</returns>
 		internal Task<object> CallScript(string name, params object[] args)
 		{
-			return CallRawScript(
-				string.Format(
-					"{0}({1})",
-					name,
-					string.Join(",", args.Select(x =>
-					{
-						var type = x.GetType();
-						if (type == typeof(string)) return $"\"{(x as string)}\"";
-						else if (type == typeof(bool)) return (bool)x ? "true" : "false";
-						else return x.ToString();
-					}))
-				)
+			var script = string.Format(
+				"{0}({1})",
+				name,
+				string.Join(",", args.Select(x =>
+				{
+					var type = x.GetType();
+					if (type == typeof(string)) return $"\"{(x as string)}\"";
+					else if (type == typeof(bool)) return (bool)x ? "true" : "false";
+					else if (type.IsArray) return $"[{string.Join(", ", x as object[])}]";
+					else return x.ToString();
+				}))
 			);
+			return CallRawScript(script);
 		}
 
 		/// <summary>
@@ -245,7 +245,7 @@ namespace BeerViewer.Modules.Communication
 
 				if (!File.Exists(scriptFile))
 				{
-					Logger.Log("Module directory '{0}' found but '{0}.js' not found", moduleName, scriptFile);
+					Logger.Log("Module directory '{0}' found but '{1}.js' not found", moduleName, scriptFile);
 					continue;
 				}
 

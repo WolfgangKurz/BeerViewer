@@ -56,6 +56,7 @@ module.exports = {
 	},
 	externals: {
 		"vue": "Vue",
+		"vuex": "Vuex",
 		"tippy.js": {
 			root: "tippy",
 			commonjs2: "tippy.js",
