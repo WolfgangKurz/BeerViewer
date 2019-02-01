@@ -1,10 +1,20 @@
 import { DirectiveBinding } from "vue/types/options";
 import Vue, { VNode, PluginObject } from "vue";
-import tippy, { Props } from "tippy.js";
+import tippy, { Props, Tippy } from "tippy.js";
+import Popper from "popper.js";
 
-type AnyElement = HTMLElement | any;
+interface VueTippyHTMLElement extends HTMLElement {
+	_tippyReferences: HTMLElement[];
+	_tippy: {
+		popperInstance: Popper
+		popper: HTMLElement;
+		show(): void;
+		hide(): void;
+		destroy(): void;
+	};
+}
 
-const TIPPY = function (el: AnyElement, binding: DirectiveBinding, vnode: VNode) {
+const TIPPY = function (el: VueTippyHTMLElement, binding: DirectiveBinding, vnode: VNode) {
 	const handlers: any = (vnode.data && vnode.data.on) || (vnode.componentOptions && vnode.componentOptions.listeners);
 	const opts = Object.assign({ reactive: false, showOnLoad: false }, binding.value || {});
 
@@ -22,17 +32,19 @@ const TIPPY = function (el: AnyElement, binding: DirectiveBinding, vnode: VNode)
 				: selector instanceof Vue
 					? selector.$el
 					: document.querySelector(selector);
+			opts.content = opts.html.innerHTML;
 		} else {
-			const elem = document.querySelector<AnyElement>(opts.html);
+			const elem = document.querySelector<VueTippyHTMLElement>(opts.html);
 			if (elem) {
-				if (elem._tipppyReferences)
-					elem._tipppyReferences.push(el);
+				if (elem._tippyReferences)
+					elem._tippyReferences.push(el);
 				else
-					elem._tipppyReferences = [el];
+					elem._tippyReferences = [el];
 			} else {
 				console.error(`[TippyExt] Selector "${opts.html}" not found`);
 				return;
 			}
+			opts.content = elem.innerHTML;
 		}
 	}
 
@@ -56,33 +68,37 @@ const TIPPY = function (el: AnyElement, binding: DirectiveBinding, vnode: VNode)
 const VueTippy: PluginObject<Props> = {
 	install(Vue, options) {
 		Vue.directive("tippy-target", { // Tippy content target
-			componentUpdated: function (el: AnyElement) {
-				const refs = el._tipppyReferences;
+			componentUpdated: function (_el: HTMLElement) {
+				const el = <VueTippyHTMLElement>_el;
+				const refs = el._tippyReferences;
 				if (refs && refs.length > 0) {
 					Vue.nextTick(() => {
-						refs.filter((x: AnyElement) => x._tippy)
-							.forEach((ref: AnyElement) => {
-								if (ref._tippy) {
-									const content = ref._tippy.popper.querySelector(".tippy-content");
-									content.innerHTML = el.innerHTML;
-								}
+						refs.filter((x: HTMLElement) => (<VueTippyHTMLElement>x)._tippy)
+							.forEach((_ref: HTMLElement) => {
+								const ref = <VueTippyHTMLElement>_ref;
+								const content = ref._tippy.popper.querySelector(".tippy-content");
+								if (content) content.innerHTML = el.innerHTML;
 							});
 					});
 				}
 			},
-			unbind: function (el: AnyElement) {
-				delete el._tipppyReference;
+			unbind: function (_el: HTMLElement) {
+				const el = <VueTippyHTMLElement>_el;
+				delete el._tippyReferences;
 			}
 		});
 		Vue.directive("tippy", {
-			inserted: function (el, binding, vnode) {
+			inserted: function (_el, binding, vnode) {
+				const el = <VueTippyHTMLElement>_el;
 				Vue.nextTick(() => TIPPY(el, binding, vnode));
 			},
-			unbind: function (el: AnyElement) {
+			unbind: function (_el: HTMLElement) {
+				const el = <VueTippyHTMLElement>_el;
 				if (el._tippy)
 					el._tippy.destroy();
 			},
-			componentUpdated: function (el: AnyElement, binding, vnode) {
+			componentUpdated: function (_el: HTMLElement, binding, vnode) {
+				const el = <VueTippyHTMLElement>_el;
 				const ts = JSON.stringify;
 				const opts = binding.value || {};
 				const oldOpts = binding.oldValue || {};
@@ -94,7 +110,7 @@ const VueTippy: PluginObject<Props> = {
 					if (el._tippy.popperInstance) {
 						if (opts.show)
 							el._tippy.show();
-						else if (!opts.show && opts.trigger === "manual")
+						else if (opts.trigger === "manual")
 							el._tippy.hide();
 					}
 				}

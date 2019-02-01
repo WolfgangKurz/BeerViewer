@@ -9,13 +9,16 @@ import { Homeport } from "System/Homeport/Homeport";
 import { FleetState } from "System/Enums/FleetEnums";
 import { ObservableCallback } from "System/Base/Observable";
 import TemplateContent from "./overview.html";
+import { mapState } from "vuex";
+import { ShipInfo } from "System/Master/Wrappers/ShipInfo";
 
 const getTextWidth = function (text: string, font: string) {
 	const canvas: HTMLCanvasElement = (<any>getTextWidth).canvas || ((<any>getTextWidth).canvas = document.createElement("canvas"));
 	const context = canvas.getContext("2d");
 	if (!context) return 0; // Failed to get canvas context..?
 	context.font = font;
-	return context.measureText(text).width;
+	const m = context.measureText(text);
+	return m.width;
 };
 
 interface FleetData {
@@ -76,10 +79,14 @@ class Overview implements IModule {
 	}
 
 	constructor() {
+		const _this = this;
 		Vue.component("overview-component", {
 			data: () => this.Data,
 			template: TemplateContent,
 
+			computed: mapState({
+				i18n: "i18n"
+			}),
 			methods: {
 				GetConditionLevel(condition: number): string {
 					let level: string = "0";
@@ -111,6 +118,9 @@ class Overview implements IModule {
 						states.push("damagecontrolled");
 
 					return states.join(" ");
+				},
+				SelectFleet(id: number): void {
+					_this.SelectFleet(id);
 				}
 			},
 			watch: {
@@ -131,7 +141,7 @@ class Overview implements IModule {
 								: 0;
 
 							fleet.NameSize = ships
-								.reduce((a, c) => Math.max(a, getTextWidth(c.Info.Name || "???", font)), 0)
+								.reduce((a, c) => Math.max(a, getTextWidth(this.i18n[c.Info.Name] || c.Info.Name || "???", font)), 0)
 								+ 6; // See overview.scss:131
 						});
 					},
@@ -155,6 +165,7 @@ class Overview implements IModule {
 		Homeport.Instance.ConstructionDock!.Observe(() => this.updateConstructionDocks(), nameof(Homeport.Instance.ConstructionDock!.Docks));
 
 		// Setup quests
+		//#region .
 		/*
 		(async function () {
 			const quests = $.new("div", "quest-container");
@@ -185,6 +196,7 @@ class Overview implements IModule {
 			overview.append(quests);
 		})();
 		*/
+		//#endregion
 		window.addEventListener("resize", () => this.updateSize());
 		this.updateSize();
 
@@ -329,7 +341,7 @@ class Overview implements IModule {
 				State: ConstructionDock.DockState.Locked,
 				StateText: ""
 			};
-			x.Observe((_, value: Ship) => dock.Ship = (value && value.Info.Name) || "???", nameof(x.Ship));
+			x.Observe((_, value: ShipInfo) => dock.Ship = (value && value.Name) || "???", nameof(x.Ship));
 			x.Observe((_, value: ConstructionDock.DockState) => {
 				dock.State = value;
 				dock.StateText = ConstructionDock.DockState[value].toLowerCase();

@@ -10,7 +10,6 @@ import { Expedition } from "./Expedition/Expedition";
 import { AirSupremacy } from "System/Models/AirSupremacy";
 import { LoSCalculator } from "System/Models/LoSCalculator/LoSCalculator";
 import { SubscribeKcsapi } from "System/Base/KcsApi";
-import { HTTPRequest } from "System/Exports/API";
 import { Settings } from "System/Settings";
 
 export class Fleet extends TickObservable implements IIdentifiable {

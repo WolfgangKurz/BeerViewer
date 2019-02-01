@@ -68,7 +68,7 @@
 				 v-if="ship !== null"
 				 :data-id="ship.Id"
 				 :data-state="ParseShipState(ship)"
-				 :style="{'grid-template-columns': fleet.NameSize+'px auto auto 20%'}"
+				 :style="{'grid-template-columns': `${fleet.NameSize}px auto auto 20%`}"
 				 v-tippy="{html:`#overview-ship-tooltip-${ship.Id}`}">
 				<div :id="'overview-ship-tooltip-'+ship.Id"
 					 class="tooltip-host"
@@ -92,7 +92,7 @@
 				</div>
 
 				<div class="ship-namelv">
-					<div class="ship-name" :prop="ship.Name">{{i18n[ship.Info.Name] || "???"}}</div>
+					<div class="ship-name">{{i18n[ship.Info.Name] || "???"}}</div>
 					<div class="ship-level">Lv.{{ship.Level || "???"}}</div>
 				</div>
 
@@ -123,7 +123,7 @@
 			 :data-state="dock.StateText">
 			<div class="dock-text">
 				<span v-if="dock.State === 0">{{i18n.fleet_repair_empty}}</span>
-				<span v-else-if="dock.State === 1">{{i18n[dock.Ship || "???"]}}</span>
+				<span v-else-if="dock.State === 1">{{i18n[dock.Ship] || "???"}}</span>
 				<span v-else>{{i18n.fleet_locked}}</span>
 			</div>
 			<div class="dock-time">
@@ -140,7 +140,7 @@
 			 :data-state="dock.StateText">
 			<div class="dock-text">
 				<span v-if="dock.State === 0">{{i18n.fleet_repair_empty}}</span>
-				<span v-else-if="dock.State === 2 || dock.State === 3">{{i18n[dock.Ship || "???"]}}</span>
+				<span v-else-if="dock.State === 2 || dock.State === 3">{{i18n[dock.Ship] || "???"}}</span>
 				<span v-else>{{i18n.fleet_locked}}</span>
 			</div>
 			<div class="dock-time">
