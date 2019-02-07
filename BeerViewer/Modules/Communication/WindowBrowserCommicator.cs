@@ -239,9 +239,12 @@ namespace BeerViewer.Modules.Communication
 			foreach (var dir in dirs)
 			{
 				var moduleName = Path.GetFileName(dir);
+				var moduleRawName = moduleName;
 				var scriptFile = Path.Combine(dir, moduleName + ".js");
 				var templateFile = Path.Combine(dir, moduleName + ".html");
 				var styleFile = Path.Combine(dir, moduleName + ".css");
+
+				var metaFile = Path.Combine(dir, "meta.txt");
 
 				if (!File.Exists(scriptFile))
 				{
@@ -249,9 +252,28 @@ namespace BeerViewer.Modules.Communication
 					continue;
 				}
 
+				if (File.Exists(metaFile)) {
+					var metas = File.ReadAllLines(metaFile);
+					foreach(var meta in metas)
+					{
+						if (!meta.StartsWith("#!")) continue;
+						if (!meta.Contains("=")) continue;
+
+						var head = meta.Substring(2, meta.IndexOf("=") - 2);
+						var body = meta.Substring(meta.IndexOf("=") + 1);
+						switch (head)
+						{
+							case "name":
+								moduleName = body;
+								break;
+						}
+					}
+				}
+
 				output.Add(new ModuleInfo
 				{
 					Name = moduleName,
+					RawName = moduleRawName,
 					Template = File.Exists(templateFile) ? File.ReadAllText(templateFile) : "",
 					Scripted = File.Exists(scriptFile),
 					Styled = File.Exists(styleFile),
@@ -360,6 +382,13 @@ namespace BeerViewer.Modules.Communication
 			return list.ToArray();
 		}
 
+		/// <summary>
+		/// Save value to setting.
+		/// </summary>
+		/// <param name="Provider">Provider of setting to save</param>
+		/// <param name="Name">Name of setting to save</param>
+		/// <param name="Value">Value of setting to save</param>
+		/// <returns><see cref="true"/> if saved. Otherwise failed.</returns>
 		public bool UpdateSetting(string Provider, string Name, dynamic Value)
 		{
 			if (string.IsNullOrWhiteSpace(Provider) || string.IsNullOrWhiteSpace(Name)) return false;
@@ -382,6 +411,20 @@ namespace BeerViewer.Modules.Communication
 				}
 			}
 			return false;
+		}
+
+		/// <summary>
+		/// Reload main game frame
+		/// </summary>
+		public void ReloadMainFrame()
+		{
+			var a = this.Browser.GetBrowser();
+			if (a == null) return;
+			
+			var b = a.GetFrame("MAIN_FRAME");
+			if (b == null) return;
+
+			b.ExecuteJavaScriptAsync("window.location.reload(true)");
 		}
 	}
 }

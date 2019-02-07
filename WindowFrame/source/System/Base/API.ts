@@ -18,23 +18,6 @@ export class BaseAPI {
 					await _this.LoadLanguage();
 					fns(_this.callbacks.i18n, window.i18n);
 				});
-			},
-			zoomMainFrame(_zoomFactor: number | string): void {
-				const zoomFactor = typeof _zoomFactor === "number"
-					? _zoomFactor / 100
-					: parseFloat(_zoomFactor) / 100;
-
-				$("#MAIN_FRAME")
-					.css("transform", `scale(${zoomFactor})`)
-					.css("marginRight", 1200 * (zoomFactor - 1) + "px")
-					.css("marginBottom", 720 * (zoomFactor - 1) + "px");
-
-				fns(_this.callbacks.zoomMainFrame, zoomFactor);
-			},
-			loadMainFrame(url: string): void {
-				$("#MAIN_FRAME").prop("src", url);
-
-				fns(_this.callbacks.loadMainFrame, url);
 			}
 		};
 		window.i18n = this._origin_i18n;

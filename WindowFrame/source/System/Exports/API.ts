@@ -63,19 +63,23 @@ export interface Communicator {
 
 	/** Save settings has updated */
 	UpdateSetting(Provider: string, Name: string, Value: any): Promise<boolean>;
+
+	/** Reload current page of Main game frame */
+	ReloadMainFrame(): void;
 }
 
 /** Callable from Communicator */
 export interface Internal {
 	Initialized(): Promise<void>;
-	zoomMainFrame(zoomFactor: number | string): void;
-	loadMainFrame(url: string): void;
 }
 
 /** Simple module information for `Module.ts` */
 export interface ModuleInfo {
 	/** Name of module */
 	Name: string;
+
+	/** Raw name of module */
+	RawName: string;
 
 	/** Content of *.html if exists, empty otherwise. */
 	Template: string;

@@ -8,9 +8,9 @@ import { IModule } from "System/Module";
 import { Homeport } from "System/Homeport/Homeport";
 import { FleetState } from "System/Enums/FleetEnums";
 import { ObservableCallback } from "System/Base/Observable";
-import TemplateContent from "./overview.html";
 import { mapState } from "vuex";
 import { ShipInfo } from "System/Master/Wrappers/ShipInfo";
+import TemplateContent from "./overview.html";
 
 const getTextWidth = function (text: string, font: string) {
 	const canvas: HTMLCanvasElement = (<any>getTextWidth).canvas || ((<any>getTextWidth).canvas = document.createElement("canvas"));

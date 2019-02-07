@@ -124,6 +124,37 @@ namespace BeerViewer.Framework
 			public bool RunContextMenu(IWebBrowser browserControl, IBrowser browser, IFrame frame, IContextMenuParams parameters, IMenuModel model, IRunContextMenuCallback callback)
 				=> false;
 		}
+		private class KeyHandler : IKeyboardHandler
+		{
+			public event KeyEventHandler KeyDown;
+			public event KeyEventHandler KeyUp;
+
+			/// <inheritdoc/>>
+			public bool OnPreKeyEvent(IWebBrowser browserControl, IBrowser browser, KeyType type, int windowsKeyCode, int nativeKeyCode, CefEventFlags modifiers, bool isSystemKey, ref bool isKeyboardShortcut)
+			{
+				isKeyboardShortcut = false;
+
+				var _key = (Keys)windowsKeyCode;
+				if (_key == Keys.Tab || _key == Keys.Left || _key == Keys.Up || _key == Keys.Down || _key == Keys.Right)
+					return false;
+
+				if (!isSystemKey)
+				{
+					if (type == KeyType.RawKeyDown || type == KeyType.KeyDown)
+						this.KeyDown?.Invoke(this, new KeyEventArgs(_key));
+					else if(type==KeyType.KeyUp)
+						this.KeyUp?.Invoke(this, new KeyEventArgs(_key));
+				}
+				return false;
+			}
+
+			/// <inheritdoc/>>
+			public bool OnKeyEvent(IWebBrowser browserControl, IBrowser browser, KeyType type, int windowsKeyCode, int nativeKeyCode, CefEventFlags modifiers, bool isSystemKey)
+			{
+				var result = false;
+				return result;
+			}
+		}
 
 		[DllImport("User32.dll")]
 		internal static extern bool ReleaseCapture();
@@ -179,6 +210,13 @@ namespace BeerViewer.Framework
 			var browserHandle = this.Handle;
 
 			this.MenuHandler = new NoMenuHandler();
+
+			{
+				var handler = new KeyHandler();
+				handler.KeyDown += (s, e) => this.OnKeyDown(e);
+				handler.KeyUp += (s, e) => this.OnKeyUp(e);
+				this.KeyboardHandler = handler;
+			}
 
 			Task.Run(() =>
 			{

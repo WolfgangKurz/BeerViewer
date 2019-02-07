@@ -7,6 +7,7 @@ import { Homeport } from "./Homeport/Homeport";
 import { Master } from "./Master/Master";
 import BaseAPI from "./Base/API"
 import { Settings } from "./Settings";
+import { fns } from "./Base/Base";
 
 Vue.use(Vuex);
 
@@ -33,10 +34,6 @@ Vue.directive("dom", function (el, binding) {
 		$(el).append(binding.value);
 });
 
-Vue.component("game-component", {
-	template: `<iframe src="MainFramePlaceholder.html" id="MAIN_FRAME" name="MAIN_FRAME"></iframe>`
-});
-
 Vue.use(VueTippy, tippy.defaults);
 
 window.modules = Modules.Instance;
@@ -45,11 +42,24 @@ window.CALLBACK = Callback.Instance;
 window.BaseAPI = new BaseAPI(); // Initialize BaseAPI
 const vueStore = new Vuex.Store({
 	state: {
-		i18n: window.i18n
+		i18n: window.i18n,
+		events: <{ [name: string]: Function[] }>{}
 	},
 	mutations: {
 		i18n(state, n) {
 			state.i18n = n;
+		},
+
+		e_register(state, data: { name: string, callback: Function }) {
+			const name = data.name, callback = data.callback;
+			if (!(name in state.events))
+				state.events[name] = [];
+
+			state.events[name].push(callback);
+		},
+		e_raise(state, data: { name: string, args: any[] }) {
+			const name = data.name, args = data.args;
+			fns(state.events[name], args);
 		}
 	}
 });
@@ -85,7 +95,11 @@ document.addEventListener("DOMContentLoaded", async function () {
 			i18n: "i18n"
 		})
 	});
-	window.BaseAPI.Event("zoomMainFrame", v => {
+	window.CALLBACK.register("Game.Zoom", (factor: number | string) => {
+		const v = typeof factor === "number"
+			? factor / 100
+			: parseFloat(factor) / 100;
+
 		mainBox.Frame.Width = 1200 * v;
 		mainBox.Frame.Height = 720 * v;
 	});
@@ -106,7 +120,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 	window.API.GetModuleList()
 		.then(async list => {
-			list.forEach(x => window.modules.load(x.Name, x.Template, x.Scripted, x.Styled));
+			list.forEach(x => window.modules.load(x.Name, x.RawName, x.Template, x.Scripted, x.Styled));
 
 			window.modules.init();
 			window.API.Initialized();

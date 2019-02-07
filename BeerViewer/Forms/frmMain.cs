@@ -1,4 +1,5 @@
 ﻿// #define USE_GC
+// #define USE_STARTUP_DEVTOOLS
 
 using System;
 using System.Collections.Generic;
@@ -39,6 +40,12 @@ namespace BeerViewer.Forms
 		{
 			InitializeComponent();
 
+#if DEBUG
+			this.Text = "βeerViewer 2.0";
+#else
+			this.Text = "BeerViewer 2.0";
+#endif
+
 			Logger.Register("MainLogger");
 
 			// Master.Instance.Ready();
@@ -69,7 +76,7 @@ namespace BeerViewer.Forms
 			this.ResizeEnd += (s, e) => Settings.WindowInformation.Value = this.GetWindowInformation();
 			this.Move += (s, e) => Settings.WindowInformation.Value = this.GetWindowInformation();
 
-			#region GC timer
+#region GC timer
 #if USE_GC
 			{
 				var timer = new System.Timers.Timer(5000);
@@ -84,23 +91,30 @@ namespace BeerViewer.Forms
 				timer.Start();
 			}
 #endif
-			#endregion
+#endregion
 
-			#region ComponentService
+#region ComponentService
+			// Components (Plugins)
 			ComponentService.Instance.Initialize();
-			#endregion
+#endregion
 
-			#region WindowBrowser
+#region WindowBrowser
 			this.WindowBrowser = new FrameworkBrowser("")
 			{
 				Dock = DockStyle.None,
 				AllowDrop = false,
 				Location = Point.Empty,
 			};
+
+			this.WindowBrowser.KeyDown += (s, e) =>
+			{
+				this.Communicator?.CallbackScript("GlobalKeyInput", e.KeyValue, (e.Control ? 1 : 0) | (e.Shift ? 2 : 0) | (e.Alt ? 4 : 0));
+			};
+
 			this.Communicator = new WindowBrowserCommicator(
 				this,
 				this.WindowBrowser,
-				async () => // After communicator initialized
+				() => // After communicator initialized
 				{
 					Settings.LanguageCode.ValueChanged += async (s, e) => await this.Communicator.CallbackScript("i18n", Settings.LanguageCode.Value);
 
@@ -108,21 +122,30 @@ namespace BeerViewer.Forms
 					this.Activated += (s, e) => this.Communicator?.CallbackScript("FocusState", true);
 					this.Deactivate += (s, e) => this.Communicator?.CallbackScript("FocusState", false);
 
-					this.GameBrowser = this.WindowBrowser.GetBrowser().GetFrame("MAIN_FRAME");
-					await this.Communicator.CallScript("window.INTERNAL.zoomMainFrame", 66.6666);
-					await this.Communicator.CallScript("window.INTERNAL.loadMainFrame", Constants.GameURL);
-
+					var timer = new System.Timers.Timer(1000);
+					timer.Elapsed += async (s, e) =>
 					{
-						// Register to Logger
-						Logger.Logged += (f, a) => this.Communicator.CallbackScript("Logged", f, a);
+						if (this.GameBrowser == null || !this.GameBrowser.IsValid)
+						{
+							if (this.WindowBrowser.IsDisposed) return;
 
-						// Logged before initialized
-						LogData prevLog;
-						while ((prevLog = Logger.Fetch("MainLogger")) != null)
-							await this.Communicator.CallbackScript("Logged", prevLog.Format, prevLog.Arguments);
+							this.GameBrowser = this.WindowBrowser.GetBrowser().GetFrame("MAIN_FRAME");
 
-						Logger.Unregister("MainLogger");
-					}
+							await this.Communicator.CallbackScript("Game.Zoom", 66.6666);
+							await this.Communicator.CallbackScript("Game.Load", Constants.GameURL);
+
+							// Register to Logger
+							Logger.Logged += (f, a) => this.Communicator.CallbackScript("Logged", f, a);
+
+							// Logged before initialized
+							LogData prevLog;
+							while ((prevLog = Logger.Fetch("MainLogger")) != null)
+								await this.Communicator.CallbackScript("Logged", prevLog.Format, prevLog.Arguments);
+
+							Logger.Unregister("MainLogger");
+						}
+					};
+					timer.Start();
 				}
 			);
 
@@ -131,13 +154,15 @@ namespace BeerViewer.Forms
 			this.WindowBrowser.JavascriptObjectRepository.Register("API", this.Communicator, true, new CefSharp.BindingOptions { CamelCaseJavascriptNames = false });
 			this.WindowBrowser.FrameLoadEnd += async (s, e) =>
 			{
+				if (this.WindowBrowser.IsDisposed) return;
+
 				var rootUri = Extensions.UriOrBlank(e.Browser.MainFrame?.Url);
 				var frameUri = Extensions.UriOrBlank(e.Url);
 
 				if (this.GameBrowser != null && !this.GameBrowser.IsValid)
 				{
 					this.GameBrowser = this.WindowBrowser.GetBrowser().GetFrame("MAIN_FRAME");
-					if (!this.GameBrowser.IsValid)
+					if (this.GameBrowser != null && !this.GameBrowser.IsValid)
 					{
 						Logger.Log("Failed to control game frame...");
 						return;
@@ -203,21 +228,20 @@ namespace BeerViewer.Forms
 				}
 			};
 
-			this.Resize += (s, e) => this.WindowBrowser.Size = this.ClientSize;
 			this.WindowBrowser.Load("file:///" + Constants.EntryDir.Replace("\\", "/") + "/WindowFrame/Application.html");
 			// this.WindowBrowser.Load("chrome://version/");
+
+			this.Resize += (s, e) => this.WindowBrowser.Size = this.ClientSize;
 			this.Controls.Add(this.WindowBrowser);
 
+#if DEBUG && USE_STARTUP_DEVTOOLS
 			this.WindowBrowser.IsBrowserInitializedChanged += (s, e) =>
 			{
 				if (e.IsBrowserInitialized)
-				{
-#if DEBUG
 					this.WindowBrowser.GetBrowser().GetHost().ShowDevTools();
-#endif
-				}
 			};
-			#endregion
+#endif
+#endregion
 
 			this.OnResize(EventArgs.Empty);
 		}
