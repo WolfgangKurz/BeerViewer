@@ -90,6 +90,16 @@ namespace BeerViewer
 		);
 		#endregion
 
+		#region MainFrame group
+		/// <summary>
+		/// MainFrame's zoom factor
+		/// </summary>
+		public static SettableSettingValue<double> ZoomFactor { get; } = new SettableSettingValue<double>(
+			getKey(), "MainFrame", 1.0,
+			"Game screen zoom factor"
+		);
+		#endregion
+
 		/// <summary>
 		/// Notification adjust time (for expedition, construction, etc.)
 		/// </summary>

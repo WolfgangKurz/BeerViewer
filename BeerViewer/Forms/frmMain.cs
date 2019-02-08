@@ -1,5 +1,5 @@
 ﻿// #define USE_GC
-// #define USE_STARTUP_DEVTOOLS
+#define USE_STARTUP_DEVTOOLS
 
 using System;
 using System.Collections.Generic;
@@ -70,8 +70,8 @@ namespace BeerViewer.Forms
 				if (info.Top.HasValue) this.Top = info.Top.Value;
 			}
 			this.MinimumSize = new Size(
-				800 + 2,
-				480 + 28 + 2
+				1200 + 2,
+				720 + 28 + 2
 			);
 			this.ResizeEnd += (s, e) => Settings.WindowInformation.Value = this.GetWindowInformation();
 			this.Move += (s, e) => Settings.WindowInformation.Value = this.GetWindowInformation();
@@ -128,10 +128,9 @@ namespace BeerViewer.Forms
 						if (this.GameBrowser == null || !this.GameBrowser.IsValid)
 						{
 							if (this.WindowBrowser.IsDisposed) return;
+							if (this.WindowBrowser.GetBrowser().IsDisposed) return;
 
 							this.GameBrowser = this.WindowBrowser.GetBrowser().GetFrame("MAIN_FRAME");
-
-							await this.Communicator.CallbackScript("Game.Zoom", 66.6666);
 							await this.Communicator.CallbackScript("Game.Load", Constants.GameURL);
 
 							// Register to Logger
@@ -148,6 +147,13 @@ namespace BeerViewer.Forms
 					timer.Start();
 				}
 			);
+			this.Communicator.MainFrameResized += (s, e) =>
+				this.Invoke(() => 
+					this.MinimumSize = new Size(
+						e.Width + 2,
+						e.Height + 28 + 2
+					)
+				);
 
 			this.WindowBrowser.Cursor = Cursors.Cross;
 

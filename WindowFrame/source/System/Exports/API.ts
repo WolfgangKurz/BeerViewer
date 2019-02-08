@@ -1,6 +1,5 @@
 import { Master } from "System/Master/Master";
 import { Homeport } from "System/Homeport/Homeport";
-import { Settings } from "System/Settings";
 
 export type HTTPCallback = (Response: string, Request: { [key: string]: string }) => void;
 
@@ -14,7 +13,6 @@ declare global {
 
 		Master: Master;
 		Homeport: Homeport;
-		Settings: Settings;
 	}
 }
 
@@ -58,14 +56,14 @@ export interface Communicator {
 	/** Get all settable settings list */
 	GetSettings(): Promise<SettingInfo[]>;
 
-	/** Get html content of Built-in module if exists. */
-	GetBuiltinModule(ModuleName: string): Promise<string>;
-
 	/** Save settings has updated */
 	UpdateSetting(Provider: string, Name: string, Value: any): Promise<boolean>;
 
 	/** Reload current page of Main game frame */
 	ReloadMainFrame(): void;
+
+	/** Notify that Main frame has resized */
+	NotifyMainFrameResized(width: number, height: number): void;
 }
 
 /** Callable from Communicator */

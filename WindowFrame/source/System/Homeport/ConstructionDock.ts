@@ -3,7 +3,7 @@ import { SubscribeKcsapi } from "System/Base/KcsApi";
 import { kcsapi_kdock, kcsapi_kdock_getship, kcsapi_req_kousyou_createship_speedchange } from "System/Interfaces/kcsapi_dock";
 
 import { Homeport } from "./Homeport";
-import { Settings } from "System/Settings";
+import Settings from "System/Settings";
 import { fns } from "System/Base/Base";
 import { IdentifiableTable } from "System/Models/TableWrapper";
 import { Master } from "System/Master/Master";
@@ -132,7 +132,7 @@ export namespace ConstructionDock {
 				if (remaining < 0) remaining = 0;
 				this.$._Remaining = remaining;
 
-				if (!this.notified && this.Completed && remaining <= Settings.Instance.NotificationTime * 1000) {
+				if (!this.notified && this.Completed && remaining <= Settings.Instance.Notification.NotificationTime.Value * 1000) {
 					fns(this.Completed, this, this.Id, this.Ship as ShipInfo);
 					this.$.notified = true;
 				}

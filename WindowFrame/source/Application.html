@@ -31,6 +31,18 @@
 				<div id="top-menu-overlay"></div>
 				<div id="top-menu">
 					<ul class="menu-host">
+						<li class="menu-zoom">
+							<div class="menu-zoom">
+								<button class="menu-zoom" data-role="zoom-out"
+										@click="ZoomFrame(-1)">-</button>
+								<span class="menu-zoom-factor">
+									<div>{{Zoom.Percentage}}</div>
+									<small>{{Frame.Width}}x{{Frame.Height}}</small>
+								</span>
+								<button class="menu-zoom" data-role="zoom-in"
+										@click="ZoomFrame(-2)">+</button>
+							</div>
+						</li>
 						<li class="menu-group"
 							v-for="area in Areas"
 							v-if="area.Type != 'top'"

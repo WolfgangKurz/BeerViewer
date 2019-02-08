@@ -5,7 +5,7 @@ import { EquipCategory } from "System/Enums/EquipEnums";
 import { Equipment } from "System/Homeport/Equipment/Equipment";
 import { ShipEquip } from "System/Homeport/Equipment/ShipEquip";
 import { LoSCalcLogic } from "./LoSCalcLogic";
-import { Settings } from "System/Settings";
+import Settings from "System/Settings";
 
 export abstract class TypeCnLoS implements LoSCalcLogic {
 	public abstract readonly Id: string;
@@ -23,8 +23,8 @@ export abstract class TypeCnLoS implements LoSCalcLogic {
 		if (ships.length === 0) return 0;
 
 		const isCombined: boolean = fleets.length > 1
-			&& Settings.Instance.IsLoSIncludeFirstFleet
-			&& Settings.Instance.IsLoSIncludeSecondFleet;
+			&& Settings.Instance.LoS.IsLoSIncludeFirstFleet.Value
+			&& Settings.Instance.LoS.IsLoSIncludeSecondFleet.Value;
 
 		const itemScore: number = ships
 			.reduce((a, c) => a.concat(c.EquippedItems), <ShipEquip[]>[])

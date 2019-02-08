@@ -4,13 +4,13 @@ import { kcsapi_deck, kcsapi_req_member_updatedeckname } from "System/Interfaces
 import { TickObservable } from "System/Base/Observable";
 import { Ship } from "./Ship";
 import { ShipSpeed, ShipType } from "System/Enums/ShipEnums";
-import Const from "System/Const/System";
 import { FleetState } from "System/Enums/FleetEnums";
 import { Expedition } from "./Expedition/Expedition";
 import { AirSupremacy } from "System/Models/AirSupremacy";
 import { LoSCalculator } from "System/Models/LoSCalculator/LoSCalculator";
 import { SubscribeKcsapi } from "System/Base/KcsApi";
-import { Settings } from "System/Settings";
+import Settings from "System/Settings";
+import { Const } from "System/Const/System";
 
 export class Fleet extends TickObservable implements IIdentifiable {
 	//#region Id
@@ -178,7 +178,7 @@ export class Fleet extends TickObservable implements IIdentifiable {
 
 		this.$._AirSupremacy = AirSupremacy.Sum(ships.map(x => x.AirSupremacy));
 
-		const calculator = LoSCalculator.Instance.Get(Settings.Instance.LoSCalculator);
+		const calculator = LoSCalculator.Instance.Get(Settings.Instance.LoS.LoSCalculator.Value);
 		if (calculator)
 			this.$._LoS = calculator.Calc([this]);
 		else

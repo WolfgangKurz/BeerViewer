@@ -5,6 +5,7 @@ import { IModule } from "System/Module";
 import { SettingInfo } from "System/Exports/API";
 import { LoSCalculator } from "System/Models/LoSCalculator/LoSCalculator";
 import TemplateContent from "./settings.html";
+import Settings from "System/Settings";
 
 declare global {
 	interface Window {
@@ -51,54 +52,62 @@ class SettingsModule implements IModule {
 				if (target instanceof HTMLInputElement && target.type === "checkbox")
 					Value = target.checked;
 
-				window.API.UpdateSetting(Provider, Name, Value);
+				const inst = Settings.Instance;
+				inst[Provider] && inst[Provider][Name] && (inst[Provider][Name].Value = Value);
 			}
 		}
 	});
 
 	init(): void {
-		(async () => {
-			const settings = await window.API.GetSettings();
-			this.Data.Settings = this.Preprocess(settings);
-		})();
+		Settings.Ready(() => this.Data.Settings = this.Preprocess(Settings.Instance));
 
 		window.modules.areas.register("main", "settings", "Settings", "setting", "settings-component");
 	}
 
-	private Preprocess(settings: SettingInfo[]): { [key: string]: ProcessedSettingInfo[] } {
-		const _ = settings.map(x => {
-			let prefix = "";
-			let _enums: { [key: string]: any } | null = null;
-			if (x.Enums) {
-				_enums = {};
-				x.Enums.forEach(x => { _enums![x] = x });
-			}
-
-			if (x.Provider === "LoS") {
-				if (x.Name === "LoSCalculator") {
+	private Preprocess(settings: Settings): { [key: string]: ProcessedSettingInfo[] } {
+		debugger;
+		const _: ProcessedSettingInfo[] =
+			(() => {
+				const _ = [];
+				for (const provider in settings)
+					for (const name in settings[provider])
+						_.push(settings[provider][name]);
+				return _;
+			})()
+			.map(x => {
+				let prefix = "";
+				let _enums: { [key: string]: any } | null = null;
+				if (x.Enums) {
 					_enums = {};
-					prefix = "los.";
-					LoSCalculator.Instance.Logics.forEach(x => {
-						_enums![x.Id] = x.Name;
-					});
+					x.Enums.forEach(x => { _enums![x] = x });
 				}
-			}
-			return <ProcessedSettingInfo>{
-				i18nPrefix: prefix,
 
-				Type: x.Type,
+				if (x.Provider === "LoS") {
+					if (x.Name === "LoSCalculator") {
+						_enums = {};
+						prefix = "los.";
+						LoSCalculator.Instance.Logics.forEach(x => {
+							_enums![x.Id] = x.Name;
+						});
+					}
+				}
+				return {
+					i18nPrefix: prefix,
 
-				Name: x.Name,
-				Provider: x.Provider,
-				Value: x.Value,
+					Type: x.Type,
 
-				DisplayName: x.DisplayName,
-				Description: x.Description,
-				Caution: x.Caution,
-				Enums: _enums
-			};
-		});
-		const map = new Map<String, ProcessedSettingInfo[]>();
+					Name: x.Name,
+					Provider: x.Provider,
+					Value: x.Value,
+
+					DisplayName: x.DisplayName,
+					Description: x.Description,
+					Caution: x.Caution,
+					Enums: _enums
+				};
+			});
+
+		const map = new Map<string, ProcessedSettingInfo[]>();
 		_.forEach(item => {
 			const key = item.Provider;
 			const c = map.get(key);

@@ -4,6 +4,12 @@ import { Keys } from "System/Enums/Keys";
 import { CombinedVueInstance } from "vue/types/vue";
 import { fns } from "System/Base/Base";
 
+declare global {
+	export interface Window {
+		Game: GameModule;
+	}
+}
+
 class GameModule implements IModule {
 	private frame: CombinedVueInstance<Vue, {}, {
 		reload(): void,
@@ -27,7 +33,7 @@ class GameModule implements IModule {
 				reload() {
 					const frame = (<HTMLIFrameElement>this.$refs.DOMElement) || null;
 					if (frame === null) return;
-					
+
 					window.API.ReloadMainFrame();
 				},
 				zoom(_zoomFactor: number | string): void {
@@ -42,6 +48,8 @@ class GameModule implements IModule {
 						.css("transform", `scale(${zoomFactor})`)
 						.css("marginRight", 1200 * (zoomFactor - 1) + "px")
 						.css("marginBottom", 720 * (zoomFactor - 1) + "px");
+
+					window.CALLBACK.call("Game.Zoom", _zoomFactor);
 				},
 				load(url: string): void {
 					const frame = (<HTMLIFrameElement>this.$refs.DOMElement) || null;
@@ -55,7 +63,6 @@ class GameModule implements IModule {
 
 	init(): void {
 		window.CALLBACK.register("GlobalKeyInput", (key: Keys, modifiers: number) => key === Keys.F5 && this.reload());
-		window.CALLBACK.register("Game.Zoom", (factor: number | string) => this.zoom(factor));
 		window.CALLBACK.register("Game.Load", (url: string) => this.load(url));
 
 		window.modules.areas.register("main", "game", "Game", "game", "game-component");
@@ -74,5 +81,12 @@ class GameModule implements IModule {
 		this.frame.load(url);
 	}
 }
-window.modules.register("game", new GameModule());
+
+Object.defineProperty(window, "Game", {
+	value: new GameModule(),
+	configurable: false,
+	writable: false
+});
+
+window.modules.register("game", window.Game);
 export default GameModule;

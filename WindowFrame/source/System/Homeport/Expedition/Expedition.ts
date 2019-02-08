@@ -6,7 +6,7 @@ import { ExpeditionResult } from "./ExpeditionResult";
 import { Master } from "System/Master/Master";
 import { SubscribeKcsapi } from "System/Base/KcsApi";
 import { kcsapi_mission_result } from "System/Interfaces/kcsapi_mission_result";
-import { Settings } from "System/Settings";
+import Settings from "System/Settings";
 import { fns } from "System/Base/Base";
 
 export class Expedition extends TickObservable {
@@ -89,7 +89,7 @@ export class Expedition extends TickObservable {
 		this.RaisePropertyChanged(nameof(this.Remaining));
 		this.RaisePropertyChanged(nameof(this.Progress));
 
-		if (!this.notificated && this.Returned != null && this.Remaining <= Settings.Instance.NotificationTime * 1000) {
+		if (!this.notificated && this.Returned != null && this.Remaining <= Settings.Instance.Notifictaion.NotificationTime.Value * 1000) {
 			fns(this.Returned, this.fleet.Name);
 			this.notificated = true;
 		}

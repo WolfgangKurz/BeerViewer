@@ -6,7 +6,7 @@ import { kcsapi_req_nyukyo_start, kcsapi_req_nyukyo_speedchange } from "System/I
 import { Homeport } from "./Homeport";
 import { Ship } from "./Ship";
 import { Fleet } from "./Fleet";
-import { Settings } from "System/Settings";
+import Settings from "System/Settings";
 import { fns } from "System/Base/Base";
 import { IdentifiableTable } from "System/Models/TableWrapper";
 
@@ -163,7 +163,7 @@ export namespace RepairDock {
 				if (remaining < 0) remaining = 0;
 				this.$._Remaining = remaining;
 
-				if (!this.notified && this.Completed && remaining <= Settings.Instance.NotificationTime * 1000) {
+				if (!this.notified && this.Completed && remaining <= Settings.Instance.Notification.NotificationTime.Value * 1000) {
 					fns(this.Completed, this, this.Id, this.Ship as Ship);
 					this.$.notified = true;
 				}

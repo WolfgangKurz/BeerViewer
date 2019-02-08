@@ -1,5 +1,5 @@
 /** Calls `Handler` even if it is array. */
-export function fns<T extends Function | any>(Handler: T | T[] | undefined | null, ...Params: any) {
+export function fns<T extends Function>(Handler: T | T[] | undefined | null, ...Params: any): void {
 	if (Handler) {
 		if ((<T[]>Handler).length)
 			(<T[]>Handler).forEach(x => typeof x === "function" && x(...Params));

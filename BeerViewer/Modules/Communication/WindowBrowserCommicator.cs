@@ -20,12 +20,26 @@ namespace BeerViewer.Modules.Communication
 {
 	public class WindowBrowserCommicator
 	{
+		public class SizeEventArgs : EventArgs
+		{
+			public int Width { get; }
+			public int Height { get; }
+
+			public SizeEventArgs(int width, int height)
+			{
+				this.Width = width;
+				this.Height = height;
+			}
+		}
+
 		private Form Owner { get; }
 		private IntPtr OwnerHandle { get; }
 		private FrameworkBrowser Browser { get; }
 		private Action OnInitialized;
 
 		private ObservedTreeManager ObserveObjectManager;
+
+		public event EventHandler<SizeEventArgs> MainFrameResized;
 
 		internal WindowBrowserCommicator(Form Owner, FrameworkBrowser Browser, Action OnInitialized)
 		{
@@ -87,7 +101,7 @@ namespace BeerViewer.Modules.Communication
 			var browser = this.Browser.GetBrowser();
 			if (browser == null) throw new NullReferenceException(nameof(browser));
 
-			System.Diagnostics.Debug.WriteLine(script);
+			// System.Diagnostics.Debug.WriteLine(script);
 
 			var result = await browser.MainFrame?.EvaluateScriptAsync(script);
 			if (!result.Success)
@@ -425,6 +439,16 @@ namespace BeerViewer.Modules.Communication
 			if (b == null) return;
 
 			b.ExecuteJavaScriptAsync("window.location.reload(true)");
+		}
+
+		/// <summary>
+		/// Be called when WindowFrame notified that Main frame resized
+		/// </summary>
+		/// <param name="width">Width of current main frame</param>
+		/// <param name="height">Height of current main frame</param>
+		public void NotifyMainFrameResized(int width, int height)
+		{
+			this.MainFrameResized?.Invoke(this, new SizeEventArgs(width, height));
 		}
 	}
 }

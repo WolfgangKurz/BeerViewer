@@ -18,7 +18,7 @@ private _Disposed: boolean = false;
 	constructor(url: string, callback: KcsApiCallback<T, U>) {
 		this._callback = callback;
 
-		window.API.SubscribeHTTP("/kcsapi/" + url, (x: String, y) => {
+		window.API.SubscribeHTTP("/kcsapi/" + url, (x: string, y) => {
 			if (!this._Disposed)
 				this.Caller(x, new HTTPRequest(y));
 			else // Something wrong?
@@ -26,8 +26,8 @@ private _Disposed: boolean = false;
 		}).then(x => this._Id = x);
 	}
 
-	private Caller(response: String, request: HTTPRequest): void {
-		let svdata: String;
+	private Caller(response: string, request: HTTPRequest): void {
+		let svdata: string;
 		let json: any;
 		try {
 			svdata = response.startsWith("svdata=") ? response.substr(7) : response;

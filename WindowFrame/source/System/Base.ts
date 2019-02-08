@@ -6,8 +6,9 @@ import Modules, { Callback } from "./Module";
 import { Homeport } from "./Homeport/Homeport";
 import { Master } from "./Master/Master";
 import BaseAPI from "./Base/API"
-import { Settings } from "./Settings";
+import Settings from "./Settings";
 import { fns } from "./Base/Base";
+import { ZoomLevels } from "./Const/ZoomLevels";
 
 Vue.use(Vuex);
 
@@ -77,6 +78,11 @@ document.addEventListener("DOMContentLoaded", async function () {
 			Frame: {
 				Width: 1200,
 				Height: 720
+			},
+			Zoom: {
+				Index: ZoomLevels.indexOf(1.0),
+				Factor: 1.0,
+				Percentage: "100.0%"
 			}
 		},
 		el: $("#mainbox")[0],
@@ -89,19 +95,44 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 				const area = this.Areas[Area];
 				area.Modules.forEach(x => x.Displaying = x.Name === Name);
+			},
+			ZoomFrame(index: number): void {
+				if (index === -1)
+					this.Zoom.Index--;
+				else if (index === -2)
+					this.Zoom.Index++;
+				else
+					this.Zoom.Index = index;
+
+				if (this.Zoom.Index < 0) this.Zoom.Index = 0;
+				if (this.Zoom.Index >= this.ZoomLevels.length) this.Zoom.Index = this.ZoomLevels.length - 1;
+
+				this.Zoom.Factor = this.ZoomLevels[this.Zoom.Index];
+				this.Zoom.Percentage = Math.floor(this.Zoom.Factor * 1000) / 10 + "%";
+
+				Settings.Instance.MainFrame.ZoomFactor.Value = this.Zoom.Factor;
+
+				window.Game.zoom(this.Zoom.Factor * 100);
 			}
 		},
-		computed: mapState({
-			i18n: "i18n"
-		})
+		computed: {
+			ZoomLevels() { return ZoomLevels },
+			...mapState({
+				i18n: "i18n"
+			})
+		}
 	});
 	window.CALLBACK.register("Game.Zoom", (factor: number | string) => {
 		const v = typeof factor === "number"
 			? factor / 100
 			: parseFloat(factor) / 100;
 
-		mainBox.Frame.Width = 1200 * v;
-		mainBox.Frame.Height = 720 * v;
+		mainBox.Frame.Width = Math.round(1200 * v);
+		mainBox.Frame.Height = Math.round(720 * v);
+		mainBox.Zoom.Factor = v;
+		mainBox.Zoom.Percentage = Math.floor(v * 1000) / 10 + "%";
+		
+		window.API.NotifyMainFrameResized(mainBox.Frame.Width, mainBox.Frame.Height);
 	});
 
 	if ((<any>window).CefSharp)
@@ -114,9 +145,18 @@ document.addEventListener("DOMContentLoaded", async function () {
 	}
 	window.INTERNAL.Initialized();
 
-	window.Settings = new Settings().Ready();
+	Settings.Initialize(); // Initialize
 	window.Master = new Master().Ready();
 	window.Homeport = new Homeport().Ready();
+
+	Settings.Ready(() => {
+		const value = Settings.Instance.MainFrame.ZoomFactor.Value;
+		const index = ZoomLevels.indexOf(value);
+		if (index < 0) return;
+		mainBox.Zoom.Index = index;
+		mainBox.Zoom.Factor = value;
+		mainBox.Zoom.Percentage = Math.floor(value * 1000) / 10 + "%";
+	});
 
 	window.API.GetModuleList()
 		.then(async list => {
