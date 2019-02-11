@@ -82,14 +82,13 @@ export class Expedition extends TickObservable {
 			this._Expedition = Master.Instance.Expeditions!.get(this.Id) || null;
 			this._ReturnTime = rawData[2];
 		}
-		this.RaisePropertyChanged(nameof(this.IsInExecution));
 	}
 
 	protected Tick(): void {
 		this.RaisePropertyChanged(nameof(this.Remaining));
 		this.RaisePropertyChanged(nameof(this.Progress));
 
-		if (!this.notificated && this.Returned != null && this.Remaining <= Settings.Instance.Notifictaion.NotificationTime.Value * 1000) {
+		if (!this.notificated && this.Returned != null && this.Remaining <= <number>Settings.Notifictaion.NotificationTime.Value * 1000) {
 			fns(this.Returned, this.fleet.Name);
 			this.notificated = true;
 		}

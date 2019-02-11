@@ -95,7 +95,7 @@ export interface SettingInfo {
 
 	Name: string;
 	Provider: string;
-	Value: any;
+	Value: string | number | boolean;
 
 	DisplayName: string;
 	Description: string | null | undefined;

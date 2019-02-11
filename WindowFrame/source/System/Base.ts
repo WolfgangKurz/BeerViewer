@@ -6,7 +6,7 @@ import Modules, { Callback } from "./Module";
 import { Homeport } from "./Homeport/Homeport";
 import { Master } from "./Master/Master";
 import BaseAPI from "./Base/API"
-import Settings from "./Settings";
+import Settings, { Settings as _Settings } from "System/Settings";
 import { fns } from "./Base/Base";
 import { ZoomLevels } from "./Const/ZoomLevels";
 
@@ -110,9 +110,18 @@ document.addEventListener("DOMContentLoaded", async function () {
 				this.Zoom.Factor = this.ZoomLevels[this.Zoom.Index];
 				this.Zoom.Percentage = Math.floor(this.Zoom.Factor * 1000) / 10 + "%";
 
-				Settings.Instance.MainFrame.ZoomFactor.Value = this.Zoom.Factor;
+				Settings.MainFrame.ZoomFactor.Value = this.Zoom.Factor;
 
-				window.Game.zoom(this.Zoom.Factor * 100);
+				if (window.Game)
+					window.Game.zoom(this.Zoom.Factor * 100);
+				else { // Lazyload...
+					const timer = setInterval(() => {
+						if (window.Game) {
+							window.Game.zoom(this.Zoom.Factor * 100);
+							clearInterval(timer);
+						}
+					}, 500);
+				}
 			}
 		},
 		computed: {
@@ -145,17 +154,17 @@ document.addEventListener("DOMContentLoaded", async function () {
 	}
 	window.INTERNAL.Initialized();
 
-	Settings.Initialize(); // Initialize
+	_Settings.Instance.Initialize(); // Initialize
 	window.Master = new Master().Ready();
 	window.Homeport = new Homeport().Ready();
 
-	Settings.Ready(() => {
-		const value = Settings.Instance.MainFrame.ZoomFactor.Value;
-		const index = ZoomLevels.indexOf(value);
+	_Settings.Instance.Ready(() => {
+		const value = <number>Settings.MainFrame.ZoomFactor.Value;
+		const index = ZoomLevels.findIndex(v => {
+			return v.toFixed(4) === value.toFixed(4);
+		});
 		if (index < 0) return;
-		mainBox.Zoom.Index = index;
-		mainBox.Zoom.Factor = value;
-		mainBox.Zoom.Percentage = Math.floor(value * 1000) / 10 + "%";
+		mainBox.ZoomFrame(index);
 	});
 
 	window.API.GetModuleList()

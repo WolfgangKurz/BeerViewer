@@ -2,87 +2,104 @@ import { SettingInfo } from "./Exports/API";
 import { fns } from "./Base/Base";
 
 declare global {
-	export interface Window {
+	interface Window {
 		Settings: Settings;
-		__SettingsInnerInformation: {
-			_initialized: boolean;
-			_loaded: boolean;
-			readyCallbacks: (() => void)[];
-		};
 	}
 }
 
-window.__SettingsInnerInformation = {
-	_initialized: false,
-	_loaded: false,
-	readyCallbacks: []
+export type SettingsData = {
+	[provider: string]: {
+		[name: string]: SettingInfo;
+	}
 };
+export class Settings {
+	private _Initialized: boolean = false;
+	private _Loaded: boolean = false;
+	private readonly _ReadyCallbacks: (() => void)[] = [];
 
-namespace Settings {
-	class Settings {
-		public static get Instance(): Settings { return instance }
-		public static Initialize(): void {
-			if (window.__SettingsInnerInformation._initialized) return;
-			window.__SettingsInnerInformation._initialized = true;
+	private constructor() { }
 
-			(async () => {
-				const settings = await window.API.GetSettings();
-				const map = new Map<string, SettingInfo[]>();
-				settings.forEach(item => {
-					const key = item.Provider;
-					const c = map.get(key);
-					if (!c) map.set(key, [item]);
-					else c.push(item);
-				});
+	public static get Instance(): Settings {
+		return window.Settings = window.Settings || new Settings();
+	}
 
-				map.forEach((arr, provider) => {
-					const _: { [name: string]: SettingInfo } = {};
+	public Initialize(): void {
+		if (this._Initialized) return;
+		this._Initialized = true;
 
-					for (let i = 0; i < arr.length; i++) {
-						_[arr[i].Name] = new Proxy(arr[i], {
-							set(target, name: string, value) {
-								if (name === "Value") {
-									(async () => {
-										if (await window.API.UpdateSetting(arr[i].Provider, arr[i].Name, value))
-											target.Value = value;
-									})();
-									return true;
-								} else
-									return false;
-							}
+		(async () => {
+			const settings = await window.API.GetSettings();
+			const map = new Map<string, SettingInfo[]>();
+			settings.forEach(item => {
+				const key = item.Provider;
+				const c = map.get(key);
+				if (!c) map.set(key, [item]);
+				else c.push(item);
+			});
+
+			map.forEach((arr, provider) => {
+				const group: { [name: string]: SettingInfo } = {};
+
+				for (let i = 0; i < arr.length; i++) {
+					const item: SettingInfo = <SettingInfo>{};
+
+					let key: keyof SettingInfo;
+					for (key in arr[i]) { // Without "Value", readonly
+						if (key === "Value") continue;
+
+						Object.defineProperty(item, key, {
+							value: arr[i][key],
+							configurable: false,
+							enumerable: false,
+							writable: false
 						});
 					}
 
-					_origin[provider] = new Proxy(_, {
-						get(target, name: string) {
-							return target[name];
+					// "Value" is writable, settable.
+					Object.defineProperty(item, "Value", {
+						get() {
+							return arr[i].Value;
 						},
-						set(_, __, ___) { return false } // Dismiss setter
+						set(value) {
+							(async () => {
+								if (await window.API.UpdateSetting(item.Provider, item.Name, value))
+									arr[i].Value = value;
+							})();
+						},
+						configurable: false,
+						enumerable: false
 					});
+
+					// Set setting item as readonly
+					Object.defineProperty(group, item.Name, {
+						value: item,
+						configurable: false,
+						enumerable: true,
+						writable: false
+					});
+				}
+
+				// Set provider group as readonly
+				Object.defineProperty(this.data, provider, {
+					value: group,
+					configurable: false,
+					enumerable: true,
+					writable: false
 				});
+			});
 
-				window.__SettingsInnerInformation._loaded = true;
-				fns(window.__SettingsInnerInformation.readyCallbacks);
-				window.__SettingsInnerInformation.readyCallbacks.splice(0, window.__SettingsInnerInformation.readyCallbacks.length);
-			})();
-		}
-		public static Ready(callback: () => void) {
-			if (window.__SettingsInnerInformation._loaded)
-				callback && callback();
-			else
-				window.__SettingsInnerInformation.readyCallbacks.push(callback);
-		}
-
-		[provider: string]: {
-			[name: string]: SettingInfo;
-		};
+			this._Loaded = true;
+			fns(this._ReadyCallbacks);
+			this._ReadyCallbacks.splice(0, this._ReadyCallbacks.length);
+		})();
 	}
+	public Ready(callback: () => void): void {
+		if (this._Loaded)
+			callback && callback();
+		else
+			this._ReadyCallbacks.push(callback);
+	}
+
+	public readonly data: SettingsData = {};
 }
-const _origin = new Settings();
-const instance = window.Settings = new Proxy(_origin, {
-	get(target, name: string) {
-		return target[name];
-	},
-	set(_, __, ___) { return false } // Dismiss setter
-});
-export default Settings;
+export default Settings.Instance.data;

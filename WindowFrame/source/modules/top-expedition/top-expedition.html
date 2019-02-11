@@ -6,8 +6,13 @@
 			 v-show="expedition.Activated"
 			 :style="{width:Math.min(100,expedition.Progress)+'%'}"></div>
 		<div class="expedition-text">
-			<div class="expedition-id">{{expedition.Id}}</div>
-			<div class="expedition-time">{{expedition.RemainingText}}</div>
+			<template v-if="expedition.Activated">
+				<div class="expedition-id">{{expedition.Id}}</div>
+				<div class="expedition-time">{{expedition.RemainingText}}</div>
+			</template>
+			<template v-else>
+				<div class="expedition-time">--:--:--</div>
+			</template>
 		</div>
 	</div>
 </div>

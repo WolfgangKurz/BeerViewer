@@ -132,7 +132,7 @@ export namespace ConstructionDock {
 				if (remaining < 0) remaining = 0;
 				this.$._Remaining = remaining;
 
-				if (!this.notified && this.Completed && remaining <= Settings.Instance.Notification.NotificationTime.Value * 1000) {
+				if (!this.notified && this.Completed && remaining <= <number>Settings.Notification.NotificationTime.Value * 1000) {
 					fns(this.Completed, this, this.Id, this.Ship as ShipInfo);
 					this.$.notified = true;
 				}

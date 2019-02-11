@@ -118,8 +118,31 @@ namespace BeerViewer.Modules.Communication
 		/// <returns>Script result</returns>
 		internal Task<object> CallScript(string name, params object[] args)
 		{
+			var _ = new List<string>();
+			var __ = new List<string>();
+			var depth = 0;
+			var offset = 0;
+			for (var i = 0; i < name.Length; i++)
+			{
+				var c = name[i];
+				if (c == '[') depth++;
+				else if (c == ']') depth--;
+
+				if (depth < 0) throw new ArgumentException("Invalid function name", nameof(name));
+
+				if (c == '.')
+				{
+					__.Add(name.Substring(offset, i - offset));
+					_.Add(string.Join(".", __));
+					offset = i + 1;
+				}
+			}
+			__.Add(name.Substring(offset));
+			_.Add(string.Join(".", __));
+			if (_.Any(x => x.Length == 0)) throw new ArgumentException("Invalid function name", nameof(name));
+
 			var script = string.Format(
-				"{0}({1})",
+				"{2} && ({0}({1}))",
 				name,
 				string.Join(",", args.Select(x =>
 				{
@@ -128,7 +151,8 @@ namespace BeerViewer.Modules.Communication
 					else if (type == typeof(bool)) return (bool)x ? "true" : "false";
 					else if (type.IsArray) return $"[{string.Join(", ", x as object[])}]";
 					else return x.ToString();
-				}))
+				})),
+				string.Join(" && ", _.ToArray())
 			);
 			return CallRawScript(script);
 		}

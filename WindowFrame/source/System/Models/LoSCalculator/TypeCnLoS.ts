@@ -23,8 +23,8 @@ export abstract class TypeCnLoS implements LoSCalcLogic {
 		if (ships.length === 0) return 0;
 
 		const isCombined: boolean = fleets.length > 1
-			&& Settings.Instance.LoS.IsLoSIncludeFirstFleet.Value
-			&& Settings.Instance.LoS.IsLoSIncludeSecondFleet.Value;
+			&& <boolean>Settings.LoS.IsLoSIncludeFirstFleet.Value
+			&& <boolean>Settings.LoS.IsLoSIncludeSecondFleet.Value;
 
 		const itemScore: number = ships
 			.reduce((a, c) => a.concat(c.EquippedItems), <ShipEquip[]>[])
@@ -45,13 +45,13 @@ export abstract class TypeCnLoS implements LoSCalcLogic {
 		if (fleets.length == 1)
 			return fleets[0].Ships;
 
-		if (Settings.Instance.IsLoSIncludeFirstFleet && Settings.Instance.IsLoSIncludeSecondFleet)
+		if (Settings.IsLoSIncludeFirstFleet && Settings.IsLoSIncludeSecondFleet)
 			return fleets.reduce((a, c) => a.concat(c.Ships), <Ship[]>[]);
 
-		if (Settings.Instance.IsLoSIncludeFirstFleet)
+		if (Settings.IsLoSIncludeFirstFleet)
 			return fleets[0].Ships;
 
-		if (Settings.Instance.IsLoSIncludeSecondFleet)
+		if (Settings.IsLoSIncludeSecondFleet)
 			return fleets[1].Ships;
 
 		return [];

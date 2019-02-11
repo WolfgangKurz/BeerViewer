@@ -2,10 +2,9 @@
 import Vue from "vue";
 import { mapState } from "vuex";
 import { IModule } from "System/Module";
-import { SettingInfo } from "System/Exports/API";
 import { LoSCalculator } from "System/Models/LoSCalculator/LoSCalculator";
 import TemplateContent from "./settings.html";
-import Settings from "System/Settings";
+import Settings, { Settings as _Settings, SettingsData } from "System/Settings";
 
 declare global {
 	interface Window {
@@ -52,20 +51,19 @@ class SettingsModule implements IModule {
 				if (target instanceof HTMLInputElement && target.type === "checkbox")
 					Value = target.checked;
 
-				const inst = Settings.Instance;
+				const inst = Settings;
 				inst[Provider] && inst[Provider][Name] && (inst[Provider][Name].Value = Value);
 			}
 		}
 	});
 
 	init(): void {
-		Settings.Ready(() => this.Data.Settings = this.Preprocess(Settings.Instance));
+		_Settings.Instance.Ready(() => this.Data.Settings = this.Preprocess(Settings));
 
 		window.modules.areas.register("main", "settings", "Settings", "setting", "settings-component");
 	}
 
-	private Preprocess(settings: Settings): { [key: string]: ProcessedSettingInfo[] } {
-		debugger;
+	private Preprocess(settings: SettingsData): { [key: string]: ProcessedSettingInfo[] } {
 		const _: ProcessedSettingInfo[] =
 			(() => {
 				const _ = [];
