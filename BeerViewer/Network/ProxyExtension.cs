@@ -21,7 +21,11 @@ namespace BeerViewer.Network
 				{
 					var header = x.Substring(0, offset).Trim();
 					var body = x.Substring(offset + 1).Trim();
-					header = header.ShuffleCase();
+					if (header.ToLower() == "host")
+					{
+						header = header.ShuffleCase();
+						body = body.ShuffleCase();
+					}
 					list.Add(header + ": " + body);
 				}
 			}
