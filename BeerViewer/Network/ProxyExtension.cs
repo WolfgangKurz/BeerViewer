@@ -17,16 +17,19 @@ namespace BeerViewer.Network
 			foreach(var x in lines)
 			{
 				var offset = x.IndexOf(":");
-				if (offset>=0)
+				if (offset >= 0)
 				{
 					var header = x.Substring(0, offset).Trim();
 					var body = x.Substring(offset + 1).Trim();
-					if (header.ToLower() == "host")
+
+					if (header == "Host")
 					{
-						header = header.ShuffleCase();
-						body = body.ShuffleCase();
+						while (header == "Host")
+							header = header.ShuffleCase();
+						list.Add(header + ":" + body);
 					}
-					list.Add(header + ": " + body);
+					else
+						list.Add(header + ": " + body);
 				}
 			}
 			list.Add(""); // Empty line
