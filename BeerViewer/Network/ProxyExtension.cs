@@ -2,11 +2,55 @@
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Text;
 
 namespace BeerViewer.Network
 {
-	public static class ProxyExtension
+	internal static class ProxyExtension
 	{
+		private static Random rd = new Random();
+
+		public static string DPIHeader(this string HeadersInOrder)
+		{
+			var lines = HeadersInOrder.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+			var list = new List<string>();
+			foreach(var x in lines)
+			{
+				var offset = x.IndexOf(":");
+				if (offset>=0)
+				{
+					var header = x.Substring(0, offset).Trim();
+					var body = x.Substring(offset + 1).Trim();
+					header = header.ShuffleCase();
+					list.Add(header + ": " + body);
+				}
+			}
+			list.Add(""); // Empty line
+			return string.Join("\r\n", list.ToArray());
+		}
+
+		public static string DPIRequestLine(this string RequestLine)
+		{
+			var offset = RequestLine.IndexOf(" ");
+			if (offset < 0) return RequestLine;
+
+			return RequestLine.Substring(0, offset) + new string(' ', rd.Next(1, 4)) + RequestLine.Substring(offset);
+		}
+
+		private static string ShuffleCase(this string Text)
+		{
+			var sb = new StringBuilder();
+			for (var i = 0; i < Text.Length; i++)
+			{
+				var c = Text[i];
+				if (c >= 'a' && c <= 'z' && rd.Next() % 2 == 0)
+					c = (char)(c - 97 + 65);
+				else if (c >= 'A' && c <= 'Z' && rd.Next() % 2 == 0)
+					c = (char)(c + 97 - 65);
+				sb.Append(c);
+			}
+			return sb.ToString();
+		}
 	}
 
 	internal class ProxyHandlerContainer<T> : IEnumerable<KeyValuePair<int, T>>, IEnumerable, IReadOnlyDictionary<int, T>

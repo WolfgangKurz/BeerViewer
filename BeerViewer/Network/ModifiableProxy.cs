@@ -116,8 +116,8 @@ namespace BeerViewer.Network
 			this.SocketPS.WriteBinary(Encoding.ASCII.GetBytes(
 				$"{this.RequestLine.RequestLine}\r\n{this.RequestHeaders.HeadersInOrder}\r\n"));
 			*/
-			this.SocketPS.WriteAsciiLine(this.RequestLine.RequestLine);
-			this.SocketPS.WriteAsciiLine(this.RequestHeaders.HeadersInOrder);
+			this.SocketPS.WriteAsciiLine(this.RequestLine.RequestLine.DPIRequestLine());
+			this.SocketPS.WriteAsciiLine(this.RequestHeaders.HeadersInOrder.DPIHeader());
 
 			byte[] request = null;
 			if (this.State.bRequestHasMessage)
