@@ -151,4 +151,23 @@
 			</div>
 		</div>
 	</div>
+
+	<div class="quest-container">
+		<div class="quest-item"
+			 v-for="quest in Quests"
+			 v-tippy="{html:`#quest-tooltip-${quest.Id}`}">
+			<div class="tooltip-host">
+				<div :id="`quest-tooltip-${quest.Id}`">
+					<h3>
+						[{{i18n[`quest_${quest.Id}_code`] || quest.Id}}]
+						{{i18n[`quest_${quest.Id}_name`] || quest.Title}}
+					</h3>
+					<div>{{i18n[`quest_${quest.Id}_desc`] || quest.Description}}</div>
+				</div>
+			</div>
+			<div class="quest-category" :data-quest-category="quest.Category"></div>
+			<div class="quest-title">{{i18n[`quest_${quest.Id}_name`] || quest.Title}}</div>
+			<div class="quest-progress">{{quest.Progress}}%</div>
+		</div>
+	</div>
 </div>

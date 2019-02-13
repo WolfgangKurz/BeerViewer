@@ -11,6 +11,7 @@ import { ObservableCallback } from "System/Base/Observable";
 import { mapState } from "vuex";
 import { ShipInfo } from "System/Master/Wrappers/ShipInfo";
 import TemplateContent from "./overview.html";
+import Quest from "System/Homeport/Quest/Quest";
 
 const getTextWidth = function (text: string, font: string) {
 	const canvas: HTMLCanvasElement = (<any>getTextWidth).canvas || ((<any>getTextWidth).canvas = document.createElement("canvas"));
@@ -74,6 +75,7 @@ class Overview implements IModule {
 		Fleets: <FleetData[]>[],
 		RepairDock: <RepairDockData[]>[],
 		ConstructionDock: <ConstructionDockData[]>[],
+		Quests: <ReadonlyArray<Quest>>[],
 
 		LosType: <string>""
 	}
@@ -165,38 +167,9 @@ class Overview implements IModule {
 		Homeport.Instance.ConstructionDock!.Observe(() => this.updateConstructionDocks(), nameof(Homeport.Instance.ConstructionDock!.Docks));
 
 		// Setup quests
-		//#region .
-		/*
-		(async function () {
-			const quests = $.new("div", "quest-container");
-	
-			window.API.ObserveData("Homeport", "Quests.All", async function (value) {
-				const progress = ["", "50%", "80%", "100%"];
-	
-				quests.findAll("div").each(function () {
-					this.remove();
-				});
-				if (value === null) return;
-	
-				const length = await window.API.GetData("Homeport", "Quests.All.Length");
-				for (let i = 0; i < length; i++) {
-					const type = await window.API.GetData("Homeport", "Quests.All[" + i + "].Category");
-					const title = await window.API.GetData("Homeport", "Quests.All[" + i + "].Title");
-					const progress = await window.API.GetData("Homeport", "Quests.All[" + i + "].Progress");
-	
-					const item = $.new("div", "quest-item")
-						.append($.new("div", "quest-category").attr("data-quest-category", type))
-						.append($.new("div", "quest-title").html(await i18n(title)))
-						.append($.new("div", "quest-progress").html(progress[progress]));
-	
-					quests.append(item);
-				}
-			});
-	
-			overview.append(quests);
-		})();
-		*/
-		//#endregion
+		Homeport.Instance.Quests!.Observe(() => this.updateQuests(), nameof(Homeport.Instance.Quests!.All));
+
+
 		window.addEventListener("resize", () => this.updateSize());
 		this.updateSize();
 
@@ -355,6 +328,9 @@ class Overview implements IModule {
 		});
 
 		this.Data.ConstructionDock = docks;
+	}
+	private updateQuests():void {
+		this.Data.Quests = Homeport.Instance.Quests!.All;
 	}
 }
 

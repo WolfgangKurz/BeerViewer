@@ -19,6 +19,7 @@ import { IdentifiableTable } from "System/Models/TableWrapper";
 import { Equipments } from "./Equipment/Equipments";
 import { ConstructionDock as ConstructionDock } from "./ConstructionDock";
 import { kcsapi_kdock_getship } from "System/Interfaces/kcsapi_dock";
+import QuestManager from "./Quest/QuestManager";
 
 export class Homeport extends Observable {
 	public static get Instance(): Homeport { return window.Homeport }
@@ -41,6 +42,11 @@ export class Homeport extends Observable {
 	//#region ConstructionDock
 	private _ConstructionDock: ConstructionDock | null = null;
 	public get ConstructionDock(): ConstructionDock | null { return this._ConstructionDock }
+	//#endregion
+
+	//#region Quests
+	private _Quests: QuestManager | null = null;
+	public get Quests(): QuestManager | null { return this._Quests }
 	//#endregion
 
 
@@ -79,12 +85,11 @@ export class Homeport extends Observable {
 		this.$._Materials = new Materials();
 		this.$._RepairDock = new RepairDock(this);
 		this.$._ConstructionDock = new ConstructionDock(this);
+		this.$._Quests = new QuestManager();
 		this.$._Equipments = new Equipments();
 
 		this.$._Ships = new IdentifiableTable<Ship>();
 		this.$._Fleets = new IdentifiableTable<Fleet>();
-
-		// this.Quests = new Quests();
 
 		SubscribeKcsapi<kcsapi_require_info>("api_get_member/require_info", x => {
 			if (this._Admiral) this._Admiral.Dispose();
