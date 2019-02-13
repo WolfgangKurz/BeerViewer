@@ -11,151 +11,36 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using BeerViewer.Modules;
-using CefSharp;
-using CefSharp.Enums;
-using CefSharp.WinForms;
+
+using Gecko;
+using Gecko.DOM;
 
 namespace BeerViewer.Framework
 {
 	// This file is not for usercontrol
 	public class FrameBrowserPlaceholder { }
 
-	public class FrameworkBrowser : ChromiumWebBrowser
+	public class JavascriptResponse
 	{
-		private class ChromeWidgetMessageInterceptor : NativeWindow
+		public bool Success { get; }
+		public dynamic Result { get; }
+
+		public JavascriptResponse(bool Success, JsVal Value)
 		{
-			public delegate bool ChromeMessage(ref Message msg, BaseWndProc WndProc);
-			public delegate void BaseWndProc(ref Message msg);
-
-			private ChromeMessage forwardAction;
-
-			internal ChromeWidgetMessageInterceptor(Control browser, IntPtr chromeWidgetHostHandle, ChromeMessage forwardAction)
-			{
-				AssignHandle(chromeWidgetHostHandle);
-
-				browser.HandleDestroyed += BrowserHandleDestroyed;
-
-				this.forwardAction = forwardAction;
-			}
-
-			private void BrowserHandleDestroyed(object sender, EventArgs e)
-			{
-				ReleaseHandle();
-
-				var browser = (Control)sender;
-
-				browser.HandleDestroyed -= BrowserHandleDestroyed;
-				forwardAction = null;
-			}
-
-			protected override void WndProc(ref Message m)
-			{
-				var handled = forwardAction?.Invoke(ref m, base.WndProc) ?? false;
-				if (!handled) base.WndProc(ref m);
-			}
+			this.Success = Success;
+			this.Result =
+				Value.IsBoolean ? Value.ToBoolean() :
+				Value.IsDouble ? Value.ToDouble() :
+				Value.IsInt ? Value.ToInteger() :
+				Value.IsNull ? null :
+				Value.IsString ? Value.ToString() :
+				Value.IsObject ? Value.ToObject() :
+				null;
 		}
-		private static class ChromeWidgetHandleFinder
-		{
-			private delegate bool EnumWindowProc(IntPtr hwnd, IntPtr lParam);
+	}
 
-			[DllImport("user32")]
-			[return: MarshalAs(UnmanagedType.Bool)]
-			private static extern bool EnumChildWindows(IntPtr window, EnumWindowProc callback, IntPtr lParam);
-
-			[DllImport("user32.dll", CharSet = CharSet.Auto)]
-			public static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
-
-			private class ClassDetails
-			{
-				public IntPtr DescendantFound { get; set; }
-			}
-
-			private static bool EnumWindow(IntPtr hWnd, IntPtr lParam)
-			{
-				const string chromeWidgetHostClassName = "Chrome_RenderWidgetHostHWND";
-
-				var buffer = new StringBuilder(128);
-				GetClassName(hWnd, buffer, buffer.Capacity);
-
-				if (buffer.ToString() == chromeWidgetHostClassName)
-				{
-					var gcHandle = GCHandle.FromIntPtr(lParam);
-
-					var classDetails = (ClassDetails)gcHandle.Target;
-
-					classDetails.DescendantFound = hWnd;
-					return false;
-				}
-
-				return true;
-			}
-
-			/// <summary>
-			/// Chrome's message-loop Window isn't created synchronously, so this may not find it.
-			/// If so, you need to wait and try again later.
-			/// </summary>
-			public static bool TryFindHandle(IntPtr browserHandle, out IntPtr chromeWidgetHostHandle)
-			{
-				var classDetails = new ClassDetails();
-				var gcHandle = GCHandle.Alloc(classDetails);
-
-				var childProc = new EnumWindowProc(EnumWindow);
-				EnumChildWindows(browserHandle, childProc, GCHandle.ToIntPtr(gcHandle));
-
-				chromeWidgetHostHandle = classDetails.DescendantFound;
-
-				gcHandle.Free();
-
-				return classDetails.DescendantFound != IntPtr.Zero;
-			}
-		}
-		private class NoMenuHandler : IContextMenuHandler
-		{
-			public void OnBeforeContextMenu(IWebBrowser browserControl, IBrowser browser, IFrame frame, IContextMenuParams parameters, IMenuModel model)
-				=> model.Clear();
-
-			public bool OnContextMenuCommand(IWebBrowser browserControl, IBrowser browser, IFrame frame, IContextMenuParams parameters, CefMenuCommand commandId, CefEventFlags eventFlags)
-				=> false;
-
-			public void OnContextMenuDismissed(IWebBrowser browserControl, IBrowser browser, IFrame frame)
-			{
-			}
-
-			public bool RunContextMenu(IWebBrowser browserControl, IBrowser browser, IFrame frame, IContextMenuParams parameters, IMenuModel model, IRunContextMenuCallback callback)
-				=> false;
-		}
-		private class KeyHandler : IKeyboardHandler
-		{
-			public event KeyEventHandler KeyDown;
-			public event KeyEventHandler KeyUp;
-
-			/// <inheritdoc/>>
-			public bool OnPreKeyEvent(IWebBrowser browserControl, IBrowser browser, KeyType type, int windowsKeyCode, int nativeKeyCode, CefEventFlags modifiers, bool isSystemKey, ref bool isKeyboardShortcut)
-			{
-				isKeyboardShortcut = false;
-
-				var _key = (Keys)windowsKeyCode;
-				if (_key == Keys.Tab || _key == Keys.Left || _key == Keys.Up || _key == Keys.Down || _key == Keys.Right)
-					return false;
-
-				if (!isSystemKey)
-				{
-					if (type == KeyType.RawKeyDown || type == KeyType.KeyDown)
-						this.KeyDown?.Invoke(this, new KeyEventArgs(_key));
-					else if(type==KeyType.KeyUp)
-						this.KeyUp?.Invoke(this, new KeyEventArgs(_key));
-				}
-				return false;
-			}
-
-			/// <inheritdoc/>>
-			public bool OnKeyEvent(IWebBrowser browserControl, IBrowser browser, KeyType type, int windowsKeyCode, int nativeKeyCode, CefEventFlags modifiers, bool isSystemKey)
-			{
-				var result = false;
-				return result;
-			}
-		}
-
+	public class FrameworkBrowser : GeckoWebBrowser
+	{
 		[DllImport("User32.dll")]
 		internal static extern bool ReleaseCapture();
 		[DllImport("User32.dll")]
@@ -172,77 +57,33 @@ namespace BeerViewer.Framework
 
 		static FrameworkBrowser()
 		{
-			var cefSettings = new CefSettings()
-			{
-				CachePath = Path.Combine(
-					Path.GetDirectoryName(Assembly.GetEntryAssembly().Location),
-					"CacheData"
-				),
-				BrowserSubprocessPath = Path.Combine(
-					Path.GetDirectoryName(Assembly.GetEntryAssembly().Location),
-					"Libs",
-					"CefSharp.BrowserSubprocess.exe"
-				),
-			};
-			cefSettings.CefCommandLineArgs.Add("disable-extensions", "1");
+			var baseDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
 
-#if !DEBUG
-			cefSettings.LogSeverity = LogSeverity.Disable;
-#endif
 			if (!Settings.HardwareAccelerationEnabled)
-				cefSettings.DisableGpuAcceleration();
+			{
+				GeckoPreferences.Default["gfx.direct2d.disabled"] = true;
+				GeckoPreferences.Default["layers.acceleration.disabled"] = true;
+			}
+			GeckoPreferences.Default["browser.xul.error_pages.enabled"] = true;
+			GeckoPreferences.Default["devtools.debugger.remote-enabled"] = true;
 
-			
+			Xpcom.ProfileDirectory = Path.Combine(baseDir, "CacheData");
 
-			CefSharpSettings.Proxy = new ProxyOptions("localhost", Network.Proxy.Instance.ListeningPort.ToString());
-			CefSharpSettings.SubprocessExitIfParentProcessClosed = true;
-			CefSharpSettings.ShutdownOnExit = true;
-			CefSharpSettings.WcfEnabled = false;
-			Cef.EnableHighDPISupport();
-			Cef.Initialize(
-				cefSettings,
-				false,
-				null
-			);
+			GeckoPreferences.Default["network.proxy.type"] = 1;
+			GeckoPreferences.Default["network.proxy.http"] = "localhost";
+			GeckoPreferences.Default["network.proxy.http_port"] = Network.Proxy.Instance.ListeningPort;
+			GeckoPreferences.Default["network.proxy.ssl"] = "localhost";
+			GeckoPreferences.Default["network.proxy.ssl_port"] = Network.Proxy.Instance.ListeningPort;
+
+			Xpcom.Initialize(Path.Combine(baseDir, "Gecko"));
 		}
 
-		public FrameworkBrowser(string address, IRequestContext requestContext = null) : base(address, requestContext)
+		public FrameworkBrowser(string address) : base()
 		{
-			ChromeWidgetMessageInterceptor messageInterceptor;
 			var browserHandle = this.Handle;
 
-			this.MenuHandler = new NoMenuHandler();
-
-			{
-				var handler = new KeyHandler();
-				handler.KeyDown += (s, e) => this.OnKeyDown(e);
-				handler.KeyUp += (s, e) => this.OnKeyUp(e);
-				this.KeyboardHandler = handler;
-			}
-
-			Task.Run(() =>
-			{
-				try
-				{
-					while (true)
-					{
-						IntPtr chromeWidgetHostHandle;
-						if (ChromeWidgetHandleFinder.TryFindHandle(browserHandle, out chromeWidgetHostHandle))
-						{
-							messageInterceptor = new ChromeWidgetMessageInterceptor(this, chromeWidgetHostHandle, handle);
-							break;
-						}
-						else
-							Thread.Sleep(10);
-					}
-				}
-				catch
-				{
-					// Errors are likely to occur if browser is disposed, and no good way to check from another thread
-				}
-			});
 		}
-
+		/*
 		private bool handle(ref Message message, ChromeWidgetMessageInterceptor.BaseWndProc WndProc)
 		{
 			if (message.Msg == (int)WindowMessages.WM_LBUTTONDOWN) // WM_LBUTTONDOWN
@@ -287,21 +128,37 @@ namespace BeerViewer.Framework
 
 			return false;
 		}
+		*/
 	}
 	public static class FrameworkBrowserExtension
 	{
-		public static void LoadUrl(this IFrame frame, string url)
-			=> frame?.LoadUrl(url);
+		public static void LoadUrl(this FrameworkBrowser browser, string url)
+			=> browser?.LoadUrl(url);
 
-		public static Task<JavascriptResponse> EvaluateScriptAsync(this IFrame frame, string script, string scriptUrl = "about:blank", int startLine = 1, TimeSpan? timeout = null)
-			=> frame?.EvaluateScriptAsync(script, scriptUrl, startLine, timeout);
+		public static JavascriptResponse EvaluateScriptAsync(this FrameworkBrowser browser, string script, string scriptUrl = "about:blank", int startLine = 1, TimeSpan? timeout = null)
+		{
+			using (var js = new AutoJSContext(browser.Window))
+			{
+				var ret = js.EvaluateScript(script, (nsISupports)browser.Window.DomWindow);
+				return new JavascriptResponse(!ret.IsUndefined, ret);
+			}
+		}
+		public static JavascriptResponse EvaluateScriptAsync(this GeckoIFrameElement browser, string script, string scriptUrl = "about:blank", int startLine = 1, TimeSpan? timeout = null)
+		{
+			using (var js = new AutoJSContext(browser.Window))
+			{
+				var ret = js.EvaluateScript(script, (nsISupports)browser.ContentWindow.DomWindow);
+				return new JavascriptResponse(!ret.IsUndefined, ret);
+			}
+		}
 
-		public static void ZoomAsPercentage(this IFrame frame, double zoomFactor)
+		public static void ZoomAsPercentage(this FrameworkBrowser browser, double zoomFactor)
 		{
 			try
 			{
-				frame?.Browser.SetZoomLevel(0);
-				frame?.Browser.SetZoomLevel(Math.Log(zoomFactor / 100.0) / Math.Log(1.2));
+				browser.GetDocShellAttribute()
+					.GetContentViewerAttribute()
+					.SetFullZoomAttribute((float)zoomFactor);
 			}
 			catch (Exception ex)
 			{

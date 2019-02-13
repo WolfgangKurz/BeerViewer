@@ -1,5 +1,4 @@
 ﻿// #define USE_GC
-#define USE_STARTUP_DEVTOOLS
 
 using System;
 using System.Collections.Generic;
@@ -17,7 +16,8 @@ using BeerViewer.Modules.Communication;
 
 using System.Runtime.InteropServices;
 
-using IFrameworkBrowserFrame = CefSharp.IFrame;
+using Gecko;
+using IFrameworkBrowserFrame = Gecko.DOM.GeckoIFrameElement;
 
 namespace BeerViewer.Forms
 {
@@ -125,12 +125,11 @@ namespace BeerViewer.Forms
 					var timer = new System.Timers.Timer(1000);
 					timer.Elapsed += async (s, e) =>
 					{
-						if (this.GameBrowser == null || !this.GameBrowser.IsValid)
+						if (this.GameBrowser == null)
 						{
 							if (this.WindowBrowser.IsDisposed) return;
-							if (this.WindowBrowser.GetBrowser().IsDisposed) return;
 
-							this.GameBrowser = this.WindowBrowser.GetBrowser().GetFrame("MAIN_FRAME");
+							this.GameBrowser = this.WindowBrowser.Document.GetElementById("MAIN_FRAME") as IFrameworkBrowserFrame;
 							await this.Communicator.CallbackScript("Game.Load", Constants.GameURL);
 
 							// Register to Logger
@@ -157,44 +156,43 @@ namespace BeerViewer.Forms
 
 			this.WindowBrowser.Cursor = Cursors.Cross;
 
-			this.WindowBrowser.JavascriptObjectRepository.Register("API", this.Communicator, true, new CefSharp.BindingOptions { CamelCaseJavascriptNames = false });
-			this.WindowBrowser.FrameLoadEnd += async (s, e) =>
+			this.WindowBrowser.RegisterMessageListener(this.Communicator, "API");
+			// this.WindowBrowser.JavascriptObjectRepository.Register("API", this.Communicator, true, new CefSharp.BindingOptions { CamelCaseJavascriptNames = false });
+			this.WindowBrowser.Navigated += async (s, e) =>
 			{
 				if (this.WindowBrowser.IsDisposed) return;
 
-				var rootUri = Extensions.UriOrBlank(e.Browser.MainFrame?.Url);
-				var frameUri = Extensions.UriOrBlank(e.Url);
-
-				if (this.GameBrowser != null && !this.GameBrowser.IsValid)
+				if (this.GameBrowser == null)
 				{
-					this.GameBrowser = this.WindowBrowser.GetBrowser().GetFrame("MAIN_FRAME");
-					if (this.GameBrowser != null && !this.GameBrowser.IsValid)
+					this.GameBrowser = this.WindowBrowser.Document.GetElementById("MAIN_FRAME") as IFrameworkBrowserFrame;
+					if (this.GameBrowser == null)
 					{
 						Logger.Log("Failed to control game frame...");
 						return;
 					}
 				}
 
+				var frameUri = e.Uri;
+
 				// Cookie patch
 				if (frameUri.AbsoluteUri.Contains("/foreign/"))
 				{
 					Logger.Log("Foreign page detected, applying DMM cookie");
-					await this.GameBrowser?.EvaluateScriptAsync(Constants.DMMCookie);
-
-					this.GameBrowser?.LoadUrl(Constants.GameURL);
+					this.GameBrowser?.EvaluateScriptAsync(Constants.DMMCookie);
+					this.GameBrowser.Src = Constants.GameURL;
 				}
 
 				// Login welcome patch
 				if (frameUri.AbsoluteUri.Contains("/login/"))
 				{
 					Logger.Log("Login page detected, applying Welcome patch");
-					await this.GameBrowser?.EvaluateScriptAsync(Constants.WelcomePatch);
+					this.GameBrowser?.EvaluateScriptAsync(Constants.WelcomePatch);
 				}
 
 				// CSS patch
-				if (this.GameBrowser?.IsValid ?? false)
+				if (this.GameBrowser != null)
 				{
-					if (this.GameBrowser?.Url == Constants.GameURL)
+					if (this.GameBrowser?.ContentDocument.Location.Href == Constants.GameURL)
 					{
 						var script =
 						(
@@ -209,44 +207,22 @@ namespace BeerViewer.Forms
 						}else false;"
 						).ToEvaluatableString();
 
-						var ret = await this.GameBrowser?.EvaluateScriptAsync(script);
+						var ret = this.GameBrowser?.EvaluateScriptAsync(script);
 						if (ret.Success && (bool)ret.Result == true)
 							Logger.Log("Game CSS applied");
 					}
 				}
 			};
-			this.WindowBrowser.LoadError += (s, e) =>
+			this.WindowBrowser.NavigationError += (s, e) =>
 			{
-				switch (e.ErrorCode)
-				{
-					case CefSharp.CefErrorCode.FileNotFound:
-					case CefSharp.CefErrorCode.ConnectionFailed:
-					case CefSharp.CefErrorCode.ConnectionRefused:
-					case CefSharp.CefErrorCode.ConnectionTimedOut:
-					case CefSharp.CefErrorCode.DisallowedUrlScheme:
-					case CefSharp.CefErrorCode.InvalidResponse:
-					case CefSharp.CefErrorCode.InvalidUrl:
-					case CefSharp.CefErrorCode.NetworkAccessDenied:
-					case CefSharp.CefErrorCode.OutOfMemory:
-					case CefSharp.CefErrorCode.TooManyRedirects:
-						e.Frame.LoadUrl("file:///" + Constants.EntryDir.Replace("\\", "/") + "/WindowFrame/internal/error.html");
-						break;
-				}
+				e.DomWindow.Document.Location.Href = "file:///" + Constants.EntryDir.Replace("\\", "/") + "/WindowFrame/internal/error.html";
 			};
 
-			this.WindowBrowser.Load("file:///" + Constants.EntryDir.Replace("\\", "/") + "/WindowFrame/Application.html");
+			this.WindowBrowser.LoadUrl("file:///" + Constants.EntryDir.Replace("\\", "/") + "/WindowFrame/Application.html");
 			// this.WindowBrowser.Load("chrome://version/");
 
 			this.Resize += (s, e) => this.WindowBrowser.Size = this.ClientSize;
 			this.Controls.Add(this.WindowBrowser);
-
-#if DEBUG && USE_STARTUP_DEVTOOLS
-			this.WindowBrowser.IsBrowserInitializedChanged += (s, e) =>
-			{
-				if (e.IsBrowserInitialized)
-					this.WindowBrowser.GetBrowser().GetHost().ShowDevTools();
-			};
-#endif
 #endregion
 
 			this.OnResize(EventArgs.Empty);
