@@ -32,9 +32,7 @@ namespace BeerViewer.Framework
 			internal ChromeWidgetMessageInterceptor(Control browser, IntPtr chromeWidgetHostHandle, ChromeMessage forwardAction)
 			{
 				AssignHandle(chromeWidgetHostHandle);
-
 				browser.HandleDestroyed += BrowserHandleDestroyed;
-
 				this.forwardAction = forwardAction;
 			}
 
@@ -188,6 +186,8 @@ namespace BeerViewer.Framework
 
 #if !DEBUG
 			cefSettings.LogSeverity = LogSeverity.Disable;
+#else
+			cefSettings.LogSeverity = LogSeverity.Verbose;
 #endif
 			if (!Settings.HardwareAccelerationEnabled)
 				cefSettings.DisableGpuAcceleration();
@@ -206,9 +206,6 @@ namespace BeerViewer.Framework
 
 		public FrameworkBrowser(string address, IRequestContext requestContext = null) : base(address, requestContext)
 		{
-			ChromeWidgetMessageInterceptor messageInterceptor;
-			var browserHandle = this.Handle;
-
 			this.MenuHandler = new NoMenuHandler();
 
 			{
@@ -218,30 +215,35 @@ namespace BeerViewer.Framework
 				this.KeyboardHandler = handler;
 			}
 
-			Task.Run(() =>
+			this.HandleCreated += (s, e) =>
 			{
-				try
+				var browserHandle = this.Handle;
+				Task.Run(() =>
 				{
-					while (true)
+					try
 					{
-						IntPtr chromeWidgetHostHandle;
-						if (ChromeWidgetHandleFinder.TryFindHandle(browserHandle, out chromeWidgetHostHandle))
+						ChromeWidgetMessageInterceptor messageInterceptor;
+
+						while (true)
 						{
-							messageInterceptor = new ChromeWidgetMessageInterceptor(this, chromeWidgetHostHandle, handle);
-							break;
+							if (ChromeWidgetHandleFinder.TryFindHandle(browserHandle, out IntPtr chromeWidgetHostHandle))
+							{
+								messageInterceptor = new ChromeWidgetMessageInterceptor(this, chromeWidgetHostHandle, MessageHandler);
+								break;
+							}
+							else
+								Thread.Sleep(10);
 						}
-						else
-							Thread.Sleep(10);
 					}
-				}
-				catch
-				{
-					// Errors are likely to occur if browser is disposed, and no good way to check from another thread
-				}
-			});
+					catch
+					{
+						// Errors are likely to occur if browser is disposed, and no good way to check from another thread
+					}
+				});
+			};
 		}
 
-		private bool handle(ref Message message, ChromeWidgetMessageInterceptor.BaseWndProc WndProc)
+		private bool MessageHandler(ref Message message, ChromeWidgetMessageInterceptor.BaseWndProc WndProc)
 		{
 			if (message.Msg == (int)WindowMessages.WM_LBUTTONDOWN) // WM_LBUTTONDOWN
 			{

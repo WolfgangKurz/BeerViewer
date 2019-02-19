@@ -166,7 +166,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="cef.redist.x86">
-      <Version>3.3497.1841</Version>
+      <Version>3.3578.1863</Version>
     </PackageReference>
     <PackageReference Include="CefSharp.Common">
       <Version>71.0.0</Version>
