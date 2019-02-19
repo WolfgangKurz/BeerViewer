@@ -192,8 +192,6 @@ namespace BeerViewer.Framework
 			if (!Settings.HardwareAccelerationEnabled)
 				cefSettings.DisableGpuAcceleration();
 
-			
-
 			CefSharpSettings.Proxy = new ProxyOptions("localhost", Network.Proxy.Instance.ListeningPort.ToString());
 			CefSharpSettings.SubprocessExitIfParentProcessClosed = true;
 			CefSharpSettings.ShutdownOnExit = true;
@@ -202,7 +200,7 @@ namespace BeerViewer.Framework
 			Cef.Initialize(
 				cefSettings,
 				false,
-				null
+				(IBrowserProcessHandler)null
 			);
 		}
 
