@@ -91,6 +91,7 @@
     <Compile Include="Framework\FrameworkContainer.cs" />
     <Compile Include="Framework\FrameworkControl.cs" />
     <Compile Include="Framework\FrameworkExtension.cs" />
+    <Compile Include="Framework\FrameworkRequestHandler.cs" />
     <Compile Include="Framework\FrameworkGesture.cs" />
     <Compile Include="Framework\FrameworkRenderer.cs" />
     <Compile Include="Framework\FrameworManager.cs" />
@@ -100,6 +101,7 @@
     <Compile Include="Forms\frmMain.Designer.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
+    <Compile Include="Libraries\FindReplaceResponseFilter.cs" />
     <Compile Include="Libraries\Sass.cs" />
     <Compile Include="Libraries\SystemEnvironment.cs" />
     <Compile Include="Modules\Communication\ModuleInfo.cs" />

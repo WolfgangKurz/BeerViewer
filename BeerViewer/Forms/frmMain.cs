@@ -103,7 +103,7 @@ namespace BeerViewer.Forms
 			{
 				Dock = DockStyle.None,
 				AllowDrop = false,
-				Location = Point.Empty,
+				Location = Point.Empty
 			};
 
 			this.WindowBrowser.KeyDown += (s, e) =>
@@ -182,13 +182,6 @@ namespace BeerViewer.Forms
 					await this.GameBrowser?.EvaluateScriptAsync(Constants.DMMCookie);
 
 					this.GameBrowser?.LoadUrl(Constants.GameURL);
-				}
-
-				// Login welcome patch
-				if (frameUri.AbsoluteUri.Contains("/login/"))
-				{
-					Logger.Log("Login page detected, applying Welcome patch");
-					await this.GameBrowser?.EvaluateScriptAsync(Constants.WelcomePatch);
 				}
 
 				// CSS patch

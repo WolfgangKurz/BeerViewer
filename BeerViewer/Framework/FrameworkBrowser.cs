@@ -207,6 +207,7 @@ namespace BeerViewer.Framework
 		public FrameworkBrowser(string address, IRequestContext requestContext = null) : base(address, requestContext)
 		{
 			this.MenuHandler = new NoMenuHandler();
+			this.RequestHandler = new FrameworkRequestHandler();
 
 			{
 				var handler = new KeyHandler();
