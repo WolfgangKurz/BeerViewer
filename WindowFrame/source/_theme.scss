@@ -62,3 +62,7 @@ $progress-colors: (
 	white-space: nowrap;
 	word-break: keep-all;
 }
+
+@function Ratio($origin, $dest, $target){
+	@return $target * ($dest / $origin);
+}

@@ -54,6 +54,7 @@ export class Ship extends ObservableDataWrapper<kcsapi_ship2> implements IIdenti
 	public get ExtraEquip(): ShipEquip | null { return this._ExtraEquip }
 	//#endregion
 
+	/** Equipped equipment items includes Extra slot */
 	public get EquippedItems(): ShipEquip[] {
 		return this.Equips
 			.concat(this.ExtraEquip ? [this.ExtraEquip] : [])

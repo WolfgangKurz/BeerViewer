@@ -71,23 +71,38 @@
 				 :style="{'grid-template-columns': `${fleet.NameSize}px auto auto 20%`}"
 				 v-tippy="{html:`#overview-ship-tooltip-${ship.Id}`}">
 				<div :id="'overview-ship-tooltip-'+ship.Id"
-					 class="tooltip-host"
+					 class="tooltip-host overview-ship-tooltip"
 					 v-tippy-target>
 					<div>
 						<b>이름</b>:
 						{{i18n[ship.Info.Name] || "???"}}
 					</div>
-					<div>
-						<b>체력</b>:
-						{{ship.HP.Current}} / {{ship.HP.Maximum}}
-					</div>
-					<div>
-						<b>연료</b>:
-						{{ship.Fuel.Current}} / {{ship.Fuel.Maximum}}
-					</div>
-					<div>
-						<b>탄약</b>:
-						{{ship.Ammo.Current}} / {{ship.Ammo.Maximum}}
+					<div class="overview-equips">
+						<b>장비</b>:
+						<table class="overview-equiptable">
+							<tbody>
+								<tr v-for="equip in ship.EquippedItems">
+									<td>
+										<i class="overview-equip-icon"
+										   :data-equip-id="equip.Item.Info.Icon"></i>
+									</td>
+									<td>
+										{{i18n[equip.Item.Info.Name] || equip.Item.Info.Name}}
+									</td>
+									<td>
+										<span class="equip-level"
+											  :data-level="equip.Item.Level">
+											{{equip.Item.LevelText}}
+										</span>
+									</td>
+									<td>
+										<span class="equip-proficiency"
+											  :data-proficiency="equip.Item.Proficiency">
+										</span>
+									</td>
+								</tr>
+							</tbody>
+						</ul>
 					</div>
 				</div>
 

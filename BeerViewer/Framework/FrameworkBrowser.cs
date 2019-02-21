@@ -186,8 +186,6 @@ namespace BeerViewer.Framework
 
 #if !DEBUG
 			cefSettings.LogSeverity = LogSeverity.Disable;
-#else
-			cefSettings.LogSeverity = LogSeverity.Verbose;
 #endif
 			if (!Settings.HardwareAccelerationEnabled)
 				cefSettings.DisableGpuAcceleration();
