@@ -3,7 +3,6 @@ import Vue from "vue";
 import { mapState } from "vuex";
 import { IModule } from "System/Module";
 import { LoSCalculator } from "System/Models/LoSCalculator/LoSCalculator";
-import TemplateContent from "./settings.html";
 import Settings, { Settings as _Settings, SettingsData } from "System/Settings";
 
 declare global {
@@ -35,7 +34,7 @@ class SettingsModule implements IModule {
 
 	private VueObject = Vue.component("settings-component", {
 		data: () => this.Data,
-		template: TemplateContent,
+		template: $("#settings-container").prop("outerHTML"),
 		computed: mapState({
 			i18n: "i18n"
 		}),

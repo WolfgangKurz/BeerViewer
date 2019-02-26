@@ -100,9 +100,17 @@
 											  :data-proficiency="equip.Item.Proficiency">
 										</span>
 									</td>
+									<td>
+										<span class="equip-aircraft"
+											  v-show="equip.MaximumAircraft > 0"
+											  :data-aircraft="equip.Item.Info.IsNumerable ? 1 : 0"
+											  :data-lost="equip.LostAircraft">
+											  {{equip.CurrentAircraft}} / {{equip.MaximumAircraft}}
+										</span>
+									</td>
 								</tr>
 							</tbody>
-						</ul>
+						</table>
 					</div>
 				</div>
 

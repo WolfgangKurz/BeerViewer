@@ -10,7 +10,6 @@ import { FleetState } from "System/Enums/FleetEnums";
 import { ObservableCallback } from "System/Base/Observable";
 import { mapState } from "vuex";
 import { ShipInfo } from "System/Master/Wrappers/ShipInfo";
-import TemplateContent from "./overview.html";
 import Quest from "System/Homeport/Quest/Quest";
 
 const getTextWidth = function (text: string, font: string) {
@@ -84,7 +83,7 @@ class Overview implements IModule {
 		const _this = this;
 		Vue.component("overview-component", {
 			data: () => this.Data,
-			template: TemplateContent,
+			template: $("#overview-container").prop("outerHTML"),
 
 			computed: mapState({
 				i18n: "i18n"
@@ -177,7 +176,7 @@ class Overview implements IModule {
 	}
 
 	private GetRemainingText(remaining: number): string {
-		const asSecs = Math.floor(remaining);
+		const asSecs = Math.floor(remaining / 1000);
 		const hours = Math.floor((asSecs / 3600) % 60);
 		const mins = Math.floor((asSecs / 60) % 60);
 		const secs = (asSecs % 60);
@@ -255,7 +254,7 @@ class Overview implements IModule {
 			x.Observe((_, value: 0 | 5 | 10 | 15 | 20) => fleet.Speed = window.i18n[this.speedList[value]], nameof(x.FleetSpeed));
 
 			x.Observe((_, value: number) => fleet.LoS = value.toFixed(2), nameof(x.LoS));
-			x.Observe((_, value: AirSupremacy) => fleet.AA = value, nameof(x.AirSupremacy));
+			x.Observe((_, value: AirSupremacy) => fleet.AA = this.AAConvert(value), nameof(x.AirSupremacy));
 			x.Observe((_, value: boolean) => fleet.IsConditionRestoring = value, nameof(x.IsConditionRestoring));
 			x.Observe((_, value: number) => fleet.ConditionRestoringText = this.GetRemainingText(value), nameof(x.ConditionRestoreTime));
 			x.Observe((_, value: Ship[]) => {
@@ -331,6 +330,13 @@ class Overview implements IModule {
 	}
 	private updateQuests():void {
 		this.Data.Quests = Homeport.Instance.Quests!.All;
+	}
+
+	private AAConvert(AA: AirSupremacy): AirSupremacy{
+		return new AirSupremacy(
+			parseFloat(AA.Minimum.toFixed(2)),
+			parseFloat(AA.Maximum.toFixed(2))
+		);
 	}
 }
 

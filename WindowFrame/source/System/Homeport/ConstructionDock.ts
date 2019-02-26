@@ -119,7 +119,7 @@ export namespace ConstructionDock {
 				this.State === DockState.Building
 					? ndock.api_complete_time
 					: 0;
-			this.$._Remaining = this.CompleteTime;
+			this.$._Remaining = this.CompleteTime - Date.now();
 		}
 		public Finish(): void {
 			this.$._State = ConstructionDock.DockState.Done;

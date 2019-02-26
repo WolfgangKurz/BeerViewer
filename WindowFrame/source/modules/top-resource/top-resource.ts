@@ -4,7 +4,6 @@ import { IModule } from "System/Module"
 import { Homeport } from "System/Homeport/Homeport";
 import { Materials } from "System/Homeport/Materials";
 import { Admiral } from "System/Homeport/Admiral";
-import TemplateContent from "./top-resource.html";
 
 interface ResourceData {
 	Name: string;
@@ -23,7 +22,7 @@ class TopResources implements IModule {
 				Resources: this.Resources,
 				Overlimit: this.Overlimit
 			}),
-			template: TemplateContent
+			template: $("#top-resources").prop("outerHTML")
 		});
 	}
 

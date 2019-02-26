@@ -59,16 +59,7 @@ module.exports = {
                     appendTsSuffixTo: [/\.vue$/],
                     getCustomTransformers: () => ({ before: [tsNameof] })
                 }
-            },
-			{
-				test: /\.(html)$/,
-				use: {
-					loader: 'html-loader',
-					options: {
-						attrs: [':data-src']
-					}
-				}
-			}
+            }
         ]
     },
     externals: {

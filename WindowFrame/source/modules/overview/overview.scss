@@ -388,5 +388,15 @@ div.overview-equips > table.overview-equiptable {
 				}
 			}
 		}
+
+		.equip-aircraft {
+			padding-left: 5px;
+			&:not([data-aircraft="1"]){
+				opacity: 0.5;
+			}
+			&:not([data-lost="0"]){
+				color: map-get($state-colors, "sortie");
+			}
+		}
 	}
 }

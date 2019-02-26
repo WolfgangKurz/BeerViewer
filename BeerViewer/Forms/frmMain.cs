@@ -1,5 +1,5 @@
 ﻿// #define USE_GC
-#define USE_STARTUP_DEVTOOLS
+// #define USE_STARTUP_DEVTOOLS
 
 using System;
 using System.Collections.Generic;
@@ -31,6 +31,7 @@ namespace BeerViewer.Forms
 		public FrameworkBrowser WindowBrowser { get; }
 		public IFrameworkBrowserFrame GameBrowser { get; private set; }
 		public WindowBrowserCommicator Communicator { get; }
+		private bool OnShutdown { get; set; } = false;
 
 		static frmMain()
 		{
@@ -53,6 +54,8 @@ namespace BeerViewer.Forms
 
 			this.FormClosed += (s, e) =>
 			{
+				OnShutdown = true;
+
 				// Hide application first
 				this.Hide();
 				Application.DoEvents();
@@ -70,13 +73,19 @@ namespace BeerViewer.Forms
 				if (info.Top.HasValue) this.Top = info.Top.Value;
 			}
 			this.MinimumSize = new Size(
-				1200 + 2,
-				720 + 28 + 2
+				(int)(1200 * 0.25) + 2,
+				(int)(720 * 0.25) + 28 + 2
 			);
-			this.ResizeEnd += (s, e) => Settings.WindowInformation.Value = this.GetWindowInformation();
-			this.Move += (s, e) => Settings.WindowInformation.Value = this.GetWindowInformation();
+			this.ResizeEnd += (s, e) =>
+			{
+				if (!OnShutdown) Settings.WindowInformation.Value = this.GetWindowInformation();
+			};
+			this.Move += (s, e) =>
+			{
+				if (!OnShutdown) Settings.WindowInformation.Value = this.GetWindowInformation();
+			};
 
-#region GC timer
+			#region GC timer
 #if USE_GC
 			{
 				var timer = new System.Timers.Timer(5000);
@@ -91,14 +100,14 @@ namespace BeerViewer.Forms
 				timer.Start();
 			}
 #endif
-#endregion
+			#endregion
 
-#region ComponentService
+			#region ComponentService
 			// Components (Plugins)
 			ComponentService.Instance.Initialize();
-#endregion
+			#endregion
 
-#region WindowBrowser
+			#region WindowBrowser
 			this.WindowBrowser = new FrameworkBrowser("")
 			{
 				Dock = DockStyle.None,
@@ -148,7 +157,7 @@ namespace BeerViewer.Forms
 				}
 			);
 			this.Communicator.MainFrameResized += (s, e) =>
-				this.Invoke(() => 
+				this.Invoke(() =>
 					this.MinimumSize = new Size(
 						e.Width + 2,
 						e.Height + 28 + 2
@@ -240,7 +249,7 @@ namespace BeerViewer.Forms
 					this.WindowBrowser.GetBrowser().GetHost().ShowDevTools();
 			};
 #endif
-#endregion
+			#endregion
 
 			this.OnResize(EventArgs.Empty);
 		}

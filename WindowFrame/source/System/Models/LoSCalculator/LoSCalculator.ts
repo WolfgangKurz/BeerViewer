@@ -1,7 +1,7 @@
 import { SimpleSumLoS } from "./SimpleSumLoS";
 import { Old2_5LoS } from "./Old2_5LoS";
 import { Fall2_5LoS } from "./Fall2_5LoS";
-import { Cn1LoS, Cn3LoS, Cn4LoS } from "./CnLoS";
+import { Cn1LoS, Cn2LoS, Cn3LoS, Cn4LoS } from "./CnLoS";
 import { ILoSCalculator, LoSCalcLogic } from "./LoSCalcLogic";
 
 export class LoSCalculator {
@@ -25,6 +25,7 @@ export class LoSCalculator {
 		this.AddLogic(new Old2_5LoS());
 		this.AddLogic(new Fall2_5LoS());
 		this.AddLogic(new Cn1LoS());
+		this.AddLogic(new Cn2LoS());
 		this.AddLogic(new Cn3LoS());
 		this.AddLogic(new Cn4LoS());
 	}

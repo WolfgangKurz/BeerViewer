@@ -4,7 +4,6 @@ import { IModule } from "System/Module";
 import { Homeport } from "System/Homeport/Homeport";
 import { IdentifiableTable } from "System/Models/TableWrapper";
 import { Progress } from "System/Models/GuageValue";
-import TemplateContent from "./top-expedition.html";
 
 interface ExpeditionData {
 	Enabled: boolean;
@@ -25,7 +24,7 @@ class TopExpedition implements IModule {
 
 	private VueObject = Vue.component("top-expedition-component", {
 		data: () => this.Data,
-		template: TemplateContent,
+		template: $("#top-expeditions").prop("outerHTML"),
 		methods: {
 			ExpeditionState(exp: ExpeditionData): string {
 				return exp.Enabled

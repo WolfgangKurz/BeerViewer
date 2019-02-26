@@ -7,6 +7,13 @@ export class Cn1LoS extends TypeCnLoS {
 	public readonly Cn: number = 1;
 }
 
+/** Formula 33 (Cn=2) */
+export class Cn2LoS extends TypeCnLoS {
+	public readonly Id: string = "Cn2";
+	public readonly Name: string = "Formula 33 (Cn=2)";
+	public readonly Cn: number = 2;
+}
+
 /** Formula 33 (Cn=3) */
 export class Cn3LoS extends TypeCnLoS {
 	public readonly Id: string = "Cn3";

@@ -147,7 +147,7 @@ export namespace RepairDock {
 				this.State === DockState.Repairing
 					? ndock.api_complete_time
 					: 0;
-			this.$._Remaining = this.CompleteTime;
+			this.$._Remaining = this.CompleteTime - Date.now();
 		}
 		public Finish(): void {
 			this.$._State = RepairDock.DockState.Free;

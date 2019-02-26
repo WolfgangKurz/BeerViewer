@@ -15,7 +15,7 @@ export class Equipment extends RawDataWrapper<kcsapi_slotitem> implements IIdent
 		return this.Level >= 10 ? "★max" : `★+${this.Level}`;
 	}
 
-	public get Proficiency(): number { return this.raw.api_alv }
+	public get Proficiency(): number { return this.raw.api_alv || 0 }
 	public get ProficiencyText(): string {
 		switch (this.Proficiency) {
 			case 1: return "|";
