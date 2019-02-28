@@ -272,7 +272,7 @@ export class Homeport extends Observable {
 		const ship = this.Ships.get(source.api_ship.api_id);
 		if (ship) ship.Update(source.api_ship);
 
-		var items = request.api_id_items
+		const items = request.api_id_items
 			.split(',').filter(x => x)
 			.map(x => parseInt(x))
 			.filter(x => this.Ships.has(x))

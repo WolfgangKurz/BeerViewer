@@ -16,18 +16,6 @@ export class Equipment extends RawDataWrapper<kcsapi_slotitem> implements IIdent
 	}
 
 	public get Proficiency(): number { return this.raw.api_alv || 0 }
-	public get ProficiencyText(): string {
-		switch (this.Proficiency) {
-			case 1: return "|";
-			case 2: return "||";
-			case 3: return "|||";
-			case 4: return "/";
-			case 5: return "//";
-			case 6: return "///";
-			case 7: return ">>";
-		}
-		return "";
-	}
 
 	constructor(api_data: kcsapi_slotitem) {
 		super(api_data);

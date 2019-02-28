@@ -134,11 +134,11 @@ export class Ship extends ObservableDataWrapper<kcsapi_ship2> implements IIdenti
 		this.$._ASW = new UpgradeStatus(0, this.raw.api_taisen[1], this.raw.api_taisen[0]);
 
 		if (this.raw.api_kyouka.length >= 5) {
-			this._FirePower = new UpgradeStatus(this.Info.FirePower, this.raw.api_kyouka[0]);
-			this._Torpedo = new UpgradeStatus(this.Info.Torpedo, this.raw.api_kyouka[1]);
-			this._AA = new UpgradeStatus(this.Info.AA, this.raw.api_kyouka[2]);
-			this._Armor = new UpgradeStatus(this.Info.Armor, this.raw.api_kyouka[3]);
-			this._Luck = new UpgradeStatus(this.Info.Luck, this.raw.api_kyouka[4]);
+			this.$._FirePower = new UpgradeStatus(this.Info.FirePower, this.raw.api_kyouka[0]);
+			this.$._Torpedo = new UpgradeStatus(this.Info.Torpedo, this.raw.api_kyouka[1]);
+			this.$._AA = new UpgradeStatus(this.Info.AA, this.raw.api_kyouka[2]);
+			this.$._Armor = new UpgradeStatus(this.Info.Armor, this.raw.api_kyouka[3]);
+			this.$._Luck = new UpgradeStatus(this.Info.Luck, this.raw.api_kyouka[4]);
 		}
 		this.UpdateEquipSlots();
 	}
@@ -151,9 +151,9 @@ export class Ship extends ObservableDataWrapper<kcsapi_ship2> implements IIdenti
 		this.$._ExtraEquip = new ShipEquip(this, this.homeport.Equipments.Equips.get(this.raw.api_slot_ex), 0, 0);
 
 		if (this.Equips.some(x => x.Item.Info.Category === EquipCategory.DamageController))
-			this._State |= Ship.State.DamageControlled;
+			this.$._State |= Ship.State.DamageControlled;
 		else
-			this._State &= ~Ship.State.DamageControlled;
+			this.$._State &= ~Ship.State.DamageControlled;
 
 		this.UpdateASW();
 
@@ -166,10 +166,10 @@ export class Ship extends ObservableDataWrapper<kcsapi_ship2> implements IIdenti
 	}
 
 	public Evacuate(): void {
-		this._State |= Ship.State.Evacuation;
+		this.$._State |= Ship.State.Evacuation;
 	}
 	public Tow(): void {
-		this._State |= Ship.State.Tow;
+		this.$._State |= Ship.State.Tow;
 	}
 }
 export namespace Ship {

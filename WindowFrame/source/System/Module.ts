@@ -1,4 +1,3 @@
-import Vue, { VueConstructor } from "vue";
 import BaseAPI from "./Base/API";
 
 declare global {

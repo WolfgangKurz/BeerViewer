@@ -71,38 +71,43 @@ class SettingsModule implements IModule {
 						_.push(settings[provider][name]);
 				return _;
 			})()
-			.map(x => {
-				let prefix = "";
-				let _enums: { [key: string]: any } | null = null;
-				if (x.Enums) {
-					_enums = {};
-					x.Enums.forEach(x => { _enums![x] = x });
-				}
-
-				if (x.Provider === "LoS") {
-					if (x.Name === "LoSCalculator") {
+				.filter(x => {
+					// ZoomFrame is internal settings value
+					if (x.Provider === "MainFrame" && x.Name === "ZoomFactor") return false;
+					return true;
+				})
+				.map(x => {
+					let prefix = "";
+					let _enums: { [key: string]: any } | null = null;
+					if (x.Enums) {
 						_enums = {};
-						prefix = "los.";
-						LoSCalculator.Instance.Logics.forEach(x => {
-							_enums![x.Id] = x.Name;
-						});
+						x.Enums.forEach(x => { _enums![x] = x });
 					}
-				}
-				return {
-					i18nPrefix: prefix,
 
-					Type: x.Type,
+					if (x.Provider === "LoS") {
+						if (x.Name === "LoSCalculator") {
+							_enums = {};
+							prefix = "los.";
+							LoSCalculator.Instance.Logics.forEach(x => {
+								_enums![x.Id] = x.Name;
+							});
+						}
+					}
+					return {
+						i18nPrefix: prefix,
 
-					Name: x.Name,
-					Provider: x.Provider,
-					Value: x.Value,
+						Type: x.Type,
 
-					DisplayName: x.DisplayName,
-					Description: x.Description,
-					Caution: x.Caution,
-					Enums: _enums
-				};
-			});
+						Name: x.Name,
+						Provider: x.Provider,
+						Value: x.Value,
+
+						DisplayName: x.DisplayName,
+						Description: x.Description,
+						Caution: x.Caution,
+						Enums: _enums
+					};
+				});
 
 		const map = new Map<string, ProcessedSettingInfo[]>();
 		_.forEach(item => {

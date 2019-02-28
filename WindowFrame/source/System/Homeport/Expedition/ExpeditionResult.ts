@@ -20,7 +20,7 @@ export class ExpeditionResult {
 		this.Steel = mission.api_get_material[2];
 		this.Bauxite = mission.api_get_material[3];
 
-		var list: ExpeditionResultItem[] = [];
+		const list: ExpeditionResultItem[] = [];
 		if (mission.api_get_item1 != null)
 			list.push(new ExpeditionResultItem(mission.api_get_item1, mission.api_useitem_flag[0]));
 		if (mission.api_get_item2 != null)

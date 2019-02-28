@@ -25,7 +25,7 @@ export class Expedition extends TickObservable {
 	private get _ReturnTime(): number { return this.__ReturnTime }
 	private set _ReturnTime(value: number) {
 		if (this.__ReturnTime != value) {
-			this.__ReturnTime = value;
+			this.$.__ReturnTime = value;
 			this.notificated = false;
 			this.RaisePropertyChanged(nameof(this.Remaining));
 			this.RaisePropertyChanged(nameof(this.IsInExecution));
@@ -45,8 +45,8 @@ export class Expedition extends TickObservable {
 		if (this.ReturnTime === 0) return new Progress();
 		if (this.Expedition == null) return new Progress();
 
-		var start = this.ReturnTime - (this.Expedition.raw.api_time * 60 * 1000);
-		var value = Math.floor((Date.now() - start) / 1000); // as secs
+		const start = this.ReturnTime - (this.Expedition.raw.api_time * 60 * 1000);
+		const value = Math.floor((Date.now() - start) / 1000); // as secs
 		return new Progress(value, this.Expedition.raw.api_time * 60, 0);
 	}
 
@@ -74,13 +74,13 @@ export class Expedition extends TickObservable {
 
 	public Update(rawData: [number, number, number, number]): void {
 		if (rawData.length != 4 || rawData.filter(x => x === 0).length == 4) {
-			this._Id = -1;
-			this._Expedition = null;
-			this._ReturnTime = 0;
+			this.$._Id = -1;
+			this.$._Expedition = null;
+			this.$._ReturnTime = 0;
 		} else {
-			this._Id = rawData[1];
-			this._Expedition = Master.Instance.Expeditions!.get(this.Id) || null;
-			this._ReturnTime = rawData[2];
+			this.$._Id = rawData[1];
+			this.$._Expedition = Master.Instance.Expeditions!.get(this.Id) || null;
+			this.$._ReturnTime = rawData[2];
 		}
 	}
 
