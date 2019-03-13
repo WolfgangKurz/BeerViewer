@@ -55,12 +55,6 @@ namespace LiveTranslation
 							EncodeUnicode(i18n.Current[key])
 						);
 					}
-					/*
-					src = src.Replace(@"\u91d1\u525b\u6539\u4e8c" /* 金剛改二 * /, "やすし");
-					src = src.Replace(@"\u6bd4\u53e1\u6539\u4e8c" /* 比叡改二 * /, "さとし");
-					src = src.Replace(@"\u699b\u540d\u6539\u4e8c" /* 榛名改二 * /, "きよし");
-					src = src.Replace(@"\u9727\u5cf6\u6539\u4e8c" /* 霧島改二 * /, "あつし");
-					*/
 
 					b = utf8.GetBytes(src);
 				}
