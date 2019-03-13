@@ -18,6 +18,9 @@ export class Ship extends ObservableDataWrapper<kcsapi_ship2> implements IIdenti
 	public get Info(): ShipInfo { return this._Info }
 
 	public get Level(): number { return this.raw.api_lv }
+	public get Experience(): number { return this.raw.api_exp[0] }
+	public get ExperienceRemain(): number { return this.raw.api_exp[1] }
+	public get ExperienceNext(): number { return this.ExperienceRemain + this.Experience }
 
 	public get HP(): GuageValue { return new GuageValue(this.raw.api_nowhp, this.raw.api_maxhp) }
 

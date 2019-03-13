@@ -41,34 +41,7 @@ export class Settings {
 				const group: { [name: string]: SettingInfo } = {};
 
 				for (let i = 0; i < arr.length; i++) {
-					const item: SettingInfo = <SettingInfo>{};
-
-					let key: keyof SettingInfo;
-					for (key in arr[i]) { // Without "Value", readonly
-						if (key === "Value") continue;
-
-						Object.defineProperty(item, key, {
-							value: arr[i][key],
-							configurable: false,
-							enumerable: false,
-							writable: false
-						});
-					}
-
-					// "Value" is writable, settable.
-					Object.defineProperty(item, "Value", {
-						get() {
-							return arr[i].Value;
-						},
-						set(value) {
-							(async () => {
-								if (await window.API.UpdateSetting(item.Provider, item.Name, value))
-									arr[i].Value = value;
-							})();
-						},
-						configurable: false,
-						enumerable: false
-					});
+					const item = this.BuildSetting(arr[i]);
 
 					// Set setting item as readonly
 					Object.defineProperty(group, item.Name, {
@@ -100,6 +73,81 @@ export class Settings {
 			this._ReadyCallbacks.push(callback);
 	}
 
+	public Register(setting: SettingInfo) {
+		const provider = setting.Provider;
+		const name = setting.Name;
+		const item = this.BuildSetting(setting);
+
+		const group = this.data[provider] || {};
+
+		// Set setting item as readonly
+		Object.defineProperty(group, item.Name, {
+			value: item,
+			configurable: false,
+			enumerable: true,
+			writable: false
+		});
+
+		if (!(provider in this.data)) {
+			// Set provider group as readonly
+			Object.defineProperty(this.data, provider, {
+				value: group,
+				configurable: false,
+				enumerable: true,
+				writable: false
+			});
+		}
+
+		if (this._Loaded)
+			this._ReadyCallbacks.splice(0, this._ReadyCallbacks.length);
+	}
+
+	private BuildSetting(info: SettingInfo) {
+		const _this = this;
+		const item: SettingInfo = <SettingInfo>{};
+
+		let key: keyof SettingInfo;
+		for (key in info) { // Without "Value", readonly
+			if (key === "Value") continue;
+
+			Object.defineProperty(item, key, {
+				value: info[key],
+				configurable: false,
+				enumerable: false,
+				writable: false
+			});
+		}
+
+		// "Value" is writable, settable.
+		Object.defineProperty(item, "Value", {
+			get() {
+				return info.Value;
+			},
+			set(value) {
+				(async () => {
+					if (await window.API.UpdateSetting(item.Provider, item.Name, value)) {
+						info.Value = value;
+						_this.CallObservers(`${item.Provider}.${item.Name}`, value);
+					}
+				})();
+			},
+			configurable: false,
+			enumerable: false
+		});
+		return item;
+	}
+
+	public Observe(key: string, callback: (value: string | number | boolean) => void) {
+		if (!(key in this.observers))
+			this.observers[key] = [callback];
+		else
+			this.observers[key].push(callback);
+	}
+	private CallObservers(key: string, value: string | number | boolean) {
+		fns(this.observers[key], value);
+	}
+
+	private readonly observers: { [key: string]: ((value: string | number | boolean) => void)[] } = {};
 	public readonly data: SettingsData = {};
 }
 export default Settings.Instance.data;

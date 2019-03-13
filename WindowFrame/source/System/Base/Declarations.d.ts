@@ -3,8 +3,3 @@
 declare interface Symbol {
 	readonly description: string | undefined;
 }
-declare module '*.html' {
-	const content: string;
-	export default content;
-  }
-  

@@ -26,23 +26,23 @@ export class EquipInfo extends RawDataWrapper<kcsapi_mst_slotitem> implements II
 	/** Is Aircraft? */
 	public get IsNumerable(): boolean {
 		switch (this.Category) {
-			case EquipCategory.CarrierBasedRecon:
-			case EquipCategory.CarrierBasedRecon_II:
+			case EquipCategory.CarrierBasedReconnaissance:
+			case EquipCategory.CarrierBasedReconnaissance_II:
 			case EquipCategory.CarrierBasedFighter:
 			case EquipCategory.CarrierBasedTorpedoBomber:
 			case EquipCategory.CarrierBasedDiveBomber:
-			case EquipCategory.SeaplaneRecon:
+			case EquipCategory.SeaplaneReconnaissance:
 			case EquipCategory.SeaplaneBomber:
 			case EquipCategory.SeaplaneFighter:
 			case EquipCategory.Autogyro:
 			case EquipCategory.AntiSubmarinePatrolAircraft:
 			case EquipCategory.LargeFlyingBoat:
 			case EquipCategory.LandBasedAttackAircraft:
-			case EquipCategory.InterceptorFighter:
+			case EquipCategory.LandBasedInterceptor:
 			case EquipCategory.JetPoweredFighter:
 			case EquipCategory.JetPoweredFighterBomber:
-			case EquipCategory.JetPoweredAttacker:
-			case EquipCategory.JetPoweredRecon:
+			case EquipCategory.JetPoweredTorpedoBomber:
+			case EquipCategory.JetPoweredReconnaissance:
 				return true;
 
 			default:
@@ -51,7 +51,7 @@ export class EquipInfo extends RawDataWrapper<kcsapi_mst_slotitem> implements II
 	}
 
 	public get Encounterable(): boolean[] {
-		const first = this.Category === EquipCategory.CarrierRecon || this.Category === EquipCategory.SeaplaneRecon;
+		const first = this.Category === EquipCategory.CarrierBasedReconnaissance || this.Category === EquipCategory.SeaplaneReconnaissance;
 		return [first, first || this.Category === EquipCategory.CarrierBasedTorpedoBomber];
 	}
 

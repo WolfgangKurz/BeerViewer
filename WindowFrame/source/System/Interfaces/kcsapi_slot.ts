@@ -17,7 +17,7 @@ export interface kcsapi_slot_deprive_unset_list {
 }
 
 export interface kcsapi_slot_exchange_index {
-	api_slot: number[];
+	api_slot: [number, number, number, number, number];
 }
 
 export interface kcsapi_slot_data {

@@ -16,7 +16,7 @@ export class Old2_5LoS extends LoSCalcLogic {
 		const recon = ships
 			.reduce((a, c) =>
 				a.concat(
-					c.EquippedItems.filter(x => x.Item.Info.Type === EquipDictCategory.Recon)
+					c.EquippedItems.filter(x => x.Item.Info.Type === EquipDictCategory.ReconnaissanceAircraft)
 						.filter(x => x.CurrentAircraft > 0)
 						.map(x => x.Item.Info.LoS)
 				),

@@ -56,11 +56,11 @@ export class Fall2_5LoS extends LoSCalcLogic {
 				return score * 1.04;
 			case EquipCategory.CarrierBasedTorpedoBomber:
 				return score * 1.37;
-			case EquipCategory.CarrierBasedRecon:
-			case EquipCategory.CarrierBasedRecon_II:
+			case EquipCategory.CarrierBasedReconnaissance:
+			case EquipCategory.CarrierBasedReconnaissance_II:
 				return score * 1.66;
 
-			case EquipCategory.SeaplaneRecon:
+			case EquipCategory.SeaplaneReconnaissance:
 				return score * 2.00;
 			case EquipCategory.SeaplaneBomber:
 				return score * 1.78;

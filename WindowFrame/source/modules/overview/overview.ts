@@ -11,6 +11,7 @@ import { ObservableCallback } from "System/Base/Observable";
 import { mapState } from "vuex";
 import { ShipInfo } from "System/Master/Wrappers/ShipInfo";
 import Quest from "System/Homeport/Quest/Quest";
+import { Settings } from "System/Settings";
 
 const getTextWidth = function (text: string, font: string) {
 	const canvas: HTMLCanvasElement = (<any>getTextWidth).canvas || ((<any>getTextWidth).canvas = document.createElement("canvas"));
@@ -76,7 +77,9 @@ class Overview implements IModule {
 		ConstructionDock: <ConstructionDockData[]>[],
 		Quests: <ReadonlyArray<Quest>>[],
 
-		LosType: <string>""
+		LosType: <string>"",
+
+		ExpDispType: "Remining"
 	}
 
 	constructor() {
@@ -122,6 +125,9 @@ class Overview implements IModule {
 				},
 				SelectFleet(id: number): void {
 					_this.SelectFleet(id);
+				},
+				numFormat(value: number): string {
+					return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 				}
 			},
 			watch: {
@@ -149,6 +155,19 @@ class Overview implements IModule {
 					deep: true
 				}
 			}
+		});
+		Settings.Instance.Register({
+			Provider: "Overview",
+			Name: "ExpDispType",
+			DisplayName: "Exp Display Type",
+			Value: "Remaining",
+			Type: "String",
+			Enums: ["Remaining", "Next"],
+			Description: "Experience display type"
+		});
+
+		Settings.Instance.Observe("Overview.ExpDispType", value => {
+			this.Data.ExpDispType = value.toString();
 		});
 	}
 

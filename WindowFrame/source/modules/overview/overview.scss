@@ -367,7 +367,41 @@
 		}
 	}
 }
+div.overview-ship-info {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	grid-template-rows: auto auto;
+	font-weight: bold;
 
+	.ship-name {
+		grid-column: 1 / 2;
+		grid-row: 1 / 3;
+		padding: 4px 10px 0 0;
+		vertical-align: middle;
+		align-items: center;
+		font-size: 16px;
+	}
+	.ship-level {
+		grid-column: 2 / 3;
+		grid-row: 1 / 2;
+		font-size: 12px;
+
+		small {
+			font-size: 10px;
+			opacity: 0.82;
+		}
+	}
+	.ship-exp {
+		grid-column: 2 / 3;
+		grid-row: 2 / 3;
+		font-size: 10px;
+
+		small {
+			font-size: 9.4px;
+			opacity: 0.82;
+		}
+	}
+}
 div.overview-equips > table.overview-equiptable {
 	margin: 0;
 	padding: 0;
@@ -381,10 +415,14 @@ div.overview-equips > table.overview-equiptable {
 		i.overview-equip-icon {
 			margin-right: 5px;
 
-			@for $i from 1 through 47 {
-				&[data-equip-id="#{$i}"] {
-					@include EquipmentIcon($i, 30);
-					background-image: url("../../assets/equipments.png");
+			&[data-equip-id] {
+				margin: -2px 5px -2px -2px;
+				background-image: url("../../assets/equipments.png");
+
+				@for $i from 1 through 47 {
+					&[data-equip-id="#{$i}"] {
+						@include EquipmentIcon($i, 30);
+					}
 				}
 			}
 		}
@@ -398,5 +436,8 @@ div.overview-equips > table.overview-equiptable {
 				color: map-get($state-colors, "sortie");
 			}
 		}
+	}
+	tr.overview-equip-extra > td {
+		border-top: 1px solid #c9c9c9;
 	}
 }

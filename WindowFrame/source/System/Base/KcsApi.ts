@@ -7,7 +7,7 @@ export interface KcsApiCallback<T, U extends HTTPRequest> {
 
 /** Subscribe information */
 export class SubscribeInfo<T, U extends HTTPRequest = HTTPRequest> implements IDisposable {
-private _Disposed: boolean = false;
+	private _Disposed: boolean = false;
 	public get Disposed(): boolean { return this._Disposed }
 
 	private _Id: number = -1;

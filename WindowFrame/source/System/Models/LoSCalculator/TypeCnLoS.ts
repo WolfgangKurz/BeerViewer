@@ -58,7 +58,7 @@ export abstract class TypeCnLoS implements LoSCalcLogic {
 	}
 	private static GetLevelCoefficient(item: Equipment): number {
 		switch (item.Info.Category) {
-			case EquipCategory.SeaplaneRecon:
+			case EquipCategory.SeaplaneReconnaissance:
 				return Math.sqrt(item.Level) * 1.2;
 
 			case EquipCategory.SmallRadar:
@@ -94,15 +94,15 @@ export abstract class TypeCnLoS implements LoSCalcLogic {
 			case EquipCategory.JetPoweredTorpedoBomber: // Maybe
 				return 0.8;
 
-			case EquipCategory.CarrierBasedRecon:
-			case EquipCategory.CarrierBasedRecon_II:
+			case EquipCategory.CarrierBasedReconnaissance:
+			case EquipCategory.CarrierBasedReconnaissance_II:
 				return 1.0;
 
 			case EquipCategory.SeaplaneBomber:
 				return 1.1;
 
-			case EquipCategory.SeaplaneRecon:
-			case EquipCategory.JetPoweredRecon: // Maybe
+			case EquipCategory.SeaplaneReconnaissance:
+			case EquipCategory.JetPoweredReconnaissance: // Maybe
 				return 1.2;
 
 			default:

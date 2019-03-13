@@ -448,7 +448,13 @@ namespace BeerViewer.Modules.Communication
 					}
 				}
 			}
-			return false;
+
+			// WindowFrame settings
+			var setting = new SettableSettingValue<dynamic>(Name, Provider, "", "");
+			setting.Value = Value;
+			setting.Save();
+
+			return true;
 		}
 
 		/// <summary>

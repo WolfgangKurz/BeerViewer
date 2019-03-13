@@ -98,10 +98,10 @@ export interface SettingInfo {
 	Value: string | number | boolean;
 
 	DisplayName: string;
-	Description: string | null | undefined;
-	Caution: string | null | undefined;
+	Description?: string | null;
+	Caution?: string | null;
 
-	Enums: any[] | null | undefined;
+	Enums?: any[] | null;
 }
 
 /** Requset data for HTTP request/response */

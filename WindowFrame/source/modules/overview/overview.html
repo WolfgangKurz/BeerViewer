@@ -73,15 +73,22 @@
 				<div :id="'overview-ship-tooltip-'+ship.Id"
 					 class="tooltip-host overview-ship-tooltip"
 					 v-tippy-target>
-					<div>
-						<b>이름</b>:
-						{{i18n[ship.Info.Name] || "???"}}
+					<div class="overview-ship-info">
+						<div class="ship-name">{{i18n[ship.Info.Name] || "???"}}</div>
+						<div class="ship-level">
+							<small>Lv.</small>
+							{{ship.Level}}
+						</div>
+						<div class="ship-exp">
+							{{numFormat(ship.Experience)}}
+							<small v-if="EXPDispType==='Remaining'">/{{numFormat(ship.ExperienceRemain)}}</small>
+							<small v-else-if="EXPDispType==='Next'">/{{numFormat(ship.ExperienceNext)}}</small>
+						</div>
 					</div>
 					<div class="overview-equips">
-						<b>장비</b>:
 						<table class="overview-equiptable">
 							<tbody>
-								<tr v-for="equip in ship.EquippedItems">
+								<tr v-for="equip in ship.Equips">
 									<td>
 										<i class="overview-equip-icon"
 										   :data-equip-id="equip.Item.Info.Icon"></i>
@@ -106,6 +113,34 @@
 											  :data-aircraft="equip.Item.Info.IsNumerable ? 1 : 0"
 											  :data-lost="equip.LostAircraft">
 											  {{equip.CurrentAircraft}} / {{equip.MaximumAircraft}}
+										</span>
+									</td>
+								</tr>
+								<tr class="overview-equip-extra" v-if="ship.ExtraEquip && ship.ExtraEquip.Equipped">
+									<td>
+										<i class="overview-equip-icon"
+										   :data-equip-id="ship.ExtraEquip.Item.Info.Icon"></i>
+									</td>
+									<td>
+										{{i18n[ship.ExtraEquip.Item.Info.Name] || ship.ExtraEquip.Item.Info.Name}}
+									</td>
+									<td>
+										<span class="equip-level"
+											  :data-level="ship.ExtraEquip.Item.Level">
+											{{ship.ExtraEquip.Item.LevelText}}
+										</span>
+									</td>
+									<td>
+										<span class="equip-proficiency"
+											  :data-proficiency="ship.ExtraEquip.Item.Proficiency">
+										</span>
+									</td>
+									<td>
+										<span class="equip-aircraft"
+											  v-show="ship.ExtraEquip.MaximumAircraft > 0"
+											  :data-aircraft="ship.ExtraEquip.Item.Info.IsNumerable ? 1 : 0"
+											  :data-lost="ship.ExtraEquip.LostAircraft">
+											  {{ship.ExtraEquip.CurrentAircraft}} / {{ship.ExtraEquip.MaximumAircraft}}
 										</span>
 									</td>
 								</tr>
