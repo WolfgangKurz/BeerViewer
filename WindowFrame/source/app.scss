@@ -1,0 +1,477 @@
+﻿@import "_fontface";
+@import "_theme";
+
+* {
+	box-sizing: border-box;
+	user-select: none;
+}
+html, body {
+	margin: 0;
+	padding: 0;
+	outline: 0;
+	border: 0;
+	height: 100%;
+	background-color: $theme-color;
+	font: $theme-font-size $theme-font-face, "Segoe UI", "Malgun Gothic", sans-serif;
+	overflow: hidden;
+	color: $theme-text-color;
+}
+input, select {
+	font: $theme-font-size $theme-font-face, "Segoe UI", "Malgun Gothic", sans-serif;
+	color: $theme-text-color;
+}
+img { vertical-align: bottom }
+iframe#MAIN_FRAME {
+	/* Default size */
+	display: block;
+	width: 1200px;
+	height: 720px;
+	border: none;
+	transform-origin: 0% 0%;
+}
+
+button {
+	padding: 0;
+	border: none;
+	outline: none;
+	background-color: $theme-color;
+	line-height: inherit;
+	color: inherit;
+	font: inherit;
+	cursor: pointer;
+
+	&:hover {
+		background-color: $theme-hover-color;
+	}
+	&:active {
+		background-color: $theme-active-color;
+	}
+}
+table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+input, select {
+	padding: 6px 8px;
+	outline: 0;
+	border: 0;
+	border-radius: 3px;
+	background-color: $theme-line-color;
+	font-size: 14px;
+}
+select {
+	padding-right: 12px;
+	cursor: pointer;
+}
+
+#modules {
+	display: none !important;
+}
+
+div.tab-host {
+	display: flex;
+	background-color: $theme-hover-color;
+	line-height: 14px;
+	text-align: center;
+	flex-direction: row;
+
+	> * {
+		flex: 1 0 0;
+		padding: 5px 0;
+		text-decoration: none;
+		cursor: pointer;
+		color: $theme-text-color;
+	}
+
+	> a {
+		&[data-hide="true"] {
+			display: none;
+		}
+
+		&:hover, &.selected {
+			background-color: $theme-active-color;
+		}
+	}
+}
+
+ul.menu-host {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+
+	li {
+		margin: 0;
+		padding: 0 0 0 6px;
+		height: 28px;
+		border-right: 3px solid transparent;
+		border-top: 1px solid $theme-line-color;
+		white-space: nowrap;
+		line-height: 28px;
+		overflow: hidden;
+
+		.menu-active {
+			border-right-color: $theme-text-color;
+		}
+
+		&:not(.menu-group) {
+			cursor: pointer;
+
+			&:hover {
+				background-color: $theme-active-color;
+			}
+
+			&:active {
+				background-color: $theme-color;
+			}
+		}
+	}
+
+	> li:first-child {
+		border-top: none !important;
+	}
+
+	> li.menu-group {
+		height: auto;
+		border-top: 1px solid $theme-highlight-line-color;
+		border-right: none;
+		font-weight: bold;
+	}
+
+	> li.menu-group {
+		> span.menu-group-name {
+			padding-right: 6px;
+		}
+
+		> ul {
+			margin: 0;
+			padding: 0;
+			list-style: none;
+		}
+	}
+}
+
+ul.menu-host {
+	> li.menu-zoom {
+		padding: 0;
+		border-right: 0;
+
+		&:hover {
+			background-color: unset;
+		}
+
+		> div.menu-zoom {
+			display: grid;
+			grid-template-columns: auto 1fr auto;
+
+			> button {
+				padding: 4px 14px;
+				line-height: 20px;
+			}
+
+			> span {
+				text-align: center;
+				line-height: 13px;
+				font-size: 13px;
+
+				> div {
+					font-weight: bold;
+				}
+				> small {
+					font-size: 8.5px;
+					opacity: 0.71;
+				}
+			}
+		}
+	}
+}
+
+i.menu-icon {
+	display: inline-block;
+	margin-right: 4px;
+	width: 28px;
+	height: 28px;
+	background-image: url(assets/icon_menu_area.png);
+	background-repeat: no-repeat;
+	vertical-align: bottom;
+
+	@mixin IconSet($name, $x, $y) {
+		&[data-icon="#{$name}"] {
+			background-position: (-$x * 1px) (-$y * 1px);
+		}
+	}
+
+	@include IconSet("mainscreen", 28, 0);
+	@include IconSet("subscreen", 56, 0);
+	@include IconSet("sidescreen", 84, 0);
+	@include IconSet("tools", 84, 28);
+	@include IconSet("plugin", 0, 28);
+	@include IconSet("game", 28, 28);
+	@include IconSet("setting", 56, 28);
+}
+
+[data-type="progress"] {
+	position: relative;
+	background-color: $theme-progress-back;
+
+	> .progress-strip {
+		position: absolute;
+		top: 0;
+		height: 50%;
+		width: 1px;
+		background-color: $theme-progress-strip;
+		z-index: 1;
+	}
+
+	> .progress-bar {
+		height: 100%;
+		transition: all 0.22s ease-in-out;
+	}
+
+	@mixin ProgressColor($strip) {
+		@for $i from 1 through $strip {
+			&[data-progress-strip="#{$strip}"] > .progress-bar[data-color="#{$i - 1}"] {
+				background-color: map-get($progress-colors, floor(($i - 1) / ($strip - 1) * 100) + "%");
+			}
+		}
+	}
+
+	@include ProgressColor(4);
+	@include ProgressColor(5);
+}
+
+body {
+	background-image: url(./theme/background.png);
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+#mainbox {
+	display: grid;
+	width: 100%;
+	height: 100%;
+	border: 1px solid $theme-active-color;
+	background-color: transparentize($theme-color, 0.3);
+	overflow: hidden;
+
+	html.focused & {
+		border: 1px solid $theme-highlight-color;
+	}
+
+	.grid-placeholder {
+		background-color: $theme-split-color;
+	}
+}
+
+#top-area {
+	line-height: 28px;
+	background-color: transparentize($theme-color, 0.6);
+	grid-column: 1 / 4;
+	grid-row: 1;
+}
+#main-area {
+	grid-column: 1;
+	grid-row: 2;
+	overflow: auto;
+}
+#side-area {
+	display: flex; /* to maximize module */
+	grid-column: 3;
+	grid-row: 2 / 5;
+	overflow: hidden;
+}
+#sub-area {
+	display: flex; /* to maximize module */
+	grid-column: 1;
+	grid-row: 4;
+	overflow: hidden;
+}
+#side-area > *,
+#sub-area > * {
+	display: flex; /* to maximize module */
+	flex: 1;
+}
+#side-module-area > *,
+#sub-module-area > * {
+	flex: 1;
+}
+
+#top-area #top-systembutton {
+	float: right;
+
+	> .system-button {
+		float: left;
+		width: 32px;
+		height: 28px;
+		background-image: url(assets/button_system.png);
+		background-repeat: no-repeat;
+
+
+		@mixin SysButton($n) {
+			&:nth-of-type(#{$n + 1}) {
+				background-position: (-$n * 32px) 0;
+			}
+		}
+
+		@include SysButton(0);
+		@include SysButton(1);
+		@include SysButton(2);
+	}
+
+	&[data-windowstate="2"] > .system-button {
+		@mixin SysButtonMaximized($n) {
+			&:nth-of-type(#{$n + 1}) {
+				background-position: (-$n * 32px) -28px;
+			}
+		}
+
+		@include SysButtonMaximized(0);
+		@include SysButtonMaximized(1);
+		@include SysButtonMaximized(2);
+	}
+}
+
+#top-area #top-menubutton {
+	float: left;
+	position: relative;
+	display: block;
+
+	&::after {
+		content: "";
+		display: table;
+		clear: both;
+	}
+
+	&:hover {
+		background-color: $theme-hover-color;
+	}
+
+	&:active {
+		background-color: $theme-active-color;
+	}
+
+	> button {
+		float: left;
+		position: relative;
+		padding-right: 8px;
+		z-index: 999;
+
+		> * {
+			float: left;
+		}
+	}
+
+	> #top-menu-overlay {
+		position: fixed;
+		left: 0;
+		top: 28px;
+		width: 100%;
+		height: 100%;
+		pointer-events: none;
+		z-index: 997;
+	}
+
+	> #top-menu {
+		position: absolute;
+		left: 0;
+		top: 100%;
+		min-width: 140px;
+		background-color: $theme-hover-color;
+		box-shadow: 0 0 11px $theme-shadow-color;
+		transition: opacity 0.07s ease-in;
+		pointer-events: none;
+		opacity: 0;
+		z-index: 998;
+	}
+
+	&.menu-open {
+		> button:not(:active) {
+			background-color: $theme-hover-color !important;
+		}
+
+		> #top-menu,
+		> #top-menu-overlay {
+			pointer-events: initial;
+			opacity: 1;
+		}
+	}
+}
+
+#top-area #top-module-area {
+	display: flex;
+	white-space: nowrap;
+	overflow: hidden;
+
+	&::after {
+		content: "";
+		display: table;
+		clear: both;
+	}
+
+	> * {
+		float: left;
+	}
+}
+
+i[data-type="module-content"] {
+	display: block;
+	font: inherit;
+
+	> * {
+		width: 100%;
+		height: 100%;
+	}
+
+	&[data-module-id="game"] {
+		overflow: hidden;
+	}
+}
+
+.tooltip-host {
+	display: none;
+}
+.tippy-tooltip .tippy-content {
+	text-align: left;
+	font-size: 12px;
+}
+
+.equip-level {
+	display: inline-block;
+	margin-left: 4px;
+	color: #45A9A5;
+
+	&[data-level="0"] {
+		display: none;
+	}
+}
+.equip-proficiency {
+	display: inline-block;
+	margin-left: 2px;
+	width: 16px;
+	height: 16px;
+	vertical-align: middle;
+
+	&[data-proficiency="0"] {
+		display: none;
+	}
+	&[data-proficiency="1"] {
+		background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZmlsbD0iIzk4QjNDRSIgZD0iTTcsMiBMOSwyIDksMTQgNywxNFoiLz48L3N2Zz4=);
+	}
+	&[data-proficiency="2"]{
+		background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZmlsbD0iIzk4QjNDRSIgZD0iTTUsMiBMNywyIDcsMTQgNSwxNFogTTgsMiBMMTAsMiAxMCwxNCA4LDE0WiIvPjwvc3ZnPg==);
+	}
+	&[data-proficiency="3"] {
+		background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZmlsbD0iIzk4QjNDRSIgZD0iTTQsMiBMNiwyIDYsMTQgNCwxNFogTTcsMiBMOSwyIDksMTQgNywxNFogTTEwLDIgTDEyLDIgMTIsMTQgMTAsMTRaIi8+PC9zdmc+);
+	}
+	&[data-proficiency="4"] {
+		background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZmlsbD0iI0Q0OUMwRiIgZD0iTTUuNSwyIEw3LjUsMiAxMC41LDE0IDguNSwxNFoiLz48L3N2Zz4=);
+	}
+	&[data-proficiency="5"]{
+		background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZmlsbD0iI0Q0OUMwRiIgZD0iTTQsMiBMNiwyIDksMTQgNywxNFogTTcsMiBMOSwyIDEyLDE0IDEwLDE0WiIvPjwvc3ZnPg==);
+	}
+	&[data-proficiency="6"] {
+		background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZmlsbD0iI0Q0OUMwRiIgZD0iTTIsMiBMNCwyIDcsMTQgNSwxNFogTTUuNSwyIEw3LjUsMiAxMC41LDE0IDguNSwxNFogTTksMiBMMTEsMiAxNCwxNCAxMiwxNFoiLz48L3N2Zz4=);
+	}
+	&[data-proficiency="7"] {
+		background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZmlsbD0iI0Q0OUMwRiIgZD0iTTQsMiBMNiwyIDksOCA2LDE0IDQsMTQgNyw4WiBNOCwyIEwxMCwyIDEzLDggMTAsMTQgOCwxNCAxMSw4WiIvPjwvc3ZnPg==);
+	}
+}

@@ -80,15 +80,5 @@ namespace BeerViewer.Modules
 		/// Permission to notify to user
 		/// </summary>
 		CP_NOTIFY = 0x0004,
-
-		/// <summary>
-		/// Permission to use main tab display area (right)
-		/// </summary>
-		CP_MAINTAB = 0x0008,
-
-		/// <summary>
-		/// Permission to use sub tab display area (bottom)
-		/// </summary>
-		CP_SUBTAB = 0x0010,
 	}
 }

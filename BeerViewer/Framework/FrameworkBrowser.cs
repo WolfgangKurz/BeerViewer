@@ -32,9 +32,7 @@ namespace BeerViewer.Framework
 			internal ChromeWidgetMessageInterceptor(Control browser, IntPtr chromeWidgetHostHandle, ChromeMessage forwardAction)
 			{
 				AssignHandle(chromeWidgetHostHandle);
-
 				browser.HandleDestroyed += BrowserHandleDestroyed;
-
 				this.forwardAction = forwardAction;
 			}
 
@@ -124,6 +122,37 @@ namespace BeerViewer.Framework
 			public bool RunContextMenu(IWebBrowser browserControl, IBrowser browser, IFrame frame, IContextMenuParams parameters, IMenuModel model, IRunContextMenuCallback callback)
 				=> false;
 		}
+		private class KeyHandler : IKeyboardHandler
+		{
+			public event KeyEventHandler KeyDown;
+			public event KeyEventHandler KeyUp;
+
+			/// <inheritdoc/>>
+			public bool OnPreKeyEvent(IWebBrowser browserControl, IBrowser browser, KeyType type, int windowsKeyCode, int nativeKeyCode, CefEventFlags modifiers, bool isSystemKey, ref bool isKeyboardShortcut)
+			{
+				isKeyboardShortcut = false;
+
+				var _key = (Keys)windowsKeyCode;
+				if (_key == Keys.Tab || _key == Keys.Left || _key == Keys.Up || _key == Keys.Down || _key == Keys.Right)
+					return false;
+
+				if (!isSystemKey)
+				{
+					if (type == KeyType.RawKeyDown || type == KeyType.KeyDown)
+						this.KeyDown?.Invoke(this, new KeyEventArgs(_key));
+					else if(type==KeyType.KeyUp)
+						this.KeyUp?.Invoke(this, new KeyEventArgs(_key));
+				}
+				return false;
+			}
+
+			/// <inheritdoc/>>
+			public bool OnKeyEvent(IWebBrowser browserControl, IBrowser browser, KeyType type, int windowsKeyCode, int nativeKeyCode, CefEventFlags modifiers, bool isSystemKey)
+			{
+				var result = false;
+				return result;
+			}
+		}
 
 		[DllImport("User32.dll")]
 		internal static extern bool ReleaseCapture();
@@ -169,41 +198,51 @@ namespace BeerViewer.Framework
 			Cef.Initialize(
 				cefSettings,
 				false,
-				null
+				(IBrowserProcessHandler)null
 			);
 		}
 
 		public FrameworkBrowser(string address, IRequestContext requestContext = null) : base(address, requestContext)
 		{
-			ChromeWidgetMessageInterceptor messageInterceptor;
-			var browserHandle = this.Handle;
-
 			this.MenuHandler = new NoMenuHandler();
+			this.RequestHandler = new FrameworkRequestHandler();
 
-			Task.Run(() =>
 			{
-				try
+				var handler = new KeyHandler();
+				handler.KeyDown += (s, e) => this.OnKeyDown(e);
+				handler.KeyUp += (s, e) => this.OnKeyUp(e);
+				this.KeyboardHandler = handler;
+			}
+
+			this.HandleCreated += (s, e) =>
+			{
+				var browserHandle = this.Handle;
+				Task.Run(() =>
 				{
-					while (true)
+					try
 					{
-						IntPtr chromeWidgetHostHandle;
-						if (ChromeWidgetHandleFinder.TryFindHandle(browserHandle, out chromeWidgetHostHandle))
+						ChromeWidgetMessageInterceptor messageInterceptor;
+
+						while (true)
 						{
-							messageInterceptor = new ChromeWidgetMessageInterceptor(this, chromeWidgetHostHandle, handle);
-							break;
+							if (ChromeWidgetHandleFinder.TryFindHandle(browserHandle, out IntPtr chromeWidgetHostHandle))
+							{
+								messageInterceptor = new ChromeWidgetMessageInterceptor(this, chromeWidgetHostHandle, MessageHandler);
+								break;
+							}
+							else
+								Thread.Sleep(10);
 						}
-						else
-							Thread.Sleep(10);
 					}
-				}
-				catch
-				{
-					// Errors are likely to occur if browser is disposed, and no good way to check from another thread
-				}
-			});
+					catch
+					{
+						// Errors are likely to occur if browser is disposed, and no good way to check from another thread
+					}
+				});
+			};
 		}
 
-		private bool handle(ref Message message, ChromeWidgetMessageInterceptor.BaseWndProc WndProc)
+		private bool MessageHandler(ref Message message, ChromeWidgetMessageInterceptor.BaseWndProc WndProc)
 		{
 			if (message.Msg == (int)WindowMessages.WM_LBUTTONDOWN) // WM_LBUTTONDOWN
 			{

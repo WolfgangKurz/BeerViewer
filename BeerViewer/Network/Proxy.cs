@@ -32,22 +32,21 @@ namespace BeerViewer.Network
 
 		public static Proxy Instance { get; } = new Proxy();
 
-		internal ConcurrentDictionary<int, ProxyHandler> Handlers { get; }
-		internal ConcurrentDictionary<int, ModifiableProxyHandler> ModifiableHandlers { get; }
+		internal ProxyHandlerContainer<ProxyHandler> Handlers { get; }
+		internal ProxyHandlerContainer<ModifiableProxyHandler> ModifiableHandlers { get; }
 
 		private Proxy()
 		{
-			this.Handlers = new ConcurrentDictionary<int, ProxyHandler>();
-			this.ModifiableHandlers = new ConcurrentDictionary<int, ModifiableProxyHandler>();
+			this.Handlers = new ProxyHandlerContainer<ProxyHandler>();
+			this.ModifiableHandlers = new ProxyHandlerContainer<ModifiableProxyHandler>();
 			if (IsInDesignMode) return;
 
 			HttpProxy.AfterSessionComplete += (_ =>
 			{
-				this.Handlers.Values.ToList().ForEach(x =>
-				{
-					if ((x.Where == null) || (_.Request.PathAndQuery == x.Where))
-						x.Handler.Invoke(_);
-				});
+				this.Handlers.Values
+					.Where(x => x.Where == null || x.Where == _.Request.PathAndQuery)
+					.ToList()
+					.ForEach(x => x.Handler.Invoke(_));
 			});
 
 			bool AlterPort = false;
@@ -67,7 +66,7 @@ namespace BeerViewer.Network
 			} while (true);
 
 			if (AlterPort)
-				Logger.Log($"Default port already in using, use {this.ListeningPort} instead.");
+				Logger.Log("Default port already in using, use {0} instead.", this.ListeningPort);
 
 			HttpProxy.BeforeRequest += _ =>
 				this.ModifiableHandlers
@@ -138,89 +137,89 @@ namespace BeerViewer.Network
 		/// <summary>
 		/// Register HTTP event handler without URL
 		/// </summary>
-		public Proxy Register(Action<Session> e)
+		public int Register(Action<Session> e)
 			=> this.Register(null, e);
 
 		/// <summary>
 		/// Register HTTP event handler with URL
 		/// </summary>
-		public Proxy Register(string Where, Action<Session> e)
+		public int Register(string Where, Action<Session> e)
 		{
-			if (IsInDesignMode) return this;
+			if (IsInDesignMode) return -1;
 
 			if (!this.PermissionCheck(BeerComponentPermission.CP_NETWORK))
 				throw new InvalidOperationException("Not allowed operation");
 
 			try
 			{
-				this.Handlers.TryAdd(
-					this.Handlers.Count,
+				var key = this.Handlers.TryAdd(
 					new ProxyHandler
 					{
 						Where = Where,
 						Handler = e
 					}
 				);
+				return key;
 			}
 			catch { }
 
-			return this;
+			return -1;
 		}
 		#endregion
 
 		#region BeforeResponse Handlers
-		public Proxy RegisterModifiable(Func<Session, byte[], byte[]> e)
+		public int RegisterModifiable(Func<Session, byte[], byte[]> e)
 			=> this.RegisterModifiable(null, e);
 
-		public Proxy RegisterModifiable(string Where, Func<Session, byte[], byte[]> e)
+		public int RegisterModifiable(string Where, Func<Session, byte[], byte[]> e)
 		{
-			if (IsInDesignMode) return this;
+			if (IsInDesignMode) return -1;
 
 			if (!this.PermissionCheck(BeerComponentPermission.CP_NETWORK_MODIFIABLE))
 				throw new InvalidOperationException("Not allowed operation");
 
 			try
 			{
-				this.ModifiableHandlers.TryAdd(
-					this.ModifiableHandlers.Count,
+				var key = this.ModifiableHandlers.TryAdd(
 					new ModifiableProxyHandler
 					{
 						Where = Where,
 						Handler_Response = e
 					}
 				);
+				return key;
 			}
 			catch { }
 
-			return this;
+			return -1;
 		}
 		#endregion
 
 		#region BeforeRequest Handlers
-		public Proxy RegisterModifiable(Func<HttpRequest, bool> e)
+		public int RegisterModifiable(Func<HttpRequest, bool> e)
 			=> this.RegisterModifiable(null, e);
 
-		public Proxy RegisterModifiable(string Where, Func<HttpRequest, bool> e)
+		public int RegisterModifiable(string Where, Func<HttpRequest, bool> e)
 		{
-			if (IsInDesignMode) return this;
+			if (IsInDesignMode) return -1;
 
 			if (!this.PermissionCheck(BeerComponentPermission.CP_NETWORK_MODIFIABLE))
 				throw new InvalidOperationException("Not allowed operation");
 
 			try
 			{
-				this.ModifiableHandlers.TryAdd(
-					this.ModifiableHandlers.Count,
+				var key = this.ModifiableHandlers.TryAdd(
 					new ModifiableProxyHandler
 					{
 						Where = Where,
 						Handler_Request = e
 					}
 				);
+				return key;
 			}
 			catch { }
 
-			return this;
+			return -1;
 		}
 		#endregion
 
@@ -233,9 +232,45 @@ namespace BeerViewer.Network
 		public Proxy Unregister(Action<Session> e)
 		{
 			var k = this.Handlers.FirstOrDefault(x => x.Value.Handler == e).Key;
-			ProxyHandler h;
+			this.Handlers.TryRemove(k, out _);
+			return this;
+		}
 
-			this.Handlers.TryRemove(k, out h);
+		/// <summary>
+		/// Unregister HTTP event handler with key
+		/// </summary>
+		public Proxy Unregister(int key)
+		{
+			this.Handlers.TryRemove(key, out _);
+			return this;
+		}
+
+		/// <summary>
+		/// Unregister HTTP event modifiable handler
+		/// </summary>
+		public Proxy UnregisterModifiable(Func<HttpRequest, bool> e)
+		{
+			var k = this.ModifiableHandlers.FirstOrDefault(x => x.Value.Handler_Request == e).Key;
+			this.Handlers.TryRemove(k, out _);
+			return this;
+		}
+
+		/// <summary>
+		/// Unregister HTTP event modifiable handler
+		/// </summary>
+		public Proxy UnregisterModifiable(Func<Session, byte[], byte[]> e)
+		{
+			var k = this.ModifiableHandlers.FirstOrDefault(x => x.Value.Handler_Response == e).Key;
+			this.Handlers.TryRemove(k, out _);
+			return this;
+		}
+
+		/// <summary>
+		/// Unregister HTTP event modifiable handler with key
+		/// </summary>
+		public Proxy UnregisterModifiable(int key)
+		{
+			this.ModifiableHandlers.TryRemove(key, out _);
 			return this;
 		}
 		#endregion

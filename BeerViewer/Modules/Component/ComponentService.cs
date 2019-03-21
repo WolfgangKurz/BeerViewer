@@ -68,28 +68,28 @@ namespace BeerViewer.Modules
 				catch (ReflectionTypeLoadException ex)
 				{
 					Logger.Log(
-						string.Join(Environment.NewLine, new string[] {
-							$"Failed to load component '{filename}' with ReflectionTypeLoadException.",
-							string.Join(Environment.NewLine, ex.LoaderExceptions.Select(x => x.Message))
-						})
+						"Failed to load component '{1}' with ReflectionTypeLoadException.{0}{2}",
+						Environment.NewLine,
+						filename,
+						string.Join(Environment.NewLine, ex.LoaderExceptions.Select(x => x.Message))
 					);
 				}
 				catch (BadImageFormatException ex)
 				{
 					Logger.Log(
-						string.Join(Environment.NewLine, new string[] {
-							$"Failed to load component '{filename}' with BadImageFormatException.",
-							ex.Message
-						})
+						"Failed to load component '{1}' with BadImageFormatException.{0}{2}",
+						Environment.NewLine,
+						filename,
+						ex.Message
 					);
 				}
 				catch (FileLoadException ex)
 				{
 					Logger.Log(
-						string.Join(Environment.NewLine, new string[] {
-							$"Failed to load component '{filename}' with FileLoadException.",
-							ex.Message
-						})
+						"Failed to load component '{1}' with FileLoadException.{0}{2}",
+						Environment.NewLine,
+						filename,
+						ex.Message
 					);
 				}
 			}
@@ -139,33 +139,29 @@ namespace BeerViewer.Modules
 						var filename = Path.GetFileName(filepath);
 
 						Logger.Log(
-							string.Join(Environment.NewLine, new string[] {
-								$"Failed to load component '{filename}' with CompositionException.",
-								component.Metadata.ToString(),
-								ex.Message
-							})
+							$"Failed to load component '{1}' with CompositionException.{0}{2}",
+							Environment.NewLine,
+							filename,
+							component.Metadata.ToString(),
+							ex.Message
 						);
 					}
 				}
 				catch (Exception ex)
 				{
 					Logger.Log(
-						string.Join(Environment.NewLine, new string[] {
-							$"Failed to load component '{component.Metadata.Name}' with {ex.GetType().Name}.",
-							component.Metadata.ToString(),
-							ex.Message
-						})
+						$"Failed to load component '{1}' with {2}.{0}{3}{0}{4}",
+						Environment.NewLine,
+						component.Metadata.Name,
+						ex.GetType().Name,
+						component.Metadata.ToString(),
+						ex.Message
 					);
 				}
 
 				if (!ids.Add(component.Id))
 				{
-					Logger.Log(
-						string.Join(Environment.NewLine, new string[] {
-							$"Failed to load component '{component.Metadata.Name}'.",
-							"Guid has duplicated."
-						})
-					);
+					Logger.Log("Failed to load component '{0}'. Guid has duplicated.", component.Metadata.Name);
 					success = false;
 				}
 
@@ -194,10 +190,10 @@ namespace BeerViewer.Modules
 				catch (Exception ex)
 				{
 					Logger.Log(
-						string.Join(Environment.NewLine, new string[] {
-							$"Failed to load component '{component?.Metadata?.Name ?? "*Unknown"}' with FileLoadException.",
-							ex.Message
-						})
+						"Failed to load component '{1}' with FileLoadException.{0}{2}",
+						Environment.NewLine,
+						component?.Metadata?.Name ?? "*Unknown",
+						ex.Message
 					);
 				}
 			}

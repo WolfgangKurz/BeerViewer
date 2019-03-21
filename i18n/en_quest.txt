@@ -1,4 +1,4 @@
-quest_101_code	A1
+﻿quest_101_code	A1
 quest_101_name	The First Attempt at Fleet Organization!
 quest_101_desc	Have 2 ships in your main fleet.
 quest_102_code	A2

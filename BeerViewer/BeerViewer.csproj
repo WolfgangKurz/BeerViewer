@@ -91,6 +91,7 @@
     <Compile Include="Framework\FrameworkContainer.cs" />
     <Compile Include="Framework\FrameworkControl.cs" />
     <Compile Include="Framework\FrameworkExtension.cs" />
+    <Compile Include="Framework\FrameworkRequestHandler.cs" />
     <Compile Include="Framework\FrameworkGesture.cs" />
     <Compile Include="Framework\FrameworkRenderer.cs" />
     <Compile Include="Framework\FrameworManager.cs" />
@@ -100,14 +101,15 @@
     <Compile Include="Forms\frmMain.Designer.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
+    <Compile Include="Libraries\FindReplaceResponseFilter.cs" />
     <Compile Include="Libraries\Sass.cs" />
     <Compile Include="Libraries\SystemEnvironment.cs" />
-    <Compile Include="Models\Enums\FleetSituation.cs" />
     <Compile Include="Modules\Communication\ModuleInfo.cs" />
     <Compile Include="Modules\Communication\ObjectPathLevel.cs" />
     <Compile Include="Modules\Communication\ObservedTreeData.cs" />
     <Compile Include="Modules\Communication\ObservedTreeManager.cs" />
     <Compile Include="Modules\Communication\Serialization.cs" />
+    <Compile Include="Modules\Communication\SettingInfo.cs" />
     <Compile Include="Modules\Component\Component.cs" />
     <Compile Include="Modules\Component\ComponentService.cs" />
     <Compile Include="Modules\Component\IComponent.cs" />
@@ -115,184 +117,6 @@
     <Compile Include="Modules\i18n.cs" />
     <Compile Include="Libraries\DynamicJson.cs" />
     <Compile Include="Modules\Logger.cs" />
-    <Compile Include="Models\AirSuperiorityPotential.cs" />
-    <Compile Include="Models\BuildingDock.cs" />
-    <Compile Include="Models\Dockyard.cs" />
-    <Compile Include="Models\Enums\AdmiralRank.cs" />
-    <Compile Include="Models\Enums\BuildingDockState.cs" />
-    <Compile Include="Models\Enums\ConditionType.cs" />
-    <Compile Include="Models\Enums\QuestCategory.cs" />
-    <Compile Include="Models\Enums\QuestProgress.cs" />
-    <Compile Include="Models\Enums\QuestState.cs" />
-    <Compile Include="Models\Enums\QuestType.cs" />
-    <Compile Include="Models\Enums\RepairingDockState.cs" />
-    <Compile Include="Models\Enums\ShipSituation.cs" />
-    <Compile Include="Models\Expedition.cs" />
-    <Compile Include="Models\Experience.cs" />
-    <Compile Include="Models\Fleet.cs" />
-    <Compile Include="Models\Homeport.cs" />
-    <Compile Include="Models\Enums\ShipSpeed.cs" />
-    <Compile Include="Models\Enums\SlotItemIconType.cs" />
-    <Compile Include="Models\Enums\SlotItemType.cs" />
-    <Compile Include="Models\Itemyard.cs" />
-    <Compile Include="Models\kcsapi\kcdapi_slot_deprive_unset_list.cs" />
-    <Compile Include="Models\kcsapi\kcsapi_battleresult.cs" />
-    <Compile Include="Models\kcsapi\kcsapi_battle_midnight_battle.cs" />
-    <Compile Include="Models\kcsapi\kcsapi_battle_midnight_sp_midnight.cs" />
-    <Compile Include="Models\kcsapi\kcsapi_combined_battle.cs" />
-    <Compile Include="Models\kcsapi\kcsapi_combined_battle_airbattle.cs" />
-    <Compile Include="Models\kcsapi\kcsapi_combined_battle_battleresult.cs" />
-    <Compile Include="Models\kcsapi\kcsapi_combined_battle_midnight_battle.cs" />
-    <Compile Include="Models\kcsapi\kcsapi_combined_each_battle.cs" />
-    <Compile Include="Models\kcsapi\kcsapi_combined_each_midnight_battle.cs" />
-    <Compile Include="Models\kcsapi\kcsapi_createitem.cs" />
-    <Compile Include="Models\kcsapi\kcsapi_createship.cs" />
-    <Compile Include="Models\kcsapi\kcsapi_data_airbaseattack.cs" />
-    <Compile Include="Models\kcsapi\kcsapi_data_enemyinfo.cs" />
-    <Compile Include="Models\kcsapi\kcsapi_data_hougeki.cs" />
-    <Compile Include="Models\kcsapi\kcsapi_data_kouku.cs" />
-    <Compile Include="Models\kcsapi\kcsapi_data_raigeki.cs" />
-    <Compile Include="Models\kcsapi\kcsapi_data_support_info.cs" />
-    <Compile Include="Models\kcsapi\kcsapi_hensei_combined.cs" />
-    <Compile Include="Models\kcsapi\kcsapi_kdock_getship.cs" />
-    <Compile Include="Models\kcsapi\kcsapi_map_start.cs" />
-    <Compile Include="Models\kcsapi\kcsapi_mission_result.cs" />
-    <Compile Include="Models\kcsapi\kcsapi_ndock.cs" />
-    <Compile Include="Models\kcsapi\kcsapi_port.cs" />
-    <Compile Include="Models\kcsapi\kcsapi_practice_result.cs" />
-    <Compile Include="Models\kcsapi\kcsapi_quest.cs" />
-    <Compile Include="Models\kcsapi\kcsapi_questlist.cs" />
-    <Compile Include="Models\kcsapi\kcsapi_remodel_after_slot.cs" />
-    <Compile Include="Models\kcsapi\kcsapi_remodel_slot.cs" />
-    <Compile Include="Models\kcsapi\kcsapi_slot_deprive_ship_data.cs" />
-    <Compile Include="Models\kcsapi\kcsapi_basic.cs" />
-    <Compile Include="Models\kcsapi\kcsapi_charge.cs" />
-    <Compile Include="Models\kcsapi\kcsapi_charge_ship.cs" />
-    <Compile Include="Models\kcsapi\kcsapi_deck.cs" />
-    <Compile Include="Models\kcsapi\kcsapi_destroyitem2.cs" />
-    <Compile Include="Models\kcsapi\kcsapi_destroyship.cs" />
-    <Compile Include="Models\kcsapi\kcsapi_kdock.cs" />
-    <Compile Include="Models\kcsapi\kcsapi_material.cs" />
-    <Compile Include="Models\kcsapi\kcsapi_powerup.cs" />
-    <Compile Include="Models\kcsapi\kcsapi_require_info.cs" />
-    <Compile Include="Models\kcsapi\kcsapi_ship2.cs" />
-    <Compile Include="Models\kcsapi\kcsapi_ship3.cs" />
-    <Compile Include="Models\kcsapi\kcsapi_ship_deck.cs" />
-    <Compile Include="Models\kcsapi\kcsapi_slot_deprive.cs" />
-    <Compile Include="Models\kcsapi\kcsapi_slot_exchange_index.cs" />
-    <Compile Include="Models\kcsapi\kcsapi_slotitem.cs" />
-    <Compile Include="Models\kcsapi\kcsapi_sortie_airbattle.cs" />
-    <Compile Include="Models\kcsapi\kcsapi_sortie_battle.cs" />
-    <Compile Include="Models\kcsapi\kcsapi_useitem.cs" />
-    <Compile Include="Models\LimitedValue.cs" />
-    <Compile Include="Models\Materials.cs" />
-    <Compile Include="Models\ModernizableStatus.cs" />
-    <Compile Include="Models\Organization.cs" />
-    <Compile Include="Models\Quests.cs" />
-    <Compile Include="Models\Quest\Bd\Bd1.cs" />
-    <Compile Include="Models\Quest\Bd\Bd2.cs" />
-    <Compile Include="Models\Quest\Bd\Bd3.cs" />
-    <Compile Include="Models\Quest\Bd\Bd4.cs" />
-    <Compile Include="Models\Quest\Bd\Bd5.cs" />
-    <Compile Include="Models\Quest\Bd\Bd6.cs" />
-    <Compile Include="Models\Quest\Bd\Bd7.cs" />
-    <Compile Include="Models\Quest\Bd\Bd8.cs" />
-    <Compile Include="Models\Quest\Bm\Bm1.cs" />
-    <Compile Include="Models\Quest\Bm\Bm2.cs" />
-    <Compile Include="Models\Quest\Bm\Bm3.cs" />
-    <Compile Include="Models\Quest\Bm\Bm4.cs" />
-    <Compile Include="Models\Quest\Bm\Bm5.cs" />
-    <Compile Include="Models\Quest\Bm\Bm6.cs" />
-    <Compile Include="Models\Quest\Bm\Bm7.cs" />
-    <Compile Include="Models\Quest\Bq\Bq1.cs" />
-    <Compile Include="Models\Quest\Bq\Bq2.cs" />
-    <Compile Include="Models\Quest\Bq\Bq3.cs" />
-    <Compile Include="Models\Quest\Bq\Bq4.cs" />
-    <Compile Include="Models\Quest\Bw\Bw1.cs" />
-    <Compile Include="Models\Quest\Bw\Bw10.cs" />
-    <Compile Include="Models\Quest\Bw\Bw2.cs" />
-    <Compile Include="Models\Quest\Bw\Bw3.cs" />
-    <Compile Include="Models\Quest\Bw\Bw4.cs" />
-    <Compile Include="Models\Quest\Bw\Bw5.cs" />
-    <Compile Include="Models\Quest\Bw\Bw6.cs" />
-    <Compile Include="Models\Quest\Bw\Bw7.cs" />
-    <Compile Include="Models\Quest\Bw\Bw8.cs" />
-    <Compile Include="Models\Quest\Bw\Bw9.cs" />
-    <Compile Include="Models\Quest\C\C2.cs" />
-    <Compile Include="Models\Quest\C\C3.cs" />
-    <Compile Include="Models\Quest\C\C4.cs" />
-    <Compile Include="Models\Quest\C\C8.cs" />
-    <Compile Include="Models\Quest\D\D11.cs" />
-    <Compile Include="Models\Quest\D\D2.cs" />
-    <Compile Include="Models\Quest\D\D22.cs" />
-    <Compile Include="Models\Quest\D\D24.cs" />
-    <Compile Include="Models\Quest\D\D3.cs" />
-    <Compile Include="Models\Quest\D\D4.cs" />
-    <Compile Include="Models\Quest\D\D9.cs" />
-    <Compile Include="Models\Quest\EventArgs.cs" />
-    <Compile Include="Models\Quest\Extension.cs" />
-    <Compile Include="Models\Quest\E\E3.cs" />
-    <Compile Include="Models\Quest\E\E4.cs" />
-    <Compile Include="Models\Quest\FleetDamages.cs" />
-    <Compile Include="Models\Quest\F\F12.cs" />
-    <Compile Include="Models\Quest\F\F18.cs" />
-    <Compile Include="Models\Quest\F\F22.cs" />
-    <Compile Include="Models\Quest\F\F25.cs" />
-    <Compile Include="Models\Quest\F\F34.cs" />
-    <Compile Include="Models\Quest\F\F35.cs" />
-    <Compile Include="Models\Quest\F\F39.cs" />
-    <Compile Include="Models\Quest\F\F41.cs" />
-    <Compile Include="Models\Quest\F\F5.cs" />
-    <Compile Include="Models\Quest\F\F55.cs" />
-    <Compile Include="Models\Quest\F\F6.cs" />
-    <Compile Include="Models\Quest\F\F7.cs" />
-    <Compile Include="Models\Quest\F\F8.cs" />
-    <Compile Include="Models\Quest\F\F9.cs" />
-    <Compile Include="Models\Quest\G\G2.cs" />
-    <Compile Include="Models\Quest\G\G3.cs" />
-    <Compile Include="Models\Quest\SlotitemTracker.cs" />
-    <Compile Include="Models\Quest\Tracker.cs" />
-    <Compile Include="Models\Quest\TrackerModels.cs" />
-    <Compile Include="Models\Quest\TrackManager.cs" />
-    <Compile Include="Models\Raw\DisposableNotifier.cs" />
-    <Compile Include="Models\Raw\Extensions.cs" />
-    <Compile Include="Models\Raw\IIdentifiable.cs" />
-    <Compile Include="Models\Raw\MasterTable.cs" />
-    <Compile Include="Models\Raw\MemberTable.cs" />
-    <Compile Include="Models\Raw\RawDataWrapper.cs" />
-    <Compile Include="Models\Raw\Notifier.cs" />
-    <Compile Include="Models\Raw\TimerNotifier.cs" />
-    <Compile Include="Models\RepairingDock.cs" />
-    <Compile Include="Models\Repairyard.cs" />
-    <Compile Include="Models\Ship.cs" />
-    <Compile Include="Models\LOSCalculator.cs" />
-    <Compile Include="Models\Wrapper\Admiral.cs" />
-    <Compile Include="Models\Wrapper\CreatedSlotItem.cs" />
-    <Compile Include="Models\Wrapper\MapArea.cs" />
-    <Compile Include="Models\Wrapper\MapInfo.cs" />
-    <Compile Include="Models\Wrapper\Mission.cs" />
-    <Compile Include="Models\Wrapper\Quest.cs" />
-    <Compile Include="Models\Wrapper\ShipSlot.cs" />
-    <Compile Include="Models\Wrapper\ShipType.cs" />
-    <Compile Include="Models\kcsapi\kcsapi_mission.cs" />
-    <Compile Include="Models\kcsapi\kcsapi_start2.cs" />
-    <Compile Include="Models\kcsapi\mst\kcsapi_mst_maparea.cs" />
-    <Compile Include="Models\kcsapi\mst\kcsapi_mst_mapcell.cs" />
-    <Compile Include="Models\kcsapi\mst\kcsapi_mst_mapinfo.cs" />
-    <Compile Include="Models\kcsapi\mst\kcsapi_mst_slotitem.cs" />
-    <Compile Include="Models\kcsapi\mst\kcsapi_mst_slotitem_equiptype.cs" />
-    <Compile Include="Models\kcsapi\mst\kcsapi_mst_ship.cs" />
-    <Compile Include="Models\kcsapi\mst\kcsapi_mst_stype.cs" />
-    <Compile Include="Models\kcsapi\mst\kcsapi_mst_useitem.cs" />
-    <Compile Include="Models\Master.cs" />
-    <Compile Include="Models\Raw\SvData.cs" />
-    <Compile Include="Models\Raw\SvDataBase.cs" />
-    <Compile Include="Models\Wrapper\ShipInfo.cs" />
-    <Compile Include="Models\Wrapper\SlotItem.cs" />
-    <Compile Include="Models\Wrapper\SlotItemEquipType.cs" />
-    <Compile Include="Models\Wrapper\SlotItemInfo.cs" />
-    <Compile Include="Models\Wrapper\UseItem.cs" />
-    <Compile Include="Models\Wrapper\UseItemInfo.cs" />
     <Compile Include="Modules\Communication\WindowBrowserCommicator.cs" />
     <Compile Include="Network\HttpProxy.cs" />
     <Compile Include="Network\ModifiableProxy.cs" />
@@ -308,21 +132,6 @@
     <Compile Include="Settings.SettingValue.cs">
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
-    <Content Include="WindowFrame\assets\button_menu.png" />
-    <Content Include="WindowFrame\assets\button_system.png" />
-    <Content Include="WindowFrame\assets\icon_menu_area.png" />
-    <Content Include="WindowFrame\base.js" />
-    <Content Include="WindowFrame\internal\error.html" />
-    <Content Include="WindowFrame\internal\example.html" />
-    <Content Include="WindowFrame\MainFramePlaceholder.html" />
-    <Content Include="WindowFrame\storage\class.js" />
-    <Content Include="WindowFrame\storage\constant.js" />
-    <Content Include="WindowFrame\storage\homeport.js" />
-    <Content Include="WindowFrame\vendor\common.js" />
-    <Content Include="WindowFrame\vendor\tippy.theme.css" />
-    <Content Include="WindowFrame\vendor\tippy.all.min.js" />
-    <Content Include="WindowFrame\vendor\vue.js" />
-    <Content Include="WindowFrame\vendor\vue.min.js" />
     <EmbeddedResource Include="Forms\frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>
     </EmbeddedResource>
@@ -340,39 +149,10 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="WindowFrame\assets\fonts\SpoqaHanSansBold.woff2" />
-    <None Include="WindowFrame\assets\fonts\SpoqaHanSansJPBold.woff2" />
-    <None Include="WindowFrame\assets\fonts\SpoqaHanSansJPRegular.woff2" />
-    <None Include="WindowFrame\assets\fonts\SpoqaHanSansRegular.woff2" />
-    <None Include="WindowFrame\_theme.scss" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
     <Content Include="icon.ico" />
-    <Content Include="WindowFrame\modules\internal.js" />
-    <None Include="WindowFrame\modules\logger\logger.scss" />
-    <Content Include="WindowFrame\modules\logger\logger.js" />
-    <Content Include="WindowFrame\modules\overview\iconset_fleet.png" />
-    <None Include="WindowFrame\modules\overview\overview.scss" />
-    <Content Include="WindowFrame\modules\overview\overview.html" />
-    <Content Include="WindowFrame\modules\overview\overview.js" />
-    <Content Include="WindowFrame\modules\top-expedition\top-expedition.html" />
-    <Content Include="WindowFrame\modules\top-resource\icon_ammo.png" />
-    <Content Include="WindowFrame\modules\top-resource\icon_bauxite.png" />
-    <Content Include="WindowFrame\modules\top-resource\icon_fuel.png" />
-    <Content Include="WindowFrame\modules\top-resource\icon_improvementmaterial.png" />
-    <Content Include="WindowFrame\modules\top-resource\icon_repairbucket.png" />
-    <Content Include="WindowFrame\modules\top-resource\icon_steel.png" />
-    <Content Include="WindowFrame\modules\top-resource\top-resource.html" />
-    <Content Include="WindowFrame\modules\top-resource\top-resource.js" />
-    <None Include="WindowFrame\modules\top-resource\top-resource.scss" />
-    <None Include="WindowFrame\modules\window\window.scss" />
-    <Content Include="WindowFrame\modules\window\window.js" />
-    <None Include="WindowFrame\app.scss" />
-    <Content Include="WindowFrame\Application.html" />
-    <None Include="WindowFrame\modules\top-expedition\top-expedition.scss" />
-    <Content Include="WindowFrame\modules\top-expedition\top-expedition.js" />
-    <Content Include="WindowFrame\modules\module.js" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
@@ -388,13 +168,13 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="cef.redist.x86">
-      <Version>3.3497.1841</Version>
+      <Version>3.3578.1863</Version>
     </PackageReference>
     <PackageReference Include="CefSharp.Common">
-      <Version>69.0.0</Version>
+      <Version>71.0.0</Version>
     </PackageReference>
     <PackageReference Include="CefSharp.WinForms">
-      <Version>69.0.0</Version>
+      <Version>71.0.0</Version>
     </PackageReference>
     <PackageReference Include="Nekoxy">
       <Version>1.5.3.21</Version>
@@ -406,8 +186,8 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>XCOPY "$(SolutionDir)i18n" "$(TargetDir)i18n\" /Y /V /E
-RMDIR "$(TargetDir)WindowFrame" /S /Q
-XCOPY "$(ProjectDir)WindowFrame" "$(TargetDir)WindowFrame\" /Y /V /E</PostBuildEvent>
+echo RMDIR "$(TargetDir)WindowFrame" /S /Q
+echo XCOPY "$(ProjectDir)WindowFrame" "$(TargetDir)WindowFrame\" /Y /V /E</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

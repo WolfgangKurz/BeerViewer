@@ -1,0 +1,19 @@
+﻿module.Settings		뷰어 설정
+group.Language		언어 설정
+group.System		시스템 설정
+group.LoS			색적 설정
+group.Notification	알림 설정
+
+Use Translation		번역 사용
+Display Language	표시 언어
+
+Enable Hardware Acceleration					하드웨어 가속 사용
+Use hardware acceleration for CEF browser.		CEF 브라우저에 하드웨어 가속을 사용합니다.
+Restart viewer required for apply this setting.	적용에는 뷰어 재시작이 필요합니다.
+
+LoS Calculator				색적 계산식
+LoS Includes 1st Fleet?		색적 계산에 1함대 포함
+LoS Includes 2nd Fleet?		색적 계산에 2함대 포함
+
+Notification Condition Value	피로도 회복을 알릴 피로도 수치
+Notification Time				서버 시간 보정값

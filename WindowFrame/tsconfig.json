@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+        "baseUrl": "./source",
+        "outDir": "_dist",
+        "target": "es6",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "strict": true,
+
+        "esModuleInterop": true,
+        "resolveJsonModule": true,
+        "experimentalDecorators": true,
+
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "allowSyntheticDefaultImports" :true,
+        "sourceMap": true,
+
+        "declaration": true
+    },
+    "include": [
+        "source/**/*.ts"
+    ]
+}

@@ -12,20 +12,34 @@ using System.Web;
 using System.Windows.Forms;
 
 using BeerViewer.Framework;
-using BeerViewer.Models;
 using BeerViewer.Network;
 using CefSharp;
+using static BeerViewer.Settings;
 
 namespace BeerViewer.Modules.Communication
 {
 	public class WindowBrowserCommicator
 	{
+		public class SizeEventArgs : EventArgs
+		{
+			public int Width { get; }
+			public int Height { get; }
+
+			public SizeEventArgs(int width, int height)
+			{
+				this.Width = width;
+				this.Height = height;
+			}
+		}
+
 		private Form Owner { get; }
 		private IntPtr OwnerHandle { get; }
 		private FrameworkBrowser Browser { get; }
 		private Action OnInitialized;
 
 		private ObservedTreeManager ObserveObjectManager;
+
+		public event EventHandler<SizeEventArgs> MainFrameResized;
 
 		internal WindowBrowserCommicator(Form Owner, FrameworkBrowser Browser, Action OnInitialized)
 		{
@@ -87,7 +101,7 @@ namespace BeerViewer.Modules.Communication
 			var browser = this.Browser.GetBrowser();
 			if (browser == null) throw new NullReferenceException(nameof(browser));
 
-			System.Diagnostics.Debug.WriteLine(script);
+			// System.Diagnostics.Debug.WriteLine(script);
 
 			var result = await browser.MainFrame?.EvaluateScriptAsync(script);
 			if (!result.Success)
@@ -104,19 +118,43 @@ namespace BeerViewer.Modules.Communication
 		/// <returns>Script result</returns>
 		internal Task<object> CallScript(string name, params object[] args)
 		{
-			return CallRawScript(
-				string.Format(
-					"{0}({1})",
-					name,
-					string.Join(",", args.Select(x =>
-					{
-						var type = x.GetType();
-						if (type == typeof(string)) return $"\"{(x as string)}\"";
-						else if (type == typeof(bool)) return (bool)x ? "true" : "false";
-						else return x.ToString();
-					}))
-				)
+			var _ = new List<string>();
+			var __ = new List<string>();
+			var depth = 0;
+			var offset = 0;
+			for (var i = 0; i < name.Length; i++)
+			{
+				var c = name[i];
+				if (c == '[') depth++;
+				else if (c == ']') depth--;
+
+				if (depth < 0) throw new ArgumentException("Invalid function name", nameof(name));
+
+				if (c == '.')
+				{
+					__.Add(name.Substring(offset, i - offset));
+					_.Add(string.Join(".", __));
+					offset = i + 1;
+				}
+			}
+			__.Add(name.Substring(offset));
+			_.Add(string.Join(".", __));
+			if (_.Any(x => x.Length == 0)) throw new ArgumentException("Invalid function name", nameof(name));
+
+			var script = string.Format(
+				"{2} && ({0}({1}))",
+				name,
+				string.Join(",", args.Select(x =>
+				{
+					var type = x.GetType();
+					if (type == typeof(string)) return $"\"{(x as string)}\"";
+					else if (type == typeof(bool)) return (bool)x ? "true" : "false";
+					else if (type.IsArray) return $"[{string.Join(", ", x as object[])}]";
+					else return x.ToString();
+				})),
+				string.Join(" && ", _.ToArray())
 			);
+			return CallRawScript(script);
 		}
 
 		/// <summary>
@@ -218,7 +256,9 @@ namespace BeerViewer.Modules.Communication
 		/// <returns>Registered i18n text dictionary</returns>
 		public Dictionary<string, string> i18nSet()
 		{
-			return Modules.i18n.Current.Table as Dictionary<string, string>;
+			var y = Modules.i18n.Current.Table
+				.Concat(Modules.i18n.i["g"].Table);
+			return y.ToDictionary(x => x.Key, x => x.Value);
 		}
 
 		/// <summary>
@@ -234,22 +274,44 @@ namespace BeerViewer.Modules.Communication
 				"modules"
 			);
 			var dirs = Directory.GetDirectories(baseDir);
-			foreach(var dir in dirs)
+			foreach (var dir in dirs)
 			{
 				var moduleName = Path.GetFileName(dir);
+				var moduleRawName = moduleName;
 				var scriptFile = Path.Combine(dir, moduleName + ".js");
 				var templateFile = Path.Combine(dir, moduleName + ".html");
 				var styleFile = Path.Combine(dir, moduleName + ".css");
 
+				var metaFile = Path.Combine(dir, "meta.txt");
+
 				if (!File.Exists(scriptFile))
 				{
-					Logger.Log("Module directory '{0}' found but '{0}.js' not found", moduleName, scriptFile);
+					Logger.Log("Module directory '{0}' found but '{1}.js' not found", moduleName, scriptFile);
 					continue;
+				}
+
+				if (File.Exists(metaFile)) {
+					var metas = File.ReadAllLines(metaFile);
+					foreach(var meta in metas)
+					{
+						if (!meta.StartsWith("#!")) continue;
+						if (!meta.Contains("=")) continue;
+
+						var head = meta.Substring(2, meta.IndexOf("=") - 2);
+						var body = meta.Substring(meta.IndexOf("=") + 1);
+						switch (head)
+						{
+							case "name":
+								moduleName = body;
+								break;
+						}
+					}
 				}
 
 				output.Add(new ModuleInfo
 				{
 					Name = moduleName,
+					RawName = moduleRawName,
 					Template = File.Exists(templateFile) ? File.ReadAllText(templateFile) : "",
 					Scripted = File.Exists(scriptFile),
 					Styled = File.Exists(styleFile),
@@ -285,7 +347,7 @@ namespace BeerViewer.Modules.Communication
 			var output = new Dictionary<string, object>();
 
 			var n = c.Count;
-			for(var i=0; i<n; i++)
+			for (var i = 0; i < n; i++)
 			{
 				var key = c.Keys[i];
 				var value = c.GetValues(i);
@@ -310,18 +372,113 @@ namespace BeerViewer.Modules.Communication
 		/// </summary>
 		/// <param name="url">Url to watch</param>
 		/// <param name="callback">Callback when get HTTP response with <paramref name="url"/>.</param>
-		public void SubscribeHTTP(string url, IJavascriptCallback callback)
+		public int SubscribeHTTP(string url, IJavascriptCallback callback)
 		{
-			if (callback == null || !callback.CanExecute) return;
+			if (callback == null || !callback.CanExecute) return -1;
 
-			Proxy.Instance.Register(url, e =>
+			return Proxy.Instance.Register(url, async e =>
 			{
-				var x = e.TryParse();
-				if (x == null) return;
-
 				if (callback != null && callback.CanExecute)
-					callback.ExecuteAsync(e.Response.BodyAsString, ConvertRequest(x.Request));
+				{
+					await callback.ExecuteAsync(
+						e.Response.BodyAsString,
+						ConvertRequest(HttpUtility.ParseQueryString(e.Request.BodyAsString))
+					);
+				}
 			});
+		}
+
+		/// <summary>
+		/// Remove HTTP response observer.
+		/// </summary>
+		/// <param name="SubsrcibeId">Id that returned from <see cref="WindowBrowserCommicator.SubscribeHTTP(string, IJavascriptCallback)"/></param>
+		public bool UnsubscribeHTTP(int SubsrcibeId)
+		{
+			if (SubsrcibeId < 0) return false;
+
+			Proxy.Instance.Unregister(SubsrcibeId);
+			return true;
+		}
+
+		/// <summary>
+		/// Get all settable settings.
+		/// </summary>
+		public SettingInfo[] GetSettings()
+		{
+			var flag = BindingFlags.Public | BindingFlags.Static;
+			var props = typeof(Settings).GetProperties(flag);
+			var list = new List<SettingInfo>();
+
+			foreach (var prop in props)
+			{
+				if (prop.PropertyType.GetGenericTypeDefinition() == typeof(SettableSettingValue<>))
+				{
+					var info = SettingInfo.Create(prop.GetValue(null));
+					list.Add(info);
+				}
+			}
+			return list.ToArray();
+		}
+
+		/// <summary>
+		/// Save value to setting.
+		/// </summary>
+		/// <param name="Provider">Provider of setting to save</param>
+		/// <param name="Name">Name of setting to save</param>
+		/// <param name="Value">Value of setting to save</param>
+		/// <returns><see cref="true"/> if saved. Otherwise failed.</returns>
+		public bool UpdateSetting(string Provider, string Name, dynamic Value)
+		{
+			if (string.IsNullOrWhiteSpace(Provider) || string.IsNullOrWhiteSpace(Name)) return false;
+
+			var flag = BindingFlags.Public | BindingFlags.Static;
+			var props = typeof(Settings).GetProperties(flag);
+			var list = new List<SettingInfo>();
+
+			foreach (var prop in props)
+			{
+				if (prop.PropertyType.GetGenericTypeDefinition() == typeof(SettableSettingValue<>))
+				{
+					var target = prop.GetValue(null);
+					var info = SettingInfo.Create(target);
+					if (info.Provider == Provider && info.Name == Name)
+					{
+						target.GetType().GetProperty("Value").SetValue(target, Value);
+						return true;
+					}
+				}
+			}
+
+			// WindowFrame settings
+			var setting = new SettableSettingValue<dynamic>(Name, Provider, "", "");
+			setting.Value = Value;
+			setting.Save();
+
+			return true;
+		}
+
+		/// <summary>
+		/// Reload main game frame
+		/// </summary>
+		public void ReloadMainFrame()
+		{
+			var a = this.Browser.GetBrowser();
+			if (a == null) return;
+			
+			var b = a.GetFrame("MAIN_FRAME");
+			if (b == null) return;
+
+			b.ExecuteJavaScriptAsync("window.location.reload(true)");
+		}
+
+		/// <summary>
+		/// Be called when WindowFrame notified that Main frame resized
+		/// </summary>
+		/// <param name="width">Width of current main frame</param>
+		/// <param name="height">Height of current main frame</param>
+		public void NotifyMainFrameResized(int width, int height)
+		{
+			this.MainFrameResized?.Invoke(this, new SizeEventArgs(width, height));
 		}
 	}
 }

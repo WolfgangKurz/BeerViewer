@@ -20,7 +20,7 @@ namespace Performancer
 	[ExportMetadata("Permission", BeerComponentPermission.CP_NETWORK_MODIFIABLE)]
 	public class Performancer : IBeerComponent
 	{
-		public string Name => throw new NotImplementedException();
+		public string Name => "Performancer";
 
 		public void Initialize()
 		{

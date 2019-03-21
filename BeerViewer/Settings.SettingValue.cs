@@ -29,12 +29,15 @@ namespace BeerViewer
 					if (!object.Equals(this._Value, value))
 					{
 						this._Value = value;
-						this.ValueChanged?.Invoke(this, EventArgs.Empty);
 						this.Save();
+
+						this.ValueChanged?.Invoke(this, EventArgs.Empty);
 					}
 				}
 			}
 			#endregion
+
+			public Type Type { get; } = typeof(T);
 
 			public string Name { get; }
 			public string Provider { get; }
@@ -175,6 +178,11 @@ namespace BeerViewer
 								rValue = (T)Convert.ChangeType(v, typeof(T));
 								break;
 							}
+
+						case TypeCode.String:
+							ret = true;
+							rValue = (T)Convert.ChangeType(sValue.ToString(), typeof(T));
+							break;
 
 						default:
 							if (typeof(T) == typeof(WindowInfo))
@@ -557,6 +565,7 @@ namespace BeerViewer
 
 				return false; // unknown type
 			}
+			#endregion
 		}
 
 		public sealed class SettableSettingValue<T> : SettingValue<T>
@@ -574,6 +583,5 @@ namespace BeerViewer
 				this.Enums = Enums;
 			}
 		}
-		#endregion
 	}
 }

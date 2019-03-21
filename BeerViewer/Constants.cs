@@ -15,12 +15,11 @@ namespace BeerViewer
 		public static string GameURL => "http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854";
 		// public static string GameURL => "about:blank";
 
-		public static string DMMCookie => "document.cookie='cklg=ja;expires=Sun, 09 Feb 2055 09:00:09 GMT;domain=dmm.com;path=/';"
-			+ "document.cookie='ckcy=1;expires=Sun, 09 Feb 2055 09:00:09 GMT;domain=osapi.dmm.com;path=/';"
-			+ "document.cookie='ckcy=1;expires=Sun, 09 Feb 2055 09:00:09 GMT;domain=203.104.209.7;path=/';"
-			+ "document.cookie='ckcy=1;expires=Sun, 09 Feb 2055 09:00:09 GMT;domain=www.dmm.com;path=/netgame/';";
-
-		public static string WelcomePatch => "!function(){var x=document.querySelector('#welcome'); if(x) x.parentNode.removeChild(x); }();";
+		public static string DMMCookie => "void(eval(\"document.cookie='cklg=ja;expires=Fri, 31 Dec 2100 23:59:59 GMT;domain=dmm.com;path=/';"
+			+ "document.cookie='ckcy=1;expires=Fri, 31 Dec 2100 23:59:59 GMT;domain=osapi.dmm.com;path=/';"
+			+ "document.cookie='ckcy=1;expires=Fri, 31 Dec 2100 23:59:59 GMT;domain=203.104.209.7;path=/';"
+			+ "document.cookie='ckcy=1;expires=Fri, 31 Dec 2100 23:59:59 GMT;domain=www.dmm.com;path=/netgame/';\"));"
+			+ "location.href=\"" + Constants.GameURL + "\"";
 
 		public static string UserStyleSheet => "body { margin:0; overflow:hidden }"
 			+ "#game_frame { position:fixed; left:50%; top:-16px; margin-left:-600px; z-index:1 }"
