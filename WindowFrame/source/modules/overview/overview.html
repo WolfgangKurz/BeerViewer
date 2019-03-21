@@ -74,16 +74,63 @@
 					 class="tooltip-host overview-ship-tooltip"
 					 v-tippy-target>
 					<div class="overview-ship-info">
-						<div class="ship-name">{{i18n[ship.Info.Name] || "???"}}</div>
+						<div class="ship-name">
+							{{i18n[ship.Info.Name] || "???"}}
+							<small v-if="i18n[ship.Info.Name] !== ship.Info.Name">
+								{{ship.Info.Name || "???"}}
+							</small>
+						</div>
 						<div class="ship-level">
 							<small>Lv.</small>
 							{{ship.Level}}
 						</div>
 						<div class="ship-exp">
 							{{numFormat(ship.Experience)}}
-							<small v-if="EXPDispType==='Remaining'">/{{numFormat(ship.ExperienceRemain)}}</small>
-							<small v-else-if="EXPDispType==='Next'">/{{numFormat(ship.ExperienceNext)}}</small>
+							<small v-if="ExpDispType==='Remaining'">/ {{numFormat(ship.ExperienceRemain)}}</small>
+							<small v-else-if="ExpDispType==='Next'">/ {{numFormat(ship.ExperienceNext)}}</small>
 						</div>
+					</div>
+					<div class="overview-ship-stats">
+						<table class="overview-statstable">
+							<tbody>
+								<tr>
+									<td>{{i18n.ship_hp}}</td>
+									<td>{{ship.HP.Maximum}}</td>
+									<td>{{i18n.ship_firepower}}</td>
+									<td>{{ship.FirePower.Current + ship.AllEquips.reduce((a, c) => a + c.Item.Info.FirePower, 0)}}</td>
+								</tr>
+								<tr>
+									<td>{{i18n.ship_armor}}</td>
+									<td>{{ship.Armor.Current + ship.AllEquips.reduce((a, c) => a + c.Item.Info.Armor, 0)}}</td>
+									<td>{{i18n.ship_torpedo}}</td>
+									<td>{{ship.Torpedo.Current + ship.AllEquips.reduce((a, c) => a + c.Item.Info.Torpedo, 0)}}</td>
+								</tr>
+								<tr>
+									<td>{{i18n.ship_evation}}</td>
+									<td>{{ship.Evation.Min + ship.AllEquips.reduce((a, c) => a + c.Item.Info.Evation, 0)}}</td>
+									<td>{{i18n.ship_aa}}</td>
+									<td>{{ship.AA.Current + ship.AllEquips.reduce((a, c) => a + c.Item.Info.AA, 0)}}</td>
+								</tr>
+								<tr>
+									<td>{{i18n.ship_carry}}</td>
+									<td>{{ship.AllEquips.reduce((a, c) => a + c.MaximumAircraft, 0)}}</td>
+									<td>{{i18n.ship_asw}}</td>
+									<td>{{ship.ASW.Current + ship.Equips.reduce((a, c) => a + c.Item.Info.ASW, 0)}}</td>
+								</tr>
+								<tr>
+									<td>{{i18n.ship_speed}}</td>
+									<td>{{i18n[speedStringify(ship.Speed)] || speedStringify(ship.Speed)}}</td>
+									<td>{{i18n.ship_los}}</td>
+									<td>{{ship.LoS}}</td>
+								</tr>
+								<tr>
+									<td>{{i18n.ship_range}}</td>
+									<td>{{i18n[rangeStringify(ship.Range)] || rangeStringify(ship.Range)}}</td>
+									<td>{{i18n.ship_luck}}</td>
+									<td>{{ship.Luck.Current}}</td>
+								</tr>
+							</tbody>
+						</table>
 					</div>
 					<div class="overview-equips">
 						<table class="overview-equiptable">

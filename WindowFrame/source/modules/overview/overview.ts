@@ -11,7 +11,7 @@ import { ObservableCallback } from "System/Base/Observable";
 import { mapState } from "vuex";
 import { ShipInfo } from "System/Master/Wrappers/ShipInfo";
 import Quest from "System/Homeport/Quest/Quest";
-import { Settings } from "System/Settings";
+import Settings, { Settings as SettingsClass } from "System/Settings";
 
 const getTextWidth = function (text: string, font: string) {
 	const canvas: HTMLCanvasElement = (<any>getTextWidth).canvas || ((<any>getTextWidth).canvas = document.createElement("canvas"));
@@ -68,6 +68,13 @@ class Overview implements IModule {
 		10: "fleet_speed_fast",
 		15: "fleet_speed_faster",
 		20: "fleet_speed_fastest"
+	};
+	private readonly rangeList = {
+		0: "ship_range_none",
+		1: "ship_range_short",
+		2: "ship_range_middle",
+		3: "ship_range_long",
+		4: "ship_range_far"
 	};
 
 	private Data = {
@@ -128,6 +135,18 @@ class Overview implements IModule {
 				},
 				numFormat(value: number): string {
 					return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+				},
+				speedStringify(value: keyof Overview["speedList"]): string {
+					if (value in _this.speedList)
+						return _this.speedList[value];
+					else
+						return "fleet_speed_unknown";
+				},
+				rangeStringify(value: keyof Overview["rangeList"]): string {
+					if (value in _this.rangeList)
+						return _this.rangeList[value];
+					else
+						return "ship_range_unknown";
 				}
 			},
 			watch: {
@@ -156,7 +175,7 @@ class Overview implements IModule {
 				}
 			}
 		});
-		Settings.Instance.Register({
+		SettingsClass.Instance.Register({
 			Provider: "Overview",
 			Name: "ExpDispType",
 			DisplayName: "Exp Display Type",
@@ -166,9 +185,10 @@ class Overview implements IModule {
 			Description: "Experience display type"
 		});
 
-		Settings.Instance.Observe("Overview.ExpDispType", value => {
+		SettingsClass.Instance.Observe("Overview.ExpDispType", value => {
 			this.Data.ExpDispType = value.toString();
 		});
+		this.Data.ExpDispType = Settings.Overview.ExpDispType.Value.toString();
 	}
 
 	private SelectFleet(id: number): void {

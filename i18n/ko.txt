@@ -45,3 +45,22 @@ los.cn1			33식 (Cn=1, 2-5)
 los.cn2			33식 (Cn=2, 5-2 71)
 los.cn3			33식 (Cn=3, 6-2, 6-3)
 los.cn4			33식 (Cn=4, 3-5, 6-1)
+
+ship_hp		내구
+ship_firepower	화력
+ship_armor		장갑
+ship_torpedo	뇌장
+ship_evation	회피
+ship_aa		대공
+ship_carry		탑재
+ship_asw		대잠
+ship_speed		속력
+ship_los		색적
+ship_range		사거리
+ship_luck		운
+
+ship_range_none		없음
+ship_range_short		단
+ship_range_middle	중
+ship_range_long		장
+ship_range_far		최장

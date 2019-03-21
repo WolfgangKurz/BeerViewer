@@ -16,12 +16,13 @@ tippy.setDefaults({
 	arrow: true,
 	boundary: "viewport",
 	placement: "bottom",
+	delay: [100, 50],
 	size: "large",
 	theme: "light-border",
 	interactive: false,
 	trigger: 'mouseenter focus',
 	hideOnClick: false,
-	performance: false
+	ignoreAttributes: true
 });
 
 Vue.directive("dom", function (el, binding) {

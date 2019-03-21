@@ -5,6 +5,7 @@ export class MasterMinMax {
 	public get Min(): number { return this._min }
 	public get Max(): number { return this._max }
 
+	/** [Min, Max] */
 	constructor(value: [number, number]) {
 		this._min = value[0];
 		this._max = value[1];

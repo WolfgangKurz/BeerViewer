@@ -135,6 +135,11 @@
 
 				.ship-name {
 					font-size: 14px;
+
+					> small {
+						font-size: 12px;
+						color: transparentize($theme-text-color, 0.23);
+					}
 				}
 
 				.ship-level {

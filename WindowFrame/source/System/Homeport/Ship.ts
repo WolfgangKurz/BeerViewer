@@ -10,6 +10,7 @@ import { ShipEquip } from "./Equipment/ShipEquip";
 import { ObservableDataWrapper } from "System/Base/Wrapper";
 import { EquipCategory } from "System/Enums/EquipEnums";
 import { UpgradeStatus } from "System/Models/UpgradeStatus";
+import { MasterMinMax } from "System/Master/MasterMinMax";
 
 export class Ship extends ObservableDataWrapper<kcsapi_ship2> implements IIdentifiable {
 	public get Id(): number { return this.raw.api_id }
@@ -45,6 +46,7 @@ export class Ship extends ObservableDataWrapper<kcsapi_ship2> implements IIdenti
 
 	public get AirSupremacy(): AirSupremacy { return AirSupremacy.Sum(this.EquippedItems.map(x => x.AirSupremacy)) }
 	public get LoS(): number { return this.raw.api_sakuteki[0] }
+	public get Range(): number { return this.raw.api_leng }
 
 
 	//#region Equips Property
@@ -57,11 +59,15 @@ export class Ship extends ObservableDataWrapper<kcsapi_ship2> implements IIdenti
 	public get ExtraEquip(): ShipEquip | null { return this._ExtraEquip }
 	//#endregion
 
+	/** Equipment slots includes Extra slot */
+	public get AllEquips(): ShipEquip[] {
+		return this.Equips
+			.concat(this.ExtraEquip ? [this.ExtraEquip] : []);
+	}
+
 	/** Equipped equipment items includes Extra slot */
 	public get EquippedItems(): ShipEquip[] {
-		return this.Equips
-			.concat(this.ExtraEquip ? [this.ExtraEquip] : [])
-			.filter(x => x.Equipped);
+		return this.AllEquips.filter(x => x.Equipped);
 	}
 
 	//#region FirePower
@@ -82,6 +88,11 @@ export class Ship extends ObservableDataWrapper<kcsapi_ship2> implements IIdenti
 	//#region Armor
 	private _Armor: UpgradeStatus = new UpgradeStatus();
 	public get Armor(): UpgradeStatus { return this._Armor }
+	//#endregion
+
+	//#region Evation
+	private _Evation: MasterMinMax = new MasterMinMax([0, 0]);
+	public get Evation(): MasterMinMax { return this._Evation }
 	//#endregion
 
 	//#region Luck
@@ -134,6 +145,7 @@ export class Ship extends ObservableDataWrapper<kcsapi_ship2> implements IIdenti
 		this.$._Fuel = new GuageValue(this.raw.api_fuel, this.Info.Fuel, 0);
 		this.$._Ammo = new GuageValue(this.raw.api_bull, this.Info.Ammo, 0);
 
+		this.$._Evation = new MasterMinMax([this.raw.api_kaihi[0], this.raw.api_kaihi[1]]);
 		this.$._ASW = new UpgradeStatus(0, this.raw.api_taisen[1], this.raw.api_taisen[0]);
 
 		if (this.raw.api_kyouka.length >= 5) {
@@ -143,6 +155,7 @@ export class Ship extends ObservableDataWrapper<kcsapi_ship2> implements IIdenti
 			this.$._Armor = new UpgradeStatus(this.Info.Armor, this.raw.api_kyouka[3]);
 			this.$._Luck = new UpgradeStatus(this.Info.Luck, this.raw.api_kyouka[4]);
 		}
+
 		this.UpdateEquipSlots();
 	}
 
