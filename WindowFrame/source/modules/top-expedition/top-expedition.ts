@@ -1,6 +1,6 @@
 ﻿/// <reference path="../../../node_modules/ts-nameof/ts-nameof.d.ts" />
 import Vue from "vue";
-import { IModule } from "System/Module";
+import { IModule, GetModuleTemplate } from "System/Module";
 import { Homeport } from "System/Homeport/Homeport";
 import { IdentifiableTable } from "System/Models/TableWrapper";
 import { Progress } from "System/Models/GuageValue";
@@ -24,7 +24,7 @@ class TopExpedition implements IModule {
 
 	private VueObject = Vue.component("top-expedition-component", {
 		data: () => this.Data,
-		template: $("#top-expeditions").prop("outerHTML"),
+		template: GetModuleTemplate(),
 		methods: {
 			ExpeditionState(exp: ExpeditionData): string {
 				return exp.Enabled

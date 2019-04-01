@@ -1,6 +1,6 @@
 ﻿import Vue from "vue";
 import { mapState } from "vuex";
-import { IModule } from "System/Module";
+import { IModule, GetModuleTemplate } from "System/Module";
 
 interface LogInfo {
 	Date: string;
@@ -15,7 +15,7 @@ class Logger implements IModule {
 	constructor() {
 		Vue.component("logger-component", {
 			data: () => this.Data,
-			template: $("#logger-container").prop("outerHTML"),
+			template: GetModuleTemplate(),
 			computed: mapState({
 				i18n: "i18n"
 			}),

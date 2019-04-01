@@ -16,7 +16,7 @@ tippy.setDefaults({
 	arrow: true,
 	boundary: "viewport",
 	placement: "bottom",
-	delay: [100, 50],
+	delay: [40, 100],
 	size: "large",
 	theme: "light-border",
 	interactive: false,

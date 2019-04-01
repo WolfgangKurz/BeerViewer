@@ -211,4 +211,23 @@ export class Callback {
 	}
 }
 
+/** Returns module HTML content of called module script.\
+ *  If cannot find, returns `undefined`.
+ */
+export function GetModuleTemplate(throws: boolean = false): string | undefined {
+	const current = document.currentScript;
+	if (!current) {
+		if (throws) throw "Cannot find current 'script'.";
+		return undefined;
+	}
+
+	const prev = current.previousElementSibling;
+	if (!prev || !(prev instanceof HTMLTemplateElement)) {
+		if (throws) throw "Previous element is not 'template'."
+		return undefined;
+	}
+
+	return $("<div>").append(prev.content).html();
+}
+
 export default Modules;

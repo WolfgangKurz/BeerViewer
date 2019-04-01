@@ -4,7 +4,7 @@ import { Ship } from "System/Homeport/Ship";
 import { AirSupremacy } from "System/Models/AirSupremacy";
 import { RepairDock } from "System/Homeport/RepairDock";
 import { ConstructionDock } from "System/Homeport/ConstructionDock";
-import { IModule } from "System/Module";
+import { IModule, GetModuleTemplate } from "System/Module";
 import { Homeport } from "System/Homeport/Homeport";
 import { FleetState } from "System/Enums/FleetEnums";
 import { ObservableCallback } from "System/Base/Observable";
@@ -86,14 +86,15 @@ class Overview implements IModule {
 
 		LosType: <string>"",
 
-		ExpDispType: "Remining"
+		ExpDispType: "Remining",
+		TooltipStatsDisplay: true
 	}
 
 	constructor() {
 		const _this = this;
 		Vue.component("overview-component", {
 			data: () => this.Data,
-			template: $("#overview-container").prop("outerHTML"),
+			template: GetModuleTemplate(),
 
 			computed: mapState({
 				i18n: "i18n"
@@ -184,11 +185,19 @@ class Overview implements IModule {
 			Enums: ["Remaining", "Next"],
 			Description: "Experience display type"
 		});
-
-		SettingsClass.Instance.Observe("Overview.ExpDispType", value => {
-			this.Data.ExpDispType = value.toString();
+		SettingsClass.Instance.Register({
+			Provider: "Overview",
+			Name: "TooltipStatsDisplay",
+			DisplayName: "Display Status",
+			Value: true,
+			Type: "Boolean",
+			Description: "Display ship's current status on tooltip"
 		});
+
+		SettingsClass.Instance.Observe("Overview.ExpDispType", value => this.Data.ExpDispType = value.toString());
+		SettingsClass.Instance.Observe("Overview.TooltipStatsDisplay", value => this.Data.TooltipStatsDisplay = <boolean>value);
 		this.Data.ExpDispType = Settings.Overview.ExpDispType.Value.toString();
+		this.Data.TooltipStatsDisplay = <boolean>Settings.Overview.TooltipStatsDisplay.Value;
 	}
 
 	private SelectFleet(id: number): void {

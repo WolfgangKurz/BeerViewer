@@ -1,6 +1,6 @@
 ﻿/// <reference path="../../../node_modules/ts-nameof/ts-nameof.d.ts" />
 import Vue from "vue";
-import { IModule } from "System/Module"
+import { IModule, GetModuleTemplate } from "System/Module"
 import { Homeport } from "System/Homeport/Homeport";
 import { Materials } from "System/Homeport/Materials";
 import { Admiral } from "System/Homeport/Admiral";
@@ -22,7 +22,7 @@ class TopResources implements IModule {
 				Resources: this.Resources,
 				Overlimit: this.Overlimit
 			}),
-			template: $("#top-resources").prop("outerHTML")
+			template: GetModuleTemplate()
 		});
 	}
 
