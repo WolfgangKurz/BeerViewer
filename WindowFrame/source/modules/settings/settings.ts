@@ -63,6 +63,7 @@ class SettingsModule implements IModule {
 	}
 
 	private Preprocess(settings: SettingsData): { [key: string]: ProcessedSettingInfo[] } {
+		console.warn(settings);
 		const _: ProcessedSettingInfo[] =
 			(() => {
 				const _ = [];

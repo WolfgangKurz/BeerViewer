@@ -106,6 +106,10 @@
 					}
 				}
 			}
+			
+			&[data-summary="aa"] > span {
+				display: inline-block;
+			}
 		}
 	}
 }
@@ -255,7 +259,7 @@
 		}
 	}
 
-	&[data-modes~="mininame"] .fleet .ship .ship-name {
+	&[data-modes~="name_minify"] .fleet .ship .ship-name {
 		width: 104px;
 		overflow: hidden;
 		white-space: nowrap;
@@ -263,22 +267,26 @@
 		font-size: 14px;
 	}
 
-	&[data-modes~="mini"] .fleet .ship .ship-morale > .ship-morale-value {
-		padding-right: 0;
+	&[data-modes~="morale_mini"] .fleet .ship {
+		.ship-morale > .ship-morale-value{
+			display: none;
+		}
+	}
+	&[data-modes~="morale_hidden"] .fleet .ship {
+		.ship-morale {
+			display: none;
+		}
+		.ship-hp {
+			grid-column-end: 5;
+		}
 	}
 
-	&[data-modes~="tiny"] .fleet .ship .ship-morale > .ship-morale-value,
-	&[data-modes~="minimal"] .fleet .ship .ship-morale {
-		display: none;
-	}
-
-	&[data-modes~="mini"] .fleet .ship {
+	&[data-modes~="supply_hidden"] .fleet .ship {
 		.ship-supply {
 			display: none;
 		}
-
 		.ship-morale {
-			width: 50%;
+			grid-column-end: 5;
 		}
 	}
 }

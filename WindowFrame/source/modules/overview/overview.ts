@@ -182,7 +182,7 @@ class Overview implements IModule {
 			DisplayName: "Exp Display Type",
 			Value: "Remaining",
 			Type: "String",
-			Enums: ["Remaining", "Next"],
+			Enums: ["Remaining Exp", "Next Exp"],
 			Description: "Experience display type"
 		});
 		SettingsClass.Instance.Register({
@@ -233,18 +233,22 @@ class Overview implements IModule {
 
 	private updateSize() {
 		const el = [
-			$('.fleet[data-display="1"] .ship td:first-of-type'),
-			$('.fleet[data-display="1"] .ship td:last-of-type')
-		];
-		if (el[0].length === 0 || el[1].length === 0) return;
+			$('.fleet[data-display="1"] .ship .ship-namelv'),
+			$('.fleet[data-display="1"] .ship .ship-morale'),
+			$('.fleet[data-display="1"] .ship .ship-supply')
+		]
+			.filter(x => x.length > 0)
+			.map(x => x.get(0).clientWidth);
 
-		const leftSize = el[0][0].clientWidth;
-		const rightSize = el[1][0].clientWidth;
+		const sizeName = el[0];
+		const sizeMorale = el[1];
+		const sizeSupply = el[2];
+
 		const modes = [];
-		if (rightSize < 128) modes.push("mini");
-		if (rightSize < 84) modes.push("tiny");
-		if (rightSize < 76) modes.push("minimal");
-		if (leftSize > 104) modes.push("mininame");
+		if (sizeName > 104) modes.push("name_minify");
+		if (sizeSupply < 76) modes.push("supply_hidden");
+		if (sizeMorale < 40) modes.push("morale_mini");
+		if (sizeMorale < 16) modes.push("morale_hidden");
 		$("#overview-container").attr("data-modes", modes.join(" "));
 	}
 

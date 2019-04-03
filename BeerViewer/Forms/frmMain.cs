@@ -1,5 +1,5 @@
 ﻿// #define USE_GC
-// #define USE_STARTUP_DEVTOOLS
+#define USE_STARTUP_DEVTOOLS
 
 using System;
 using System.Collections.Generic;

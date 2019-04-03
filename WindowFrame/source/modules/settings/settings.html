@@ -6,7 +6,7 @@
 				<h2 class="setting-group-name">{{i18n[`group.${key}`] || key}}</h2>
 				<div class="setting-line"
 						v-for="setting in group">
-					<span class="setting-name">{{i18n[setting.DisplayName] || setting.DisplayName}}</span>
+					<span class="setting-name">{{i18n[`${key}.${setting.DisplayName}`] || setting.DisplayName}}</span>
 
 					<div class="setting-content"
 							:data-enum="setting.Enums ? '1' : '0'">
@@ -20,7 +20,7 @@
 										:value="key"
 										v-model="setting.Value"
 										@change="UpdateSetting">
-								{{i18n[(setting.i18nPrefix || "")+key.toLowerCase()] || item}}
+								{{i18n[`${key}.${(setting.i18nPrefix || "")+key.toLowerCase()}`] || item}}
 							</label>
 						</template>
 						<template v-else-if="setting.Type === 'Boolean'">
@@ -39,9 +39,9 @@
 									@change="UpdateSetting">
 						</template>
 
-						<div class="setting-description">{{i18n[setting.Description] || setting.Description}}</div>
+						<div class="setting-description">{{i18n[`${key}.${setting.Description}`] || setting.Description}}</div>
 						<div class="setting-caution"
-								v-if="setting.Caution">{{i18n[setting.Caution] || setting.Caution}}</div>
+								v-if="setting.Caution">{{i18n[`${key}.${setting.Caution}`] || setting.Caution}}</div>
 					</div>
 				</div>
 			</div>

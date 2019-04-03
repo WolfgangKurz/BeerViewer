@@ -31,5 +31,10 @@
 
 	> .top-resource .resource-value {
 		white-space: nowrap;
+
+		small {
+			font-size: 10px;
+			opacity: 0.88;
+		}
 	}
 }

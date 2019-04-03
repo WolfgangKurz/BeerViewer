@@ -1,8 +1,8 @@
 ﻿fleet_speed_immovable	Landbased
-fleet_speed_slow			Slow speed
-fleet_speed_fast			Fast speed
-fleet_speed_faster			Fast+ speed
-fleet_speed_fastest		Fastest speed
+fleet_speed_slow			Slow
+fleet_speed_fast			Fast
+fleet_speed_faster			Fast+
+fleet_speed_fastest		Fastest
 
 fleet_level	Lv
 fleet_totallevel	Total Level
@@ -30,9 +30,29 @@ fleet_status_supply		Need to Supply
 fleet_status_repairship	RepairShip is Flagship
 fleet_status_ready			Ready to Sortie
 
-loscalc_simplesum	Simple Sum
-loscalc_old2_5		2-5 (Old)
-loscalc_fall2_5	2-5 (Fall)
-loscalc_cn1			Formula 33 (Cn=1, for 2-5)
-loscalc_cn3			Formula 33 (Cn=3, for 6-2, 6-3)
-loscalc_cn4			Formula 33 (Cn=4, for 3-5, 6-1)
+los.simplesum	Simple Sum
+los.old2_5	2-5 (Old)
+los.fall2_5	2-5 (Fall)
+los.cn1		Formula 33 (Cn=1, for 2-5)
+los.cn2		Formula 33 (Cn=2, 5-2 71)
+los.cn3		Formula 33 (Cn=3, for 6-2, 6-3)
+los.cn4		Formula 33 (Cn=4, for 3-5, 6-1)
+
+ship_hp		HP
+ship_firepower	Firepower
+ship_armor	Armor
+ship_torpedo	Torpedo
+ship_evation	Evation
+ship_aa		AA
+ship_carry		Carry
+ship_asw		ASW
+ship_speed		Speed
+ship_los		LoS
+ship_range		Range
+ship_luck		Luck
+
+ship_range_none		None
+ship_range_short	Short
+ship_range_middle	Middle
+ship_range_long		Long
+ship_range_far		Far

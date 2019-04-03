@@ -63,7 +63,6 @@ export class Settings {
 
 			this._Loaded = true;
 			fns(this._ReadyCallbacks);
-			this._ReadyCallbacks.splice(0, this._ReadyCallbacks.length);
 		})();
 	}
 	public Ready(callback: () => void): void {
@@ -98,8 +97,7 @@ export class Settings {
 			});
 		}
 
-		if (this._Loaded)
-			this._ReadyCallbacks.splice(0, this._ReadyCallbacks.length);
+		if (this._Loaded) fns(this._ReadyCallbacks);
 	}
 
 	private BuildSetting(info: SettingInfo) {
