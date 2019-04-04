@@ -1,5 +1,5 @@
-﻿// #define USE_GC
-#define USE_STARTUP_DEVTOOLS
+﻿#define USE_GC
+// #define USE_STARTUP_DEVTOOLS
 
 using System;
 using System.Collections.Generic;
@@ -8,6 +8,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -151,6 +152,9 @@ namespace BeerViewer.Forms
 								await this.Communicator.CallbackScript("Logged", prevLog.Format, prevLog.Arguments);
 
 							Logger.Unregister("MainLogger");
+
+							timer.Enabled = false;
+							timer = null;
 						}
 					};
 					timer.Start();
@@ -189,6 +193,15 @@ namespace BeerViewer.Forms
 				{
 					Logger.Log("Foreign page detected, applying DMM cookie");
 					await this.GameBrowser?.EvaluateScriptAsync(Constants.DMMCookie);
+
+					this.GameBrowser?.LoadUrl(Constants.GameURL);
+				}
+
+				// Main page redirection (logout)
+				if (new Regex(@"^https?://www\.dmm\.com/$").IsMatch(frameUri.AbsoluteUri))
+				{
+					Logger.Log("Main page detected, redirecting");
+					await this.Communicator.CallbackScript("Game.Load", Constants.GameURL);
 
 					this.GameBrowser?.LoadUrl(Constants.GameURL);
 				}

@@ -103,18 +103,19 @@ class TopResources implements IModule {
 			data: () => this.Data,
 			template: GetModuleTemplate()
 		});
-		
+
 		let key: TResources;
 		for (key in this.Data.Datas) {
-			console.log(key, this.Data.Datas[key]);
-			SettingsClass.Instance.Register({
-				Provider: "Top-Resources",
-				Name: `Disp${key}`,
-				DisplayName: `Display ${this.Data.Datas[key].Name}`,
-				Value: this.Data.Datas[key].Display,
-				Type: "Boolean"
-			});
-			SettingsClass.Instance.Observe(`Top-Resources.Disp${key}`, value => this.Data.Datas[key].Display = <boolean>value);
+			(function (this: TopResources, key: TResources) {
+				SettingsClass.Instance.Register({
+					Provider: "Top-Resources",
+					Name: `Disp${key}`,
+					DisplayName: `Display ${this.Data.Datas[key].Name}`,
+					Value: this.Data.Datas[key].Display,
+					Type: "Boolean"
+				});
+				SettingsClass.Instance.Observe(`Top-Resources.Disp${key}`, value => this.Data.Datas[key].Display = <boolean>value);
+			}).call(this, key);
 		}
 	}
 
@@ -135,7 +136,7 @@ class TopResources implements IModule {
 			Homeport.Instance.Observe((_, value: Admiral) => value && value.Observe((_, value: number) => _this.Data.Datas.EquipCount.Maximum = value, nameof(Homeport.Instance.Admiral!.MaximumEquips)), nameof(Homeport.Instance.Admiral));
 
 			Homeport.Instance.Observe((_, value: IdentifiableTable<Ship>) => value && (_this.Data.Datas.ShipCount.Value = value.size), nameof(Homeport.Instance.Ships));
-			Homeport.Instance.Equipments.Observe((_, value: number) => value && (_this.Data.Datas.EquipCount.Value = value), nameof(Homeport.Instance.Equipments.EquipCount));
+			Homeport.Instance.Equipments.Observe((_, value: number) => _this.Data.Datas.EquipCount.Value = value, nameof(Homeport.Instance.Equipments.EquipCount));
 		}).call(Homeport.Instance.Materials, this);
 
 		Homeport.Instance.Observe(

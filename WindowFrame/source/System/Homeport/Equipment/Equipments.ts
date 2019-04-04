@@ -29,6 +29,7 @@ export class Equipments extends Observable {
 
 	public Update(source: kcsapi_slotitem[]): void {
 		this.$._Equips = new IdentifiableTable<Equipment>(source.map(x => new Equipment(x)));
+		this.EquipmentsChanged();
 	}
 
 	public RemoveAllFromShip(ship: Ship): void {

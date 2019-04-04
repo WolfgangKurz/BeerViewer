@@ -20,7 +20,8 @@ export class Settings {
 	private constructor() { }
 
 	public static get Instance(): Settings {
-		return window.Settings = window.Settings || new Settings();
+		if(!window.Settings) window.Settings = new Settings();
+		return window.Settings;
 	}
 
 	public Initialize(): void {
@@ -66,10 +67,9 @@ export class Settings {
 		})();
 	}
 	public Ready(callback: () => void): void {
+		this._ReadyCallbacks.push(callback);
 		if (this._Loaded)
 			callback && callback();
-		else
-			this._ReadyCallbacks.push(callback);
 	}
 
 	public Register(setting: SettingInfo) {
@@ -97,7 +97,8 @@ export class Settings {
 			});
 		}
 
-		if (this._Loaded) fns(this._ReadyCallbacks);
+		if (this._Loaded)
+			fns(this._ReadyCallbacks);
 	}
 
 	private BuildSetting(info: SettingInfo) {

@@ -67,7 +67,7 @@ const vueStore = new Vuex.Store({
 });
 window.BaseAPI.Event("i18n", v => vueStore.commit("i18n", window.i18n));
 
-document.addEventListener("DOMContentLoaded", async function () {
+document.addEventListener("DOMContentLoaded", async () => {
 	if (window.modules.initialized()) return; // Called twice
 
 	window.modules.areas.init();

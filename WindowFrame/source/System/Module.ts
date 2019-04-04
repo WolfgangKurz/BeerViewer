@@ -93,7 +93,14 @@ class ModuleAreas {
 		this._Tools["devtools"] = new MenuTool(
 			"devtools",
 			"DevTools",
-			function () { window.API.DevTools() }
+			() => window.API.DevTools()
+		);
+
+		// Logout
+		this._Tools["logout"] = new MenuTool(
+			"logout",
+			"Logout",
+			() => Callback.Instance.call("Game.Load", "https://www.dmm.com/my/-/login/logout/=/path=Sg__/")
 		);
 	}
 
