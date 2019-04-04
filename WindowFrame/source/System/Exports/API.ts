@@ -45,7 +45,7 @@ export interface Communicator {
 	DevTools(): void;
 
 	/** Deliver "text" to logger */
-	Log(text: string): void;
+	Log(text: string, ...args: any[]): void;
 
 	/** Subscribe HTTP packets for specific "url" */
 	SubscribeHTTP(url: string, callback: HTTPCallback): Promise<number>;

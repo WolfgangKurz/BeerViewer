@@ -86,7 +86,7 @@ export class Homeport extends Observable {
 		this.$._RepairDock = new RepairDock(this);
 		this.$._ConstructionDock = new ConstructionDock(this);
 		this.$._Quests = new QuestManager();
-		this.$._Equipments = new Equipments();
+		// this.$._Equipments = new Equipments();
 
 		this.$._Ships = new IdentifiableTable<Ship>();
 		this.$._Fleets = new IdentifiableTable<Fleet>();

@@ -3,9 +3,11 @@ import { SubscribeKcsapi } from "System/Base/KcsApi";
 import { kcsapi_port } from "System/Interfaces/kcsapi_port";
 import { kcsapi_material } from "System/Interfaces/kcsapi_material";
 import { kcsapi_charge } from "System/Interfaces/kcsapi_charge";
-import { kcsapi_destroyship } from "System/Interfaces/kcsapi_ship";
+import { kcsapi_destroyship, kcsapi_req_kousyou_destroyship } from "System/Interfaces/kcsapi_ship";
 import { kcsapi_destroyitem2 } from "System/Interfaces/kcsapi_item";
 import { kcsapi_airbase_corps_supply, kcsapi_airbase_corps_set_plane, kcsapi_req_air_corps_set_plane } from "System/Interfaces/kcsapi_airbase_corps";
+import { kcsapi_req_nyukyo_start, kcsapi_req_nyukyo_speedchange } from "System/Interfaces/kcsapi_repair";
+import LogHelper from "System/Base/LogHelper";
 
 export class Materials extends Observable {
 	private _Fuel: number;
@@ -25,6 +27,8 @@ export class Materials extends Observable {
 	public get RepairBucket(): number { return this._RepairBucket }
 	public get DevelopmentMaterial(): number { return this._DevelopmentMaterial }
 	public get ImprovementMaterial(): number { return this._ImprovementMaterial }
+
+	public get Materials(): number[] { return [this.Fuel, this.Ammo, this.Steel, this.Bauxite] }
 
 	constructor() {
 		super();
@@ -47,15 +51,31 @@ export class Materials extends Observable {
 		);
 		SubscribeKcsapi<kcsapi_charge>(
 			"api_req_hokyu/charge",
-			x => this.Update(x.api_material)
+			x => {
+				window.API.Log("Ships supplied, costs {0}.", LogHelper.MaterialDiff(this.Materials, x.api_material));
+				this.Update(x.api_material);
+			}
 		);
-		SubscribeKcsapi<kcsapi_destroyship>(
+		SubscribeKcsapi<kcsapi_destroyship, kcsapi_req_kousyou_destroyship>(
 			"api_req_kousyou/destroyship",
-			x => this.Update(x.api_material)
+			(x, y) => {
+				window.API.Log("Ship {0} destroyed, resource {1} returned.", LogHelper.GetShipNamesFromList(y.api_ship_id.toString()), LogHelper.MaterialDiff(this.Materials, x.api_material));
+				this.Update(x.api_material, true);
+			}
 		);
 		SubscribeKcsapi<kcsapi_destroyitem2>(
 			"api_req_kousyou/destroyitem2",
 			x => this.Update(x.api_get_material)
+		);
+
+		// Bucket using
+		SubscribeKcsapi<{}, kcsapi_req_nyukyo_start>(
+			"api_req_nyukyo/start",
+			(x, y) => y.api_highspeed === 1 ? this.$._RepairBucket-- : 0
+		);
+		SubscribeKcsapi<{}, kcsapi_req_nyukyo_speedchange>(
+			"api_req_nyukyo/speedchange",
+			(x, y) => this.$._RepairBucket--
 		);
 
 		// Supply Airbase
@@ -85,18 +105,25 @@ export class Materials extends Observable {
 		);
 	}
 
-	public Update(source: number[] | kcsapi_material[]): void {
+	public Update(source: number[] | kcsapi_material[], raw: boolean = false): void {
 		if (!source || source.length == 0) return;
 		const type = typeof (<kcsapi_material>source[0]).api_value;
 
 		if (source.length >= 4 && type === "undefined") {
 			const casted = source as number[];
-			this.$._Fuel = casted[0];
-			this.$._Ammo = casted[1];
-			this.$._Steel = casted[2];
-			this.$._Bauxite = casted[3];
-		}
-		else if (source.length >= 8 && type !== "undefined") {
+			if (!raw) {
+				this.$._Fuel += casted[0];
+				this.$._Ammo += casted[1];
+				this.$._Steel += casted[2];
+				this.$._Bauxite += casted[3];
+			}
+			else {
+				this.$._Fuel = casted[0];
+				this.$._Ammo = casted[1];
+				this.$._Steel = casted[2];
+				this.$._Bauxite = casted[3];
+			}
+		} else if (source.length >= 8 && type !== "undefined") {
 			const casted = source as kcsapi_material[];
 			this.$._Fuel = casted[0].api_value;
 			this.$._Ammo = casted[1].api_value;
@@ -107,5 +134,7 @@ export class Materials extends Observable {
 			this.$._DevelopmentMaterial = casted[6].api_value;
 			this.$._ImprovementMaterial = casted[7].api_value;
 		}
+
+		this.RaisePropertyChanged(nameof(this.Materials));
 	}
 }

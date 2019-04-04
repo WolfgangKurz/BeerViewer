@@ -332,9 +332,10 @@ namespace BeerViewer.Modules.Communication
 		/// Log to logger
 		/// </summary>
 		/// <param name="Text">Text to log</param>
-		public void Log(string Text)
+		/// <param name="args">Params for format</param>
+		public void Log(string Text, params object[] args)
 		{
-			Logger.Log(Text);
+			Logger.Log(Text, args);
 		}
 
 		/// <summary>

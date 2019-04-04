@@ -38,7 +38,7 @@ export interface kcsapi_remodel_after_slot {
 }
 
 export interface kcsapi_req_destroyitem2 extends HTTPRequest {
-	api_slotitem_ids: string;
+	api_slotitem_ids: number | string;
 }
 
 

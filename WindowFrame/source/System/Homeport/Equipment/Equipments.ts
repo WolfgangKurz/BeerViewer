@@ -3,8 +3,8 @@ import { IdentifiableTable } from "System/Models/TableWrapper";
 import { Ship } from "System/Homeport/Ship";
 import { Equipment } from "./Equipment";
 import { SubscribeKcsapi } from "System/Base/KcsApi";
-
 import { kcsapi_slotitem, kcsapi_createitem, kcsapi_destroyitem2, kcsapi_remodel_slot, kcsapi_req_destroyitem2 } from "System/Interfaces/kcsapi_item";
+import LogHelper from "System/Base/LogHelper";
 
 export class Equipments extends Observable {
 	//#region Equips
@@ -20,7 +20,13 @@ export class Equipments extends Observable {
 		SubscribeKcsapi<kcsapi_slotitem[]>("api_get_member/slot_item", x => this.Update(x));
 
 		SubscribeKcsapi<kcsapi_createitem>("api_req_kousyou/createitem", x => this.CreateItem(x));
-		SubscribeKcsapi<{}, kcsapi_req_destroyitem2>("api_req_kousyou/destroyitem2", (_, y) => this.DestroyItem(y));
+		SubscribeKcsapi<kcsapi_destroyitem2, kcsapi_req_destroyitem2>(
+			"api_req_kousyou/destroyitem2",
+			(x, y) => {
+				window.API.Log("Equipment {0} destroyed, resource {1} returned.", LogHelper.GetEquipNamesFromList(y.api_slotitem_ids.toString()), LogHelper.MaterialDiff(x.api_get_material));
+				this.DestroyItem(y);
+			}
+		);
 		SubscribeKcsapi<kcsapi_remodel_slot>("api_req_kousyou/remodel_slot", x => {
 			this.RemoveFromRemodel(x);
 			this.RemodelSlotItem(x);
@@ -56,9 +62,13 @@ export class Equipments extends Observable {
 	}
 	private DestroyItem(data: kcsapi_req_destroyitem2) {
 		try {
-			data.api_slotitem_ids.split(',')
-				.map(x => parseInt(x))
-				.forEach(x => this.Equips.delete(x));
+			if (typeof data.api_slotitem_ids === "number") {
+				this.Equips.delete(data.api_slotitem_ids);
+			} else {
+				data.api_slotitem_ids.split(',')
+					.map(x => parseInt(x))
+					.forEach(x => this.Equips.delete(x));
+			}
 
 			this.EquipmentsChanged();
 		}
@@ -68,7 +78,7 @@ export class Equipments extends Observable {
 		if (source.api_after_slot == null) return;
 
 		const equip = this.Equips.get(source.api_after_slot.api_id);
-		if(!equip) return;
+		if (!equip) return;
 
 		equip.Remodel(source.api_after_slot.api_level, source.api_after_slot.api_slotitem_id);
 	}

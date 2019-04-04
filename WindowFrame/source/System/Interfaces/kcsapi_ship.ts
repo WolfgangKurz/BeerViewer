@@ -54,6 +54,6 @@ export interface kcsapi_destroyship {
 }
 
 export interface kcsapi_req_kousyou_destroyship extends HTTPRequest {
-	/** "," separated string */
-	api_ship_id: string;
+	/** "," separated string or single number */
+	api_ship_id: number | string;
 }

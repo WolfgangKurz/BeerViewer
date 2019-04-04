@@ -1,4 +1,4 @@
-﻿#define USE_GC
+﻿// #define USE_GC
 // #define USE_STARTUP_DEVTOOLS
 
 using System;
@@ -144,12 +144,12 @@ namespace BeerViewer.Forms
 							await this.Communicator.CallbackScript("Game.Load", Constants.GameURL);
 
 							// Register to Logger
-							Logger.Logged += (f, a) => this.Communicator.CallbackScript("Logged", f, a);
+							Logger.Logged += (f, a) => this.Communicator.CallbackScript("Logged", f, a.Select(x => "\"" + x + "\"").ToArray());
 
 							// Logged before initialized
 							LogData prevLog;
 							while ((prevLog = Logger.Fetch("MainLogger")) != null)
-								await this.Communicator.CallbackScript("Logged", prevLog.Format, prevLog.Arguments);
+								await this.Communicator.CallbackScript("Logged", prevLog.Format, prevLog.Arguments.Select(x => "\"" + x + "\"").ToArray());
 
 							Logger.Unregister("MainLogger");
 
