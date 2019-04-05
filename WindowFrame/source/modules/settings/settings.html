@@ -17,7 +17,7 @@
 								   :data-state="setting.Value === key ? 'selected' : ''">
 								<input type="radio"
 									   :name="`${setting.Provider}.${setting.Name}`"
-									   :value="key"
+									   :value="_key"
 									   v-model="setting.Value"
 									   @change="UpdateSetting">
 								{{i18n[`${key}.${key.toLowerCase()}`] || item}}
