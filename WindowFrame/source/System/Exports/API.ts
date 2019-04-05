@@ -91,7 +91,7 @@ export interface ModuleInfo {
 
 /** Setting information for `Settings` built-in module */
 export interface SettingInfo {
-	Type: string;
+	Type: "String" | "Boolean" | "Number" | "Object";
 
 	Name: string;
 	Provider: string;

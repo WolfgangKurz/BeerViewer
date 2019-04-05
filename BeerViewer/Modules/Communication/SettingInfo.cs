@@ -33,6 +33,23 @@ namespace BeerViewer.Modules.Communication
 			var output = new SettingInfo();
 			output.Type = ((Type)((dynamic)settingValue).Type).Name;
 
+			{
+				var _type = (Type)((dynamic)settingValue).Type;
+				if (
+					_type == typeof(char) || _type == typeof(Char)
+					|| _type == typeof(short) || _type == typeof(Int16)
+					|| _type == typeof(int) || _type == typeof(Int32)
+					|| _type == typeof(long) || _type == typeof(Int64)
+					|| _type == typeof(byte) || _type == typeof(Byte)
+					|| _type == typeof(ushort) || _type == typeof(UInt16)
+					|| _type == typeof(uint) || _type == typeof(UInt32)
+					|| _type == typeof(ulong) || _type == typeof(UInt64)
+					|| _type == typeof(float) || _type == typeof(Single)
+					|| _type == typeof(double) || _type == typeof(Double)
+					|| _type == typeof(decimal) || _type == typeof(Decimal)
+				) output.Type = "Number";
+			}
+
 			output.Name = input.Name;
 			output.Provider = input.Provider;
 			output.Value = input.Value;

@@ -74,7 +74,6 @@ export class Settings {
 
 	public Register(setting: SettingInfo) {
 		const provider = setting.Provider;
-		const name = setting.Name;
 		const item = this.BuildSetting(setting);
 
 		const group = this.data[provider] || {};

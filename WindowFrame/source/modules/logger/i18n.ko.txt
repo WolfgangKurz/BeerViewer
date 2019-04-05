@@ -2,6 +2,11 @@ module.Log		로그 화면
 
 Logger module has been loaded					Logger 모듈이 로드되었습니다.
 Failed to control game frame...					게임 화면 프레임을 제어하는데 실패했습니다.
+Main page detected, redirecting					메인 페이지가 감지되었습니다. 게임 페이지로 이동합니다.
 Foreign page detected, applying DMM cookie		해외 접속 페이지가 감지되었습니다. DMM 쿠키를 적용합니다.
 Game CSS applied								게임 화면 CSS가 적용되었습니다.
 Default port already in using, use {0} instead.	기본 포트가 이미 사용중입니다. 대신 {0} 포트를 사용합니다.
+
+Ships supplied, costs {0}.						함선을 보급하여 자원 {0}을 사용했습니다.
+Equipment {0} destroyed, resource {1} returned.	장비 {0}을(를) 폐기하여 자원 {1}을 획득했습니다.
+Ship {0} destroyed, resource {1} returned.		함선 {0}을(를) 해체하여 자원 {1}을 획득했습니다.
