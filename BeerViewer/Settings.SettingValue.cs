@@ -43,6 +43,8 @@ namespace BeerViewer
 			public string Provider { get; }
 			public event EventHandler ValueChanged;
 
+			public bool Exists { get; } = false;
+
 			private string FilePath { get; }
 				= Path.Combine(
 					Path.GetDirectoryName(Assembly.GetEntryAssembly().Location),
@@ -63,6 +65,7 @@ namespace BeerViewer
 					if (this.Parse(sb.ToString(), out v))
 					{
 						this.Value = v;
+						this.Exists = true;
 						return;
 					}
 				}

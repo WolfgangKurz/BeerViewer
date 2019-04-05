@@ -422,6 +422,41 @@ namespace BeerViewer.Modules.Communication
 		}
 
 		/// <summary>
+		/// Get specific settings.
+		/// </summary>
+		public SettingInfo GetWindowFrameSetting(string Provider, string Name, string Type)
+		{
+			// WindowFrame settings
+			Type T;
+			switch (Type)
+			{
+				case "String":
+					T = typeof(string);
+					break;
+				case "Number":
+					T = typeof(decimal);
+					break;
+				case "Boolean":
+					T = typeof(bool);
+					break;
+				case "Object":
+				default:
+					T = typeof(object);
+					break;
+			}
+			var _T = typeof(SettableSettingValue<>).MakeGenericType(new Type[] { T });
+
+			object _default = null;
+			if (T.IsValueType) _default = Activator.CreateInstance(T);
+			if (T == typeof(string)) _default = "";
+
+			var setting = Activator.CreateInstance(_T, Name, Provider, _default, "", "", "", null);
+
+			if(!(bool)_T.GetProperty("Exists").GetValue(setting)) return null;
+			return SettingInfo.Create(setting);
+		}
+
+		/// <summary>
 		/// Save value to setting.
 		/// </summary>
 		/// <param name="Provider">Provider of setting to save</param>

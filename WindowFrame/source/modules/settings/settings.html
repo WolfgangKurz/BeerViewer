@@ -2,10 +2,10 @@
 	<div id="settings-container">
 		<form>
 			<div class="setting-group"
-				 v-for="(group, key) in Settings" :key="group">
+				 v-for="(group, key) in Settings">
 				<h2 class="setting-group-name">{{i18n[`group.${key}`] || key}}</h2>
 				<div class="setting-line"
-					 v-for="setting in group" :key="setting">
+					 v-for="setting in group">
 					<span class="setting-name">{{i18n[`${key}.${setting.DisplayName}`] || setting.DisplayName}}</span>
 
 					<div class="setting-content"
@@ -13,8 +13,8 @@
 						<template v-if="setting.Enums">
 							<label class="setting-content-item"
 								   data-type="radio"
-								   v-for="(item, _key) in setting.Enums" :key="_key"
-								   :data-state="setting.Value === key ? 'selected' : ''">
+								   v-for="(item, _key) in setting.Enums"
+								   :data-state="setting.Value === _key ? 'selected' : ''">
 								<input type="radio"
 									   :name="`${setting.Provider}.${setting.Name}`"
 									   :value="_key"

@@ -153,8 +153,11 @@ namespace BeerViewer.Forms
 
 							Logger.Unregister("MainLogger");
 
-							timer.Enabled = false;
-							timer = null;
+							if (timer != null)
+							{
+								timer.Enabled = false;
+								timer = null;
+							}
 						}
 					};
 					timer.Start();

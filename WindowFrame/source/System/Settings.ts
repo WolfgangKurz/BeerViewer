@@ -73,9 +73,15 @@ export class Settings {
 	}
 
 	public Register(setting: SettingInfo) {
+		(async () => {
+			const info = await window.API.GetWindowFrameSetting(setting.Provider, setting.Name, setting.Type);
+			if(!info) return;
+
+			this.data[setting.Provider][setting.Name].Value = info.Value;
+		})();
+
 		const provider = setting.Provider;
 		const item = this.BuildSetting(setting);
-
 		const group = this.data[provider] || {};
 
 		// Set setting item as readonly

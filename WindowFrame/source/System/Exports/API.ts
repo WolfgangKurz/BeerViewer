@@ -56,6 +56,9 @@ export interface Communicator {
 	/** Get all settable settings list */
 	GetSettings(): Promise<SettingInfo[]>;
 
+	/** Get specific setting */
+	GetWindowFrameSetting(Provider: string, Name: string, Type: string): Promise<SettingInfo | null>;
+
 	/** Save settings has updated */
 	UpdateSetting(Provider: string, Name: string, Value: any): Promise<boolean>;
 

@@ -115,6 +115,7 @@ class TopResources implements IModule {
 					Type: "Boolean"
 				});
 				SettingsClass.Instance.Observe(`Top-Resources.Disp${key}`, value => this.Data.Datas[key].Display = <boolean>value);
+				this.Data.Datas[key].Display = <boolean>Settings["Top-Resources"][`Disp${key}`].Value;
 			}).call(this, key);
 		}
 	}
