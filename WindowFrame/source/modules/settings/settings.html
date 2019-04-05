@@ -20,7 +20,7 @@
 									   :value="key"
 									   v-model="setting.Value"
 									   @change="UpdateSetting">
-								{{i18n[`${key}.${(setting.i18nPrefix || "")+key.toLowerCase()}`] || item}}
+								{{i18n[`${key}.${key.toLowerCase()}`] || item}}
 							</label>
 						</template>
 						<template v-else-if="setting.Type === 'Boolean'">

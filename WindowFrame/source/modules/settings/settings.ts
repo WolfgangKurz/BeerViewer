@@ -11,8 +11,6 @@ declare global {
 	}
 }
 interface ProcessedSettingInfo {
-	i18nPrefix: string;
-
 	Type: string;
 
 	Name: string;
@@ -77,7 +75,6 @@ class SettingsModule implements IModule {
 					return true;
 				})
 				.map(x => {
-					let prefix = "";
 					let _enums: { [key: string]: any } | null = null;
 					if (x.Enums) {
 						_enums = {};
@@ -87,15 +84,12 @@ class SettingsModule implements IModule {
 					if (x.Provider === "LoS") {
 						if (x.Name === "LoSCalculator") {
 							_enums = {};
-							prefix = "los.";
 							LoSCalculator.Instance.Logics.forEach(x => {
 								_enums![x.Id] = x.Name;
 							});
 						}
 					}
 					return {
-						i18nPrefix: prefix,
-
 						Type: x.Type,
 
 						Name: x.Name,
