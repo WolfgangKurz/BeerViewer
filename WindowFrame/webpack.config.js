@@ -31,16 +31,21 @@ module.exports = {
 			}
 		]
 	},
-	externals: {
-		"vue": "Vue",
-		"vuex": "Vuex",
-		"tippy.js": {
-			root: "tippy",
-			commonjs2: "tippy.js",
-			commonjs: "tippy.js",
-			amd: "tippy.js"
+	plugins: [
+		new AccessDependenciesPlugin()
+	],
+	externals: [
+		{
+			"vue": "Vue",
+			"vuex": "Vuex",
+			"tippy.js": {
+				root: "tippy",
+				commonjs2: "tippy.js",
+				commonjs: "tippy.js",
+				amd: "tippy.js"
+			}
 		}
-	},
+	],
 	devtool: "source-map",
 	mode: ENV
 }
