@@ -1,12 +1,18 @@
-import { IModule, GetModuleTemplate } from "System/Module";
 import Vue from "vue";
 import { mapState } from "vuex";
+import { IModule, GetModuleTemplate } from "System/Module";
 import { SubscribeKcsapi, KcsApiCallback } from "System/Base/KcsApi";
 import { HTTPRequest } from "System/Exports/API";
+import { Homeport } from "System/Homeport/Homeport";
+import { MembersShipData } from "./ShipData";
+import { EventKind, EventId, BattleEngage, Formation, FleetType } from "./Types/Enums";
+import FleetData from "./FleetData";
+import { kcsapi_map_next, kcsapi_map_start } from "./Types/kcsapi_map";
+import battle, { battle_base } from "./Types/battle";
 
 import MapEdges from "./edges.json";
 
-const API = {
+const Endpoint = {
 	get_member: {
 		/** LBAS, Current information and state of inserted aircrafts */
 		base_air_corps: "/api_get_member/base_air_corps",
@@ -110,59 +116,20 @@ const API = {
 };
 
 // Deep Freeze
-((x: any)=>{
-	const f = function(this: any){
-		Object.freeze(this);
-		for(let k in this) f.call(this[k]);
+((x: any) => {
+	const f = (y: any) => {
+		Object.freeze(y);
+		Object.getOwnPropertyNames(y).forEach(function (prop) {
+			if (y.hasOwnProperty(prop)
+				&& y[prop] !== null
+				&& (typeof y[prop] === "object" || typeof y[prop] === "function")
+				&& !Object.isFrozen(y[prop])) {
+				f(y[prop]);
+			}
+		});
 	};
-	f.call(x);
-})(API);
-
-//#region Interfaces
-namespace KCSAPI {
-	export interface map_start {
-		api_maparea_id: number;
-		api_mapinfo_no: number;
-		api_no: number;
-
-		api_event_id: number;
-		api_event_kind: number;
-		api_eventmap: any;
-
-		/** If zero, no nodes to go (End of map reached) */
-		api_next: number;
-	}
-	export interface map_next extends map_start {
-		api_m1?: number; // Map extended?
-	}
-
-	export enum EventId {
-		None = 0,
-		Obtain = 2,
-		Loss = 3,
-		NormalBattle = 4,
-		BossBattle = 5,
-		NoEvent = 6,
-		AirEvent = 7,
-		Escort = 8,
-		TP = 9,
-		LDAirBattle = 10
-	}
-	export enum EventKind {
-		NoBattle = 0,
-		Battle = 1,
-		NightBattle = 2,
-		NightDayBattle = 3,
-		AirBattle = 4,
-		ECBattle = 5,
-		LDAirBattle = 6,
-		ECNightDayBattle = 7,
-
-		AirSearch = 0,
-		Selectable = 2
-	}
-}
-//#endregion
+	f(x);
+})(Endpoint);
 
 class BattlePreview implements IModule {
 	private Data = {
@@ -177,8 +144,19 @@ class BattlePreview implements IModule {
 			NodeDisp: ""
 		},
 		Event: {
-			Kind: 0,
-			Id: 0
+			Kind: EventKind.None,
+			Id: EventId.None
+		},
+		Battle: {
+			Engage: BattleEngage.None
+		},
+
+		Fleets: {
+			AliasFirst: <FleetData | null>null,
+			AliasSecond: <FleetData | null>null,
+			EnemyFirst: <FleetData | null>null,
+			EnemySecond: <FleetData | null>null,
+			CurrentDeckId: 0
 		}
 	};
 
@@ -204,41 +182,90 @@ class BattlePreview implements IModule {
 	}
 
 	init(): void {
-		(()=>{
-			let proc: KcsApiCallback<KCSAPI.map_next, HTTPRequest> = (data => {
+		(() => {
+			let proc: KcsApiCallback<kcsapi_map_next, HTTPRequest> = (data => {
 				this.ClearEvationList();
-	
+
 				this.Data.Map.MapArea = data.api_maparea_id;
 				this.Data.Map.MapNo = data.api_mapinfo_no;
 				this.Data.Map.Node = data.api_no;
+				this.Data.Map.NodeDisp = this.GetNodeDisp(this.Data.Map.MapArea, this.Data.Map.MapNo, this.Data.Map.Node);
 
 				this.Data.Event.Kind = data.api_event_kind;
 				this.Data.Event.Id = data.api_event_id;
 
-				this.Data.IsBoss = this.Data.Event.Id === KCSAPI.EventId.BossBattle;
+				this.Data.IsBoss = this.Data.Event.Id === EventId.BossBattle;
 				this.Data.IsEnd = data.api_next === 0;
-
-				this.Data.Map.NodeDisp = this.GetNodeDisp(this.Data.Map.MapArea, this.Data.Map.MapNo, this.Data.Map.Node);
 			});
 
-			SubscribeKcsapi<KCSAPI.map_start>(API.api_req_map.start, proc);
-			SubscribeKcsapi(API.api_req_map.next, proc);
+			SubscribeKcsapi<kcsapi_map_start>(Endpoint.api_req_map.start, proc);
+			SubscribeKcsapi(Endpoint.api_req_map.next, proc);
 		})();
 
 		window.API.Log("Battle Preview module has been loaded");
 
 		window.modules.areas.register("sub", "battle-preview", "Battle Preview", "game", "battle-preview-component");
 	}
+	private UpdateFleets(api_deck_id: number, data: battle_base, api_formation?: [Formation, Formation, BattleEngage]): void {
+		// Update alias with deck
+		this.UpdateFriendFleets(api_deck_id);
 
-	private ClearEvationList(){
-		
+		this.Data.Fleets.EnemyFirst = new FleetData(
+			battle.ToMastersShipData(data),
+			this.Data.Fleets.EnemyFirst ? this.Data.Fleets.EnemyFirst.Formation : Formation.None,
+			this.Data.Fleets.EnemyFirst ? this.Data.Fleets.EnemyFirst.Name : "",
+			FleetType.EnemyFirst
+		);
+
+		// 제 2함대는 없음
+		this.Data.Fleets.EnemySecond = new FleetData([],Formation.None,"",FleetType.EnemySecond);
+
+		// 진형과 전투형태 존재하면
+		if (api_formation != null) {
+			this.Data.Battle.Engage = api_formation[2];
+
+			if (this.Data.Fleets.AliasFirst !== null)
+				this.Data.Fleets.AliasFirst.UpdateFormation(api_formation[0]);
+
+			if (this.Data.Fleets.EnemyFirst !== null)
+				this.Data.Fleets.EnemyFirst.UpdateFormation(api_formation[1]);
+		}
+
+		// 출격중인 함대 번호 갱신
+		this.Data.Fleets.CurrentDeckId = api_deck_id;
+	}
+	private UpdateFriendFleets(deckID: number): void {
+		const fleets = Homeport.Instance.Fleets;
+		const combined = Homeport.Instance.FleetCombined;
+
+		this.Data.Fleets.AliasFirst = new FleetData(
+			fleets.get(deckID)!.Ships.map(s => new MembersShipData(s)),
+			this.Data.Fleets.AliasFirst
+				? this.Data.Fleets.AliasFirst.Formation
+				: Formation.None,
+			fleets.get(deckID)!.Name,
+			FleetType.AliasFirst
+		);
+		this.Data.Fleets.AliasSecond = new FleetData(
+			combined && deckID == 1
+				? fleets.get(2)!.Ships.map(s => new MembersShipData(s))
+				: [],
+				this.Data.Fleets.AliasSecond
+					? this.Data.Fleets.AliasSecond.Formation
+					: Formation.None,
+			fleets.get(2)!.Name,
+			FleetType.AliasSecond
+		);
+	}
+	private ClearEvationList() {
+
 	}
 
 	private GetNodeDisp(world: number, map: number, node: number): string {
 		let _map = `${world}-${map}`;
-		if(_map in MapEdges){
+		if (_map in MapEdges) {
 			const list = (<any>MapEdges)[_map];
-			if(node in list)
+			if (node in list)
 				return `${list[node][1]}`;
 		}
 		return `${_map}-${node}`;

@@ -31,9 +31,6 @@ module.exports = {
 			}
 		]
 	},
-	plugins: [
-		new AccessDependenciesPlugin()
-	],
 	externals: [
 		{
 			"vue": "Vue",

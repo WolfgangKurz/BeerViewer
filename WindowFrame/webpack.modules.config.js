@@ -11,12 +11,15 @@ function getEntries() {
 	for (let i = 0; i < list.length; i++) {
 		const path = list[i];
 		const parts = path.split("/");
-		const modulename = parts[parts.length - 2];
+
+		const modulepath = /modules\/(.+)\/.+\.ts$/.exec(path)[1];
+		const modulename = /^([^/]+)/.exec(modulepath)[1];
 
 		let filename = parts[parts.length - 1];
 		filename = filename.substr(0, filename.lastIndexOf("."));
+		if(filename !== modulename) continue;
 
-		output[`${modulename}/${filename}`] = path;
+		output[`${modulepath}/${filename}`] = path;
 	}
 	return output;
 }
