@@ -1,8 +1,8 @@
-import { MastersShipData } from "../ShipData";
 import { Master } from "System/Master/Master";
-import ShipEquipData from "../ShipEquipData";
 import { ShipInfo } from "System/Master/Wrappers/ShipInfo";
 import { EquipInfo } from "System/Master/Wrappers/EquipInfo";
+import { MastersShipData } from "../Models/ShipData";
+import ShipEquipData from "../Models/ShipEquipData";
 
 export default class battle {
 	public static ToMastersShipData(data: battle_base): MastersShipData[] {

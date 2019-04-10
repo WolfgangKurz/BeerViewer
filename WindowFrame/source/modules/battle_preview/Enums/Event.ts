@@ -37,33 +37,3 @@ export enum EventKind {
 	AirSearch = 0,
 	Selectable = 2
 }
-export enum Formation {
-	Unknown = -1,
-	None = 0,
-	LineAhead = 1,
-	DoubleLine = 2,
-	Diamond = 3,
-	Echelon = 4,
-	LineAbreast = 5,
-	Vanguard = 6,
-
-	AntiSubmarine = 11,
-	Forward = 12,
-	Ring = 13,
-	Battle = 14,
-}
-
-export enum FleetType {
-	None = 0,
-	AliasFirst,
-	AliasSecond,
-	EnemyFirst,
-	EnemySecond
-}
-export enum BattleEngage {
-	None = 0,
-	Parallel = 1,
-	HeadOn = 2,
-	T_Advantage = 3,
-	T_Disadvantage = 4
-}

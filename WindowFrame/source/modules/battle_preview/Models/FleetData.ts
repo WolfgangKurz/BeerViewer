@@ -1,7 +1,7 @@
 import { Observable } from "System/Base/Observable";
-import ShipData from "./ShipData";
 import { Ship } from "System/Homeport/Ship";
-import { Formation, FleetType } from "./Types/Enums";
+import { Formation, FleetType } from "../Enums/Battle";
+import ShipData from "./ShipData";
 
 export default class FleetData extends Observable {
 	private _FleetType: FleetType = FleetType.None;

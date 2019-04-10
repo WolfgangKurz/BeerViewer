@@ -1,0 +1,8 @@
+BattleInfo	전투정보
+
+BattleInfo.{0} {1}\nResult: {2}\nDrop: {3}		{0} {1}\n전투 결과: {2}\n드롭: {3}
+
+BattleInfo.diff.Casual	丁
+BattleInfo.diff.Easy	丙
+BattleInfo.diff.Normal	乙
+BattleInfo.diff.Hard	甲

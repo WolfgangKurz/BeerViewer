@@ -1,16 +1,18 @@
 import Vue from "vue";
 import { mapState } from "vuex";
 import { IModule, GetModuleTemplate } from "System/Module";
-import { SubscribeKcsapi, KcsApiCallback } from "System/Base/KcsApi";
-import { HTTPRequest } from "System/Exports/API";
+import { SubscribeKcsapi } from "System/Base/KcsApi";
 import { Homeport } from "System/Homeport/Homeport";
-import { MembersShipData } from "./ShipData";
-import { EventKind, EventId, BattleEngage, Formation, FleetType } from "./Types/Enums";
-import FleetData from "./FleetData";
-import { kcsapi_map_next, kcsapi_map_start } from "./Types/kcsapi_map";
-import battle, { battle_base } from "./Types/battle";
-
-import MapEdges from "./edges.json";
+import { BattleEngage, Formation, FleetType, MapDifficulty, AirSupremacy, BattleRank } from "./Enums/Battle";
+import FleetData from "./Models/FleetData";
+import { kcsapi_map_next, kcsapi_map_start, kcsapi_req_map_start, kcsapi_req_map_next } from "./Interfaces/kcsapi_map";
+import battle, { battle_base } from "./Interfaces/battle";
+import Calculator from "./Calculator";
+import SortieInfo from "./Models/SortieInfo";
+import AirBattleResult from "./Models/AirBattleResult";
+import BattleFlags from "./BattleFlags";
+import { MembersShipData } from "./Models/ShipData";
+import { EventKind, EventId } from "./Enums/Event";
 
 const Endpoint = {
 	get_member: {
@@ -131,37 +133,52 @@ const Endpoint = {
 	f(x);
 })(Endpoint);
 
-class BattlePreview implements IModule {
+class BattleInfo implements IModule {
 	private Data = {
-		IsBoss: false,
-		IsEnd: false,
-
 		Map: {
 			MapArea: 0,
 			MapNo: 0,
 			Node: 0,
+			NodeDisp: "",
 
-			NodeDisp: ""
+			Extended: false
 		},
 		Event: {
 			Kind: EventKind.None,
 			Id: EventId.None
 		},
 		Battle: {
-			Engage: BattleEngage.None
+			Engage: BattleEngage.None,
+			AirSupremacy: AirSupremacy.None,
+			AirBattleResults: <AirBattleResult[]>[],
+
+			Rank: BattleRank.None,
+			AirRank: BattleRank.None
 		},
 
 		Fleets: {
-			AliasFirst: <FleetData | null>null,
-			AliasSecond: <FleetData | null>null,
-			EnemyFirst: <FleetData | null>null,
-			EnemySecond: <FleetData | null>null,
+			Alias: {
+				First: <FleetData | null>null,
+				Second: <FleetData | null>null
+			},
+			Enemy: {
+				First: <FleetData | null>null,
+				Second: <FleetData | null>null
+			},
 			CurrentDeckId: 0
-		}
+		},
+
+		UpdatedTime: 0
 	};
 
+	private SortieInfo: SortieInfo = new SortieInfo();
+	private Calculator: Calculator = new Calculator();
+	private BattleFlags: BattleFlags = new BattleFlags();
+
+	private EventMapDifficulty: Map<number, MapDifficulty> = new Map<number, MapDifficulty>();
+
 	constructor() {
-		Vue.component("battle-preview-component", {
+		Vue.component("battleinfo-component", {
 			data: () => this.Data,
 			template: GetModuleTemplate(),
 			computed: mapState({
@@ -183,92 +200,117 @@ class BattlePreview implements IModule {
 
 	init(): void {
 		(() => {
-			let proc: KcsApiCallback<kcsapi_map_next, HTTPRequest> = (data => {
-				this.ClearEvationList();
+			let proc = (data: kcsapi_map_start | kcsapi_map_next, request: kcsapi_req_map_start | kcsapi_req_map_next, next: boolean = false) => {
+				if (!next) this.Data.Fleets.CurrentDeckId = request.api_deck_id;
+				if (this.Data.Fleets.CurrentDeckId < 1) return;
 
-				this.Data.Map.MapArea = data.api_maparea_id;
-				this.Data.Map.MapNo = data.api_mapinfo_no;
-				this.Data.Map.Node = data.api_no;
-				this.Data.Map.NodeDisp = this.GetNodeDisp(this.Data.Map.MapArea, this.Data.Map.MapNo, this.Data.Map.Node);
+				this.UpdateFriendFleets(this.Data.Fleets.CurrentDeckId);
 
-				this.Data.Event.Kind = data.api_event_kind;
-				this.Data.Event.Id = data.api_event_id;
+				if (!next) {
+					this.SortieInfo.Initialize(
+						data.api_maparea_id,
+						data.api_mapinfo_no,
+						data.api_eventmap
+							? this.EventMapDifficulty.get(data.api_mapinfo_no)
+							: MapDifficulty.None
+					);
+				}
 
-				this.Data.IsBoss = this.Data.Event.Id === EventId.BossBattle;
-				this.Data.IsEnd = data.api_next === 0;
-			});
+				this.ClearBattleInfo();
 
-			SubscribeKcsapi<kcsapi_map_start>(Endpoint.api_req_map.start, proc);
-			SubscribeKcsapi(Endpoint.api_req_map.next, proc);
+				// Map extended with visit node
+				if (next && (<kcsapi_map_next>data).api_m1 !== undefined)
+					this.Data.Map.Extended = (<kcsapi_map_next>data).api_m1 === 1;
+
+				// Map extended after LBAS raid
+				if (data.api_destruction_battle) {
+					if (data.api_destruction_battle.api_m1 !== undefined)
+						this.Data.Map.Extended = data.api_destruction_battle.api_m1 === 1;
+				}
+
+				this.SortieInfo.Update(data.api_no, data.api_event_id, data.api_event_kind, data);
+			};
+
+			SubscribeKcsapi<kcsapi_map_start, kcsapi_req_map_start>(Endpoint.api_req_map.start, (x, y) => proc(x, y, false));
+			SubscribeKcsapi<kcsapi_map_next, kcsapi_req_map_next>(Endpoint.api_req_map.next, (x, y) => proc(x, y, true));
 		})();
 
-		window.API.Log("Battle Preview module has been loaded");
+		window.API.Log("BattleInfo module has been loaded");
 
-		window.modules.areas.register("sub", "battle-preview", "Battle Preview", "game", "battle-preview-component");
+		window.modules.areas.register("sub", "battleinfo", "BattleInfo", "game", "battleinfo-component");
 	}
+
 	private UpdateFleets(api_deck_id: number, data: battle_base, api_formation?: [Formation, Formation, BattleEngage]): void {
 		// Update alias with deck
 		this.UpdateFriendFleets(api_deck_id);
 
-		this.Data.Fleets.EnemyFirst = new FleetData(
+		this.Data.Fleets.Enemy.First = new FleetData(
 			battle.ToMastersShipData(data),
-			this.Data.Fleets.EnemyFirst ? this.Data.Fleets.EnemyFirst.Formation : Formation.None,
-			this.Data.Fleets.EnemyFirst ? this.Data.Fleets.EnemyFirst.Name : "",
+			this.Data.Fleets.Enemy.First ? this.Data.Fleets.Enemy.First.Formation : Formation.None,
+			this.Data.Fleets.Enemy.First ? this.Data.Fleets.Enemy.First.Name : "",
 			FleetType.EnemyFirst
 		);
 
-		// 제 2함대는 없음
-		this.Data.Fleets.EnemySecond = new FleetData([],Formation.None,"",FleetType.EnemySecond);
+		// No second fleet
+		this.Data.Fleets.Enemy.Second = new FleetData([], Formation.None, "", FleetType.EnemySecond);
 
-		// 진형과 전투형태 존재하면
+		// Formation available
 		if (api_formation != null) {
 			this.Data.Battle.Engage = api_formation[2];
 
-			if (this.Data.Fleets.AliasFirst !== null)
-				this.Data.Fleets.AliasFirst.UpdateFormation(api_formation[0]);
+			if (this.Data.Fleets.Alias.First !== null)
+				this.Data.Fleets.Alias.First.UpdateFormation(api_formation[0]);
 
-			if (this.Data.Fleets.EnemyFirst !== null)
-				this.Data.Fleets.EnemyFirst.UpdateFormation(api_formation[1]);
+			if (this.Data.Fleets.Enemy.First !== null)
+				this.Data.Fleets.Enemy.First.UpdateFormation(api_formation[1]);
 		}
 
-		// 출격중인 함대 번호 갱신
+		// Update fleet id that in sortie
 		this.Data.Fleets.CurrentDeckId = api_deck_id;
 	}
 	private UpdateFriendFleets(deckID: number): void {
 		const fleets = Homeport.Instance.Fleets;
 		const combined = Homeport.Instance.FleetCombined;
 
-		this.Data.Fleets.AliasFirst = new FleetData(
+		this.Data.Fleets.Alias.First = new FleetData(
 			fleets.get(deckID)!.Ships.map(s => new MembersShipData(s)),
-			this.Data.Fleets.AliasFirst
-				? this.Data.Fleets.AliasFirst.Formation
+			this.Data.Fleets.Alias.First
+				? this.Data.Fleets.Alias.First.Formation
 				: Formation.None,
 			fleets.get(deckID)!.Name,
 			FleetType.AliasFirst
 		);
-		this.Data.Fleets.AliasSecond = new FleetData(
+		this.Data.Fleets.Alias.Second = new FleetData(
 			combined && deckID == 1
 				? fleets.get(2)!.Ships.map(s => new MembersShipData(s))
 				: [],
-				this.Data.Fleets.AliasSecond
-					? this.Data.Fleets.AliasSecond.Formation
-					: Formation.None,
+			this.Data.Fleets.Alias.Second
+				? this.Data.Fleets.Alias.Second.Formation
+				: Formation.None,
 			fleets.get(2)!.Name,
 			FleetType.AliasSecond
 		);
 	}
-	private ClearEvationList() {
 
-	}
 
-	private GetNodeDisp(world: number, map: number, node: number): string {
-		let _map = `${world}-${map}`;
-		if (_map in MapEdges) {
-			const list = (<any>MapEdges)[_map];
-			if (node in list)
-				return `${list[node][1]}`;
-		}
-		return `${_map}-${node}`;
+	private ClearBattleInfo(): void {
+		// Reset enemy fleet
+		this.Data.Fleets.Enemy.First = null;
+		this.Data.Fleets.Enemy.Second = null;
+		if (this.Data.Fleets.Alias.First != null)
+			this.Data.Fleets.Alias.First.UpdateFormation(Formation.None);
+
+		this.Data.UpdatedTime = Date.now();
+		this.BattleFlags.Clear();
+
+		this.Data.Battle.Engage = BattleEngage.None;
+		this.Data.Battle.AirSupremacy = AirSupremacy.None;
+		this.Data.Battle.AirBattleResults = [];
+
+		// 결과 초기화
+		this.Data.Battle.Rank = BattleRank.None;
+		this.Data.Battle.AirRank = BattleRank.None;
+		//#endregion
 	}
 }
-export default BattlePreview;
+export default BattleInfo;
