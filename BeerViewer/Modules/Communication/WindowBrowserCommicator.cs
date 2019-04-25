@@ -286,7 +286,9 @@ namespace BeerViewer.Modules.Communication
 
 				if (!File.Exists(scriptFile))
 				{
-					Logger.Log("Module directory '{0}' found but '{1}.js' not found", moduleName, scriptFile);
+					var targetFile = scriptFile.Replace(Constants.EntryDir, "");
+					if (targetFile[0] == '\\' || targetFile[0] == '/') targetFile = targetFile.Substring(1);
+					Logger.Log("Module directory '{0}' found but '{1}' not found", moduleName, targetFile);
 					continue;
 				}
 

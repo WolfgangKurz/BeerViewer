@@ -76,8 +76,8 @@
 						v-tippy-target>
 						<div class="overview-ship-info">
 							<div class="ship-name">
-								{{i18n[ship.Info.Name] || "???"}}
-								<small v-if="i18n[ship.Info.Name] !== ship.Info.Name">
+								{{i18n[ship.Info.Name] || ship.Info.Name}}
+								<small v-if="i18n[ship.Info.Name] && i18n[ship.Info.Name] !== ship.Info.Name">
 									{{ship.Info.Name || "???"}}
 								</small>
 							</div>
@@ -199,7 +199,7 @@
 					</div>
 
 					<div class="ship-namelv">
-						<div class="ship-name">{{i18n[ship.Info.Name] || "???"}}</div>
+						<div class="ship-name">{{i18n[ship.Info.Name] || ship.Info.Name}}</div>
 						<div class="ship-level">Lv.{{ship.Level || "???"}}</div>
 					</div>
 
@@ -230,7 +230,7 @@
 				:data-state="dock.StateText">
 				<div class="dock-text">
 					<span v-if="dock.State === 0">{{i18n.fleet_repair_empty}}</span>
-					<span v-else-if="dock.State === 1">{{i18n[dock.Ship] || "???"}}</span>
+					<span v-else-if="dock.State === 1">{{i18n[dock.Ship] || dock.Ship}}</span>
 					<span v-else>{{i18n.fleet_locked}}</span>
 				</div>
 				<div class="dock-time">
@@ -247,7 +247,7 @@
 				:data-state="dock.StateText">
 				<div class="dock-text">
 					<span v-if="dock.State === 0">{{i18n.fleet_repair_empty}}</span>
-					<span v-else-if="dock.State === 2 || dock.State === 3">{{i18n[dock.Ship] || "???"}}</span>
+					<span v-else-if="dock.State === 2 || dock.State === 3">{{i18n[dock.Ship] || dock.Ship}}</span>
 					<span v-else>{{i18n.fleet_locked}}</span>
 				</div>
 				<div class="dock-time">
@@ -262,6 +262,7 @@
 		<div class="quest-container">
 			<div class="quest-item"
 				v-for="quest in Quests"
+				:key="`quest${quest.Id}`"
 				v-tippy="{html:`#quest-tooltip-${quest.Id}`}">
 				<div class="tooltip-host">
 					<div :id="`quest-tooltip-${quest.Id}`">
@@ -274,7 +275,7 @@
 				</div>
 				<div class="quest-category" :data-quest-category="quest.Category"></div>
 				<div class="quest-title">{{i18n[`quest_${quest.Id}_name`] || quest.Title}}</div>
-				<div class="quest-progress">{{quest.Progress}}%</div>
+				<div class="quest-progress">{{questProgress(quest.Progress)}}%</div>
 			</div>
 		</div>
 	</div>

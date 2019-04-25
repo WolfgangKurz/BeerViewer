@@ -2,10 +2,10 @@ import { Observable } from "System/Base/Observable";
 import Quest from "./Quest";
 import { SubscribeKcsapi } from "System/Base/KcsApi";
 import { kcsapi_questlist, kcsapi_req_quest_requests } from "System/Interfaces/kcsapi_quest";
-import { QuestState } from "System/Enums/Quests";
+import { QuestState, QuestCategory, QuestType } from "System/Enums/Quests";
 
 class QuestManager extends Observable {
-	private readonly currentQuests: Quest[] = [];
+	private currentQuests: Quest[] = [];
 
 	//#region All Property
 	private _All: Quest[] = [];
@@ -23,52 +23,31 @@ class QuestManager extends Observable {
 	private Update(questList: kcsapi_questlist): void {
 		if (questList.api_list === null) return;
 
-		questList.api_list.forEach(quest => {
-			for (let i = 0; i < this.currentQuests.length; i++) {
-				if (this.currentQuests[i].Id === quest.api_no) {
-					this.currentQuests.splice(i, 1);
-					i--;
-				}
-			}
-
-			switch (quest.api_state) {
-				/*
-				case QuestState.None:
-					break;
-				*/
-				case QuestState.Complete:
-				case QuestState.TakeOn:
-					if (!this.currentQuests.some(x => x.Id == quest.api_no))
-						this.currentQuests.push(new Quest(quest));
-					break;
-			}
-		});
+		this.currentQuests = this.currentQuests
+			.filter(x => !questList.api_list.some(y => y.api_no === x.Id))
+			.concat(
+				questList.api_list
+					.filter(x => x.api_state === QuestState.Complete || x.api_state === QuestState.TakeOn)
+					.map(x => new Quest(x))
+			);
 		this.Publish();
 	}
 
 	private ClearQuest(q_id: number): void {
-		for (let i = 0; i < this.currentQuests.length; i++) {
-			if (this.currentQuests[i].Id === q_id) {
-				this.currentQuests.splice(i, 1);
-				i--;
-			}
-		}
+		this.currentQuests = this.currentQuests.filter(x => x.Id !== q_id);
 		// TODO for additional processing
 		this.Publish();
 	}
 	private StopQuest(q_id: number): void {
-		for (let i = 0; i < this.currentQuests.length; i++) {
-			if (this.currentQuests[i].Id === q_id) {
-				this.currentQuests.splice(i, 1);
-				i--;
-			}
-		}
+		this.currentQuests = this.currentQuests.filter(x => x.Id !== q_id);
 		// TODO for additional processing
 		this.Publish();
 	}
 
 	private Publish(): void {
-		this.$._All = this.currentQuests.sort(x => x.Id);
+		this.currentQuests.sort((x, y) => x.Id === y.Id ? 0 : (x.Id < y.Id ? -1 : 1));
+		this.$._All = this.currentQuests;
+		this.RaisePropertyChanged(nameof(this.All));
 	}
 }
 export default QuestManager;

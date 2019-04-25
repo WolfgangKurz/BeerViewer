@@ -12,6 +12,7 @@ import { mapState } from "vuex";
 import { ShipInfo } from "System/Master/Wrappers/ShipInfo";
 import Quest from "System/Homeport/Quest/Quest";
 import Settings, { Settings as SettingsClass } from "System/Settings";
+import { QuestProgress } from "System/Enums/Quests";
 
 const getTextWidth = function (text: string, font: string) {
 	const canvas: HTMLCanvasElement = (<any>getTextWidth).canvas || ((<any>getTextWidth).canvas = document.createElement("canvas"));
@@ -148,6 +149,19 @@ class Overview implements IModule {
 						return _this.rangeList[value];
 					else
 						return "ship_range_unknown";
+				},
+				questProgress(value: QuestProgress): number {
+					switch (value) {
+						case QuestProgress.Progress50:
+							return 50;
+						case QuestProgress.Progress80:
+							return 80;
+						case QuestProgress.Complete:
+							return 100;
+						case QuestProgress.None:
+						default:
+							return 0;
+					}
 				}
 			},
 			watch: {
@@ -380,11 +394,11 @@ class Overview implements IModule {
 
 		this.Data.ConstructionDock = docks;
 	}
-	private updateQuests():void {
+	private updateQuests(): void {
 		this.Data.Quests = Homeport.Instance.Quests!.All;
 	}
 
-	private AAConvert(AA: AirSupremacy): AirSupremacy{
+	private AAConvert(AA: AirSupremacy): AirSupremacy {
 		return new AirSupremacy(
 			parseFloat(AA.Minimum.toFixed(2)),
 			parseFloat(AA.Maximum.toFixed(2))

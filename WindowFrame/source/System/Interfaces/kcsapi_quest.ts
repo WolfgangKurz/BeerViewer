@@ -1,15 +1,16 @@
 import { HTTPRequest } from "System/Exports/API";
+import { QuestState, QuestProgress, QuestType, QuestCategory } from "System/Enums/Quests";
 
 export interface kcsapi_quest {
 	api_no: number;
-	api_category: number;
-	api_type: number;
-	api_state: number;
+	api_category: QuestCategory;
+	api_type: QuestType;
+	api_state: QuestState;
 	api_title: string;
 	api_detail: string;
 	api_get_material: number[];
 	api_bonus_flag: number;
-	api_progress_flag: number;
+	api_progress_flag: QuestProgress;
 }
 export interface kcsapi_questlist {
 	api_count: number;

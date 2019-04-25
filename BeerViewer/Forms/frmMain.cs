@@ -144,12 +144,12 @@ namespace BeerViewer.Forms
 							await this.Communicator.CallbackScript("Game.Load", Constants.GameURL);
 
 							// Register to Logger
-							Logger.Logged += (f, a) => this.Communicator.CallbackScript("Logged", f, a.Select(x => "\"" + x + "\"").ToArray());
+							Logger.Logged += (f, a) => this.Communicator.CallbackScript("Logged", f, a.Select(x => "\"" +  Regex.Escape(x as string) + "\"").ToArray());
 
 							// Logged before initialized
 							LogData prevLog;
 							while ((prevLog = Logger.Fetch("MainLogger")) != null)
-								await this.Communicator.CallbackScript("Logged", prevLog.Format, prevLog.Arguments.Select(x => "\"" + x + "\"").ToArray());
+								await this.Communicator.CallbackScript("Logged", prevLog.Format, prevLog.Arguments.Select(x => "\"" + Regex.Escape(x as string) + "\"").ToArray());
 
 							Logger.Unregister("MainLogger");
 
