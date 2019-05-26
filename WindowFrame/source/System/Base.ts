@@ -21,8 +21,7 @@ tippy.setDefaults({
 	theme: "light-border",
 	interactive: false,
 	trigger: 'mouseenter focus',
-	hideOnClick: false,
-	ignoreAttributes: true
+	hideOnClick: false
 });
 
 Vue.directive("dom", function (el, binding) {
@@ -68,9 +67,13 @@ const vueStore = new Vuex.Store({
 window.BaseAPI.Event("i18n", v => vueStore.commit("i18n", window.i18n));
 
 document.addEventListener("DOMContentLoaded", async () => {
+	console.log("DOMContentLoaded");
 	if (window.modules.initialized()) return; // Called twice
 
+	console.log("DOMContentLoaded2");
+
 	window.modules.areas.init();
+	console.log("Areas init");
 	const mainBox = new Vue({
 		data: {
 			Areas: window.modules.areas.Areas,
@@ -132,6 +135,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 			})
 		}
 	});
+	console.log("Vue instance initialized");
 	window.CALLBACK.register("Game.Zoom", (factor: number | string) => {
 		const v = typeof factor === "number"
 			? factor / 100
@@ -145,8 +149,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 		window.API.NotifyMainFrameResized(mainBox.Frame.Width, mainBox.Frame.Height);
 	});
 
+	console.log("window.CefSharp");
+
 	if ((<any>window).CefSharp)
 		await (<any>window).CefSharp.BindObjectAsync({ IgnoreCache: true }, "API");
+
+	console.log("BindObjectAsync");
 
 	if (typeof window.API === "undefined") {
 		// Browsed with not-allowed method
@@ -154,10 +162,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 		return;
 	}
 	window.INTERNAL.Initialized();
+	console.log("Internal initialized");
 
 	_Settings.Instance.Initialize(); // Initialize
 	window.Master = new Master().Ready();
 	window.Homeport = new Homeport().Ready();
+	console.log("Settings Master Homport ready");
 
 	_Settings.Instance.Ready(() => {
 		const value = <number>Settings.MainFrame.ZoomFactor.Value;
@@ -168,8 +178,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 		mainBox.ZoomFrame(index);
 	});
 
+	console.log("Before get module list");
 	window.API.GetModuleList()
 		.then(async list => {
+			console.log("Module list arrived");
 			list.forEach(x => window.modules.load(x.Name, x.RawName, x.Template, x.Scripted, x.Styled));
 
 			window.modules.init();

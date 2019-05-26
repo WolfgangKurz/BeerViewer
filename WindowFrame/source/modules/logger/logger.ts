@@ -49,11 +49,15 @@ class Logger implements IModule {
 		const minutes = ("0" + date.getMinutes()).substr(-2);
 		const seconds = ("0" + date.getSeconds()).substr(-2);
 
-		this.Data.Logs.splice(0, 0, {
-			Date: `${hours}:${minutes}:${seconds}`,
-			Text: format,
-			Arguments: args
-		});
+		const len = this.Data.Logs.length;
+		if(len >= 50){
+			this.Data.Logs.splice(0, len - 50 + 1);
+			this.Data.Logs.push({
+				Date: `${hours}:${minutes}:${seconds}`,
+				Text: format,
+				Arguments: args
+			});
+		}
 	}
 }
 window.modules.register("logger", new Logger());

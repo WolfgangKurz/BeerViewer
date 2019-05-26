@@ -168,13 +168,13 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="cef.redist.x86">
-      <Version>3.3578.1863</Version>
+      <Version>73.1.13</Version>
     </PackageReference>
     <PackageReference Include="CefSharp.Common">
-      <Version>71.0.0</Version>
+      <Version>73.1.130</Version>
     </PackageReference>
     <PackageReference Include="CefSharp.WinForms">
-      <Version>71.0.0</Version>
+      <Version>73.1.130</Version>
     </PackageReference>
     <PackageReference Include="Nekoxy">
       <Version>1.5.3.21</Version>

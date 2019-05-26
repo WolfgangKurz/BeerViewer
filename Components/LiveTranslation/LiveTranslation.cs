@@ -51,8 +51,8 @@ namespace LiveTranslation
 					foreach(var key in i18n.Current.Table.Keys)
 					{
 						src = src.Replace(
-							EncodeUnicode(key),
-							EncodeUnicode(i18n.Current[key])
+							$"\"{EncodeUnicode(key)}\"",
+							$"\"{EncodeUnicode(i18n.Current[key])}\""
 						);
 					}
 

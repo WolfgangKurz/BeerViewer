@@ -322,7 +322,7 @@ class Overview implements IModule {
 			x.Observe((_, value: number) => fleet.LoS = value.toFixed(2), nameof(x.LoS));
 			x.Observe((_, value: AirSupremacy) => fleet.AA = this.AAConvert(value), nameof(x.AirSupremacy));
 			x.Observe((_, value: boolean) => fleet.IsConditionRestoring = value, nameof(x.IsConditionRestoring));
-			x.Observe((_, value: number) => fleet.ConditionRestoringText = this.GetRemainingText(value), nameof(x.ConditionRestoreTime));
+			x.Observe((_, value: number) => fleet.ConditionRestoringText = this.GetRemainingText(value - Date.now()), nameof(x.ConditionRestoreTime));
 			x.Observe((_, value: Ship[]) => {
 				fleet.Ships = value;
 
