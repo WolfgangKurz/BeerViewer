@@ -86,7 +86,10 @@ export class Observable implements IDisposable {
 	}
 }
 
-/** Observable contains `ManagedDisposable: DisposableContainer` */
+/** Observable contains
+ * ```javascript
+ * protected ManagedDisposable: DisposableContainer;
+ * ``` */
 export class DisposableObservable extends Observable implements IDisposable {
 	protected ManagedDisposable: DisposableContainer;
 
@@ -100,28 +103,40 @@ export class DisposableObservable extends Observable implements IDisposable {
 	}
 }
 
-/** Observable contains `Tick()` called every 1sec */
+/** Observable class that call `Tick()` function every 1sec */
 export class TickObservable extends DisposableObservable implements IDisposable {
+	private static timerList: number[] = [];
 	private timer: number;
 
 	constructor() {
 		super();
 		this.timer = setInterval(() => this.Tick(), 1000);
+		TickObservable.timerList.push(this.timer);
+		console.info("TickObserver::New", this.timer);
+		console.info("TickObserver::Current", `(${TickObservable.timerList.length})[${TickObservable.timerList.join(", ")}]`);
 	}
 
 	protected Tick(): void { }
 
 	public Dispose(): void {
-		clearInterval(this.timer);
-		this.timer = 0;
+		if (this.timer) {
+			TickObservable.timerList.splice(TickObservable.timerList.indexOf(this.timer), 1);
+			console.info("TickObserver::Dispose", this.timer);
+			console.info("TickObserver::Current", `(${TickObservable.timerList.length})[${TickObservable.timerList.join(", ")}]`);
+
+			clearInterval(this.timer);
+			this.timer = 0;
+		}
 
 		super.Dispose();
 	}
 }
 
 /** Will be called when registered property has set.
- * 
- * `ObservableCallback(name: string, value: any, oldValue: any): void;`
+ * a
+ * ```javascript
+ * ObservableCallback(name: string, value: any, oldValue: any): void;
+ * ```
  */
 export interface ObservableCallback {
 	(name: string, value: any, oldValue: any): void;

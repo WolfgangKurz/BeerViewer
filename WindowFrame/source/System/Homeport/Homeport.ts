@@ -128,7 +128,8 @@ export class Homeport extends Observable {
 
 		SubscribeKcsapi<kcsapi_deck[]>("api_get_member/deck", x => this.UpdateDecks(x));
 		SubscribeKcsapi<kcsapi_deck[]>("api_get_member/deck_port", x => this.UpdateDecks(x));
-		SubscribeKcsapi<kcsapi_deck>("api_req_hensei_preset/select", x => this.UpdateDeck(x));
+		SubscribeKcsapi<kcsapi_deck>("api_req_hensei_preset/select", x => this.UpdateDeck(x)); // Deprecated
+		SubscribeKcsapi<kcsapi_deck>("api_req_hensei/preset_select", x => this.UpdateDeck(x));
 		SubscribeKcsapi<kcsapi_ship_deck>("api_get_member/ship_deck", x => this.UpdateShipDeck(x));
 
 		SubscribeKcsapi<{}, kcsapi_req_hensei_change>("api_req_hensei/change", (x, y) => this.ChangeComposite(y));
