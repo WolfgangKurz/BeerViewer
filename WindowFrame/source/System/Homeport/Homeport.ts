@@ -306,7 +306,26 @@ export class Homeport extends Observable {
 		// TODO
 	}
 	private DestroyShip(source: kcsapi_destroyship, request: kcsapi_req_kousyou_destroyship): void {
-		// TODO
+		// Update resources first
+		this.Materials!.Update(source.api_material);
+
+		const DeleteSingleShip = (id: number) => {
+			this.Fleets.forEach(x => { // Loop fleets
+				if(x.Ships.some(y => y.Id == id)){ // Find deleted ship from fleet
+					x.Unset(x.Ships.findIndex(y => y.Id == id)); // Unset from fleet
+				}
+			});
+			this.Ships.delete(id); // Remove from all ship list
+		};
+
+		const id = request.api_ship_id;
+		if(typeof id === "number"){
+			DeleteSingleShip(id);
+		}else{
+			id.split(',')
+			  .map(x => parseInt(x))
+			  .forEach(x => DeleteSingleShip(x));
+		}
 	}
 
 	public GetFleetFromShipId(shipId: number): Fleet | undefined {

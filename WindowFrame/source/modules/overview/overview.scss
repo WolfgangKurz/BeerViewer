@@ -223,26 +223,24 @@
 				background-color: transparentize(map-get($state-colors, "damaged"), 0.7);
 			}
 
-			.ship-repairing {
-				display: none;
-				position: absolute;
-				left: 0;
-				top: 0;
-				right: 0;
-				bottom: 0;
-				z-index: 2;
-				text-align: center;
-
-				> span {
-					margin: auto;
-				}
-
-				@at-root #{$ship}[data-state="repairing"] .ship-repairing {
+			&[data-state-message] {
+				.ship-status-message {
+					position: absolute;
 					display: flex;
+					left: 0;
+					top: 0;
+					right: 0;
+					bottom: 0;
 					margin-top:-4px;
+					z-index: 2;
 					font-size: 14px;
+					text-align: center;
+
+					> span {
+						margin: auto;
+					}
 				}
-				@at-root #{$ship}[data-state="repairing"] > div:not(.ship-repairing):not(.tooltip-host) {
+				> div:not(.ship-status-message):not(.tooltip-host) {
 					opacity: 0.14;
 				}
 			}

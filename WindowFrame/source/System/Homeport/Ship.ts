@@ -161,7 +161,8 @@ export class Ship extends ObservableDataWrapper<kcsapi_ship2> implements IIdenti
 
 	public UpdateEquipSlots(): void {
 		this.$._Equips = this.raw.api_slot
-			.map(id => this.homeport.Equipments.Equips.get(id)).filter(x => x)
+			.map(id => this.homeport.Equipments.Equips.get(id))
+			//.filter(x => x)
 			.map((t, i) => new ShipEquip(this, t, this._Info.raw.api_maxeq[i] || 0, this.raw.api_onslot[i] || 0));
 
 		this.$._ExtraEquip = new ShipEquip(this, this.homeport.Equipments.Equips.get(this.raw.api_slot_ex), 0, 0);

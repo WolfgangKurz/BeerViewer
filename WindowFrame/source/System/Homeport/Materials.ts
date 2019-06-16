@@ -60,7 +60,7 @@ export class Materials extends Observable {
 			"api_req_kousyou/destroyship",
 			(x, y) => {
 				window.API.Log("Ship {0} destroyed, resource {1} returned.", LogHelper.GetShipNamesFromList(y.api_ship_id.toString()), LogHelper.MaterialDiff(this.Materials, x.api_material));
-				this.Update(x.api_material, true);
+				this.Update(x.api_material);
 			}
 		);
 		SubscribeKcsapi<kcsapi_destroyitem2>(
@@ -105,24 +105,16 @@ export class Materials extends Observable {
 		);
 	}
 
-	public Update(source: number[] | kcsapi_material[], raw: boolean = false): void {
+	public Update(source: number[] | kcsapi_material[]): void {
 		if (!source || source.length == 0) return;
 		const type = typeof (<kcsapi_material>source[0]).api_value;
 
 		if (source.length >= 4 && type === "undefined") {
 			const casted = source as number[];
-			if (!raw) {
-				this.$._Fuel += casted[0];
-				this.$._Ammo += casted[1];
-				this.$._Steel += casted[2];
-				this.$._Bauxite += casted[3];
-			}
-			else {
-				this.$._Fuel = casted[0];
-				this.$._Ammo = casted[1];
-				this.$._Steel = casted[2];
-				this.$._Bauxite = casted[3];
-			}
+			this.$._Fuel = casted[0];
+			this.$._Ammo = casted[1];
+			this.$._Steel = casted[2];
+			this.$._Bauxite = casted[3];
 		} else if (source.length >= 8 && type !== "undefined") {
 			const casted = source as kcsapi_material[];
 			this.$._Fuel = casted[0].api_value;

@@ -217,8 +217,9 @@
 						<div class="ship-ammo" data-type="progress" data-progress-strip="4"
 							:data-progress="100 * ship.Ammo.Current / ship.Ammo.Maximum"></div>
 					</div>
-					<div class="ship-repairing">
-						<span>{{i18n.fleet_repairing}}</span>
+					<div class="ship-status-message">
+						<span v-if="(ship.State & Ship.State.Repairing) !== 0">{{i18n.fleet_repairing}}</span>
+						<span v-if="(ship.State & Ship.State.Evacuation) !== 0 || (ship.State & Ship.State.Tow) !== 0">{{i18n.fleet_evacuation}}</span>
 					</div>
 				</div>
 			</div>
