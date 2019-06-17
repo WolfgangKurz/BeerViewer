@@ -68,7 +68,8 @@
 					v-for="ship in fleet.Ships"
 					v-if="ship !== null"
 					:data-id="ship.Id"
-					:data-state="ParseShipState(ship)"
+					:data-state="ParseShipState(ship).join(' ')"
+					:class="{'ship-status-message': ParseShipState(ship).length > 0}"
 					:style="{'grid-template-columns': `${fleet.NameSize}px auto auto 20%`}"
 					v-tippy="{html:`#overview-ship-tooltip-${ship.Id}`}">
 					<div :id="'overview-ship-tooltip-'+ship.Id"
@@ -218,8 +219,8 @@
 							:data-progress="100 * ship.Ammo.Current / ship.Ammo.Maximum"></div>
 					</div>
 					<div class="ship-status-message">
-						<span v-if="(ship.State & Ship.State.Repairing) !== 0">{{i18n.fleet_repairing}}</span>
-						<span v-if="(ship.State & Ship.State.Evacuation) !== 0 || (ship.State & Ship.State.Tow) !== 0">{{i18n.fleet_evacuation}}</span>
+						<span v-if="(ship.State & (1) /*Ship.State.Repairing*/) !== 0">{{i18n.ship_repairing}}</span>
+						<span v-if="(ship.State & (1<<1) /*Ship.State.Evacuation*/) !== 0 || (ship.State & (1<<2) /*Ship.State.Tow*/) !== 0">{{i18n.ship_evacuation}}</span>
 					</div>
 				</div>
 			</div>

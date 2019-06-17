@@ -117,8 +117,8 @@ class Overview implements IModule {
 
 					return level;
 				},
-				ParseShipState(ship: Ship): string {
-					const states = [];
+				ParseShipState(ship: Ship): string[] {
+					const states: string[] = [];
 					if (ship.State & Ship.State.Repairing)
 						states.push("repairing");
 					else if (ship.State & Ship.State.Evacuation)
@@ -130,7 +130,7 @@ class Overview implements IModule {
 					else if (ship.State & Ship.State.DamageControlled)
 						states.push("damagecontrolled");
 
-					return states.join(" ");
+					return states;
 				},
 				SelectFleet(id: number): void {
 					_this.SelectFleet(id);

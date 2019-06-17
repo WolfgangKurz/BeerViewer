@@ -38,6 +38,9 @@ fleet_status_supply			보급 필요
 fleet_status_repairship		공작함 기함
 fleet_status_ready			준비 완료
 
+ship_repairing				수리중
+ship_evacuation				퇴피
+
 los.simplesum	단순 합계
 los.old2_5		2-5 (구)
 los.fall2_5	2-5 (가을)

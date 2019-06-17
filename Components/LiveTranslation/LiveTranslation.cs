@@ -41,18 +41,21 @@ namespace LiveTranslation
 				{
 					var utf8 = Encoding.UTF8;
 					var src = utf8.GetString(b);
-
+					/*
 					src = new Regex("(\"api_map_bgm\"):\\[[0-9]+,[0-9]+\\]")
 						.Replace(src, "$1:[67,67]");
 
 					src = new Regex("(\"api_boss_bgm\"):\\[[0-9]+,[0-9]+\\]")
 						.Replace(src, "$1:[17,17]");
-
-					foreach(var key in i18n.Current.Table.Keys)
+					*/
+					var list = i18n.Current.Table
+						.OrderByDescending(x => x.Key.Length);
+					foreach (var pair in list)
 					{
+						var key = pair.Key;
 						src = src.Replace(
 							$"\"{EncodeUnicode(key)}\"",
-							$"\"{EncodeUnicode(i18n.Current[key])}\""
+							$"\"{EncodeUnicode(pair.Value)}\""
 						);
 					}
 
