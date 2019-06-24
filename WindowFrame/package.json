@@ -1,0 +1,28 @@
+{
+  "name": "beerviewer",
+  "version": "2.0.0",
+  "description": "BeerViewer electron application",
+  "main": "dist/Base.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WolfgangKurz/BeerViewer.git"
+  },
+  "author": {
+    "name": "Wolfgang Kurz",
+    "email": "wolfgangkurzdev@gmail.com",
+    "url": "http://swaytwig.com/"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/WolfgangKurz/BeerViewer/issues"
+  },
+  "homepage": "https://github.com/WolfgangKurz/BeerViewer#readme",
+  "devDependencies": {
+    "electron": "^5.0.5",
+    "typescript": "^3.5.2"
+  }
+}
