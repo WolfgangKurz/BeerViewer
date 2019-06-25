@@ -241,11 +241,20 @@ html.focused .windowframe {
 }
 
 .windowframe > .content .game {
-  padding: 20px;
   width: 800px;
   height: 480px;
   background-color: #414141;
   overflow: hidden;
   position: relative;
+}
+
+.windowframe > .content .game #GAME {
+  position: relative;
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  width: 800px;
+  height: 480px;
+  z-index: 1;
 }
 /*# sourceMappingURL=app.css.map */

@@ -1,5 +1,6 @@
 import { remote, ipcRenderer } from "electron";
-import $ from "jQuery";
+import $ from "jquery";
+import Game from "./Game";
 
 const updateWindowFocus = (state: 0 | 1) => {
 	if (state === 0)
@@ -23,3 +24,4 @@ $(".titlebar .systembox .maximize").click(() => {
 	else
 		remote.getCurrentWindow().maximize();
 });
+Game.Initialize();

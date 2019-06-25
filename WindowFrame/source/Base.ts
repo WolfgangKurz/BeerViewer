@@ -10,7 +10,8 @@ function createWindow() {
 		height: 720,
 		frame: false,
 		webPreferences: {
-			nodeIntegration: true
+			nodeIntegration: true,
+			webviewTag: true
 		}
 	});
 
