@@ -1,12 +1,76 @@
 <!DOCTYPE html>
-<html style="height: 100%">
-	<head>
-		<meta charset="UTF-8">
-		<title>WindowFrame</title>
-	</head>
-	<body style="height:100%;border:2px solid red">
-		<div style="padding:40px;background-color:rgba(0,0,0,0.3);color:#fff; -webkit-app-region: drag">
-			test
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>WindowFrame</title>
+	<link rel="stylesheet" type="text/css" href="app.css">
+</head>
+
+<body>
+	<div class="windowframe">
+		<header class="titlebar">
+			<div class="menubox">
+				<i>BeerViewer</i>
+			</div>
+			<div class="systembox">
+				<div class="systembutton minimize"></div>
+				<div class="systembutton maximize"></div>
+				<div class="systembutton close"></div>
+			</div>
+			<div class="content">
+				<div class="expedition-bar">
+					<div class="expedition-progress" style="width:90%"></div>
+					<div class="expedition-id">2</div>
+					<div class="expedition-time">00:25:23</div>
+				</div>
+				<div class="expedition-bar">
+					<div class="expedition-progress" style="width:90%"></div>
+					<div class="expedition-id">6</div>
+					<div class="expedition-time">00:04:01</div>
+				</div>
+				<div class="expedition-bar">
+					<div class="expedition-progress" style="width:90%"></div>
+					<div class="expedition-id">38</div>
+					<div class="expedition-time">01:09:56</div>
+				</div>
+			</div>
+		</header>
+		<aside class="sidemenu">
+			<div class="menu selected">
+				<img src="assets/icons/menu-overview.png">
+			</div>
+			<div class="menu">
+				<img src="assets/icons/menu-settings.png">
+			</div>
+		</aside>
+		<article class="content">
+			<div class="game">
+				We are using...
+				<br><br>
+				Node.js
+				<script>document.write(process.versions.node)</script>
+				<br>
+				Chromium
+				<script>document.write(process.versions.chrome)</script>
+				<br>
+				Electron
+				<script>document.write(process.versions.electron)</script>
+
+				<img src="assets/0795_9863.png" style="position: absolute;right:-100px;bottom:-300px;opacity:0.3">
+			</div>
+		</article>
+		<div class="r-content">
+			Right content
 		</div>
-	</body>
+		<div class="b-content">
+			Bottom content
+		</div>
+	</div>
+
+</body>
+<script>
+	require('../dist/main.js');
+</script>
+
 </html>

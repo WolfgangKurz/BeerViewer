@@ -1,0 +1,11 @@
+@mixin clearfix {
+	&::after {
+		content: "";
+		display: table;
+		clear: both;
+	}
+}
+
+@function Ratio($origin, $dest, $target){
+	@return $target * ($dest / $origin);
+}

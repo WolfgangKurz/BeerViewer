@@ -2,10 +2,12 @@
   "name": "beerviewer",
   "version": "2.0.0",
   "description": "BeerViewer electron application",
-  "main": "dist/Base.js",
+  "main": "dist/app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "electron ."
+    "build": "npx webpack",
+    "start": "npm run build && electron .",
+    "run": "electron ."
   },
   "repository": {
     "type": "git",
@@ -23,6 +25,16 @@
   "homepage": "https://github.com/WolfgangKurz/BeerViewer#readme",
   "devDependencies": {
     "electron": "^5.0.5",
-    "typescript": "^3.5.2"
+    "ts-loader": "^6.0.4",
+    "typescript": "^3.5.2",
+    "webpack-cli": "^3.3.5"
+  },
+  "dependencies": {
+    "@types/jquery": "^3.3.30",
+    "electron-middle-sass": "^1.0.2",
+    "jquery": "^3.4.1",
+    "path": "^0.12.7",
+    "ts-nameof": "^3.1.0",
+    "webpack": "^4.35.0"
   }
 }
