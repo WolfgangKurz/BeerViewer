@@ -1,6 +1,6 @@
 import { remote, ipcRenderer } from "electron";
 import $ from "jquery";
-import Game from "./Game";
+import Game from "../System/Game";
 
 const updateWindowFocus = (state: 0 | 1) => {
 	if (state === 0)

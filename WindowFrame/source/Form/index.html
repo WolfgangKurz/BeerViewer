@@ -4,7 +4,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>WindowFrame</title>
-	<link rel="stylesheet" type="text/css" href="app.css">
+	<link rel="stylesheet" type="text/css" href="../app.css">
 </head>
 
 <body>
@@ -38,15 +38,19 @@
 		</header>
 		<aside class="sidemenu">
 			<div class="menu selected">
-				<img src="assets/icons/menu-overview.png">
+				<img src="../assets/icons/menu-overview.png">
 			</div>
 			<div class="menu">
-				<img src="assets/icons/menu-settings.png">
+				<img src="../assets/icons/menu-settings.png">
 			</div>
 		</aside>
 		<article class="content">
 			<div class="game">
-				<img src="assets/0795_9863.png" style="position: absolute;right:-100px;bottom:-300px;opacity:0.3">
+We are using Node.js <script>document.write(process.versions.node)</script>,
+Chromium <script>document.write(process.versions.chrome)</script>,
+and Electron <script>document.write(process.versions.electron)</script>
+
+				<img src="../assets/0795_9863.png" style="position: absolute;right:0px;bottom:-300px;opacity:0.3">
 				<webview id="GAME" src="about:blank"></webview>
 			</div>
 		</article>
@@ -60,7 +64,7 @@
 
 </body>
 <script>
-	require('../dist/main.js');
+	require('../../dist/Form/index.js');
 </script>
 
 </html>
