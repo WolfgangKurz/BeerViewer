@@ -3,6 +3,7 @@ import cluster from "cluster";
 import path from "path";
 import url from "url";
 import Proxy from "./Proxy/Proxy";
+import Storage from "./System/Storage";
 
 if (cluster.isWorker) { // porked
 	if (process.env["ClusterType"] === "ProxyWorker") {
@@ -21,6 +22,7 @@ if (cluster.isWorker) { // porked
 				webviewTag: true
 			}
 		});
+		Storage.set("AppMainWindow", mainWindow);
 
 		const startUrl = process.env.ELECTRON_START_URL || url.format({
 			pathname: path.join(__dirname, "../source/Form/index.html"),
@@ -28,7 +30,6 @@ if (cluster.isWorker) { // porked
 			slashes: true
 		});
 		mainWindow.loadURL(startUrl);
-		console.log(startUrl, __dirname, __filename);
 
 		mainWindow.webContents.openDevTools();
 	}

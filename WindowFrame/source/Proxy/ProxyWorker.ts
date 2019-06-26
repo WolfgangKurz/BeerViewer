@@ -1,5 +1,7 @@
 import http from "http";
 import url from "url";
+import fs from "fs";
+import crypto from "crypto";
 import Proxy from "./Proxy";
 
 const Emit = (message: any) => {
@@ -11,24 +13,51 @@ const Emit = (message: any) => {
 	process.send!(data);
 }
 
-http.createServer(function (client_req, client_res) {
-	if (!client_req.url) return;
+http.createServer((client_req, client_res) => {
+	if (!client_req.url) {
+		return;
+	}
+	const _id = crypto.randomBytes(8).toString("hex");
+
 	const parsed = url.parse(client_req.url, true, true);
-
-	console.log(parsed);
-
 	const options: http.ClientRequestArgs = {
 		method: client_req.method,
 		host: parsed.host, // hostname + port
-		path: parsed.path // path + query string
+		path: parsed.path, // path + query string
 	};
 
-	var proxy = http.request(options, function (res) {
-		let data = "";
-		res.on("data", chunk => {
+	options.headers = client_req.headers;
+	if ("accept-encoding" in options.headers) {
+		delete options.headers["accept-encoding"];
+	}
+
+	// Speed booster, for http (not https)
+	const allowed_hosts: string[] = [
+		"^log-netgame\\.dmm\\.com$",
+		"^www\\.dmm\\.com$",
+		"^dmm\\.com$",
+		"^p\\.dmm\\.com$",
+		"^osapi\\.dmm\\.com$",
+		"^[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}$", // KanColle servers has no domain, just ip
+	];
+	if (!allowed_hosts.some(x => new RegExp(x).test(parsed.host!))) {
+		client_res.writeHead(403, {
+			connection: "close"
+		});
+		client_res.end();
+		return;
+	}
+
+	fs.appendFile("http-log.txt", `${_id} > ${client_req.url}\n`, () => null);
+
+	var proxy = http.request(options, req_res => {
+		let data: string = "";
+
+		req_res.on("data", chunk => {
 			data += chunk;
 		})
-		res.on("end", () => {
+		req_res.on("end", () => {
+			const body = data;
 			Emit({
 				request: {
 					method: client_req.method,
@@ -42,12 +71,37 @@ http.createServer(function (client_req, client_res) {
 					query: parsed.query
 				},
 				response: {
-					response: data
+					response: body
 				}
 			});
 
-			client_res.write(data);
-			client_res.end();
+
+			for (let i = 0; i < req_res.rawHeaders.length; i += 2) {
+				fs.appendFile("http-log.txt", `${_id} > ${req_res.rawHeaders[i]}: ${req_res.rawHeaders[i + 1]}\n`, () => null);
+			}
+			/*
+						console.log("-----------------------------------------------");
+						console.log(`Target: ${parsed.protocol}://${parsed.host}${parsed.path}`);
+						console.log("");
+						console.log(`HTTP/${req_res.httpVersion} ${req_res.statusCode} ${req_res.statusMessage}`);
+						for (let i = 0; i < req_res.rawHeaders.length; i += 2) {
+							console.log(`${req_res.rawHeaders[i]}: ${req_res.rawHeaders[i + 1]}`);
+						}
+						console.log("");
+						console.log(body);
+						console.log("-----------------------------------------------");
+			*/
+			const headers = req_res.headers;
+			headers["cache-control"] = "must-revalidate, no-cache";
+			headers.connection = "close";
+			client_res.writeHead(req_res.statusCode!, headers);
+			client_res.end(body);
+		});
+		req_res.on("error", e => {
+			console.error(e);
+		});
+		req_res.on("close", () => {
+			console.log("close");
 		});
 	});
 

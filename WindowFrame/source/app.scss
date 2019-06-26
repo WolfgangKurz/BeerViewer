@@ -177,15 +177,25 @@ body {
 .windowframe > .content .game {
 	$factor: (2 / 3);
 
+	position: relative;
 	width: 1200px * $factor;
 	height: 720px * $factor;
 	background-color: $theme-highlight-line-color;
 	overflow: hidden;
-	position: relative;
+
+	.systeminfo {
+		padding: 10px 20px;
+		font-weight: bold;
+		font-size: 28px;
+		color: $theme-color;
+		opacity: 0.47;
+	}
 
 	#GAME {
-		position: relative;
+		position: absolute;
 		display: inline-flex;
+		left: 0;
+		top: 0;
 		width: 800px;
 		height: 480px;
 		z-index: 1;

@@ -241,18 +241,28 @@ html.focused .windowframe {
 }
 
 .windowframe > .content .game {
+  position: relative;
   width: 800px;
   height: 480px;
   background-color: #414141;
   overflow: hidden;
-  position: relative;
+}
+
+.windowframe > .content .game .systeminfo {
+  padding: 10px 20px;
+  font-weight: bold;
+  font-size: 28px;
+  color: #222225;
+  opacity: 0.47;
 }
 
 .windowframe > .content .game #GAME {
-  position: relative;
+  position: absolute;
   display: -webkit-inline-box;
   display: -ms-inline-flexbox;
   display: inline-flex;
+  left: 0;
+  top: 0;
   width: 800px;
   height: 480px;
   z-index: 1;

@@ -8,17 +8,18 @@ export default class Game {
 		const _game = $("#GAME");
 		if (_game.length !== 1) throw "Fatal Error, Game frame not found on main frame.";
 
-		Proxy.Instance.SetupEndpoint(remote.session.defaultSession);
+		const game = <WebviewTag>_game.get(0);
 
-		Proxy.Instance.Register("/api_start2/getData", (req, resp) => {
+		Proxy.Instance.Register("/kcsapi/api_start2/getData", (req, resp) => {
 			console.log(resp.response);
 		});
 
-		const game = <WebviewTag>_game.get(0);
 		const prepareGameFrame = () => {
 			game.removeEventListener("dom-ready", prepareGameFrame); // Only once
 
 			const session = game.getWebContents().session;
+			Proxy.Instance.SetupEndpoint(session);
+			
 			Constants.RequireCookies.forEach(cookie => {
 				session.cookies.set({
 					name: cookie.name,

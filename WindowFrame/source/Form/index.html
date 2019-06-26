@@ -46,9 +46,17 @@
 		</aside>
 		<article class="content">
 			<div class="game">
-We are using Node.js <script>document.write(process.versions.node)</script>,
-Chromium <script>document.write(process.versions.chrome)</script>,
-and Electron <script>document.write(process.versions.electron)</script>
+				<div class="systeminfo">
+					<div>Node.js <span id="ver_nodejs"></span></div>
+					<div>Chromium <span id="ver_chromium"></span></div>
+					<div>Electron <span id="ver_electron"></span></div>
+					<script>
+						$ = require("jquery");
+						$("#ver_nodejs").html(process.versions.node);
+						$("#ver_chromium").html(process.versions.chrome);
+						$("#ver_electron").html(process.versions.electron);
+					</script>
+				</div>
 
 				<img src="../assets/0795_9863.png" style="position: absolute;right:0px;bottom:-300px;opacity:0.3">
 				<webview id="GAME" src="about:blank"></webview>
