@@ -2,15 +2,20 @@ import { app, BrowserWindow } from "electron";
 import cluster from "cluster";
 import path from "path";
 import url from "url";
-import Proxy from "./Proxy/Proxy";
-import Storage from "./System/Storage";
+import Proxy from "../Proxy/Proxy";
+import Storage from "../System/Storage";
+import LiveTranslation from "./LiveTranslation";
 
 if (cluster.isWorker) { // porked
 	if (process.env["ClusterType"] === "ProxyWorker") {
-		require("./Proxy/ProxyWorker");
+		require("../Proxy/ProxyWorker");
 	}
 } else {
 	process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
+
+	Proxy.Instance.SetupProxyServer();
+
+	LiveTranslation.Init();
 
 	let mainWindow: Electron.BrowserWindow;
 	function createWindow() {
@@ -26,7 +31,7 @@ if (cluster.isWorker) { // porked
 		Storage.set("AppMainWindow", mainWindow);
 
 		const startUrl = process.env.ELECTRON_START_URL || url.format({
-			pathname: path.join(__dirname, "./Form/index.html"),
+			pathname: path.join(__dirname, "../Form/index.html"),
 			protocol: "file:",
 			slashes: true
 		});
@@ -54,6 +59,4 @@ if (cluster.isWorker) { // porked
 	app.on("browser-window-blur", () => {
 		mainWindow.webContents.send("window-focus-state", "lost", 0);
 	});
-
-	Proxy.Instance.SetupProxyServer();
 }

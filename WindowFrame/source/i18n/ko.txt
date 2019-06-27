@@ -1,4 +1,4 @@
-﻿menu.Main		메인 화면
+menu.Main		메인 화면
 menu.Side		우측 화면
 menu.Sub		하단 화면
 menu.Tools		도구

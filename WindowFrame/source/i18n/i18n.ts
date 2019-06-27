@@ -9,7 +9,7 @@ export default class i18n {
 
 		if (list.length === 0) return null;
 
-		return list.map(x => fs.readFileSync(x, { encoding: "utf8" }).toString())
+		return list.map(x => fs.readFileSync(x, { encoding: "utf8" }))
 			.join("\n");
 	}
 }

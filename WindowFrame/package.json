@@ -2,7 +2,7 @@
   "name": "beerviewer",
   "version": "2.0.0",
   "description": "BeerViewer electron application",
-  "main": "dist/App.js",
+  "main": "dist/Backend/App.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",

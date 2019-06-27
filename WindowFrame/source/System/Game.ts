@@ -11,23 +11,6 @@ export default class Game {
 		if (_game.length !== 1) throw "Fatal Error, Game frame not found on main frame.";
 
 		const game = <WebviewTag>_game.get(0);
-		Proxy.Instance.Register("/kcsapi/api_start2/getData", (req, resp) => {
-			const ko = i18n.get("ko");
-			if (!ko) return;
-
-			const list = ko.replace(/\r/g, "").split("\n")
-				.filter(x => x.length > 0)
-				.map(x => <[string, string]>x.split("\t"))
-				.filter(x => x.length == 2)
-				.sort((a, b) => a[0].length < b[0].length ? -1 : a[0].length > b[0].length ? 1 : 0);
-
-			let body = resp.toString();
-			list.forEach(x => body = body.replace(
-				new RegExp(`"${Unicode.Escape(x[0])}"`, "g"),
-				`"${Unicode.Escape(x[1])}"`
-			));
-			return Buffer.from(body);
-		});
 
 		const prepareGameFrame = () => {
 			game.removeEventListener("dom-ready", prepareGameFrame); // Only once

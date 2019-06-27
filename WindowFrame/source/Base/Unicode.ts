@@ -1,5 +1,5 @@
 export default class Unicode {
-	public static Escape(text: string): string {
+	public static Escape(text: string, forRegex: boolean = false): string {
 		let buffer = "";
 		for (let i = 0; i < text.length; i++) {
 			const c = text.charCodeAt(i);
@@ -8,6 +8,10 @@ export default class Unicode {
 			else
 				buffer += text[i];
 		}
-		return buffer;
+
+		if (forRegex)
+			return buffer.replace(/\\/g, "\\\\");
+		else
+			return buffer;
 	}
 }
