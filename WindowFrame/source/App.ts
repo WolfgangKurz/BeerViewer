@@ -26,7 +26,7 @@ if (cluster.isWorker) { // porked
 		Storage.set("AppMainWindow", mainWindow);
 
 		const startUrl = process.env.ELECTRON_START_URL || url.format({
-			pathname: path.join(__dirname, "../source/Form/index.html"),
+			pathname: path.join(__dirname, "./Form/index.html"),
 			protocol: "file:",
 			slashes: true
 		});
@@ -42,6 +42,10 @@ if (cluster.isWorker) { // porked
 		if (mainWindow === null) {
 			createWindow();
 		}
+	});
+	app.on("window-all-closed", ()=>{
+		Proxy.Instance.Dispose();
+		process.exit(0);
 	});
 
 	app.on("browser-window-focus", () => {

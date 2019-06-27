@@ -6,8 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
-    "start": "npm run build && electron .",
-    "run": "electron ."
+    "dist": "node ./disttool.js",
+    "start": "npm run build && npm run dist && electron .",
+    "run": "npm run dist && electron ."
   },
   "repository": {
     "type": "git",
@@ -28,12 +29,15 @@
     "typescript": "^3.5.2"
   },
   "dependencies": {
+    "@types/glob": "^7.1.1",
     "@types/http-proxy": "^1.17.0",
     "@types/jquery": "^3.3.30",
+    "@types/uuid": "^3.4.4",
     "electron-middle-sass": "^1.0.2",
+    "glob": "^7.1.4",
     "http-proxy": "^1.17.0",
     "jquery": "^3.4.1",
-    "path": "^0.12.7",
-    "ts-nameof": "^3.1.0"
+    "ts-nameof": "^3.1.0",
+    "uuid": "^3.3.2"
   }
 }
