@@ -10,8 +10,9 @@ if (cluster.isWorker) { // porked
 		require("./Proxy/ProxyWorker");
 	}
 } else {
-	let mainWindow: Electron.BrowserWindow;
+	process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
 
+	let mainWindow: Electron.BrowserWindow;
 	function createWindow() {
 		mainWindow = new BrowserWindow({
 			width: 1200,

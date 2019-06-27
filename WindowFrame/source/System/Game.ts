@@ -9,11 +9,11 @@ export default class Game {
 		if (_game.length !== 1) throw "Fatal Error, Game frame not found on main frame.";
 
 		const game = <WebviewTag>_game.get(0);
-
+/*
 		Proxy.Instance.Register("/kcsapi/api_start2/getData", (req, resp) => {
 			console.log(resp.response);
 		});
-
+*/
 		const prepareGameFrame = () => {
 			game.removeEventListener("dom-ready", prepareGameFrame); // Only once
 

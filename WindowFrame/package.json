@@ -28,8 +28,10 @@
     "typescript": "^3.5.2"
   },
   "dependencies": {
+    "@types/http-proxy": "^1.17.0",
     "@types/jquery": "^3.3.30",
     "electron-middle-sass": "^1.0.2",
+    "http-proxy": "^1.17.0",
     "jquery": "^3.4.1",
     "path": "^0.12.7",
     "ts-nameof": "^3.1.0"
