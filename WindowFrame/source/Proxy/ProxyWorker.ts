@@ -140,3 +140,7 @@ const server = http.createServer((req, res) => {
 		target: target
 	});
 }).listen(Proxy.Port);
+
+/// TODO: Make HTTP server with socket.
+/// TODO: Cannot use http.Server, has bug?
+/// TODO: Network Time "pending" issue.
