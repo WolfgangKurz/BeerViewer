@@ -1,9 +1,10 @@
 import { app, protocol, BrowserWindow } from "electron";
-import { createProtocol, installVueDevtools } from "vue-cli-plugin-electron-builder/lib";
+// import { createProtocol, installVueDevtools } from "vue-cli-plugin-electron-builder/lib";
 const isDevelopment = process.env.NODE_ENV !== "production";
 
 // Scheme must be registered before the app is ready
-protocol.registerSchemesAsPrivileged([{ scheme: "app", privileges: { secure: true, standard: true } }]);
+if (protocol)
+	protocol.registerSchemesAsPrivileged([{ scheme: "app", privileges: { secure: true, standard: true } }]);
 
 import cluster from "cluster";
 import Proxy from "../Proxy/Proxy";
@@ -44,7 +45,7 @@ if (cluster.isWorker) { // Is worker process? (Proxy worker)
 			// Load the url of the dev server if in development mode
 			mainWindow.loadURL(process.env.WEBPACK_DEV_SERVER_URL as string);
 		} else {
-			createProtocol("app");
+			// createProtocol("app");
 			// Load the index.html when not in development
 			mainWindow.loadURL("app://Frontend/index.html");
 		}
