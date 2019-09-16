@@ -2,21 +2,26 @@ import { app, BrowserWindow } from "electron";
 import cluster from "cluster";
 import path from "path";
 import url from "url";
-import Proxy from "../Proxy/Proxy";
-import Storage from "../System/Storage";
+
+import Proxy from "@/Proxy/Proxy";
+import Storage from "@/System/Storage";
+
 import LiveTranslation from "./LiveTranslation";
 
-if (cluster.isWorker) { // porked
+if (cluster.isWorker) { // Is worker process? (Proxy worker)
 	if (process.env["ClusterType"] === "ProxyWorker") {
-		require("../Proxy/ProxyWorker");
+		require("@/Proxy/ProxyWorker");
 	}
-} else {
-	process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
+} else { // Main process
+	process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
 
+	// Setup local proxy server
 	Proxy.Instance.SetupProxyServer();
 
-	LiveTranslation.Init();
+	// Setup live-translation
+	new LiveTranslation("ko").Init();
 
+	// Setup WindowFrame window
 	let mainWindow: Electron.BrowserWindow;
 	function createWindow() {
 		mainWindow = new BrowserWindow({
@@ -28,15 +33,17 @@ if (cluster.isWorker) { // porked
 				webviewTag: true
 			}
 		});
-		Storage.set("AppMainWindow", mainWindow);
+		Storage.set("AppMainWindow", mainWindow); // Set window instance to global storage
 
+		// Set WindowFrame window page
 		const startUrl = process.env.ELECTRON_START_URL || url.format({
-			pathname: path.join(__dirname, "../Form/index.html"),
+			pathname: path.join(__dirname, "../Frontend/index.html"),
 			protocol: "file:",
 			slashes: true
 		});
 		mainWindow.loadURL(startUrl);
 
+		// Open Developer tools
 		mainWindow.webContents.openDevTools();
 	}
 
@@ -48,7 +55,7 @@ if (cluster.isWorker) { // porked
 			createWindow();
 		}
 	});
-	app.on("window-all-closed", ()=>{
+	app.on("window-all-closed", () => {
 		Proxy.Instance.Dispose();
 		process.exit(0);
 	});

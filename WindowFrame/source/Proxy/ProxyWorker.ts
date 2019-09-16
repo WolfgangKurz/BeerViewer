@@ -8,6 +8,7 @@ import Proxy, { ProxyWorkerMessage, ProxyWorkerResponse } from "./Proxy";
 let proxy: httpProxy | undefined;
 let server: net.Server | undefined;
 
+// Shutdown signal received
 process.on("SIGTERM", () => {
 	console.debug("[ProxyWorker:SIGTERM] Signal received, do destroy");
 	proxy && proxy.close();
@@ -15,6 +16,7 @@ process.on("SIGTERM", () => {
 	process.kill(0);
 })
 
+// Emit message to Main process
 const Emit = (message: any) => {
 	if (!process.send) throw "[ProxyWorker:Emit] process.send is undefined!";
 
@@ -26,16 +28,17 @@ const Emit = (message: any) => {
 	} catch (e) { }
 };
 
-proxy = httpProxy.createProxyServer({
-	selfHandleResponse: true
-});
+// Proxy server, processes HTTP packet data
+proxy = httpProxy.createProxyServer({ selfHandleResponse: true });
 
+// Proxy server error handler
 proxy.on("error", (e, req, res, target) => {
 	console.error("[ProxyWorker] Proxy error,", e);
 	res.writeHead(500);
 	res.end();
 });
 
+// From http-proxy original source
 var web_o = require("http-proxy/lib/http-proxy/passes/web-outgoing");
 web_o = Object.keys(web_o).map(pass => web_o[pass]);
 
@@ -43,25 +46,32 @@ const proxy_endpoints = [
 	/\/kcs\//, /\/kcs2\//, /\/kcsapi\//
 ];
 
+// Request handler
 proxy.on("proxyReq", (proxyReq, req, res, opts) => {
-	proxyReq.setHeader("cache-control", "must-revalidate, no-cache");
+	// Client must request always (Uses cache)
+	proxyReq.setHeader("cache-control", "must-revalidate");
 });
+// Response handler
 proxy.on("proxyRes", (proxyRes, req, res) => {
+	// Response has started
 	if (!res.headersSent) {
 		for (var i = 0; i < web_o.length; i++) {
 			if (web_o[i](req, res, proxyRes, {})) break;
 		}
 	}
 
+	// Parse request url
 	const parsed = url.parse(req.url!, true, true);
 
+	// Prepare buffer as binary
 	let body = Buffer.alloc(0, undefined, "binary");
 	proxyRes.on("data", (data) => {
+		// data received, in progress!
 		body = Buffer.concat([body, data]);
-		// res.write(data);
+		// res.write(data); // Pass back directly without modifying
 	});
 	proxyRes.on("end", () => {
-		// Parse kcs resources, kcsapi only
+		// Pass response if not KanColle resources/APIs
 		if (!proxy_endpoints.some(x => x.test(parsed.pathname!))) {
 			res.write(body);
 			res.end();
@@ -69,16 +79,17 @@ proxy.on("proxyRes", (proxyRes, req, res) => {
 		}
 
 		const result = body;
-		const callbackId = uuid();
-		const callback = (message: ProxyWorkerResponse) => {
+		const callbackId = uuid(); // Unique callback id
+		const callback = (message: ProxyWorkerResponse) => { // Response body modification has done
 			if (message.callbackId !== callbackId) return;
 			process.off("message", callback);
 
 			console.debug(`[ProxyWorker] BeforeResponse end, for "${callbackId}", "${req.url}"`);
 
-			const respBase64 = message.response.response; // From message, base64 data
-			const respBuffer = Buffer.from(respBase64, "base64");
+			const respBase64 = message.response.response; // Base64-encoded packet data
+			const respBuffer = Buffer.from(respBase64, "base64"); // Decode base64
 
+			// Send modified response body to Master process
 			Emit(<ProxyWorkerMessage>{
 				type: "AfterResponse",
 				request: {
@@ -93,21 +104,24 @@ proxy.on("proxyRes", (proxyRes, req, res) => {
 					query: parsed.query
 				},
 				response: {
-					response: respBase64 // Send to Master
+					response: respBase64
 				}
 			});
 
+			// Pass back to original requester (Browser)
 			const headers = proxyRes.headers;
-			headers["content-length"] = respBuffer.byteLength.toString();
-			delete headers["content-encoding"];
-			delete headers["transfer-encoding"];
+			headers["content-length"] = respBuffer.byteLength.toString(); // Raw data length
+			delete headers["content-encoding"]; // Not encoded, raw data
+			delete headers["transfer-encoding"]; // Not encoded, raw data
 
 			res.write(respBuffer);
-			res.end();
+			res.end(); // Request done
 		};
 		console.debug(`[ProxyWorker] BeforeResponse start, for "${callbackId}", "${req.url}"`);
-		process.on("message", callback);
+		process.on("message", callback); // Register after modification callback
 
+		// Submit to Main process to modify response body
+		// After modification, callback will be called.
 		Emit(<ProxyWorkerMessage>{
 			type: "BeforeResponse",
 			callbackId: callbackId,
@@ -130,6 +144,7 @@ proxy.on("proxyRes", (proxyRes, req, res) => {
 	res.writeHead(proxyRes.statusCode!, proxyRes.headers);
 });
 
+// Create and start local proxy server
 server = http.createServer((req, res) => {
 	if (!req.url) return;
 	const parsed = url.parse(req.url, true, true);
@@ -161,16 +176,23 @@ server = http.createServer((req, res) => {
 	});
 }).listen(Proxy.Port);
 
+// Local proxy server error handler
 server.on("error", e => {
 	console.error("[ProxyWorker] Server error,", e);
 })
+// Local proxy server connection handler
 server.on("connect", (req, socket) => {
 	const serverUrl = url.parse("http://" + req.url);
-	const srvSocket = net.connect(serverUrl.port ? parseInt(serverUrl.port) : 80, serverUrl.hostname, () => {
-		socket.write("HTTP/1.1 200 Connection Established\r\n" +
-			"Proxy-agent: Node-Proxy\r\n" +
-			"\r\n");
-		srvSocket.pipe(socket);
-		socket.pipe(srvSocket);
-	});
+	const srvSocket = net.connect(
+		serverUrl.port ? parseInt(serverUrl.port) : 80,
+		serverUrl.hostname,
+		() => {
+			// Allow connection
+			socket.write("HTTP/1.1 200 Connection Established\r\n" +
+				"Proxy-agent: Node-Proxy\r\n" +
+				"\r\n");
+			srvSocket.pipe(socket);
+			socket.pipe(srvSocket);
+		}
+	);
 });

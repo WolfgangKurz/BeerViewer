@@ -6,10 +6,16 @@ export class CookieInfo {
 	public expires?: string;
 }
 
+/**
+ * Class that contains constant values.
+ */
 export default class Constants {
+	/** Game page URL */
 	static get GameURL(): string {
 		return "http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854";
 	}
+
+	/** Cookies to prevent foreigner page */
 	static get RequireCookies(): CookieInfo[] {
 		const expires = "Fri, 31 Dec 2100 23:59:59 GMT";
 		return [
@@ -40,6 +46,8 @@ export default class Constants {
 			}
 		];
 	}
+
+	/** Stylesheet for crop game screen */
 	static get GameCSS(): string {
 		return "body { margin:0; overflow:hidden }"
 			+ "#game_frame { position:fixed; left:50%; top:-16px; margin-left:-600px; z-index:1 }"

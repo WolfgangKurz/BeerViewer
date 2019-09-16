@@ -2,7 +2,14 @@ import fs from "fs";
 import glob from "glob";
 import path from "path";
 
+/**
+ * i18n manager class
+ */
 export default class i18n {
+	/**
+	 * Get all localization text list of given locale name.
+	 * @param name Locale name
+	 */
 	public static get(name: string): string | null {
 		const list = glob.sync(path.join(__dirname, `${name}?(_)**.txt`))
 			.filter(x => fs.existsSync(x));

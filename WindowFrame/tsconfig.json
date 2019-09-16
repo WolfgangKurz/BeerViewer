@@ -1,5 +1,6 @@
 {
 	"compilerOptions": {
+		"baseUrl": "./source/",
 		"outDir": "dist",
 		"target": "es6",
 		"module": "commonjs",
@@ -15,7 +16,11 @@
 		"allowSyntheticDefaultImports" :true,
 		"sourceMap": true,
 
-		"declaration": true
+		"declaration": true,
+
+		"paths": {
+			"@/*": ["./*"]
+		}
 	},
 	"include": [
 		"source/**/*.ts"

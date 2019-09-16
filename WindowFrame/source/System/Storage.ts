@@ -1,3 +1,6 @@
+/**
+ * Basic Storage class to contain some values `globally`.
+ */
 export default class Storage {
 	private static table: Map<string, any> = new Map<string, any>();
 
