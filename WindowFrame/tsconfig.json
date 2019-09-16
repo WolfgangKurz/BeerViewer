@@ -1,9 +1,9 @@
 {
 	"compilerOptions": {
-		"baseUrl": "./source/",
+		"baseUrl": "src",
 		"outDir": "dist",
 		"target": "es6",
-		"module": "commonjs",
+		"module": "esnext",
 		"moduleResolution": "node",
 		"strict": true,
 
@@ -16,10 +16,25 @@
 		"allowSyntheticDefaultImports" :true,
 		"sourceMap": true,
 
-		"declaration": true
+		"declaration": true,
+
+		"types": [
+			"webpack-env",
+			"jquery"
+		],
+		"lib": [
+			"esnext",
+			"dom",
+			"dom.iterable",
+			"scripthost"
+		],
+		"paths": {
+			"@/*": ["./*"]
+		}
 	},
 	"include": [
-		"source/**/*.ts"
+		"src/**/*.ts",
+		"src/**/*.vue"
 	],
 	"exclude": [
 		"node_modules",

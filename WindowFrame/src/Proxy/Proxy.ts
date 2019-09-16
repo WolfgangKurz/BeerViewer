@@ -79,33 +79,41 @@ export interface ProxyWorkerResponse extends ProxyWorkerPacket {
  * Local proxy server to intercept game packets.
  */
 export default class Proxy implements IDisposable {
-	/** Is disposed? */
-	Disposed: boolean = false;
-
 	/** Single-tone instance */
 	public static get Instance(): Proxy {
-		if (!this._Instnace) this._Instnace = new this();
-		return this._Instnace;
+		if (!this.pInstance) this.pInstance = new this();
+		return this.pInstance;
 	}
-	private static _Instnace?: Proxy;
 
 	/** Port of local proxy server */
-	public static get Port(): number { return 49217 }
+	public static get Port(): number { return 49217; }
 
-	private constructor() { }
+	/** Instance object */
+	private static pInstance?: Proxy;
+
+	/** Is disposed? */
+	public Disposed: boolean = false;
 
 	/** Is worker created? */
-	private _WorkerCreated: boolean = false;
+	private pWorkerCreated: boolean = false;
 	/** Cluster instance */
-	private _Cluster?: cluster.Worker;
+	private pCluster?: cluster.Worker;
+
+	/** Modifiable handlers array */
+	private ModifiableMap: Array<{
+		url: string;
+		callback: ProxyModifiableCallback;
+	}> = [];
+
+	private constructor() { }
 
 	/**
 	 * Setup and start proxy server
 	 */
 	public SetupProxyServer() {
-		if (this.Disposed) throw "[Proxy:SetupProxyServer] Disposed";
-		if (cluster.isWorker) throw "[Proxy:SetupProxyServer] Cannot setup proxy server on worker";
-		if (this._WorkerCreated) throw "[Proxy:SetupProxyServer] Proxy server already running";
+		if (this.Disposed) throw new Error("[Proxy:SetupProxyServer] Disposed");
+		if (cluster.isWorker) throw new Error("[Proxy:SetupProxyServer] Cannot setup proxy server on worker");
+		if (this.pWorkerCreated) throw new Error("[Proxy:SetupProxyServer] Proxy server already running");
 
 		/** Register event handler on Register event received from game-system */
 		ipcMain.on("ProxyWorker.Register", this.ipcHandler);
@@ -117,32 +125,113 @@ export default class Proxy implements IDisposable {
 			});
 		});
 		*/
-		this._Cluster = cluster.fork({
+		this.pCluster = cluster.fork({
 			ClusterType: "ProxyWorker"
 		});
 
 		// Register handler for received packet from worker
-		this._Cluster.on("message", this.ClusterHandler);
+		this.pCluster.on("message", this.ClusterHandler);
 
 		// set Worker created
-		this._WorkerCreated = true;
+		this.pWorkerCreated = true;
+	}
+
+	/**
+	 * Setup endpoint.
+	 *
+	 * Set Electron proxy configuration.
+	 * @param session Electron session
+	 * @param callback Callback function after Endpoint has set, can be `undefined`
+	 */
+	public SetupEndpoint(session: Session | undefined, callback?: () => void) {
+		if (this.Disposed) throw new Error("[Proxy:SetupEndpoint] Disposed");
+		if (!session) throw new Error("[Proxy:SetupEndpoint] Session is undefined");
+
+		session.setProxy(
+			{
+				pacScript: "",
+				proxyRules: `http=127.0.0.1:${Proxy.Port}`,
+				proxyBypassRules: ""
+			},
+			() => {
+				if (callback)
+					callback();
+			}
+		);
+	}
+
+	/**
+	 * Dispose Proxy.
+	 *
+	 * Shutdown worker cluster, remove all handlers, remove single-tone instance.
+	 */
+	public Dispose() {
+		if (this.Disposed) throw new Error("[Proxy:Dispose] Disposed");
+		this.Disposed = true;
+
+		if (this.pWorkerCreated) {
+			ipcMain.removeListener("ProxyWorker.Register", this.ipcHandler);
+		}
+
+		if (this.pCluster) {
+			this.pCluster.off("message", this.ClusterHandler);
+			this.pCluster.kill();
+			this.pCluster = undefined;
+		}
+
+		Proxy.pInstance = undefined;
+	}
+
+	/**
+	 * Registers handler for received packet of specific url.
+	 * @param url URL string or array to observe
+	 * @param callback Handler for received packet
+	 */
+	public Register(url: string | string[], callback: ProxyCallback | null): void {
+		// Call inner register function, to hide IPCId parameter (internal use only parameter)
+		this.InternalRegister(url, callback, null);
+	}
+
+	/**
+	 * Registers handler for received packet of specific url, available to modify.
+	 * @param url URL string or array to observe
+	 * @param callback Handler for received packet, returns modified response body
+	 */
+	public RegisterModifiable(url: string | string[], callback: ProxyModifiableCallback): void {
+		if (this.Disposed) throw new Error("[Proxy:RegisterModifiable] Disposed");
+		if (cluster.isWorker) throw new Error("[Proxy:RegisterModifiable] Modifiable can register on main process only");
+		if (!this.pCluster) throw new Error("[Proxy:RegisterModifiable] Cluster not ready yet");
+
+		if (Array.isArray(url)) {
+			// Register all urls
+			url.forEach((x) => this.ModifiableMap.push({
+				url: x,
+				callback
+			}));
+		} else {
+			// Register url
+			this.ModifiableMap.push({
+				url,
+				callback
+			});
+		}
 	}
 
 	/**
 	 * Registers network packet received handler.
 	 * @param $event Event of handler, unused
 	 * @param url URL of request
-	 * @param ipc_id IPC id between Worker and Master.
+	 * @param ipdId IPC id between Worker and Master.
 	 */
-	private ipcHandler = ($event: Event, url: string | string[], ipc_id: string) => {
-		console.debug(`[ProxyWorker:Register] <Main> "ProxyWorker.${ipc_id}" received, call register, for ${url}`);
+	private ipcHandler = ($event: Event, url: string | string[], ipdId: string) => {
+		console.debug(`[ProxyWorker:Register] <Main> "ProxyWorker.${ipdId}" received, call register, for ${url}`);
 
 		if (Array.isArray(url)) { // Type guard
-			this.InternalRegister(url, () => { }, ipc_id);
+			this.InternalRegister(url, () => void (0), ipdId);
 		} else {
-			this.InternalRegister(url, () => { }, ipc_id);
+			this.InternalRegister(url, () => void (0), ipdId);
 		}
-	};
+	}
 
 	/**
 	 * Handler for received packet from worker.
@@ -159,7 +248,7 @@ export default class Proxy implements IDisposable {
 		let responseBuffer = Buffer.from(message.response.response, "base64");
 
 		// Call modifiable handlers
-		this.ModifiableMap.forEach(x => {
+		this.ModifiableMap.forEach((x) => {
 			try {
 				if (message.request.pathname !== x.url) return; // Target URL not matches
 
@@ -172,71 +261,14 @@ export default class Proxy implements IDisposable {
 		});
 
 		// Escape when Cluster not available
-		if (!this._Cluster || this._Cluster.isDead()) return;
+		if (!this.pCluster || this.pCluster.isDead()) return;
 
 		// Pass back to Worker, to pass original requester(browser)
-		this._Cluster.send(<ProxyWorkerResponse>{
+		this.pCluster.send({
 			sender: "Proxy",
 			callbackId: message.callbackId,
 			response: { response: responseBuffer.toString("base64") } // Encode to Base64
-		});
-	};
-
-	/**
-	 * Setup endpoint.
-	 *
-	 * Set Electron proxy configuration.
-	 * @param session Electron session
-	 * @param callback Callback function after Endpoint has set, can be `undefined`
-	 */
-	public SetupEndpoint(session: Session | undefined, callback?: Function) {
-		if (this.Disposed) throw "[Proxy:SetupEndpoint] Disposed";
-		if (!session) throw "[Proxy:SetupEndpoint] Session is undefined";
-
-		session.setProxy({
-			pacScript: "",
-			proxyRules: `http=127.0.0.1:${Proxy.Port}`,
-			proxyBypassRules: ""
-		}, () => (callback && callback()));
-	}
-
-	/**
-	 * Dispose Proxy.
-	 * 
-	 * Shutdown worker cluster, remove all handlers, remove single-tone instance.
-	 */
-	public Dispose() {
-		if (this.Disposed) throw "[Proxy:Dispose] Disposed";
-		this.Disposed = true;
-
-		if (this._WorkerCreated) {
-			ipcMain.removeListener("ProxyWorker.Register", this.ipcHandler);
-		}
-
-		if (this._Cluster) {
-			this._Cluster.off("message", this.ClusterHandler);
-			this._Cluster.kill();
-			this._Cluster = undefined;
-		}
-
-		Proxy._Instnace = undefined;
-	}
-
-	/**
-	 * Registers handler for received packet of specific url.
-	 * @param url URL to observe
-	 * @param callback Handler for received packet
-	 */
-	public Register(url: string, callback: ProxyCallback): void;
-	/**
-	 * Registers handler for received packet of specific urls.
-	 * @param urls URL array to observe
-	 * @param callback Handler for received packet
-	 */
-	public Register(urls: string[], callback: ProxyCallback): void;
-	public Register(url: string | string[], callback: ProxyCallback | null): void {
-		// Call inner register function, to hide IPCId parameter (internal use only parameter)
-		this.InternalRegister(url, callback, null);
+		} as ProxyWorkerResponse);
 	}
 
 	/**
@@ -246,7 +278,7 @@ export default class Proxy implements IDisposable {
 	 * @param IPCId IPC id between Master and Worker, internal only
 	 */
 	private InternalRegister(url: string | string[], callback: ProxyCallback | null, IPCId: string | null = null): void {
-		if (this.Disposed) throw "[Proxy:Register] Disposed";
+		if (this.Disposed) throw new Error("[Proxy:Register] Disposed");
 
 		// Is in Renderer process?
 		if (remote) {
@@ -256,30 +288,30 @@ export default class Proxy implements IDisposable {
 			 *  and Renderer process handler pass back to Register caller.
 			 */
 
-			let ipc_id = uuid(); // Unique IPC id
-			console.debug(`[ProxyWorker:Register] <Renderer> "ProxyWorker.${ipc_id}" listened, send to main process, for ${url}`);
+			const ipcId = uuid(); // Unique IPC id
+			console.debug(`[ProxyWorker:Register] <Renderer> "ProxyWorker.${ipcId}" listened, send to main process, for ${url}`);
 
 			// Register renderer process handler
-			ipcRenderer.on(`ProxyWorker.${ipc_id}`, (e: Event, req: ProxyRequest, resp: ProxyResponse) => {
+			ipcRenderer.on(`ProxyWorker.${ipcId}`, (e: Event, req: ProxyRequest, resp: ProxyResponse) => {
 				// Main process has sent packet data to Renderer process handler.
 				// This renderer process handler pass back to Request caller.
-				console.debug(`[ProxyWorker:Register] <Renderer> "ProxyWorker.${ipc_id}" callback received, for ${url}`);
+				console.debug(`[ProxyWorker:Register] <Renderer> "ProxyWorker.${ipcId}" callback received, for ${url}`);
 
 				// Response was encoded as Base64, so decode
-				const _resp = Buffer.from(resp.response, "base64");
-				callback && callback(req, _resp); // Pass back
+				const decodedResp = Buffer.from(resp.response, "base64");
+				if (callback) callback(req, decodedResp); // Pass back
 			});
 
 			// Register renderer process handler
-			ipcRenderer.send("ProxyWorker.Register", url, ipc_id);
+			ipcRenderer.send("ProxyWorker.Register", url, ipcId);
 
 		} else {
 			// Is in Main process?
 
-			if (!this._Cluster) throw "[Proxy:Register] Cluster not ready yet";
+			if (!this.pCluster) throw new Error("[Proxy:Register] Cluster not ready yet");
 
 			// Packet received
-			this._Cluster.on("message", (message: ProxyWorkerMessage) => {
+			this.pCluster.on("message", (message: ProxyWorkerMessage) => {
 				if (message.sender !== "ProxyWorker") return; // Not from Proxy worker
 				if (message.type !== "AfterResponse") return; // For after response (not-modifiable, after modify) only
 				if (message.request.pathname !== url) return; // Not matched url
@@ -297,7 +329,7 @@ export default class Proxy implements IDisposable {
 						Storage.get<BrowserWindow>("AppMainWindow")
 							.webContents.send(`ProxyWorker.${IPCId}`, message.request, respBase64);
 					} else {
-						if (!callback) throw "[Proxy:Register] callback is not callable";
+						if (!callback) throw new Error("[Proxy:Register] callback is not callable");
 
 						// Internally registered callback, call callback directly
 						callback(message.request, respBuffer);
@@ -306,49 +338,6 @@ export default class Proxy implements IDisposable {
 					// Dismiss all exceptions, just print to console
 					console.error(e);
 				}
-			});
-		}
-	}
-
-	/** Modifiable handlers array */
-	private ModifiableMap: {
-		url: string;
-		callback: ProxyModifiableCallback;
-	}[] = [];
-
-	/**
-	 * Registers handler for received packet of specific url, available to modify.
-	 * @param url URL to observe
-	 * @param callback Handler for received packet, returns modified response body
-	 */
-	public RegisterModifiable(url: string, callback: ProxyModifiableCallback): void;
-	/**
-	 * Registers handler for received packet of specific urls, available to modify.
-	 * @param urls URL array to observe
-	 * @param callback Handler for received packet, returns modified response body
-	 */
-	public RegisterModifiable(urls: string[], callback: ProxyModifiableCallback): void;
-	/**
-	 * Registers handler for received packet of specific url, available to modify.
-	 * @param url URL string or array to observe
-	 * @param callback Handler for received packet, returns modified response body
-	 */
-	public RegisterModifiable(url: string | string[], callback: ProxyModifiableCallback): void {
-		if (this.Disposed) throw "[Proxy:RegisterModifiable] Disposed";
-		if (cluster.isWorker) throw "[Proxy:RegisterModifiable] Modifiable can register on main process only";
-		if (!this._Cluster) throw "[Proxy:RegisterModifiable] Cluster not ready yet";
-
-		if (Array.isArray(url)) {
-			// Register all urls
-			url.forEach(x => this.ModifiableMap.push({
-				url: x,
-				callback: callback
-			}));
-		} else {
-			// Register url
-			this.ModifiableMap.push({
-				url: url,
-				callback: callback
 			});
 		}
 	}

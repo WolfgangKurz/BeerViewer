@@ -11,21 +11,23 @@ let server: net.Server | undefined;
 // Shutdown signal received
 process.on("SIGTERM", () => {
 	console.debug("[ProxyWorker:SIGTERM] Signal received, do destroy");
-	proxy && proxy.close();
-	server && server.close();
+	if (proxy) proxy.close();
+	if (server) server.close();
 	process.kill(0);
-})
+});
 
 // Emit message to Main process
 const Emit = (message: any) => {
-	if (!process.send) throw "[ProxyWorker:Emit] process.send is undefined!";
+	if (!process.send) throw new Error("[ProxyWorker:Emit] process.send is undefined!");
 
 	try {
-		let data: any = {};
+		const data: any = {};
 		if (message) Object.assign(data, message);
 		data.sender = "ProxyWorker";
 		process.send!(data);
-	} catch (e) { }
+	} catch (e) {
+		console.error(e);
+	}
 };
 
 // Proxy server, processes HTTP packet data
@@ -39,10 +41,11 @@ proxy.on("error", (e, req, res, target) => {
 });
 
 // From http-proxy original source
-var web_o = require("http-proxy/lib/http-proxy/passes/web-outgoing");
-web_o = Object.keys(web_o).map(pass => web_o[pass]);
+// tslint:disable-next-line:no-var-requires
+let webO = require("http-proxy/lib/http-proxy/passes/web-outgoing");
+webO = Object.keys(webO).map((pass) => webO[pass]);
 
-const proxy_endpoints = [
+const proxyEndpoints = [
 	/\/kcs\//, /\/kcs2\//, /\/kcsapi\//
 ];
 
@@ -55,8 +58,8 @@ proxy.on("proxyReq", (proxyReq, req, res, opts) => {
 proxy.on("proxyRes", (proxyRes, req, res) => {
 	// Response has started
 	if (!res.headersSent) {
-		for (var i = 0; i < web_o.length; i++) {
-			if (web_o[i](req, res, proxyRes, {})) break;
+		for (const o of webO) {
+			if (o(req, res, proxyRes, {})) break;
 		}
 	}
 
@@ -72,7 +75,7 @@ proxy.on("proxyRes", (proxyRes, req, res) => {
 	});
 	proxyRes.on("end", () => {
 		// Pass response if not KanColle resources/APIs
-		if (!proxy_endpoints.some(x => x.test(parsed.pathname!))) {
+		if (!proxyEndpoints.some((x) => x.test(parsed.pathname!))) {
 			res.write(body);
 			res.end();
 			return;
@@ -90,7 +93,7 @@ proxy.on("proxyRes", (proxyRes, req, res) => {
 			const respBuffer = Buffer.from(respBase64, "base64"); // Decode base64
 
 			// Send modified response body to Master process
-			Emit(<ProxyWorkerMessage>{
+			Emit({
 				type: "AfterResponse",
 				request: {
 					method: req.method,
@@ -106,7 +109,7 @@ proxy.on("proxyRes", (proxyRes, req, res) => {
 				response: {
 					response: respBase64
 				}
-			});
+			} as ProxyWorkerMessage);
 
 			// Pass back to original requester (Browser)
 			const headers = proxyRes.headers;
@@ -122,9 +125,9 @@ proxy.on("proxyRes", (proxyRes, req, res) => {
 
 		// Submit to Main process to modify response body
 		// After modification, callback will be called.
-		Emit(<ProxyWorkerMessage>{
+		Emit({
 			type: "BeforeResponse",
-			callbackId: callbackId,
+			callbackId,
 			request: {
 				method: req.method,
 
@@ -139,7 +142,7 @@ proxy.on("proxyRes", (proxyRes, req, res) => {
 			response: {
 				response: result.toString("base64") // Send to Master, encode to base64
 			}
-		});
+		} as ProxyWorkerMessage);
 	});
 	res.writeHead(proxyRes.statusCode!, proxyRes.headers);
 });
@@ -150,7 +153,7 @@ server = http.createServer((req, res) => {
 	const parsed = url.parse(req.url, true, true);
 
 	// Speed booster, for http (not https)
-	const allowed_hosts: string[] = [
+	const allowedHosts: string[] = [
 		"^log-netgame\\.dmm\\.com$",
 		"^www\\.dmm\\.com$",
 		"^dmm\\.com$",
@@ -158,7 +161,7 @@ server = http.createServer((req, res) => {
 		"^osapi\\.dmm\\.com$",
 		"^[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}$", // KanColle servers has no domain, just ip
 	];
-	if (!allowed_hosts.some(x => new RegExp(x).test(parsed.host!))) {
+	if (!allowedHosts.some((x) => new RegExp(x).test(parsed.host!))) {
 		res.writeHead(403, {
 			connection: "close"
 		});
@@ -170,21 +173,22 @@ server = http.createServer((req, res) => {
 	req.headers.connection = "close";
 
 	const target = parsed.protocol + "//" + parsed.host;
-	proxy && proxy.web(req, res, {
-		target: target,
-		secure: false
-	});
+	if (proxy)
+		proxy.web(req, res, {
+			target,
+			secure: false
+		});
 }).listen(Proxy.Port);
 
 // Local proxy server error handler
-server.on("error", e => {
+server.on("error", (e) => {
 	console.error("[ProxyWorker] Server error,", e);
-})
+});
 // Local proxy server connection handler
 server.on("connect", (req, socket) => {
 	const serverUrl = url.parse("http://" + req.url);
 	const srvSocket = net.connect(
-		serverUrl.port ? parseInt(serverUrl.port) : 80,
+		serverUrl.port ? parseInt(serverUrl.port, 10) : 80,
 		serverUrl.hostname,
 		() => {
 			// Allow connection

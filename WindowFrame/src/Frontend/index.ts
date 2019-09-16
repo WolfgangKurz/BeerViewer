@@ -12,9 +12,10 @@ function updateWindowFocus(state: 0 | 1): void  {
 		$("html").removeClass("focused");
 	else
 		$("html").addClass("focused");
-};
+}
+
 // Register window focus changed event, Initial focus state
-ipcRenderer.on("window-focus-state", (_e: Event, _: string, state: 0 | 1) => updateWindowFocus(state));
+ipcRenderer.on("window-focus-state", ($event: Event, _: string, state: 0 | 1) => updateWindowFocus(state));
 updateWindowFocus(remote.getCurrentWindow().isFocused() ? 1 : 0);
 
 // System button handlers

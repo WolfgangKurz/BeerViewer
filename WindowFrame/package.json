@@ -2,15 +2,6 @@
 	"name": "beerviewer",
 	"version": "2.0.0",
 	"description": "BeerViewer electron application",
-	"main": "dist/Backend/App.js",
-	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1",
-		"build": "tsc",
-		"babel": "babel ./dist --out-dir ./dist",
-		"dist": "node ./disttool.js",
-		"start": "npm run build && npm run dist && electron .",
-		"run": "npm run dist && electron ."
-	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/WolfgangKurz/BeerViewer.git"
@@ -25,21 +16,37 @@
 		"url": "https://github.com/WolfgangKurz/BeerViewer/issues"
 	},
 	"homepage": "https://github.com/WolfgangKurz/BeerViewer#readme",
-	"devDependencies": {
-		"electron": "^5.0.10",
-		"ts-lint": "^4.5.1",
-		"typescript": "^3.6.3"
+	"scripts": {
+		"serve": "vue-cli-service serve",
+		"build": "vue-cli-service build",
+		"lint": "vue-cli-service lint",
+		"electron:build": "vue-cli-service electron:build",
+		"electron:serve": "vue-cli-service electron:serve",
+		"postinstall": "electron-builder install-app-deps",
+		"postuninstall": "electron-builder install-app-deps"
 	},
+	"main": "background.js",
 	"dependencies": {
-		"@types/glob": "^7.1.1",
 		"@types/http-proxy": "^1.17.0",
 		"@types/jquery": "^3.3.31",
 		"@types/uuid": "^3.4.5",
-		"electron-middle-sass": "^1.0.2",
-		"glob": "^7.1.4",
+		"vue": "^2.6.10",
+		"vue-class-component": "^7.0.2",
+		"vue-property-decorator": "^8.1.0",
+		"vuex": "^3.0.1",
 		"http-proxy": "^1.17.0",
 		"jquery": "^3.4.1",
 		"ts-nameof": "^3.2.0",
 		"uuid": "^3.3.3"
+	},
+	"devDependencies": {
+		"@vue/cli-plugin-typescript": "^3.11.0",
+		"@vue/cli-service": "^3.11.0",
+		"electron": "^6.0.0",
+		"node-sass": "^4.9.0",
+		"sass-loader": "^7.1.0",
+		"typescript": "^3.4.3",
+		"vue-cli-plugin-electron-builder": "^1.4.0",
+		"vue-template-compiler": "^2.6.10"
 	}
 }

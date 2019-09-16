@@ -2,8 +2,6 @@
  * Basic Storage class to contain some values `globally`.
  */
 export default class Storage {
-	private static table: Map<string, any> = new Map<string, any>();
-
 	public static set(name: string, value: any) {
 		this.table.set(name, value);
 	}
@@ -16,4 +14,6 @@ export default class Storage {
 	public static has(name: string): boolean {
 		return this.table.has(name);
 	}
+
+	private static table: Map<string, any> = new Map<string, any>();
 }

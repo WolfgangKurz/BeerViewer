@@ -12,10 +12,10 @@ export default class Game {
 	 * Set cookies to prevent foreigner page, and load Game URL.
 	 */
 	public static Initialize() {
-		const _game = $("#GAME");
-		if (_game.length !== 1) throw "Fatal Error, Game frame not found on main frame.";
+		const gameElem = $("#GAME");
+		if (gameElem.length !== 1) throw new Error("Fatal Error, Game frame not found on main frame.");
 
-		const game = <WebviewTag>_game.get(0);
+		const game = gameElem.get(0) as WebviewTag;
 
 		// Event after Game frame ready
 		const prepareGameFrame = () => {
@@ -23,7 +23,7 @@ export default class Game {
 
 			const session = game.getWebContents().session; // Session for set cookies
 			Proxy.Instance.SetupEndpoint(session, () => {
-				Constants.RequireCookies.forEach(cookie => { // Prevent foreigner page
+				Constants.RequireCookies.forEach((cookie) => { // Prevent foreigner page
 					session.cookies.set({
 						name: cookie.name,
 						value: cookie.value,
@@ -40,5 +40,5 @@ export default class Game {
 			game.setZoomFactor(2 / 3); // Initial zoom level (66.666%, KC 1.0 size, 800x480, for debug now)
 			if (game.getURL() === Constants.GameURL) game.insertCSS(Constants.GameCSS); // Apply stylesheet
 		});
-	};
+	}
 }

@@ -1,9 +1,9 @@
-export class CookieInfo {
-	public name!: string;
-	public value!: string;
-	public domain?: string;
-	public path?: string = "/";
-	public expires?: string;
+export interface CookieInfo {
+	name: string;
+	value: string;
+	domain?: string;
+	path?: string;
+	expires?: string;
 }
 
 /**
@@ -23,26 +23,26 @@ export default class Constants {
 				name: "cklg",
 				value: "ja",
 				domain: "dmm.com",
-				expires: expires
+				expires
 			},
 			{
 				name: "ckcy",
 				value: "1",
 				domain: "osapi.dmm.com",
-				expires: expires
+				expires
 			},
 			{
 				name: "ckcy",
 				value: "1",
 				domain: "203.104.209.7",
-				expires: expires
+				expires
 			},
 			{
 				name: "ckcy",
 				value: "1",
 				domain: "www.dmm.com",
 				path: "/netgame/",
-				expires: expires
+				expires
 			}
 		];
 	}

@@ -4,15 +4,15 @@ import Unicode from "../Base/Unicode";
 
 /**
  * Translate in-game texts via HTTP response modification.
- * 
+ *
  * Beta feature.
  */
 export default class LiveTranslation {
 	/** Has class initialized? */
-	private _Initialized: boolean = false;
+	private pInitialized: boolean = false;
 
 	/** List of text to translate */
-	private list: { key: string, value: string }[];
+	private list: Array<{ key: string, value: string }>;
 
 	/**
 	 * Initialize and setup LiveTranslation feature
@@ -24,17 +24,17 @@ export default class LiveTranslation {
 
 		// MAke translation text list
 		this.list = ko.replace(/\r/g, "").split("\n") // Split by lines
-			.filter(x => x.length > 0) // Skip empty line
-			.map(x => x.split("\t").filter(y => y.length > 0)) // Tab separated only (key-value pair only)
-			.filter(x => x.length == 2) // No multi-values
-			.map(x => ({ key: x[0], value: x[1] })) // Make key-value pair
+			.filter((x) => x.length > 0) // Skip empty line
+			.map((x) => x.split("\t").filter((y) => y.length > 0)) // Tab separated only (key-value pair only)
+			.filter((x) => x.length === 2) // No multi-values
+			.map((x) => ({ key: x[0], value: x[1] })) // Make key-value pair
 			.sort((a, b) => a.key.length < b.key.length ? -1 : a.key.length > b.key.length ? 1 : 0); // Sort by length of text
 	}
 
 	/** Register modificable HTTP handler */
 	public Init(): void {
-		if (this._Initialized) return;
-		this._Initialized = true;
+		if (this.pInitialized) return;
+		this.pInitialized = true;
 
 		Proxy.Instance.RegisterModifiable("/kcsapi/api_start2/getData", this.Handler);
 	}
@@ -48,7 +48,7 @@ export default class LiveTranslation {
 		let body = resp.toString();
 
 		// Find text to translate
-		this.list.forEach(x => {
+		this.list.forEach((x) => {
 			const a = Unicode.Escape(x.key);
 			const b = Unicode.Escape(x.value);
 			if (a === b) return;
