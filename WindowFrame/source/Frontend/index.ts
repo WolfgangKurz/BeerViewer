@@ -1,7 +1,7 @@
 import { remote, ipcRenderer } from "electron";
 import $ from "jquery";
 
-import Game from "@/System/Game";
+import Game from "../System/Game";
 
 /**
  * Update window focus state

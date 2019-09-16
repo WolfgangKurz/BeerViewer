@@ -134,7 +134,7 @@ export default class Proxy implements IDisposable {
 	 * @param url URL of request
 	 * @param ipc_id IPC id between Worker and Master.
 	 */
-	private ipcHandler($event: Event, url: string | string[], ipc_id: string) {
+	private ipcHandler = ($event: Event, url: string | string[], ipc_id: string) => {
 		console.debug(`[ProxyWorker:Register] <Main> "ProxyWorker.${ipc_id}" received, call register, for ${url}`);
 
 		if (Array.isArray(url)) { // Type guard
@@ -150,7 +150,7 @@ export default class Proxy implements IDisposable {
 	 * Worker sent, Master received.
 	 * @param message Received message data
 	 */
-	private ClusterHandler(message: ProxyWorkerMessage) {
+	private ClusterHandler = (message: ProxyWorkerMessage) => {
 		if (message.sender !== "ProxyWorker") return; // Not from Proxy worker
 		if (message.type !== "BeforeResponse") return; // For before response, modifiable only
 		if (!message.callbackId) return; // Not callbackable
@@ -240,7 +240,6 @@ export default class Proxy implements IDisposable {
 	}
 
 	/**
-	 * 
 	 * Registers handler for received packet of specific urls.
 	 * @param url URL string or array to observe
 	 * @param callback Handler for received packet

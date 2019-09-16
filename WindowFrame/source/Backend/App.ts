@@ -3,14 +3,14 @@ import cluster from "cluster";
 import path from "path";
 import url from "url";
 
-import Proxy from "@/Proxy/Proxy";
-import Storage from "@/System/Storage";
+import Proxy from "../Proxy/Proxy";
+import Storage from "../System/Storage";
 
 import LiveTranslation from "./LiveTranslation";
 
 if (cluster.isWorker) { // Is worker process? (Proxy worker)
 	if (process.env["ClusterType"] === "ProxyWorker") {
-		require("@/Proxy/ProxyWorker");
+		require("../Proxy/ProxyWorker");
 	}
 } else { // Main process
 	process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";

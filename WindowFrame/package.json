@@ -8,7 +8,7 @@
 		"build": "tsc",
 		"babel": "babel ./dist --out-dir ./dist",
 		"dist": "node ./disttool.js",
-		"start": "npm run build && npm run babel && npm run dist && electron .",
+		"start": "npm run build && npm run dist && electron .",
 		"run": "npm run dist && electron ."
 	},
 	"repository": {
@@ -26,11 +26,6 @@
 	},
 	"homepage": "https://github.com/WolfgangKurz/BeerViewer#readme",
 	"devDependencies": {
-		"@babel/cli": "^7.6.0",
-		"@babel/core": "^7.6.0",
-		"@babel/preset-env": "^7.6.0",
-		"@babel/preset-typescript": "^7.6.0",
-		"babel-plugin-module-resolver": "^3.2.0",
 		"electron": "^5.0.10",
 		"ts-lint": "^4.5.1",
 		"typescript": "^3.6.3"

@@ -1,6 +1,6 @@
-import Proxy, { ProxyRequest } from "@/Proxy/Proxy";
-import i18n from "@/i18n/i18n";
-import Unicode from "@/Base/Unicode";
+import Proxy, { ProxyRequest } from "../Proxy/Proxy";
+import i18n from "../i18n/i18n";
+import Unicode from "../Base/Unicode";
 
 /**
  * Translate in-game texts via HTTP response modification.
