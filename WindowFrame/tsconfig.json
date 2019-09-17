@@ -20,7 +20,9 @@
 
 		"types": [
 			"webpack-env",
-			"jquery"
+			"http-proxy",
+			"jquery",
+			"uuid"
 		],
 		"lib": [
 			"esnext",
@@ -29,7 +31,8 @@
 			"scripthost"
 		],
 		"paths": {
-			"@/*": ["./*"]
+			"@/*": ["./*"],
+			"@Components/*": ["./Frontend/Components/*"]
 		}
 	},
 	"include": [

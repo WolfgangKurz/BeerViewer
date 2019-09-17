@@ -74,11 +74,11 @@ if (cluster.isWorker) { // Is worker process? (Proxy worker)
 
 	app.on("browser-window-focus", () => {
 		if (mainWindow)
-			mainWindow.webContents.send("window-focus-state", "get", 1);
+			mainWindow.webContents.send("window-focus-state", 1);
 	});
 	app.on("browser-window-blur", () => {
 		if (mainWindow)
-			mainWindow.webContents.send("window-focus-state", "lost", 0);
+			mainWindow.webContents.send("window-focus-state", 0);
 	});
 
 	// Exit cleanly on request from parent process in development mode.
