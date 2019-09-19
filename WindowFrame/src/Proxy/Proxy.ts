@@ -42,6 +42,11 @@ export default class Proxy implements IDisposable {
 
 	private constructor() { }
 
+	/** Empty function to initialize instance */
+	public Empty(): void {
+		return void(0);
+	}
+
 	/**
 	 * Setup and start proxy server
 	 */
@@ -245,10 +250,6 @@ export default class Proxy implements IDisposable {
 				if (message.type !== "AfterResponse") return; // For after response (not-modifiable, after modify) only
 				if (message.request.pathname !== url) return; // Not matched url
 
-				// Processed response, encoded as Base64
-				const respBase64 = message.response.response;
-				const respBuffer = Buffer.from(respBase64, "base64"); // Decode
-
 				try {
 					// Is IPC id available? (Is registerer in Renderer process?)
 					if (IPCId !== null) {
@@ -256,9 +257,13 @@ export default class Proxy implements IDisposable {
 
 						// Pass response to Renderer process
 						Storage.get<BrowserWindow>("AppMainWindow")
-							.webContents.send(`ProxyWorker.${IPCId}`, message.request, respBase64);
+							.webContents.send(`ProxyWorker.${IPCId}`, message.request, message.response);
 					} else {
 						if (!callback) throw new Error("[Proxy:Register] callback is not callable");
+
+						// Processed response, encoded as Base64
+						const respBase64 = message.response.response;
+						const respBuffer = Buffer.from(respBase64, "base64"); // Decode
 
 						// Internally registered callback, call callback directly
 						callback(message.request, respBuffer);

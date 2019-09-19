@@ -34,6 +34,8 @@
 		"@types/http-proxy": "^1.17.0",
 		"@types/jquery": "^3.3.31",
 		"@types/uuid": "^3.4.5",
+		"body-parser": "^1.19.0",
+		"connect": "^3.7.0",
 		"http-proxy": "^1.18.0",
 		"jquery": "^3.4.1",
 		"ts-nameof": "^3.2.0",
@@ -41,7 +43,9 @@
 		"vue": "^2.6.10",
 		"vue-class-component": "^7.0.2",
 		"vue-property-decorator": "^8.1.0",
-		"vuex": "^3.0.1"
+		"vuex": "^3.0.1",
+		"vuex-class": "^0.3.2",
+		"vuex-module-decorators": "^0.10.1"
 	},
 	"devDependencies": {
 		"@vue/cli-plugin-typescript": "^3.11.0",

@@ -3,10 +3,10 @@
 		<title-area title="BeerViewer"></title-area>
 		<aside class="sidemenu">
 			<div class="menu selected">
-				<img src="../assets/icons/menu-overview.png" />
+				<img src="~@/assets/icons/menu-overview.png" />
 			</div>
 			<div class="menu">
-				<img src="../assets/icons/menu-settings.png" />
+				<img src="~@/assets/icons/menu-settings.png" />
 			</div>
 		</aside>
 		<article class="content">
@@ -27,7 +27,7 @@
 				</div>
 
 				<img
-					src="../assets/0795_9863.png"
+					src="~@/assets/0795_9863.png"
 					style="position: absolute;right:-100px;bottom:-300px;opacity:0.3"
 				/>
 				<webview id="GAME" src="about:blank"></webview>
@@ -85,7 +85,7 @@ export default class App extends Vue {
 		this.WindowMaximized = state !== 0;
 	}
 
-	private mounted() {
+	private created() {
 		// Register window focus changed event, Initial focus state
 		ipcRenderer.on("window-focus-state", this.updateWindowFocus);
 		this.updateWindowFocus(null, remote.getCurrentWindow().isFocused() ? 1 : 0);
@@ -93,7 +93,9 @@ export default class App extends Vue {
 		// Register window style changed event
 		ipcRenderer.on("window-maximized-state", this.updateWindowMaximized);
 		this.updateWindowFocus(null, remote.getCurrentWindow().isMaximized() ? 1 : 0);
+	}
 
+	private mounted() {
 		// Initialize Game
 		Game.Initialize();
 	}

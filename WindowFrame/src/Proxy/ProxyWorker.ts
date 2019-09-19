@@ -1,17 +1,45 @@
-import http from "http";
+import http, { ServerResponse } from "http";
 import httpProxy from "http-proxy";
 import net from "net";
 import url from "url";
 import uuid from "uuid/v1";
+import fs from "fs";
 import { ProxyPort, ProxyWorkerMessage, ProxyWorkerResponse } from "./Proxy.Define";
 
-// export default function ProxyWorker() {
+import connect from "connect";
+import bodyParser from "body-parser";
+
+interface IncomingMessage extends http.IncomingMessage {
+	body?: {} | Buffer;
+}
+
 let proxy: httpProxy | undefined;
 let server: net.Server | undefined;
 
+const _console = (() => {
+	const USE_DEBUG_LOG = false;
+	const USE_ERROR_LOG = true;
+	const USE_NORMAL_LOG = true;
+
+	return {
+		debug(...x: any[]) {
+			if (USE_DEBUG_LOG)
+				console.debug(...x);
+		},
+		error(...x: any[]) {
+			if (USE_ERROR_LOG)
+				console.error(...x);
+		},
+		log(...x: any[]) {
+			if (USE_NORMAL_LOG)
+				console.log(...x);
+		},
+	};
+})();
+
 // Shutdown signal received
 process.on("SIGTERM", () => {
-	console.debug("[ProxyWorker:SIGTERM] Signal received, do destroy");
+	_console.debug("[ProxyWorker:SIGTERM] Signal received, do destroy");
 	if (proxy) proxy.close();
 	if (server) server.close();
 	process.kill(0);
@@ -27,7 +55,7 @@ const Emit = (message: any) => {
 		data.sender = "ProxyWorker";
 		process.send!(data);
 	} catch (e) {
-		console.error(e);
+		_console.error(e);
 	}
 };
 
@@ -36,7 +64,7 @@ proxy = httpProxy.createProxyServer({ selfHandleResponse: true });
 
 // Proxy server error handler
 proxy.on("error", (e, req, res, target) => {
-	console.error("[ProxyWorker] Proxy error,", e);
+	_console.error("[ProxyWorker] Proxy error,", e);
 	res.writeHead(500);
 	res.end();
 });
@@ -51,12 +79,20 @@ const proxyEndpoints = [
 ];
 
 // Request handler
-proxy.on("proxyReq", (proxyReq, req, res, opts) => {
+proxy.on("proxyReq", (proxyReq, req: IncomingMessage, res, opts) => {
 	// Client must request always (Uses cache)
 	proxyReq.setHeader("cache-control", "must-revalidate");
+
+	// Request body exists
+	if (!req.body || !Object.keys(req.body).length) return;
+	const reqBody = req.body as Buffer;
+
+	// Pass through
+	proxyReq.setHeader('Content-Length', Buffer.byteLength(reqBody));
+	proxyReq.write(reqBody);
 });
 // Response handler
-proxy.on("proxyRes", (proxyRes, req, res) => {
+proxy.on("proxyRes", (proxyRes, req: IncomingMessage, res) => {
 	// Response has started
 	if (!res.headersSent) {
 		for (const o of webO) {
@@ -88,7 +124,7 @@ proxy.on("proxyRes", (proxyRes, req, res) => {
 			if (message.callbackId !== callbackId) return;
 			process.off("message", callback);
 
-			console.debug(`[ProxyWorker] BeforeResponse end, for "${callbackId}", "${req.url}"`);
+			_console.debug(`[ProxyWorker] BeforeResponse end, for "${callbackId}", "${req.url}"`);
 
 			const respBase64 = message.response.response; // Base64-encoded packet data
 			const respBuffer = Buffer.from(respBase64, "base64"); // Decode base64
@@ -105,7 +141,9 @@ proxy.on("proxyRes", (proxyRes, req, res) => {
 
 					path: parsed.path,
 					pathname: parsed.pathname,
-					query: parsed.query
+					query: parsed.query,
+
+					body: (req.body && Object.keys(req.body).length > 0) ? req.body as Buffer : undefined
 				},
 				response: {
 					response: respBase64
@@ -121,7 +159,7 @@ proxy.on("proxyRes", (proxyRes, req, res) => {
 			res.write(respBuffer);
 			res.end(); // Request done
 		};
-		console.debug(`[ProxyWorker] BeforeResponse start, for "${callbackId}", "${req.url}"`);
+		_console.debug(`[ProxyWorker] BeforeResponse start, for "${callbackId}", "${req.url}"`);
 		process.on("message", callback); // Register after modification callback
 
 		// Submit to Main process to modify response body
@@ -138,7 +176,9 @@ proxy.on("proxyRes", (proxyRes, req, res) => {
 
 				path: parsed.path,
 				pathname: parsed.pathname,
-				query: parsed.query
+				query: parsed.query,
+
+				body: (req.body && Object.keys(req.body).length > 0) ? req.body as Buffer : undefined
 			},
 			response: {
 				response: result.toString("base64") // Send to Master, encode to base64
@@ -149,41 +189,45 @@ proxy.on("proxyRes", (proxyRes, req, res) => {
 });
 
 // Create and start local proxy server
-server = http.createServer((req, res) => {
-	if (!req.url) return;
-	const parsed = url.parse(req.url, true, true);
+server = http.createServer(
+	connect()
+		.use(bodyParser.raw())
+		.use((req: IncomingMessage, res: ServerResponse) => {
+			if (!req.url) return;
+			const parsed = url.parse(req.url, true, true);
 
-	// Speed booster, for http (not https)
-	const allowedHosts: string[] = [
-		"^log-netgame\\.dmm\\.com$",
-		"^www\\.dmm\\.com$",
-		"^dmm\\.com$",
-		"^p\\.dmm\\.com$",
-		"^osapi\\.dmm\\.com$",
-		"^[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}$", // KanColle servers has no domain, just ip
-	];
-	if (!allowedHosts.some((x) => new RegExp(x).test(parsed.host!))) {
-		res.writeHead(403, {
-			connection: "close"
-		});
-		res.end();
-		return;
-	}
+			// Speed booster, for http (not https)
+			const allowedHosts: string[] = [
+				"^log-netgame\\.dmm\\.com$",
+				"^www\\.dmm\\.com$",
+				"^dmm\\.com$",
+				"^p\\.dmm\\.com$",
+				"^osapi\\.dmm\\.com$",
+				"^[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}$", // KanColle servers has no domain, just ip
+			];
+			if (!allowedHosts.some((x) => new RegExp(x).test(parsed.host!))) {
+				res.writeHead(403, {
+					connection: "close"
+				});
+				res.end();
+				return;
+			}
 
-	delete req.headers["accept-encoding"]; // Plain data
-	req.headers.connection = "close";
+			delete req.headers["accept-encoding"]; // Plain data
+			req.headers.connection = "close";
 
-	const target = parsed.protocol + "//" + parsed.host;
-	if (proxy)
-		proxy.web(req, res, {
-			target,
-			secure: false
-		});
-}).listen(ProxyPort);
+			const target = parsed.protocol + "//" + parsed.host;
+			if (proxy)
+				proxy.web(req, res, {
+					target,
+					secure: false
+				});
+		})
+).listen(ProxyPort);
 
 // Local proxy server error handler
 server.on("error", (e) => {
-	console.error("[ProxyWorker] Server error,", e);
+	_console.error("[ProxyWorker] Server error,", e);
 });
 // Local proxy server connection handler
 server.on("connect", (req, socket) => {
@@ -201,4 +245,3 @@ server.on("connect", (req, socket) => {
 		}
 	);
 });
-// }

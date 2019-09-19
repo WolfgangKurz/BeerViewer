@@ -32,7 +32,10 @@
 		],
 		"paths": {
 			"@/*": ["./*"],
-			"@Components/*": ["./Frontend/Components/*"]
+			"@Components/*": ["./Frontend/Components/*"],
+			"@KanColle/*": ["./KanColle/*"],
+			"@KC/*": ["./KanColle/*"],
+			"@KCComponents/*": ["./Frontend/KanColle/*"]
 		}
 	},
 	"include": [

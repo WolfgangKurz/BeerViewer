@@ -21,7 +21,7 @@ export default function Backend() {
 	try {
 		Proxy.Instance.SetupProxyServer();
 	} catch (e) {
-		alert("Failed to startup Local proxy server!\n\n" + e);
+		console.log("Failed to startup Local proxy server!\n\n" + e);
 		return;
 	}
 

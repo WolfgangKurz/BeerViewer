@@ -45,6 +45,9 @@ export interface ProxyRequest {
 	query: {
 		[key: string]: string | string[];
 	};
+
+	/** Request body */
+	body?: Buffer;
 }
 
 /**

@@ -10,6 +10,9 @@ const setupAliasPath = (config) => {
 	// import path alias
 	config.resolve.alias.set("@", path.resolve(__dirname, "src"));
 	config.resolve.alias.set("@Components", path.resolve(__dirname, "src", "Frontend", "Components"));
+	config.resolve.alias.set("@KanColle", path.resolve(__dirname, "src", "KanColle"));
+	config.resolve.alias.set("@KC", path.resolve(__dirname, "src", "KanColle"));
+	config.resolve.alias.set("@KCComponents", path.resolve(__dirname, "src", "Frontend", "KanColle"));
 };
 
 module.exports = {
