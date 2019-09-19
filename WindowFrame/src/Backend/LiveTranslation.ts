@@ -21,17 +21,16 @@ export default class LiveTranslation {
 	 * @param locale Locale to translate
 	 */
 	constructor(locale: string) {
-		let ko = i18n.get(locale); // Load all localization texts of given locale
-		if (!ko) ko = "";
+		let data = i18n.get(locale); // Load all localization texts of given locale
+		if (!data) data = "";
 
-		// MAke translation text list
-		this.list = ko.replace(/\r/g, "").split("\n") // Split by lines
+		// Make translation text list
+		this.list = data.replace(/\r/g, "").split("\n") // Split by lines
 			.filter((x) => x.length > 0) // Skip empty line
 			.map((x) => x.split("\t").filter((y) => y.length > 0)) // Tab separated only (key-value pair only)
 			.filter((x) => x.length === 2) // No multi-values
 			.map((x) => ({ key: x[0], value: x[1] })) // Make key-value pair
-			.sort((a, b) => a.key.length < b.key.length ? -1 : a.key.length > b.key.length ? 1 : 0) // Sort by length of text
-			|| {}; // Or, empty list.
+			.sort((a, b) => a.key.length < b.key.length ? -1 : a.key.length > b.key.length ? 1 : 0); // Sort by length of text
 	}
 
 	/** Register modificable HTTP handler */
@@ -39,7 +38,7 @@ export default class LiveTranslation {
 		if (this.pInitialized) return;
 		this.pInitialized = true;
 
-		Proxy.Instance.RegisterModifiable("/kcsapi/api_start2/getData", this.Handler);
+		Proxy.Instance.RegisterModifiable("/kcsapi/api_start2/getData", (req, resp) => this.Handler(req, resp));
 	}
 
 	/**

@@ -3,8 +3,7 @@ const os = require("os");
 
 // SCSS global import files
 const preloadScss = [
-	"@/Theme/_template.scss",
-	"@/Theme/_default.scss"
+	"~@/Theme/_loader.scss"
 ];
 
 const setupAliasPath = (config) => {

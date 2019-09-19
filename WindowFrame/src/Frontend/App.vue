@@ -106,27 +106,6 @@ export default class App extends Vue {
 </script>
 
 <style lang="scss">
-@font-face {
-	font-family: "Spoqa Han Sans";
-	font-weight: 700;
-	src: url("~@/assets/fonts/SpoqaHanSansBold.woff2") format("woff2");
-}
-@font-face {
-	font-family: "Spoqa Han Sans";
-	font-weight: 400;
-	src: url("~@/assets/fonts/SpoqaHanSansRegular.woff2") format("woff2");
-}
-@font-face {
-	font-family: "Spoqa Han Sans JP";
-	font-weight: 700;
-	src: url("~@/assets/fonts/SpoqaHanSansJPBold.woff2") format("woff2");
-}
-@font-face {
-	font-family: "Spoqa Han Sans JP";
-	font-weight: 400;
-	src: url("~@/assets/fonts/SpoqaHanSansJPRegular.woff2") format("woff2");
-}
-
 html,
 body {
 	margin: 0;
