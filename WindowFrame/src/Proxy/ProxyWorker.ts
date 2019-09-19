@@ -3,8 +3,9 @@ import httpProxy from "http-proxy";
 import net from "net";
 import url from "url";
 import uuid from "uuid/v1";
-import Proxy, { ProxyWorkerMessage, ProxyWorkerResponse } from "./Proxy";
+import { ProxyPort, ProxyWorkerMessage, ProxyWorkerResponse } from "./Proxy.Define";
 
+// export default function ProxyWorker() {
 let proxy: httpProxy | undefined;
 let server: net.Server | undefined;
 
@@ -178,7 +179,7 @@ server = http.createServer((req, res) => {
 			target,
 			secure: false
 		});
-}).listen(Proxy.Port);
+}).listen(ProxyPort);
 
 // Local proxy server error handler
 server.on("error", (e) => {
@@ -200,3 +201,4 @@ server.on("connect", (req, socket) => {
 		}
 	);
 });
+// }

@@ -1,9 +1,9 @@
 {
 	"compilerOptions": {
 		"baseUrl": "src",
-		"outDir": "dist",
+		"outDir": "public",
 		"target": "es6",
-		"module": "esnext",
+		"module": "commonjs",
 		"moduleResolution": "node",
 		"strict": true,
 
@@ -16,7 +16,7 @@
 		"allowSyntheticDefaultImports" :true,
 		"sourceMap": true,
 
-		"declaration": true,
+		"declaration": false,
 
 		"types": [
 			"webpack-env",
@@ -36,12 +36,11 @@
 		}
 	},
 	"include": [
-		"src/**/*.ts",
-		"src/**/*.vue"
+		"src/Proxy/ProxyWorker.ts",
+		"src/*.d.ts"
 	],
 	"exclude": [
 		"node_modules",
-		"dist",
-		"src/Proxy/ProxyWorker.ts"
+		"dist"
 	]
 }

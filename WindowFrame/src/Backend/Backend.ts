@@ -1,27 +1,29 @@
 import { app, protocol, BrowserWindow } from "electron";
-// import { createProtocol, installVueDevtools } from "vue-cli-plugin-electron-builder/lib";
-const isDevelopment = process.env.NODE_ENV !== "production";
+// import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
+import path from "path";
 
-// Scheme must be registered before the app is ready
-if (protocol)
-	protocol.registerSchemesAsPrivileged([{ scheme: "app", privileges: { secure: true, standard: true } }]);
-
-import cluster from "cluster";
-import Proxy from "../Proxy/Proxy";
-import Storage from "../System/Storage";
+import Proxy from "@/Proxy/Proxy";
+import Storage from "@/System/Storage";
 
 import LiveTranslation from "./LiveTranslation";
 
-if (cluster.isWorker) { // Is worker process? (Proxy worker)
-	if (process.env.ClusterType === "ProxyWorker") {
-		// tslint:disable-next-line:no-var-requires
-		require("../Proxy/ProxyWorker");
-	}
-} else { // Main process
+const isDevelopment = process.env.NODE_ENV !== "production";
+
+export default function Backend() {
+	// Scheme must be registered before the app is ready
+	/*
+	if (protocol)
+		protocol.registerSchemesAsPrivileged([{ scheme: "app", privileges: { secure: true, standard: true } }]);
+	*/
 	process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = "true";
 
 	// Setup local proxy server
-	Proxy.Instance.SetupProxyServer();
+	try {
+		Proxy.Instance.SetupProxyServer();
+	} catch (e) {
+		alert("Failed to startup Local proxy server!\n\n" + e);
+		return;
+	}
 
 	// Setup live-translation
 	new LiveTranslation("ko").Init();
@@ -32,6 +34,8 @@ if (cluster.isWorker) { // Is worker process? (Proxy worker)
 		mainWindow = new BrowserWindow({
 			width: 1200,
 			height: 720,
+			icon: path.join(__static, "assets/icon.png"),
+
 			frame: false,
 			webPreferences: {
 				nodeIntegration: true,
@@ -45,9 +49,9 @@ if (cluster.isWorker) { // Is worker process? (Proxy worker)
 			// Load the url of the dev server if in development mode
 			mainWindow.loadURL(process.env.WEBPACK_DEV_SERVER_URL as string);
 		} else {
-			// createProtocol("app");
 			// Load the index.html when not in development
-			mainWindow.loadURL("app://Frontend/index.html");
+			// mainWindow.loadURL("app://Frontend/index.html");
+			mainWindow.loadURL("https://google.com/");
 		}
 
 		// Open Developer tools

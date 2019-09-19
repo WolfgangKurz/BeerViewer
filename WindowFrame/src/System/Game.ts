@@ -2,7 +2,7 @@ import { WebviewTag } from "electron";
 import $ from "jquery";
 
 import Constants from "./Constants";
-import Proxy from "../Proxy/Proxy";
+import Proxy from "@/Proxy/Proxy";
 
 export default class Game {
 	/**

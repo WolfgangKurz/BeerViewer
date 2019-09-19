@@ -86,11 +86,11 @@ export default class App extends Vue {
 	private mounted() {
 		// Register window focus changed event, Initial focus state
 		ipcRenderer.on("window-focus-state", this.updateWindowFocus);
-		this.updateWindowFocus(null, remote.getCurrentWindow().isFocused() ? 1 : 0);
+		// this.updateWindowFocus(null, remote.getCurrentWindow().isFocused() ? 1 : 0);
 
 		// Register window style changed event
 		ipcRenderer.on("window-maximized-state", this.updateWindowMaximized);
-		this.updateWindowFocus(null, remote.getCurrentWindow().isMaximized() ? 1 : 0);
+		// this.updateWindowFocus(null, remote.getCurrentWindow().isMaximized() ? 1 : 0);
 
 		// Initialize Game
 		// Game.Initialize();

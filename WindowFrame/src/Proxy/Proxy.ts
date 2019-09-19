@@ -1,79 +1,16 @@
 import cluster from "cluster";
+import child_process from "child_process";
+
+import fs from "fs";
+import path from "path";
+
 import uuid from "uuid/v1";
 import { Session, remote, ipcRenderer, ipcMain, BrowserWindow } from "electron";
-import Storage from "../System/Storage";
-import IDisposable from "../Base/IDisposable";
 
-/**
- * @param {ProxyRequest} request Request data
- * @param {Buffer} response Response data, as binary
- */
-type ProxyCallback = (request: ProxyRequest, response: Buffer) => void;
+import IDisposable from "@/Base/IDisposable";
 
-/**
- * @param {ProxyRequest} request Request data
- * @param {Buffer} response Response data, as binary
- * @returns {Buffer} Modified response data, as binary
- */
-type ProxyModifiableCallback = (request: ProxyRequest, response: Buffer) => Buffer;
-
-/**
- * Request information
- */
-export interface ProxyRequest {
-	/** HTTP request method */
-	method: "GET" | "POST";
-
-	/** Host of request, `hostname:port` */
-	host: string;
-
-	/** Hostname of request */
-	hostname: string;
-	/** Port of request */
-	port: number | string;
-
-	/** Path of request, `pathname?query` */
-	path: string;
-	/** Pathname of request */
-	pathname: string;
-	/** Query string of request */
-	query: {
-		[key: string]: string | string[];
-	};
-}
-
-/**
- * Response of Proxy, contains base64-encoded body.
- */
-interface ProxyResponse {
-	/** Base64 encoded string */
-	response: string;
-}
-
-/**
- * ProxyWorker packet interface contains information to process.
- */
-export interface ProxyWorkerPacket {
-	sender?: string;
-	callbackId?: string;
-	response: ProxyResponse;
-}
-/**
- * ProxyWorker message packet, sent from Worker.
- */
-export interface ProxyWorkerMessage extends ProxyWorkerPacket {
-	sender?: "ProxyWorker";
-
-	type: "BeforeResponse" | "AfterResponse";
-	request: ProxyRequest;
-}
-/**
- * ProxyWorker response packet, sent from Master.
- */
-export interface ProxyWorkerResponse extends ProxyWorkerPacket {
-	sender?: "Proxy";
-	callbackId: string;
-}
+import Storage from "@/System/Storage";
+import { ProxyModifiableCallback, ProxyCallback, ProxyWorkerMessage, ProxyWorkerResponse, ProxyRequest, ProxyResponse, ProxyPort } from "./Proxy.Define";
 
 /**
  * Local proxy server to intercept game packets.
@@ -85,9 +22,6 @@ export default class Proxy implements IDisposable {
 		return this.pInstance;
 	}
 
-	/** Port of local proxy server */
-	public static get Port(): number { return 49217; }
-
 	/** Instance object */
 	private static pInstance?: Proxy;
 
@@ -97,7 +31,8 @@ export default class Proxy implements IDisposable {
 	/** Is worker created? */
 	private pWorkerCreated: boolean = false;
 	/** Cluster instance */
-	private pCluster?: cluster.Worker;
+	// private pCluster?: cluster.Worker;
+	private pCluster?: child_process.ChildProcess;
 
 	/** Modifiable handlers array */
 	private ModifiableMap: Array<{
@@ -118,16 +53,10 @@ export default class Proxy implements IDisposable {
 		/** Register event handler on Register event received from game-system */
 		ipcMain.on("ProxyWorker.Register", this.ipcHandler);
 
-		/* // Create clusters as many as CPUs
-		os.cpus().forEach(x => {
-			this._Cluster = cluster.fork({
-				ClusterType: "ProxyWorker"
-			});
-		});
-		*/
-		this.pCluster = cluster.fork({
-			ClusterType: "ProxyWorker"
-		});
+		/** Pork new child process with ProxyWorker script */
+		this.pCluster = child_process.fork(
+			path.join(__static, "ProxyWorker.js")
+		);
 
 		// Register handler for received packet from worker
 		this.pCluster.on("message", this.ClusterHandler);
@@ -150,7 +79,7 @@ export default class Proxy implements IDisposable {
 		session.setProxy(
 			{
 				pacScript: "",
-				proxyRules: `http=127.0.0.1:${Proxy.Port}`,
+				proxyRules: `http=127.0.0.1:${ProxyPort}`,
 				proxyBypassRules: ""
 			},
 			() => {
@@ -261,7 +190,7 @@ export default class Proxy implements IDisposable {
 		});
 
 		// Escape when Cluster not available
-		if (!this.pCluster || this.pCluster.isDead()) return;
+		if (!this.pCluster || this.pCluster.killed/*isDead()*/) return;
 
 		// Pass back to Worker, to pass original requester(browser)
 		this.pCluster.send({

@@ -2,6 +2,10 @@
 node_modules
 /dist
 
+# Will be compiled when serve or build
+/public/Proxy*.js
+/public/Proxy*.js.map
+
 # local env files
 .env.local
 .env.*.local

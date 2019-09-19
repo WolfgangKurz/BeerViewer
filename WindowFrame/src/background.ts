@@ -1,2 +1,2 @@
-// tslint:disable-next-line:no-var-requires
-require("./Backend/App.ts");
+import Backend from "@/Backend/Backend.ts";
+Backend();

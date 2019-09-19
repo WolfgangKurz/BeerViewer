@@ -20,29 +20,34 @@
 		"serve": "vue-cli-service serve",
 		"build": "vue-cli-service build",
 		"lint": "vue-cli-service lint",
-		"electron:build": "vue-cli-service electron:build",
-		"electron:serve": "vue-cli-service electron:serve",
+		"inspect": "vue-cli-service inspect",
+		"electron:build": "npm run proxyworker:build && vue-cli-service electron:build",
+		"electron:serve": "npm run proxyworker:build && vue-cli-service electron:serve",
 		"postinstall": "electron-builder install-app-deps",
-		"postuninstall": "electron-builder install-app-deps"
+		"postuninstall": "electron-builder install-app-deps",
+		
+		"electron:build:raw": "vue-cli-service electron:build",
+		"electron:serve:raw": "vue-cli-service electron:serve",
+		"proxyworker:build": "tsc --build tsconfig.proxyworker.json"
 	},
 	"main": "background.js",
 	"dependencies": {
 		"@types/http-proxy": "^1.17.0",
 		"@types/jquery": "^3.3.31",
 		"@types/uuid": "^3.4.5",
+		"http-proxy": "^1.18.0",
+		"jquery": "^3.4.1",
+		"ts-nameof": "^3.2.0",
+		"uuid": "^3.3.3",
 		"vue": "^2.6.10",
 		"vue-class-component": "^7.0.2",
 		"vue-property-decorator": "^8.1.0",
-		"vuex": "^3.0.1",
-		"http-proxy": "^1.17.0",
-		"jquery": "^3.4.1",
-		"ts-nameof": "^3.2.0",
-		"uuid": "^3.3.3"
+		"vuex": "^3.0.1"
 	},
 	"devDependencies": {
 		"@vue/cli-plugin-typescript": "^3.11.0",
 		"@vue/cli-service": "^3.11.0",
-		"electron": "^6.0.0",
+		"electron": "^6.0.10",
 		"node-sass": "^4.9.0",
 		"sass-loader": "^7.1.0",
 		"typescript": "^3.4.3",

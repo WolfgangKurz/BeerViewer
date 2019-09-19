@@ -12,7 +12,7 @@ export default class i18n {
 	 * @param name Locale name
 	 */
 	public static get(name: string): string | null {
-		const list = glob.sync(path.join(__dirname, `${name}?(_)**.txt`))
+		const list = glob.sync(path.join(__static, "i18n", `${name}?(_)**.txt`))
 			.filter((x) => fs.existsSync(x));
 
 		if (list.length === 0) return null;

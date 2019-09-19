@@ -1,6 +1,4 @@
 const path = require("path");
-const fs = require("fs");
-const glob = require("glob");
 const os = require("os");
 
 // SCSS global import files
@@ -9,12 +7,15 @@ const preloadScss = [
 	"@/Theme/_default.scss"
 ];
 
+const setupAliasPath = (config) => {
+	// import path alias
+	config.resolve.alias.set("@", path.resolve(__dirname, "src"));
+	config.resolve.alias.set("@Components", path.resolve(__dirname, "src", "Frontend", "Components"));
+};
+
 module.exports = {
-	filenameHashing: false,
-	chainWebpack: config => {
-		// import path alias
-		config.resolve.alias.set("@", path.resolve(__dirname, "src"));
-		config.resolve.alias.set("@Components", path.resolve(__dirname, "src", "Frontend", "Components"));
+	chainWebpack: (config) => {
+		setupAliasPath(config);
 
 		// Disable preload, prefetch tags
 		config.plugins.delete("preload");
@@ -47,6 +48,28 @@ module.exports = {
 					require("autoprefixer")
 				]
 			}
+		}
+	},
+
+	pluginOptions: {
+		electronBuilder: {
+			chainWebpackMainProcess: config => {
+				setupAliasPath(config);
+/*
+				config.plugins.push(
+					new CopyWebpackPlugin([
+						{
+							from: path.join(__dirname, '../src/worker'),
+							to: path.join(__dirname, '../dist/electron/worker'),
+							ignore: ['.*']
+						}
+					])
+				)
+*/
+			},
+			chainWebpackRendererProcess: config => {
+				setupAliasPath(config);
+			},
 		}
 	}
 };

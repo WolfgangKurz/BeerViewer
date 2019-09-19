@@ -46,16 +46,20 @@ export default class ExpeditionBar extends Vue {
 .expedition-bar {
 	float: left;
 	position: relative;
+
 	margin: 2px 10px 0 0;
 	width: 80px;
 	height: 14px;
-	vertical-align: middle;
+
 	line-height: 14px;
 	font-size: 10px;
 	text-align: center;
+
 	text-shadow: 0 0 3px $theme-background-color, 0 0 3px $theme-background-color;
 	background-color: $theme-highlight-line-color;
 	color: $theme-text-color;
+
+	vertical-align: middle;
 
 	.expedition-progress {
 		height: 14px;
