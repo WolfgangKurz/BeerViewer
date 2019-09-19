@@ -30,7 +30,8 @@ export default class LiveTranslation {
 			.map((x) => x.split("\t").filter((y) => y.length > 0)) // Tab separated only (key-value pair only)
 			.filter((x) => x.length === 2) // No multi-values
 			.map((x) => ({ key: x[0], value: x[1] })) // Make key-value pair
-			.sort((a, b) => a.key.length < b.key.length ? -1 : a.key.length > b.key.length ? 1 : 0); // Sort by length of text
+			.sort((a, b) => a.key.length < b.key.length ? -1 : a.key.length > b.key.length ? 1 : 0) // Sort by length of text
+			|| {}; // Or, empty list.
 	}
 
 	/** Register modificable HTTP handler */

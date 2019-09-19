@@ -25,7 +25,6 @@
 		"electron:serve": "npm run proxyworker:build && vue-cli-service electron:serve",
 		"postinstall": "electron-builder install-app-deps",
 		"postuninstall": "electron-builder install-app-deps",
-		
 		"electron:build:raw": "vue-cli-service electron:build",
 		"electron:serve:raw": "vue-cli-service electron:serve",
 		"proxyworker:build": "tsc --build tsconfig.proxyworker.json"
