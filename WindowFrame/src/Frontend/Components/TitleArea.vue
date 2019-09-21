@@ -6,18 +6,18 @@
 		</div>
 
 		<!-- Right area -->
-		<systembox></systembox>
+		<systembox />
 
 		<!-- Remain area -->
 		<div class="content">
 			<group :order="1">
-				<expedition-bar :id="2"></expedition-bar>
-				<expedition-bar :id="3"></expedition-bar>
-				<expedition-bar :id="38"></expedition-bar>
+				<expedition-bar :id="2" />
+				<expedition-bar :id="3" />
+				<expedition-bar :id="38" />
 			</group>
 
 			<group :order="2">
-				<material-bar></material-bar>
+				<material-bar />
 			</group>
 		</div>
 	</header>

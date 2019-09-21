@@ -23,11 +23,10 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, PropSync } from "vue-property-decorator";
-
-import path from "path";
-import Materials from "@KC/Classes/Materials";
-
 import KanColleStoreClient, { StoreInterface } from "@KC/Store/KanColleStoreClient";
+import path from "path";
+
+import Materials from "@KC/Hub/Homeport/Materials";
 
 @Component({})
 export default class MaterialBar extends KanColleStoreClient {

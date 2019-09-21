@@ -45,8 +45,8 @@ export interface kcsapi_ship3 {
 }
 
 export interface kcsapi_ship_deck {
-	api_ship_data: kcsapi_ship2[];
-	api_deck_data: kcsapi_deck[];
+	api_ship_data?: kcsapi_ship2[];
+	api_deck_data?: kcsapi_deck[];
 }
 
 export interface kcsapi_destroyship {

@@ -31,11 +31,10 @@
 			"scripthost"
 		],
 		"paths": {
-			"@/*": ["./*"],
+			"@KCComponents/*": ["./Frontend/KanColle/*"],
 			"@Components/*": ["./Frontend/Components/*"],
-			"@KanColle/*": ["./KanColle/*"],
 			"@KC/*": ["./KanColle/*"],
-			"@KCComponents/*": ["./Frontend/KanColle/*"]
+			"@/*": ["./*"]
 		}
 	},
 	"include": [

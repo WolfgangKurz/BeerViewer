@@ -1,4 +1,4 @@
-enum AdmiralRank {
+export enum AdmiralRank {
 	/** 元帥 */
 	FleetAdmiral = 1,
 

@@ -1,6 +1,6 @@
 <template>
 	<div class="windowframe" :class="{ focused: WindowFocused, maximized: WindowMaximized }">
-		<title-area title="BeerViewer"></title-area>
+		<title-area title="BeerViewer" />
 		<aside class="sidemenu">
 			<div class="menu selected">
 				<img src="~@/assets/icons/menu-overview.png" />
@@ -30,10 +30,12 @@
 					src="~@/assets/0795_9863.png"
 					style="position: absolute;right:-100px;bottom:-300px;opacity:0.3"
 				/>
-				<webview id="GAME" src="about:blank"></webview>
+				<webview id="GAME" src="about:blank" />
 			</div>
 		</article>
-		<div class="r-content">Right content</div>
+		<div class="r-content">
+			<fleet-view />
+		</div>
 		<div class="b-content">Bottom content</div>
 	</div>
 </template>
@@ -45,10 +47,12 @@ import { ipcRenderer, remote } from "electron";
 import Game from "@/System/Game";
 
 import TitleArea from "@Components/TitleArea.vue";
+import FleetView from "@KCComponents/FleetView.vue";
 
 @Component({
 	components: {
 		TitleArea,
+		FleetView
 	},
 })
 export default class App extends Vue {

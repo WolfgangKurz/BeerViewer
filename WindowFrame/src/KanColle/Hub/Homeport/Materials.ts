@@ -1,15 +1,15 @@
 import { Component } from "vue-property-decorator";
 import Proxy from "@/Proxy/Proxy";
+import { ParseKcsApi } from "@KC/Functions";
+import KanColleStoreClient, { StoreInterface } from "@KC/Store/KanColleStoreClient";
 
-import { ParseKcsApi, } from "@KC/Functions";
 import { kcsapi_port } from "@KC/Raw/kcsapi_port";
 import { kcsapi_material } from "@KC/Raw/kcsapi_material";
 import { kcsapi_charge } from "@KC/Raw/kcsapi_charge";
 import { kcsapi_destroyship } from "@KC/Raw/kcsapi_ship";
-import { kcsapi_destroyitem2 } from "../Raw/kcsapi_item";
-import { kcsapi_req_nyukyo_start } from "../Raw/kcsapi_repair";
-import { kcsapi_airbase_corps_supply, kcsapi_airbase_corps_set_plane, kcsapi_req_air_corps_set_plane } from "../Raw/kcsapi_airbase_corps";
-import KanColleStoreClient, { StoreInterface } from "../Store/KanColleStoreClient";
+import { kcsapi_destroyitem2 } from "@KC/Raw/kcsapi_item";
+import { kcsapi_req_nyukyo_start } from "@KC/Raw/kcsapi_repair";
+import { kcsapi_airbase_corps_supply, kcsapi_airbase_corps_set_plane, kcsapi_req_air_corps_set_plane } from "@KC/Raw/kcsapi_airbase_corps";
 
 /**
  * Intercept and Manage `Materials` data of KanColle
@@ -30,11 +30,9 @@ export default class Materials extends KanColleStoreClient {
 		Proxy.Instance.Register("/kcsapi/api_req_hokyu/charge", (req, resp) => {
 			ParseKcsApi<kcsapi_charge>(resp, (x) => this.Update(x.api_material));
 		});
+
 		Proxy.Instance.Register("/kcsapi/api_req_kousyou/destroyship", (req, resp) => {
 			ParseKcsApi<kcsapi_destroyship>(resp, (x) => this.Update(x.api_material));
-		});
-		Proxy.Instance.Register("/kcsapi/api_req_hokyu/charge", (req, resp) => {
-			ParseKcsApi<kcsapi_charge>(resp, (x) => this.Update(x.api_material));
 		});
 		Proxy.Instance.Register("/kcsapi/api_req_kousyou/destroyitem2", (req, resp) => {
 			ParseKcsApi<kcsapi_destroyitem2>(resp, (x) => this.Update(x.api_get_material));
@@ -67,19 +65,19 @@ export default class Materials extends KanColleStoreClient {
 	}
 
 	private DecreaseBucket() {
-		this.StoreUpdateMaterials({
+		this.StoreMaterialsUpdate({
 			Bucket: this.StoreMaterials.Bucket - 1,
 		});
 	}
 
-	private Update(source: number[] | kcsapi_material[] | StoreInterface.MaterialsPayload): void {
+	private Update(source: number[] | kcsapi_material[] | StoreInterface.MaterialsPayload) {
 		if (Array.isArray(source)) {
 			if (!source || source.length === 0) return;
 			const type = typeof (source[0] as kcsapi_material).api_value;
 
 			if (source.length >= 4 && type === "undefined") {
 				const casted = source as [number, number, number, number];
-				this.StoreUpdateMaterials({
+				this.StoreMaterialsUpdate({
 					Fuel: casted[0],
 					Ammo: casted[1],
 					Steel: casted[2],
@@ -87,7 +85,7 @@ export default class Materials extends KanColleStoreClient {
 				});
 			} else if (source.length >= 8 && type !== "undefined") {
 				const casted = source as kcsapi_material[];
-				this.StoreUpdateMaterials({
+				this.StoreMaterialsUpdate({
 					Fuel: casted[0].api_value,
 					Ammo: casted[1].api_value,
 					Steel: casted[2].api_value,
@@ -99,6 +97,6 @@ export default class Materials extends KanColleStoreClient {
 				});
 			}
 		} else
-			this.StoreUpdateMaterials(source);
+			this.StoreMaterialsUpdate(source);
 	}
 }

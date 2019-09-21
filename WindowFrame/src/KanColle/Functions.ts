@@ -1,13 +1,12 @@
 import IKcsApi from "./Interfaces/IKcsApi";
-import { request } from "http";
 
-export type ParseSingleCallback<T> = (response: T) => void;
-export type ParsePairCallback<T, U> = (response: T, request: U) => void;
+export type ParseSingleCallback<T> = (response: T, raw: IKcsApi) => void;
+export type ParsePairCallback<T, U> = (response: T, request: U, raw: IKcsApi) => void;
 
 /**
  * Parse `kcsapi` response json string to data object.
  */
-export function ParseKcsApi<T>(response: Buffer, callback: (response: T) => void): void;
+export function ParseKcsApi<T>(response: Buffer, callback: ParseSingleCallback<T>): void;
 
 /**
  * Parse `kcsapi` response json string to data object, request data to object.
@@ -29,8 +28,8 @@ export function ParseKcsApi<T, U>(response: Buffer, request: Buffer | ParseSingl
 
 	if (callback) {
 		const req: any = request ? JSON.parse(request.toString()) : {};
-		callback(kcsapi.api_data as T, req as U);
+		callback(kcsapi.api_data as T, req as U, kcsapi);
 	} else if (typeof request === "function") {
-		request(kcsapi.api_data as T);
+		request(kcsapi.api_data as T, kcsapi);
 	}
 }

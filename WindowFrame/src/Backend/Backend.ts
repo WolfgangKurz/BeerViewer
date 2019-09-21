@@ -2,6 +2,8 @@ import { app, protocol, BrowserWindow } from "electron";
 // import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import path from "path";
 
+import VueDevtools from "vue-devtools";
+
 import Proxy from "@/Proxy/Proxy";
 import Storage from "@/System/Storage";
 
@@ -31,6 +33,9 @@ export default function Backend() {
 	// Setup WindowFrame window
 	let mainWindow: BrowserWindow | null;
 	function createWindow() {
+		if (process.env.NODE_ENV !== "production")
+			VueDevtools.install();
+
 		mainWindow = new BrowserWindow({
 			width: 1200,
 			height: 720,
@@ -54,9 +59,11 @@ export default function Backend() {
 			mainWindow.loadURL("https://google.com/");
 		}
 
-		// Open Developer tools
-		if (!process.env.IS_TEST)
-			mainWindow.webContents.openDevTools();
+		if (process.env.NODE_ENV !== "production") {
+			// Open Developer tools
+			if (!process.env.IS_TEST)
+				mainWindow.webContents.openDevTools();
+		}
 
 		mainWindow.on("closed", () => {
 			mainWindow = null;
