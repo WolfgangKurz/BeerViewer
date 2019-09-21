@@ -3,10 +3,11 @@ import Vuex from "vuex";
 import App from "@/Frontend/App.vue";
 
 import Proxy from "@/Proxy/Proxy";
-import KanColleStore from "@KC/KanColleStore";
 
 import FloatComponent from "@Components/Basic/FloatComponent.vue";
 import GroupComponent from "@Components/Basic/GroupComponent.vue";
+import ConvertStore from "./KanColle/Store/StoreBase";
+import KanColleStore, { InitializeStore } from "./KanColle/Store/KanColleStore";
 
 // Vue.config.productionTip = false;
 
@@ -16,15 +17,16 @@ Vue.component("group", GroupComponent);
 
 Vue.use(Vuex);
 
-// Initialize Proxy and Store
+// Initialize Proxy
 Proxy.Instance.Empty();
 
+Vue.use({
+	install(_, options) {
+		_.prototype.$store = ConvertStore(new KanColleStore());
+	}
+});
+
 new Vue({
-	render: (h) => h(App),
-	store: new Vuex.Store({
-		state: {},
-		modules: {
-			KanColleStore
-		}
-	})
+	render: (h) => h(App)
 }).$mount("#app");
+InitializeStore();

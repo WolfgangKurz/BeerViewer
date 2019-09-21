@@ -23,30 +23,20 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, PropSync } from "vue-property-decorator";
-import { State, Getter, Action, Mutation, namespace } from "vuex-class";
-import KanColleStore from "@KC/KanColleStore";
 
 import path from "path";
-import Materials from "../../KanColle/Classes/Materials";
+import Materials from "@KC/Classes/Materials";
 
-interface MaterialsType {
-	fuel: number;
-	ammo: number;
-	steel: number;
-	bauxite: number;
-	bucket: number;
-	construction: number;
-	development: number;
-	improve: number;
-}
+import KanColleStoreClient, { StoreInterface } from "@KC/Store/KanColleStoreClient";
 
 @Component({})
-export default class MaterialBar extends Vue {
-	@Getter
-	private Materials!: MaterialsType;
+export default class MaterialBar extends KanColleStoreClient {
+	private get Materials() {
+		return this.StoreMaterials;
+	}
 
 	public get Datas() {
-		return (Object.keys(this.Materials) as (keyof MaterialsType)[])
+		return (Object.keys(this.Materials) as Array<keyof StoreInterface.Materials>)
 			.map((x) => [this.Materials[x], x])
 			.map((x) => {
 				const icon = path.join(process.env.BASE_URL as string, "assets", "icons", `${x[1]}.png`);

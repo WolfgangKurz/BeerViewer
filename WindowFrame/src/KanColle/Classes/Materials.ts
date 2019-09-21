@@ -1,5 +1,4 @@
-import Vue from "vue";
-import { State, Getter, Action, Mutation, namespace } from "vuex-class";
+import { Component } from "vue-property-decorator";
 import Proxy from "@/Proxy/Proxy";
 
 import { ParseKcsApi, } from "@KC/Functions";
@@ -10,32 +9,18 @@ import { kcsapi_destroyship } from "@KC/Raw/kcsapi_ship";
 import { kcsapi_destroyitem2 } from "../Raw/kcsapi_item";
 import { kcsapi_req_nyukyo_start } from "../Raw/kcsapi_repair";
 import { kcsapi_airbase_corps_supply, kcsapi_airbase_corps_set_plane, kcsapi_req_air_corps_set_plane } from "../Raw/kcsapi_airbase_corps";
+import KanColleStoreClient, { StoreInterface } from "../Store/KanColleStoreClient";
 
-export default class Materials extends Vue {
-	@Getter
-	private Materials!: {
-		fuel: number;
-		ammo: number;
-		steel: number;
-		bauxite: number;
-		bucket: number;
-		construction: number;
-		development: number;
-		improve: number;
-	};
-
-	@Mutation
-	private UpdateMaterials!: (payload: { fuel: number, ammo: number, steel: number, bauxite: number }) => void;
-
-	@Mutation
-	private UpdateResources!: (payload: { bucket: number, construction: number, development: number, improve: number }) => void;
-
+/**
+ * Intercept and Manage `Materials` data of KanColle
+ */
+@Component
+export default class Materials extends KanColleStoreClient {
 	constructor() {
 		super();
 
 		Proxy.Instance.Register("/kcsapi/api_port/port", (req, resp) => {
 			ParseKcsApi<kcsapi_port, unknown>(resp, req.body, (x, y) => {
-				console.log(y);
 				this.Update(x.api_material);
 			});
 		});
@@ -65,12 +50,10 @@ export default class Materials extends Vue {
 
 		// Supply Airbase
 		Proxy.Instance.Register("/kcsapi/api_req_air_corps/supply", (req, resp) => {
-			ParseKcsApi<kcsapi_airbase_corps_supply>(resp, (x) => this.Update([
-				x.api_after_fuel,
-				this.Materials.ammo,
-				this.Materials.steel,
-				x.api_after_bauxite
-			]));
+			ParseKcsApi<kcsapi_airbase_corps_supply>(resp, (x) => this.Update({
+				Fuel: x.api_after_fuel,
+				Bauxite: x.api_after_bauxite
+			}));
 		});
 
 		// Set aircraft to AirBase
@@ -78,51 +61,44 @@ export default class Materials extends Vue {
 			ParseKcsApi<kcsapi_airbase_corps_set_plane, kcsapi_req_air_corps_set_plane>(resp, (req as any).body as Buffer, (x, y) => {
 				if (y.api_item_id === -1) return;
 				if (x.api_plane_info.length >= 2) return;
-				this.Update([
-					this.Materials.fuel,
-					this.Materials.ammo,
-					this.Materials.steel,
-					x.api_after_bauxite
-				]);
+				this.Update({ Bauxite: x.api_after_bauxite });
 			});
 		});
 	}
 
 	private DecreaseBucket() {
-		this.UpdateResources({
-			bucket: this.Materials.bucket - 1,
-			construction: this.Materials.construction,
-			development: this.Materials.development,
-			improve: this.Materials.improve
+		this.StoreUpdateMaterials({
+			Bucket: this.StoreMaterials.Bucket - 1,
 		});
 	}
 
-	private Update(source: number[] | kcsapi_material[]): void {
-		if (!source || source.length === 0) return;
-		const type = typeof (source[0] as kcsapi_material).api_value;
+	private Update(source: number[] | kcsapi_material[] | StoreInterface.MaterialsPayload): void {
+		if (Array.isArray(source)) {
+			if (!source || source.length === 0) return;
+			const type = typeof (source[0] as kcsapi_material).api_value;
 
-		if (source.length >= 4 && type === "undefined") {
-			const casted = source as [number, number, number, number];
-			this.UpdateMaterials({
-				fuel: casted[0],
-				ammo: casted[1],
-				steel: casted[2],
-				bauxite: casted[3],
-			});
-		} else if (source.length >= 8 && type !== "undefined") {
-			const casted = source as kcsapi_material[];
-			this.UpdateMaterials({
-				fuel: casted[0].api_value,
-				ammo: casted[1].api_value,
-				steel: casted[2].api_value,
-				bauxite: casted[3].api_value,
-			});
-			this.UpdateResources({
-				bucket: casted[4].api_value,
-				construction: casted[5].api_value,
-				development: casted[6].api_value,
-				improve: casted[7].api_value,
-			});
-		}
+			if (source.length >= 4 && type === "undefined") {
+				const casted = source as [number, number, number, number];
+				this.StoreUpdateMaterials({
+					Fuel: casted[0],
+					Ammo: casted[1],
+					Steel: casted[2],
+					Bauxite: casted[3],
+				});
+			} else if (source.length >= 8 && type !== "undefined") {
+				const casted = source as kcsapi_material[];
+				this.StoreUpdateMaterials({
+					Fuel: casted[0].api_value,
+					Ammo: casted[1].api_value,
+					Steel: casted[2].api_value,
+					Bauxite: casted[3].api_value,
+					Bucket: casted[4].api_value,
+					Construction: casted[5].api_value,
+					Development: casted[6].api_value,
+					Improvement: casted[7].api_value,
+				});
+			}
+		} else
+			this.StoreUpdateMaterials(source);
 	}
 }

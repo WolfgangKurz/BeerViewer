@@ -27,8 +27,8 @@ export function ParseKcsApi<T, U>(response: Buffer, request: Buffer | ParseSingl
 	if (kcsapi.api_result !== 1) return;
 	// throw new Error("Failed to parse kcsapi, result was " + kcsapi.api_result);
 
-	if (callback && request) {
-		const req: any = JSON.parse(request.toString());
+	if (callback) {
+		const req: any = request ? JSON.parse(request.toString()) : {};
 		callback(kcsapi.api_data as T, req as U);
 	} else if (typeof request === "function") {
 		request(kcsapi.api_data as T);
