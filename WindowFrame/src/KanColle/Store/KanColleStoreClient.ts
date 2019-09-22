@@ -12,11 +12,31 @@ import Ship from "@KC/Classes/Ship";
 
 import { kcsapi_ship2 } from "@KC/Raw/kcsapi_ship";
 import { kcsapi_deck } from "@KC/Raw/kcsapi_deck";
+import { kcsapi_mst_stype, kcsapi_mst_ship } from "@KC/Raw/Master/kcsapi_mst_ship";
+import { kcsapi_mst_slotitem_equiptype, kcsapi_mst_slotitem } from "@KC/Raw/Master/kcsapi_mst_slotitem";
+import { kcsapi_mst_useitem } from "@KC/Raw/Master/kcsapi_mst_useitem";
+import { kcsapi_mst_mission } from "@KC/Raw/kcsapi_mission";
+import { kcsapi_mst_maparea, kcsapi_mst_mapinfo } from "@KC/Raw/Master/kcsapi_map";
 
 /**
  * Namespace that contains interfaces of `KanColleStore`.
  */
 export namespace StoreInterface {
+	/** Master dataset interface */
+	export interface Master {
+		ShipTypes: IdMap<kcsapi_mst_stype>;
+		Ships: IdMap<kcsapi_mst_ship>;
+
+		EquipTypes: IdMap<kcsapi_mst_slotitem_equiptype>;
+		Equips: IdMap<kcsapi_mst_slotitem>;
+		UseItems: IdMap<kcsapi_mst_useitem>;
+
+		Expeditions: IdMap<kcsapi_mst_mission>;
+
+		MapWorlds: IdMap<kcsapi_mst_maparea>;
+		MapAreas: IdMap<kcsapi_mst_mapinfo>;
+	}
+
 	/** Material data interface */
 	export interface Materials {
 		Fuel: number;
@@ -92,9 +112,17 @@ export namespace StoreInterface {
 }
 
 /**
- * KanColleStore implementation class for Component/Pages
+ * KanColleStore implementation class for Vue Component/Pages
  */
 export default class KanColleStoreClient extends Vue {
+	//#region Master
+	@Getter
+	public StoreMaster!: StoreInterface.Master;
+
+	@Mutation("StoreMasterUpdate")
+	public StoreMasterUpdate!: (payload: StoreInterface.Master) => void;
+	//#endregion
+
 	//#region Materials
 	/**
 	 * Material data of `KanColleStore`.

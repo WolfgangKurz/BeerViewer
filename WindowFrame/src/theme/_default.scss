@@ -20,13 +20,17 @@ $theme-font-face: "Spoqa Han Sans JP", "Spoqa Han Sans";
 
 $theme-title-size: 28px;
 
+$theme-dock-background: transparentize(#fff, 0.83);
+$theme-dock-text-color: $theme-text-color;
+$theme-dock-text-shadow: style-repeat(12, 0 0 2px #222225);
+
 $state-colors: (
 	"empty": rgba(255,255,255,0.23),
 	"sortie": #c62828,
 	"expedition": #1565c0,
 	"damaged": #e63838,
 	"not-ready": #f57c00,
-	"ready": #388e3c,
+	"ready": #287e2c,
 	"repairing": #6d4c41
 );
 $morale-colors: (
@@ -37,7 +41,7 @@ $morale-colors: (
 	"+1": #fdd835
 );
 $quest-colors: (
-	"1": #388e3c, // Composition
+	"1": #287e2c, // Composition
 	"2": #c62828, // Sortie
 	"3": #8dc660, // Practice
 	"4": #1565c0, // Expedition
@@ -48,7 +52,7 @@ $quest-colors: (
 );
 $progress-colors: (
 	"0%": #c62828,
-	"100%": #388e3c,
+	"100%": #287e2c,
 
 	// for not 5 strip progress
 	"33%": #f57c00,

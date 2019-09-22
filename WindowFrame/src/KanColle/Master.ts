@@ -1,45 +1,34 @@
+import { Component } from "vue-property-decorator";
 import Proxy from "@/Proxy/Proxy";
-import IdMap, { ConvertToIdMap } from "./Basic/IdMap";
-
 import { ParseKcsApi } from "@KC/Functions";
+import KanColleStoreClient from "@KC/Store/KanColleStoreClient";
+import { ConvertToIdMap } from "./Basic/IdMap";
 
 import { kcsapi_start2 } from "@KC/Raw/Master/kcsapi_start2";
-import { kcsapi_mst_stype, kcsapi_mst_ship } from "@KC/Raw/Master/kcsapi_mst_ship";
-import { kcsapi_mst_slotitem_equiptype, kcsapi_mst_slotitem } from "@KC/Raw/Master/kcsapi_mst_slotitem";
-import { kcsapi_mst_useitem } from "@KC/Raw/Master/kcsapi_mst_useitem";
-import { kcsapi_mst_mission } from "@KC/Raw/kcsapi_mission";
-import { kcsapi_mst_maparea, kcsapi_mst_mapinfo } from "@KC/Raw/Master/kcsapi_map";
 
 /**
  * Class that contains parsed `api_start2` data objects.
  */
-export default class Master {
-	private ShipTypes: IdMap<kcsapi_mst_stype> = {};
-	private Ships: IdMap<kcsapi_mst_ship> = {};
+@Component
+export default class MasterClass extends KanColleStoreClient {
+	constructor() {
+		super();
 
-	private EquipTypes: IdMap<kcsapi_mst_slotitem_equiptype> = {};
-	private Equips: IdMap<kcsapi_mst_slotitem> = {};
-	private UseItems: IdMap<kcsapi_mst_useitem> = {};
+		Proxy.Instance.Register("/kcsapi/api_start2/getData", (req, resp) => {
+			ParseKcsApi<kcsapi_start2>(resp, (x) => {
+				this.StoreMasterUpdate({
+					ShipTypes: ConvertToIdMap(x.api_mst_stype),
+					Ships: ConvertToIdMap(x.api_mst_ship),
 
-	private Expeditions: IdMap<kcsapi_mst_mission> = {};
+					EquipTypes: ConvertToIdMap(x.api_mst_slotitem_equiptype),
+					Equips: ConvertToIdMap(x.api_mst_slotitem),
+					UseItems: ConvertToIdMap(x.api_mst_useitem),
 
-	private MapWorlds: IdMap<kcsapi_mst_maparea> = {};
-	private MapAreas: IdMap<kcsapi_mst_mapinfo> = {};
+					Expeditions: ConvertToIdMap(x.api_mst_mission),
 
-
-	public constructor() {
-		Proxy.Instance.Register("/kcsapi/api_start2/getData", (req, respBuffer) => {
-			ParseKcsApi<kcsapi_start2>(respBuffer, (resp) => {
-				this.ShipTypes = ConvertToIdMap(resp.api_mst_stype);
-				this.Ships = ConvertToIdMap(resp.api_mst_ship);
-
-				this.EquipTypes = ConvertToIdMap(resp.api_mst_slotitem_equiptype);
-				this.Equips = ConvertToIdMap(resp.api_mst_slotitem);
-
-				this.Expeditions = ConvertToIdMap(resp.api_mst_mission);
-
-				this.MapWorlds = ConvertToIdMap(resp.api_mst_maparea);
-				this.MapAreas = ConvertToIdMap(resp.api_mst_mapinfo);
+					MapWorlds: ConvertToIdMap(x.api_mst_maparea),
+					MapAreas: ConvertToIdMap(x.api_mst_mapinfo)
+				});
 			});
 		});
 	}

@@ -20,7 +20,7 @@ export default class Admiral extends KanColleStoreClient {
 			ParseKcsApi<kcsapi_basic>(resp, (x) => this.Update(x));
 		});
 		Proxy.Instance.Register("/kcsapi/api_port/port", (req, resp) => {
-			ParseKcsApi<kcsapi_port>(resp, (x) => this.Update(x.api_basic));
+			// ParseKcsApi<kcsapi_port>(resp, (x) => this.Update(x.api_basic));
 		});
 		Proxy.Instance.Register("/kcsapi/api_req_member/updatecomment", (req, resp) => {
 			ParseKcsApi<unknown, kcsapi_member_updatecomment>(resp, req.body, (x, y) => {

@@ -97,7 +97,7 @@ export default class Fleets extends KanColleStoreClient {
 				.filter((x) => x.State & ShipState.Tow)
 				.map((x) => x.Id);
 
-			this.StoreShipsUpdate(source.map((x) => new Ship(x)));
+			this.StoreShipsUpdate(source.map((x) => new Ship().Update(x)));
 
 			for (const id of shipsEvacuated) this.StoreShipEvacuate(id);
 			for (const id of shipsTow) this.StoreShipTow(id);

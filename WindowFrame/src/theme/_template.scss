@@ -9,3 +9,31 @@
 @function Ratio($origin, $dest, $target){
 	@return $target * ($dest / $origin);
 }
+
+@mixin text-stroke($width: 1px, $color: #000) {
+	$list: "";
+	$from: -$width;
+	$to: $width;
+
+	@for $i from $from through $to {
+		@for $j from $from through $to {
+			@if ($i != 0 && $j != 0) {
+				@if ($list == "") {
+					$list: $i $j 0 $color;
+				} @else {
+					$list: #{$list}, $i $j 0 $color;
+				}
+			}
+		}
+	}
+	text-shadow: $list;
+}
+
+@function style-repeat($times: 1, $style: none) {
+	$list: $style;
+	@for $i from 2 through $times {
+		$list: #{$list}, $style;
+	}
+	@return $list;
+}
+

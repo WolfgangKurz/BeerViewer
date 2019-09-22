@@ -35,19 +35,21 @@ export default function ConvertStore(target: any): Store<any> {
 	};
 
 	const states = Object.getOwnPropertyDescriptors(target);
-	Object.keys(states).forEach((x) => {
-		Object.defineProperty(ret.state, x, {
-			get: () => target[x],
-			set: (v) => target[x] = v,
-			configurable: true,
-			enumerable: true,
-			// writable: desc.writable,
+	Object.keys(states)
+		.filter((x) => !x.startsWith("$_"))
+		.forEach((x) => {
+			Object.defineProperty(ret.state, x, {
+				get: () => target[x],
+				set: (v) => target[x] = v,
+				configurable: true,
+				enumerable: true,
+				// writable: desc.writable,
+			});
 		});
-	});
 
 	const funcs = Object.getOwnPropertyDescriptors(Object.getPrototypeOf(target));
 	Object.keys(funcs)
-		.filter((x) => x !== "constructor")
+		.filter((x) => x !== "constructor" && !x.startsWith("$_"))
 		.forEach((x) => {
 			const desc = funcs[x];
 			if (desc.get && desc.set) return; // unknown!

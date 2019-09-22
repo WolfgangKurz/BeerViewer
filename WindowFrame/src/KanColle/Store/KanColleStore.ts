@@ -6,24 +6,53 @@ import { DockState } from "@KC/Enums/DockState";
 import { CombinedFleetType } from "@KC/Enums/CombinedFleetType";
 import { AdmiralRank } from "@KC/Enums/AdmiralRank";
 
-import Master from "@KC/Master";
+import MasterClass from "@KC/Master";
 import Homeport from "@KC/Hub/Homeport";
+
+import { kcsapi_ship2 } from "@KC/Raw/kcsapi_ship";
+import { kcsapi_deck } from "@KC/Raw/kcsapi_deck";
+import { ShipState } from "@KC/Enums/ShipEnums";
 
 import Fleet from "@KC/Classes/Fleet";
 import Ship from "@KC/Classes/Ship";
 
-import { kcsapi_ship2 } from "@KC/Raw/kcsapi_ship";
-import { kcsapi_deck } from "@KC/Raw/kcsapi_deck";
-
-let instMaster: Master;
+let instMaster: MasterClass;
 let instHomeport: Homeport;
 
 /**
  * Initialize store managers
  */
 export function InitializeStore() {
-	instMaster = new Master();
+	instMaster = new MasterClass();
 	instHomeport = new Homeport();
+}
+
+/**
+ * `Use if need.` Clone new object instance, without $ and _ prefix properties.
+ */
+export function DeVue<T>(target: T): T {
+	const ret: T = {} as T;
+	Object.keys(target)
+		.filter((x) => !x.startsWith("$") && !x.startsWith("_"))
+		.forEach((x) => ret[x as keyof T] = target[x as keyof T]);
+	return ret;
+}
+
+let StoreMaster: StoreInterface.Master = {
+	ShipTypes: {},
+	Ships: {},
+
+	EquipTypes: {},
+	Equips: {},
+	UseItems: {},
+
+	Expeditions: {},
+
+	MapWorlds: {},
+	MapAreas: {}
+};
+export function Master() {
+	return StoreMaster;
 }
 
 /**
@@ -32,6 +61,10 @@ export function InitializeStore() {
  * Check `KanColleStoreClient` to read JSDoc.
  */
 export default class KanColleStore {
+	public get StoreMaster() {
+		return StoreMaster;
+	}
+
 	public StoreMaterials: StoreInterface.Materials = {
 		Fuel: 0,
 		Ammo: 0,
@@ -73,6 +106,11 @@ export default class KanColleStore {
 
 	public StoreFleets: IdMap<Fleet> = {};
 	public StoreShips: IdMap<Ship> = {};
+
+	@MutationMethod()
+	public StoreMasterUpdate(payload: StoreInterface.Master) {
+		StoreMaster = payload;
+	}
 
 	@MutationMethod()
 	public StoreMaterialsUpdate(payload: StoreInterface.MaterialsPayload) {
@@ -167,16 +205,16 @@ export default class KanColleStore {
 
 	@MutationMethod()
 	public StoreShipUpdate(ship: kcsapi_ship2) {
-		this.StoreShips[ship.api_id].Update(ship);
+		this.StoreShips[ship.api_id] = new Ship().Update(ship);
 	}
 
 	@MutationMethod()
 	public StoreShipEvacuate(id: number) {
-		this.StoreShips[id].Evacuate();
+		this.StoreShips[id].State |= ShipState.Evacuation;
 	}
 
 	@MutationMethod()
 	public StoreShipTow(id: number) {
-		this.StoreShips[id].Tow();
+		this.StoreShips[id].State |= ShipState.Tow;
 	}
 }
